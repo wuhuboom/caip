@@ -191,7 +191,7 @@
                       height="30"
                       style="text-align: center; color: rgb(255, 155, 0)"
                     >
-                      ¥{{ item.quantity * item.multiplier }}
+                      ¥{{ item.quantity * item.multiplier * $betPrice }}
                     </td>
                   </tr>
                 </table>
@@ -231,7 +231,7 @@
                   >
                     <td height="30">{{ item.expect }}</td>
                     <td height="30" style="color: rgb(255, 155, 0)">
-                      ¥{{ divide(item.money, false) }}
+                      ¥{{ divide(item.money) }}
                     </td>
                     <td height="30">{{ item.mulp }}</td>
                     <td height="30" width="330px">

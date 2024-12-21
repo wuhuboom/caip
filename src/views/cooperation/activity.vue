@@ -140,7 +140,19 @@
               ¥{{ divide(item.moneyIncome) }}
             </td>
             <td height="50">
-              <div style="margin-bottom: 3px">{{ item.p }}</div>
+              <div style="width: 114px">
+                <p>{{ `${item.p}%` }}</p>
+                <el-progress
+                  class="g-el-progress"
+                  :stroke-width="12"
+                  :show-text="false"
+                  :percentage="item.p"
+                  define-back-color="#a84f2b"
+                  color="#ffa92d"
+                ></el-progress>
+              </div>
+
+              <!-- <div style="margin-bottom: 3px">{{ item.p }}</div>
               <div class="cp-progress-main">
                 <div class="cp-progress-bar" style="width: 80px; height: 10px">
                   <div class="cp-progress" style="flex: 100 1 0%"></div>
@@ -151,7 +163,7 @@
                     }"
                   ></div>
                 </div>
-              </div>
+              </div> -->
             </td>
             <td height="50">{{ item.playerCount }}</td>
             <td height="50">{{ item.playerName }}</td>
@@ -445,10 +457,12 @@ export default {
       this.loading = false;
       if (err) return;
       res.data.results.forEach((v) => {
-        v.p = Math.floor((1 - v.betCountCurr / v.betTotal) * 100) + "%";
+        const curMoney = v.betCountCurr;
+        const fix = (curMoney / v.betTotal).toFixed(2);
+        v.p = fix * 100;
         v.clientMoney = "";
         //剩余
-        v.sellCount = v.betTotal - v.betCountCurr;
+        v.sellCount = v.betTotal - curMoney;
       });
       this.tableData = res.data;
       console.log(this.tableData);

@@ -67,7 +67,7 @@
           <th height="40">完成期数</th>
           <th height="40">订单状态</th>
           <th height="40">中奖状态</th>
-          <th height="40">购买时间</th>
+          <th height="40" width="150">购买时间</th>
           <th height="40">操作</th>
         </tr>
         <tr
@@ -77,7 +77,12 @@
           class="recharge-table-row"
         >
           <td height="40">
-            {{ getName(item.lotteryId) }}
+            <p
+              @click="goDetail(item.id)"
+              style="text-decoration: underline; cursor: pointer"
+            >
+              {{ getName(item.lotteryId) }}
+            </p>
           </td>
           <td height="40">￥{{ divide(item.money) }}</td>
           <td height="40">￥{{ divide(item.moneyIncome) }}</td>
@@ -85,7 +90,9 @@
           <td height="40">{{ item.status > 2 ? 1 : 0 }}</td>
           <td height="40">{{ getStatus(item.status) }}</td>
           <td height="40">{{ getOpenStatus(item.openStatus) }}</td>
-          <td height="40">{{ $dayjsTime(item.createdAt, "YYYY-MM-DD") }}</td>
+          <td height="40">
+            {{ $dayjsTime(item.createdAt) }}
+          </td>
           <td
             height="40"
             style="color: gold; text-decoration: underline; cursor: pointer"
@@ -187,6 +194,9 @@ export default {
       }
       if (Array.isArray(sendData.lotteryId)) {
         sendData.lotteryId = +sendData.lotteryId[sendData.lotteryId.length - 1];
+      }
+      if (Array.isArray(sendData.status)) {
+        sendData.status = +sendData.status[sendData.status.length - 1];
       }
       //删除-1
       for (let key in sendData) {

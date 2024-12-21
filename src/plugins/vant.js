@@ -35,6 +35,7 @@ import {
   tab,
   PasswordInput,
   CountDown,
+  NoticeBar,
 } from "vant";
 export default {
   install(Vue) {
@@ -70,7 +71,7 @@ export default {
     Vue.use(tab);
     Vue.use(PasswordInput);
     Vue.use(CountDown);
-
+    Vue.use(NoticeBar);
     Vue.component("tipsDialog", tipsDialog);
     Vue.component("CpSelect", CpSelect);
     Vue.component("CpInput", CpInput);

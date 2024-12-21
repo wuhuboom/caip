@@ -208,7 +208,7 @@
                       height="30"
                       style="text-align: center; color: rgb(255, 155, 0)"
                     >
-                      ¥{{ item.quantity * item.multiplier }}
+                      ¥{{ item.quantity * item.multiplier * $betPrice }}
                     </td>
                   </tr>
                 </table>

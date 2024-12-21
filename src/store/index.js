@@ -105,14 +105,21 @@ export default new Vuex.Store({
       },
     ],
     bankCard: [],
+    notice: [],
   },
   getters: {
+    noticeDoc(state) {
+      return state.notice[0] || {};
+    },
     defaultCode(state) {
       if (!state.config.area_code.length) return "";
       return state.config.area_code[0];
     },
   },
   mutations: {
+    setNotice(state, data) {
+      state.notice = data;
+    },
     setBankCard(state, data) {
       state.bankCard = data;
     },
@@ -196,6 +203,11 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    async getNotice({ commit }) {
+      const [err, res] = await userApi.notice({ pageSize: 1 });
+      if (err) return;
+      commit("setNotice", res.data?.results || []);
+    },
     async getPaySet({ commit }) {
       const [err, res] = await userApi.getPwdPay();
       if (err) return;

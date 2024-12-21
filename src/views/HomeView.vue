@@ -3,10 +3,10 @@
     <section class="app-main">
       <div>
         <div class="main-page-banners">
-          <div style="height: 360px">
+          <div>
             <el-carousel :interval="5000" arrow="always">
               <el-carousel-item v-for="(p, i) in slider" :key="i">
-                <img class="d-img" :src="p.imageUrl" />
+                <img class="carousel-img" :src="p.imageUrl" />
               </el-carousel-item>
             </el-carousel>
           </div>
@@ -20,21 +20,20 @@
               <div class="main-page-notice">
                 <div class="main-page-notice-title">公告信息</div>
                 <div style="width: 370px">
-                  <p
-                    class="marquee-tips"
+                  <van-notice-bar
                     style="
-                      font-size: 12px;
-                      color: white;
-                      animation: marqueeqwzh0 28s linear 0s infinite normal none;
+                      background-color: transparent;
+                      height: 30px;
+                      margin-top: -6px;
+                      color: #fff;
                     "
-                  >
-                    {{ $store.state.scroll }}
-                  </p>
+                    :text="noticeDoc.content"
+                  />
                 </div>
               </div>
               <div class="main-page-cp">
                 <div class="common_layout_center_v">
-                  <a href="#/game/detail/ssc/ssc_cq" class=""
+                  <a href="#/game/hall" class=""
                     ><div
                       class="cp-item-main"
                       style="
@@ -43,7 +42,7 @@
                     >
                       <div class="cp-item-title"></div></div
                   ></a>
-                  <a href="#/game/detail/five/five_gd" class=""
+                  <a href="#/game/hall" class=""
                     ><div
                       class="cp-item-main"
                       style="
@@ -55,7 +54,7 @@
                   ></a>
                 </div>
                 <div class="common_layout_center_v main-page-cp-middle">
-                  <a href="#/game/detail/three/three_js" class=""
+                  <a href="#/game/hall" class=""
                     ><div
                       class="cp-item-main"
                       style="
@@ -64,7 +63,7 @@
                     >
                       <div class="cp-item-title"></div></div
                   ></a>
-                  <a href="#/game/detail/happy/happy_gd" class=""
+                  <a href="#/game/hall" class=""
                     ><div
                       class="cp-item-main"
                       style="
@@ -76,7 +75,7 @@
                   ></a>
                 </div>
                 <div class="common_layout_center_v">
-                  <a href="#/game/detail/pk/pk_xyft" class=""
+                  <a href="#/game/hall" class=""
                     ><div
                       class="cp-item-main"
                       style="
@@ -85,7 +84,7 @@
                     >
                       <div class="cp-item-title"></div></div
                   ></a>
-                  <a href="#/game/detail/lf/lf_3d" class=""
+                  <a href="#/game/hall" class=""
                     ><div
                       class="cp-item-main"
                       style="
@@ -118,830 +117,39 @@
                       </svg>
                     </div>
                     <div class="lottery-tab-container">
-                      <div class="lottery-tab-content">
-                        <div class="lottery-tab-content-left">
-                          <div class="lottery-tab-num"></div>
-                          <svg
-                            width="100%"
-                            height="30"
-                            xmlns="http://www.w3.org/2000/svg"
-                            style="flex: 1 1 0%"
-                          >
-                            <text
-                              text-anchor="middle"
-                              dominant-baseline="middle"
-                              x="50%"
-                              y="50%"
-                              fill="#522B1D"
-                              class="cp-text"
-                              style="font-size: 10px"
-                            >
-                              gc**
-                            </text>
-                          </svg>
+                      <div
+                        class="lottery-tab-content"
+                        v-for="(v, k) in wins"
+                        :key="k"
+                      >
+                        <div class="lottery-tab-content-left no-grow">
+                          <div class="lottery-tab-num no-grow"></div>
+                          <p class="els m-r-4 m-l-4" style="font-size: 10px">
+                            {{ v.playerName }}
+                          </p>
                         </div>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <!---->
-                          <text
-                            text-anchor="start"
-                            dominant-baseline="middle"
-                            x="0%"
-                            y="50%"
-                            fill="#522B1D"
-                            style="font-size: 10px"
-                          >
-                            gcdh凯哥
-                          </text>
-                        </svg>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <text
-                            text-anchor="middle"
-                            dominant-baseline="middle"
-                            x="50%"
-                            y="50%"
-                            fill="#522B1D"
-                            class="cp-text"
-                            style="font-size: 10px"
-                          >
-                            186.00元
-                          </text>
-                        </svg>
-                      </div>
-                      <div class="lottery-tab-content">
-                        <div class="lottery-tab-content-left">
-                          <div class="lottery-tab-num"></div>
-                          <svg
-                            width="100%"
-                            height="30"
-                            xmlns="http://www.w3.org/2000/svg"
-                            style="flex: 1 1 0%"
-                          >
-                            <text
-                              text-anchor="middle"
-                              dominant-baseline="middle"
-                              x="50%"
-                              y="50%"
-                              fill="#522B1D"
-                              class="cp-text"
-                              style="font-size: 10px"
-                            >
-                              虚伪**
-                            </text>
-                          </svg>
-                        </div>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <!---->
-                          <text
-                            text-anchor="start"
-                            dominant-baseline="middle"
-                            x="0%"
-                            y="50%"
-                            fill="#522B1D"
-                            style="font-size: 10px"
-                          >
-                            虚伪的现实
-                          </text>
-                        </svg>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <text
-                            text-anchor="middle"
-                            dominant-baseline="middle"
-                            x="50%"
-                            y="50%"
-                            fill="#522B1D"
-                            class="cp-text"
-                            style="font-size: 10px"
-                          >
-                            186.00元
-                          </text>
-
-                          <!---->
-                        </svg>
-                      </div>
-                      <div class="lottery-tab-content">
-                        <div class="lottery-tab-content-left">
-                          <div class="lottery-tab-num"></div>
-                          <svg
-                            width="100%"
-                            height="30"
-                            xmlns="http://www.w3.org/2000/svg"
-                            style="flex: 1 1 0%"
-                          >
-                            <text
-                              text-anchor="middle"
-                              dominant-baseline="middle"
-                              x="50%"
-                              y="50%"
-                              fill="#522B1D"
-                              class="cp-text"
-                              style="font-size: 10px"
-                            >
-                              小小**
-                            </text>
-                          </svg>
-                        </div>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <!---->
-                          <text
-                            text-anchor="start"
-                            dominant-baseline="middle"
-                            x="0%"
-                            y="50%"
-                            fill="#522B1D"
-                            style="font-size: 10px"
-                          >
-                            小小胖仔
-                          </text>
-                        </svg>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <text
-                            text-anchor="middle"
-                            dominant-baseline="middle"
-                            x="50%"
-                            y="50%"
-                            fill="#522B1D"
-                            class="cp-text"
-                            style="font-size: 10px"
-                          >
-                            125.00元
-                          </text>
-
-                          <!---->
-                        </svg>
-                      </div>
-                      <div class="lottery-tab-content">
-                        <div class="lottery-tab-content-left">
-                          <div class="lottery-tab-num"></div>
-                          <svg
-                            width="100%"
-                            height="30"
-                            xmlns="http://www.w3.org/2000/svg"
-                            style="flex: 1 1 0%"
-                          >
-                            <text
-                              text-anchor="middle"
-                              dominant-baseline="middle"
-                              x="50%"
-                              y="50%"
-                              fill="#522B1D"
-                              class="cp-text"
-                              style="font-size: 10px"
-                            >
-                              不太**
-                            </text>
-                          </svg>
-                        </div>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <!---->
-                          <text
-                            text-anchor="start"
-                            dominant-baseline="middle"
-                            x="0%"
-                            y="50%"
-                            fill="#522B1D"
-                            style="font-size: 10px"
-                          >
-                            不太会玩
-                          </text>
-                        </svg>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <text
-                            text-anchor="middle"
-                            dominant-baseline="middle"
-                            x="50%"
-                            y="50%"
-                            fill="#522B1D"
-                            class="cp-text"
-                            style="font-size: 10px"
-                          >
-                            187.50元
-                          </text>
-
-                          <!---->
-                        </svg>
-                      </div>
-                      <div class="lottery-tab-content">
-                        <div class="lottery-tab-content-left">
-                          <div class="lottery-tab-num"></div>
-                          <svg
-                            width="100%"
-                            height="30"
-                            xmlns="http://www.w3.org/2000/svg"
-                            style="flex: 1 1 0%"
-                          >
-                            <text
-                              text-anchor="middle"
-                              dominant-baseline="middle"
-                              x="50%"
-                              y="50%"
-                              fill="#522B1D"
-                              class="cp-text"
-                              style="font-size: 10px"
-                            >
-                              君子**
-                            </text>
-                          </svg>
-                        </div>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <!---->
-                          <text
-                            text-anchor="start"
-                            dominant-baseline="middle"
-                            x="0%"
-                            y="50%"
-                            fill="#522B1D"
-                            style="font-size: 10px"
-                          >
-                            君子如约
-                          </text>
-                        </svg>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <text
-                            text-anchor="middle"
-                            dominant-baseline="middle"
-                            x="50%"
-                            y="50%"
-                            fill="#522B1D"
-                            class="cp-text"
-                            style="font-size: 10px"
-                          >
-                            1937.50元
-                          </text>
-
-                          <!---->
-                        </svg>
-                      </div>
-                      <div class="lottery-tab-content">
-                        <div class="lottery-tab-content-left">
-                          <div class="lottery-tab-num"></div>
-                          <svg
-                            width="100%"
-                            height="30"
-                            xmlns="http://www.w3.org/2000/svg"
-                            style="flex: 1 1 0%"
-                          >
-                            <text
-                              text-anchor="middle"
-                              dominant-baseline="middle"
-                              x="50%"
-                              y="50%"
-                              fill="#522B1D"
-                              class="cp-text"
-                              style="font-size: 10px"
-                            >
-                              不太**
-                            </text>
-                          </svg>
-                        </div>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <!---->
-                          <text
-                            text-anchor="start"
-                            dominant-baseline="middle"
-                            x="0%"
-                            y="50%"
-                            fill="#522B1D"
-                            style="font-size: 10px"
-                          >
-                            不太会玩
-                          </text>
-                        </svg>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <text
-                            text-anchor="middle"
-                            dominant-baseline="middle"
-                            x="50%"
-                            y="50%"
-                            fill="#522B1D"
-                            class="cp-text"
-                            style="font-size: 10px"
-                          >
-                            150.00元
-                          </text>
-
-                          <!---->
-                        </svg>
-                      </div>
-                      <div class="lottery-tab-content">
-                        <div class="lottery-tab-content-left">
-                          <div class="lottery-tab-num"></div>
-                          <svg
-                            width="100%"
-                            height="30"
-                            xmlns="http://www.w3.org/2000/svg"
-                            style="flex: 1 1 0%"
-                          >
-                            <text
-                              text-anchor="middle"
-                              dominant-baseline="middle"
-                              x="50%"
-                              y="50%"
-                              fill="#522B1D"
-                              class="cp-text"
-                              style="font-size: 10px"
-                            >
-                              目标**
-                            </text>
-                          </svg>
-                        </div>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <!---->
-                          <text
-                            text-anchor="start"
-                            dominant-baseline="middle"
-                            x="0%"
-                            y="50%"
-                            fill="#522B1D"
-                            style="font-size: 10px"
-                          >
-                            目标五个亿
-                          </text>
-                        </svg>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <text
-                            text-anchor="middle"
-                            dominant-baseline="middle"
-                            x="50%"
-                            y="50%"
-                            fill="#522B1D"
-                            class="cp-text"
-                            style="font-size: 10px"
-                          >
-                            2738.33元
-                          </text>
-
-                          <!---->
-                        </svg>
-                      </div>
-                      <div class="lottery-tab-content">
-                        <div class="lottery-tab-content-left">
-                          <div class="lottery-tab-num"></div>
-                          <svg
-                            width="100%"
-                            height="30"
-                            xmlns="http://www.w3.org/2000/svg"
-                            style="flex: 1 1 0%"
-                          >
-                            <text
-                              text-anchor="middle"
-                              dominant-baseline="middle"
-                              x="50%"
-                              y="50%"
-                              fill="#522B1D"
-                              class="cp-text"
-                              style="font-size: 10px"
-                            >
-                              小小**
-                            </text>
-                          </svg>
-                        </div>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <!---->
-                          <text
-                            text-anchor="start"
-                            dominant-baseline="middle"
-                            x="0%"
-                            y="50%"
-                            fill="#522B1D"
-                            style="font-size: 10px"
-                          >
-                            小小胖仔
-                          </text>
-                        </svg>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <text
-                            text-anchor="middle"
-                            dominant-baseline="middle"
-                            x="50%"
-                            y="50%"
-                            fill="#522B1D"
-                            class="cp-text"
-                            style="font-size: 10px"
-                          >
-                            516.67元
-                          </text>
-
-                          <!---->
-                        </svg>
-                      </div>
-                      <div class="lottery-tab-content">
-                        <div class="lottery-tab-content-left">
-                          <div class="lottery-tab-num"></div>
-                          <svg
-                            width="100%"
-                            height="30"
-                            xmlns="http://www.w3.org/2000/svg"
-                            style="flex: 1 1 0%"
-                          >
-                            <text
-                              text-anchor="middle"
-                              dominant-baseline="middle"
-                              x="50%"
-                              y="50%"
-                              fill="#522B1D"
-                              class="cp-text"
-                              style="font-size: 10px"
-                            >
-                              虚伪**
-                            </text>
-                          </svg>
-                        </div>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <!---->
-                          <text
-                            text-anchor="start"
-                            dominant-baseline="middle"
-                            x="0%"
-                            y="50%"
-                            fill="#522B1D"
-                            style="font-size: 10px"
-                          >
-                            虚伪的现实
-                          </text>
-                        </svg>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <text
-                            text-anchor="middle"
-                            dominant-baseline="middle"
-                            x="50%"
-                            y="50%"
-                            fill="#522B1D"
-                            class="cp-text"
-                            style="font-size: 10px"
-                          >
-                            372.00元
-                          </text>
-
-                          <!---->
-                        </svg>
-                      </div>
-                      <div class="lottery-tab-content">
-                        <div class="lottery-tab-content-left">
-                          <div class="lottery-tab-num"></div>
-                          <svg
-                            width="100%"
-                            height="30"
-                            xmlns="http://www.w3.org/2000/svg"
-                            style="flex: 1 1 0%"
-                          >
-                            <text
-                              text-anchor="middle"
-                              dominant-baseline="middle"
-                              x="50%"
-                              y="50%"
-                              fill="#522B1D"
-                              class="cp-text"
-                              style="font-size: 10px"
-                            >
-                              蝉语**
-                            </text>
-                          </svg>
-                        </div>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <!---->
-                          <text
-                            text-anchor="start"
-                            dominant-baseline="middle"
-                            x="0%"
-                            y="50%"
-                            fill="#522B1D"
-                            style="font-size: 10px"
-                          >
-                            蝉语888
-                          </text>
-                        </svg>
-                        <svg
-                          width="100%"
-                          height="30"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <text
-                            text-anchor="middle"
-                            dominant-baseline="middle"
-                            x="50%"
-                            y="50%"
-                            fill="#522B1D"
-                            class="cp-text"
-                            style="font-size: 10px"
-                          >
-                            132.86元
-                          </text>
-
-                          <!---->
-                        </svg>
+                        <p class="els no-grow" style="font-size: 10px">
+                          {{ v.nickname }}
+                        </p>
+                        <p class="cp-text">{{ divide(v.money) }}元</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="main_page_card">
-                <a href="#/game/detail/ssc/ssc_cq" class=""
-                  ><div class="cp_card_main" style="margin-left: 102px">
-                    <img src="@/static/cp_card_ssc.png" width="93" />
-                    <div
-                      class="cp-card-title"
-                      style="width: 93px; justify-content: flex-start"
-                    >
-                      <svg
-                        width="58"
-                        height="16"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <text
-                          text-anchor="middle"
-                          dominant-baseline="middle"
-                          x="50%"
-                          y="50%"
-                          fill="#FDD99B"
-                          class="cp-text"
-                          style="font-size: 10px"
-                        ></text>
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                      </svg>
-                    </div>
-                  </div></a
+                <p
+                  class="d-fucai"
+                  style="margin-left: 108px"
+                  @click="
+                    $router.push({ path: '/game/hall', query: { id: gid } })
+                  "
                 >
-                <a href="#/game/detail/five/five_gd" class=""
-                  ><div class="cp_card_main" style="margin-left: 6px">
-                    <img src="@/static/cp_card_11_5.png" width="83" />
-                    <div
-                      class="cp-card-title"
-                      style="width: 83px; justify-content: flex-start"
-                    >
-                      <svg
-                        width="60"
-                        height="16"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <text
-                          text-anchor="middle"
-                          dominant-baseline="middle"
-                          x="50%"
-                          y="50%"
-                          fill="#FDD99B"
-                          class="cp-text"
-                          style="font-size: 10px"
-                        ></text>
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                      </svg>
-                    </div>
-                  </div></a
-                >
-                <a href="#/game/detail/three/three_js" class=""
-                  ><div class="cp_card_main" style="margin-left: 16px">
-                    <img src="@/static/cp_card_k3.png" width="77" />
-                    <div
-                      class="cp-card-title"
-                      style="width: 77px; justify-content: flex-start"
-                    >
-                      <svg
-                        width="62"
-                        height="16"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <text
-                          text-anchor="middle"
-                          dominant-baseline="middle"
-                          x="50%"
-                          y="50%"
-                          fill="#FDD99B"
-                          class="cp-text"
-                          style="font-size: 10px"
-                        ></text>
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                      </svg>
-                    </div>
-                  </div></a
-                >
-                <a href="#/game/detail/happy/happy_gd" class=""
-                  ><div class="cp_card_main" style="margin-left: 23px">
-                    <img src="@/static/cp_card_kl.png" width="67" />
-                    <div
-                      class="cp-card-title"
-                      style="width: 67px; justify-content: flex-start"
-                    >
-                      <svg
-                        width="62"
-                        height="16"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <text
-                          text-anchor="middle"
-                          dominant-baseline="middle"
-                          x="50%"
-                          y="50%"
-                          fill="#FDD99B"
-                          class="cp-text"
-                          style="font-size: 10px"
-                        ></text>
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                      </svg>
-                    </div>
-                  </div></a
-                >
-                <a href="#/game/detail/pk/pk_bj" class=""
-                  ><div class="cp_card_main" style="margin-left: 33px">
-                    <img src="@/static/cp_card_pk10.png" width="77" />
-                    <div
-                      class="cp-card-title"
-                      style="width: 77px; justify-content: flex-end"
-                    >
-                      <svg
-                        width="60"
-                        height="16"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <text
-                          text-anchor="middle"
-                          dominant-baseline="middle"
-                          x="50%"
-                          y="50%"
-                          fill="#FDD99B"
-                          class="cp-text"
-                          style="font-size: 10px"
-                        ></text>
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                      </svg>
-                    </div>
-                  </div></a
-                >
-                <a href="#/game/detail/lf/lf_3d" class=""
-                  ><div class="cp_card_main" style="margin-left: 22px">
-                    <img src="@/static/cp_card_fc.png" width="83" />
-                    <div
-                      class="cp-card-title"
-                      style="width: 83px; justify-content: flex-end"
-                    >
-                      <svg
-                        width="54"
-                        height="16"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <text
-                          text-anchor="middle"
-                          dominant-baseline="middle"
-                          x="50%"
-                          y="50%"
-                          fill="#FDD99B"
-                          class="cp-text"
-                          style="font-size: 10px"
-                        ></text>
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                      </svg>
-                    </div>
-                  </div></a
-                >
-                <a href="#/game/detail/ssc/ssc_cq" class=""
-                  ><div class="cp_card_main" style="margin-left: 16px">
-                    <img src="@/static/cp_card_more.png" width="93" />
-                    <div
-                      class="cp-card-title"
-                      style="width: 93px; justify-content: flex-end"
-                    >
-                      <svg
-                        width="54"
-                        height="16"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <text
-                          text-anchor="middle"
-                          dominant-baseline="middle"
-                          x="50%"
-                          y="50%"
-                          fill="#FDD99B"
-                          class="cp-text"
-                          style="font-size: 10px"
-                        ></text>
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                      </svg>
-                    </div>
-                  </div></a
-                >
+                  <img class="d-img" src="@/assets/img/b1.png" alt="" />
+                </p>
+                <p class="d-fucai">
+                  <img class="d-img" src="@/assets/img/b2.png" alt="" />
+                </p>
               </div>
             </div>
           </div>
@@ -965,7 +173,7 @@
             >
               <div class="lottery-recommend-label">平台推荐</div>
               <div class="lottery-recommend-images">
-                <a href="#/game/detail/ssc/ssc_cq" class=""
+                <a :href="`#/game/hall`" class=""
                   ><div class="lottery-item-main lottery-item-left">
                     <div class="el-image lottery-item-image">
                       <img
@@ -975,7 +183,7 @@
                     </div>
                     <div class="lottery-item-text"></div></div
                 ></a>
-                <a href="#/game/detail/ssc/ssc_xj" class=""
+                <a href="#/game/hall" class=""
                   ><div class="lottery-item-main lottery-item-middle">
                     <div class="el-image lottery-item-image">
                       <img
@@ -985,7 +193,7 @@
                     </div>
                     <div class="lottery-item-text"></div></div
                 ></a>
-                <a href="#/game/detail/ssc/ssc_hn" class=""
+                <a href="#/game/hall" class=""
                   ><div class="lottery-item-main lottery-item-right">
                     <div class="el-image lottery-item-image">
                       <img
@@ -998,7 +206,7 @@
               </div>
               <div class="lottery-recommend-divider"></div>
               <div class="lottery-recommend-images">
-                <a href="#/game/detail/three/three_gx" class=""
+                <a href="#/game/hall" class=""
                   ><div class="lottery-item-main lottery-item-left">
                     <div class="el-image lottery-item-image">
                       <img
@@ -1008,7 +216,7 @@
                     </div>
                     <div class="lottery-item-text"></div></div
                 ></a>
-                <a href="#/game/detail/happy/happy_gd" class=""
+                <a href="#/game/hall" class=""
                   ><div class="lottery-item-main lottery-item-middle">
                     <div class="el-image lottery-item-image">
                       <img
@@ -1018,7 +226,7 @@
                     </div>
                     <div class="lottery-item-text"></div></div
                 ></a>
-                <a href="#/game/detail/pk/pk_xyft" class=""
+                <a href="#/game/hall" class=""
                   ><div class="lottery-item-main lottery-item-right">
                     <div class="el-image lottery-item-image">
                       <img
@@ -1031,7 +239,12 @@
               </div>
             </div>
             <div class="main-page-games">
-              <div class="game-item-main">
+              <div
+                class="game-item-main"
+                @click="
+                  $router.push({ path: '/game/hall', query: { id: did } })
+                "
+              >
                 <div class="el-image game-item-image">
                   <img
                     src="@/static/cp_ssc.png"
@@ -1068,16 +281,22 @@
                       </svg>
                     </div>
                   </div>
-                  <a href="#/game/detail/ssc/ssc_cq" class=""
-                    ><div class="game-item-button">
+                  <div href="#/game/detail/ssc/ssc_cq" class="">
+                    <div class="game-item-button">
                       <div>
                         立即游戏
                         <i class="el-icon-caret-right"></i>
-                      </div></div
-                  ></a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="game-item-main">
+              <div
+                class="game-item-main"
+                @click="
+                  $router.push({ path: '/game/hall', query: { id: did } })
+                "
+              >
                 <div class="el-image game-item-image">
                   <img
                     src="@/static/cp_dp.png"
@@ -1104,23 +323,17 @@
                         >
                           丰富游戏，精彩无限
                         </text>
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
-                        <!---->
                       </svg>
                     </div>
                   </div>
-                  <a href="#/game/detail/lf/lf_3d" class=""
-                    ><div class="game-item-button">
+                  <div href="#/game/detail/lf/lf_3d" class="">
+                    <div class="game-item-button">
                       <div>
                         立即游戏
                         <i class="el-icon-caret-right"></i>
-                      </div></div
-                  ></a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1161,15 +374,26 @@ export default {
   name: "HomePage",
   data() {
     return {
+      wins: [],
       slider: [],
-      notice: {
-        content: "",
-      },
     };
   },
   computed: {
+    noticeDoc() {
+      return this.$store.getters.noticeDoc;
+    },
     dev() {
       return this.$store.state.devApp;
+    },
+    gid() {
+      const gdoc = this.$store.state.cat.find((v) => v.id === 0);
+      const doc = gdoc.list.find((v) => v.id) || {};
+      return doc.id;
+    },
+    did() {
+      const gdoc = this.$store.state.cat.find((v) => v.id === 1);
+      const doc = gdoc.list.find((v) => v.id) || {};
+      return doc.id;
     },
   },
   components: {
@@ -1177,10 +401,10 @@ export default {
     QrcodeVue,
   },
   methods: {
-    async getNotice() {
-      const [err, res] = await userApi.notice();
+    async homeWinning() {
+      const [err, res] = await userApi.homeWinning();
       if (err) return;
-      this.notice = res.data[0] || {};
+      this.wins = res.data.filter((v, k) => k <= 7);
     },
     async sliderSlide() {
       const [err, res] = await userApi.homeswiper();
@@ -1199,13 +423,40 @@ export default {
       window.open(this.dev[appType].appUrl);
     },
   },
-  created() {
+  async created() {
     this.$store.commit("setPdTop", false);
     this.$store.dispatch("appDownload", false);
-
     this.homeDialog();
     this.sliderSlide();
-    this.getNotice();
+    this.homeWinning();
+    if (!this.$store.state.cat.find((v) => v.list.length)) {
+      await this.$store.dispatch("playerLotteryList");
+    }
   },
 };
 </script>
+<style lang="scss" scoped>
+::v-deep .el-carousel__container {
+  height: 360px;
+}
+.carousel-img {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+.d-fucai {
+  width: 337px;
+}
+.lottery-tab-content-left {
+  width: auto;
+}
+.els {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 30px;
+}
+.lottery-tab-discover {
+  margin-top: -3px;
+}
+</style>

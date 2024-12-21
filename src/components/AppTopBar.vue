@@ -60,11 +60,11 @@ export default {
           desc: "Line Detection",
           path: "/line/index",
         },
-        {
-          name: "聊天室",
-          desc: "Chat Room",
-          path: "/chat/room",
-        },
+        // {
+        //   name: "聊天室",
+        //   desc: "Chat Room",
+        //   path: "/chat/room",
+        // },
         {
           name: "U充教程",
           desc: "Usdt Course",

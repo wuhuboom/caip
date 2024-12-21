@@ -59,16 +59,16 @@
     <div class="recharge-table-container">
       <table rules="all" align="center" class="recharge-table">
         <tr align="center" class="recharge-table-header">
-          <th height="40">游戏</th>
+          <th height="40" width="100">游戏</th>
           <th height="40">方案金额</th>
           <th height="40">方案奖金</th>
           <th height="40">我的认购</th>
           <th height="40">我的奖金</th>
-          <th height="40">完成进度</th>
+          <th height="40" width="100">完成进度</th>
           <th height="40">发起人</th>
           <th height="40">订单状态</th>
           <th height="40">中奖状态</th>
-          <th height="40">购买时间</th>
+          <th height="40" width="150">购买时间</th>
           <th height="40">操作</th>
         </tr>
         <tr
@@ -78,14 +78,30 @@
           class="recharge-table-row"
         >
           <td height="40">
-            {{ getName(item.lotteryId) }}
+            <p
+              @click="goDetail(item.id)"
+              style="text-decoration: underline; cursor: pointer"
+            >
+              {{ getName(item.lotteryId) }}
+            </p>
           </td>
           <td height="40">￥{{ divide(item.money) }}</td>
           <td height="40">￥{{ divide(item.moneyIncome) }}</td>
           <td height="40">￥{{ divide(item.myBetCount) }}</td>
           <td height="40">￥{{ divide(item.myMoneyIncome) }}</td>
           <td height="40">
-            <div style="margin-bottom: 3px">{{ item.p }}</div>
+            <div>
+              <p>{{ `${item.p}%` }}</p>
+              <el-progress
+                class="g-el-progress"
+                :stroke-width="12"
+                :show-text="false"
+                :percentage="item.p"
+                define-back-color="#a84f2b"
+                color="#ffa92d"
+              ></el-progress>
+            </div>
+            <!-- <div style="margin-bottom: 3px">{{ item.p }}</div>
             <div class="cp-progress-main">
               <div class="cp-progress-bar" style="width: 80px; height: 10px">
                 <div class="cp-progress" style="flex: 100 1 0%"></div>
@@ -96,12 +112,12 @@
                   }"
                 ></div>
               </div>
-            </div>
+            </div> -->
           </td>
           <td height="40">{{ item.playerName }}</td>
           <td height="40">{{ getStatus(item.status) }}</td>
           <td height="40">{{ getOpenStatus(item.openStatus) }}</td>
-          <td height="40">{{ $dayjsTime(item.createdAt, "YYYY-MM-DD") }}</td>
+          <td height="40">{{ $dayjsTime(item.createdAt) }}</td>
           <td
             height="40"
             style="color: gold; text-decoration: underline; cursor: pointer"
@@ -203,6 +219,9 @@ export default {
       if (Array.isArray(sendData.lotteryId)) {
         sendData.lotteryId = +sendData.lotteryId[sendData.lotteryId.length - 1];
       }
+      if (Array.isArray(sendData.status)) {
+        sendData.status = +sendData.status[sendData.status.length - 1];
+      }
       //删除-1
       for (let key in sendData) {
         if (sendData[key] === -1) {
@@ -213,10 +232,12 @@ export default {
       this.loading = false;
       if (err) return;
       res.data.results.forEach((v) => {
-        v.p = Math.floor((1 - v.betCountCurr / v.betTotal) * 100) + "%";
+        const curMoney = v.betCountCurr;
+        const fix = (curMoney / v.betTotal).toFixed(2);
+        v.p = fix * 100;
         v.clientMoney = "";
         //剩余
-        v.sellCount = v.betTotal - v.betCountCurr;
+        v.sellCount = v.betTotal - curMoney;
       });
       this.tableData = res.data;
     },

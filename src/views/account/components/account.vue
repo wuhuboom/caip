@@ -125,13 +125,13 @@
               <th height="50">本月平台赠送</th>
             </tr>
             <tr align="center" class="my-account-table-body">
-              <td height="50">0元</td>
-              <td height="50">0元</td>
-              <td height="50">0元</td>
-              <td height="50">0元</td>
-              <td height="50">0元</td>
-              <td height="50">0元</td>
-              <td height="50">0元</td>
+              <td height="50">{{ divide(statis.dayUse) }}元</td>
+              <td height="50">{{ divide(statis.dayBingo) }}元</td>
+              <td height="50">{{ divide(statis.dayGet) }}元</td>
+              <td height="50">{{ divide(statis.weekBingo) }}元</td>
+              <td height="50">{{ divide(statis.monthBingo) }}元</td>
+              <td height="50">{{ divide(statis.weekGet) }}元</td>
+              <td height="50">{{ divide(statis.monthGet) }}元</td>
             </tr>
           </table>
         </div>
@@ -242,8 +242,23 @@
 import bindCard from "@/views/game/components/bindCard.vue";
 import bindUsdt from "@/views/game/components/bindUsdt.vue";
 import bindPassWrod from "@/views/game/components/bindPassWrod.vue";
+import userApi from "@/api/user";
+//"dayUse":今日消费 "dayBingo":今日中奖 “dayGet”：今日平台赠送"weekBingo":本周中奖 "monthBingo":本月中然 "weekGet":本周平台赠送 "monthGet":木月平台赠送
 export default {
   name: "AccountCenter",
+  data() {
+    return {
+      statis: {
+        dayUse: 0,
+        dayBingo: 0,
+        dayGet: 0,
+        weekBingo: 0,
+        monthBingo: 0,
+        weekGet: 0,
+        monthGet: 0,
+      },
+    };
+  },
   components: {
     bindCard,
     bindUsdt,
@@ -273,6 +288,11 @@ export default {
     },
   },
   methods: {
+    async myStatis() {
+      const [err, res] = await userApi.myStatis();
+      if (err) return;
+      this.statis = res.data;
+    },
     openPayDialog() {
       this.$refs.$paySet.open("您还未设置支付密码，请在修改密码中设置");
     },
@@ -311,6 +331,9 @@ export default {
         return this.openPayDialog();
       }
     },
+  },
+  created() {
+    this.myStatis();
   },
 };
 </script>

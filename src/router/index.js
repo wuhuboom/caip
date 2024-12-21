@@ -116,6 +116,9 @@ const router = new VueRouter({
 });
 router.beforeEach(async (to, from, next) => {
   Nprogress.start();
+  if (!store.state.notice.length) {
+    store.dispatch("getNotice");
+  }
   const ajaxs = [];
   if (!store.state.serveData.serviceAddr) {
     store.dispatch("getServeData");

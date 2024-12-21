@@ -181,14 +181,46 @@ $unit: 'px'; // Feel free to change the unit.
   .el-input__inner{
     border: none;
   }
-}
-.g-el-cascader-popper{
-  .is-active,.in-active-path{
-    background-color: #F5F7FA;
-    color: #ff9c00;
+  &>.el-input{
+    &>[type="text"]{
+      background-color: #ffba2c;
+      color: rgb(51, 51, 51);
+    }
   }
 }
-
+.g-el-cascader-popper{
+  &.el-cascader__dropdown{
+    background-color: rgb(255, 241, 192);
+  }
+  .is-active,.in-active-path{
+    background: transparent!important;
+    color: #ff9c00;
+  }
+  .el-cascader-node:hover{
+    background: rgba(255, 186, 44, .2) !important;
+  }
+}
+.el-range-editor{
+  background-color: #ffba2c;
+  .el-input__icon{
+    color: rgb(51, 51, 51);
+  }
+  &>.el-range-input{
+    background-color: transparent;
+    color: rgb(51, 51, 51);
+    &::placeholder {
+      color: rgb(51, 51, 51);
+    }
+  }
+}
+.g-el-progress{
+  .el-progress-bar__outer{
+    border:1px solid #ffa92d;
+  }
+  .el-progress-bar__outer,.el-progress-bar__inner{
+    border-radius: 0;
+  }
+}
 .g-el-pagination{
   .el-pager{
     &>li{
@@ -213,4 +245,40 @@ $unit: 'px'; // Feel free to change the unit.
 }
 .body-toast--visible{
   overflow:auto !important;
+}
+.y-container{
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  /* 使用webkit内核的浏览器 */
+  &:-moz-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  /* Firefox版本4-18 */
+  &::-moz-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  /* Firefox版本19+ */
+  &:-ms-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  /* IE浏览器 */
+  &::-o-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}
+.d-img{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

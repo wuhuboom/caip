@@ -49,14 +49,16 @@
       <div class="game-hall-notice">
         <div class="game-hall-bar">
           <div class="game-hall-bar-title">公告信息</div>
-          <p
-            class="marquee-tips"
-            style="
-              flex: 1 1 0%;
-              animation: 28s linear 0s infinite normal none running marqueechwxz;
-            "
-          >
-            {{ $store.state.scroll }}
+          <p class="marquee-tips" style="flex: 1 1 0%">
+            <van-notice-bar
+              style="
+                background-color: transparent;
+                height: 30px;
+                margin-top: -2px;
+                color: #fff;
+              "
+              :text="noticeDoc.content"
+            />
           </p>
         </div>
       </div>
@@ -510,7 +512,7 @@
     </tipsDialog>
     <tipsDialog @sure="clearData" ref="$finshDialog" />
     <tipsDialog @sure="clearData" ref="$clearDialog" />
-    <rankList ref="$rankList" />
+    <rankList :id="id" :detail="detail" ref="$rankList" />
   </div>
 </template>
 
@@ -578,7 +580,7 @@ export default {
           name: "冷热",
         },
       ],
-      id: null,
+      id: +this.$route.query.id,
       typeConfigList,
       curNav: null,
       cat: [],
@@ -605,11 +607,13 @@ export default {
     ball13: () => import("./components/ball13"),
   },
   computed: {
+    noticeDoc() {
+      return this.$store.getters.noticeDoc;
+    },
     typeTotalMoney() {
       if (this.isChase) {
         return this.totalChase.totalMoney;
       }
-      console.log(this.tableTotal);
       return this.tableTotal.totalMoney;
     },
     typeTotal() {
@@ -768,7 +772,7 @@ export default {
         0
       );
       const totalMoney = this.tableList.reduce(
-        (total, item) => total + item.total * this.multiple * this.$betPrice,
+        (total, item) => total + item.total * item.multiple * this.$betPrice,
         0
       );
       return {
@@ -1009,20 +1013,20 @@ export default {
       });
     },
     async changeId(v) {
-      document.body.classList.add("body-toast--visible");
-      this.$toast.loading({
-        duration: 0,
-        forbidClick: true,
-      });
       //删除 body van-toast--unclickable
 
-      Object.assign(this.$data, initData());
       if (+v) {
         if (this.id === v) {
           return;
         }
         this.id = v;
       }
+      document.body.classList.add("body-toast--visible");
+      this.$toast.loading({
+        duration: 0,
+        forbidClick: true,
+      });
+      Object.assign(this.$data, initData());
       await this.initDetail();
       await this.sleep();
       this.$toast.clear();
@@ -1114,6 +1118,14 @@ export default {
         await this.$store.dispatch("playerLotteryList");
       }
       this.cat = JSON.parse(JSON.stringify(this.$store.state.cat));
+      if (this.id) {
+        this.cat.forEach((doc) => {
+          if (doc.list.length && doc.list.find((v) => v.id === this.id)) {
+            doc.open = true;
+          }
+        });
+        return;
+      }
       this.cat.forEach((doc) => {
         if (doc.list.length && !this.id) {
           this.id = doc.list[0].id;

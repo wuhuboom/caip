@@ -1,7 +1,47 @@
 import request from "@/plugins/request";
 export default {
-  // /statis
-  myStatis() {},
+  ///home/winning
+  homeWinning() {
+    return request({
+      url: "/home/winning",
+    });
+  },
+  safeList(data) {
+    return request({
+      url: "/safe/list",
+      method: "post",
+      data,
+    });
+  },
+  safeToBalance(data) {
+    return request({
+      url: "/safe/toBalance",
+      method: "post",
+      data,
+    });
+  },
+  safeTransfer(data) {
+    return request({
+      url: "/safe/transfer",
+      method: "post",
+      data,
+    });
+  },
+  safeData() {
+    return request({
+      url: "/safe/data",
+    });
+  },
+  fbConf() {
+    return request({
+      url: "/safe/conf",
+    });
+  },
+  myStatis() {
+    return request({
+      url: "/statis",
+    });
+  },
   editPwdPay(data) {
     return request({
       url: "/editPwdPay",
@@ -437,20 +477,6 @@ export default {
       url: "/safe/info",
     });
   },
-  safeTransfer(data) {
-    return request({
-      url: "/safe/transfer",
-      method: "post",
-      data,
-    });
-  },
-  safeToBalance(data) {
-    return request({
-      url: "/safe/toBalance",
-      method: "post",
-      data,
-    });
-  },
   safeChangeLog(data) {
     return request({
       url: "/safe/changeLog",
@@ -601,11 +627,7 @@ export default {
       data,
     });
   },
-  fbConf() {
-    return request({
-      url: "/safe/conf",
-    });
-  },
+
   // 获取邮件验证码-未登录状态
   notLoginEmailChangePwd(data) {
     return request({
