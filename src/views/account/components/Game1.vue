@@ -57,15 +57,87 @@
       </div>
     </div>
     <div class="recharge-table-container p-t-0">
+      <!-- <el-table class="g-el-table" border :data="tableData.results">
+        <el-table-column prop="orderNo" label="游戏">
+          <template slot-scope="scope">
+            <p
+              @click="goDetail(scope.row.id)"
+              style="text-decoration: underline; cursor: pointer"
+            >
+              {{ getName(scope.row.lotteryId) }}
+            </p>
+          </template>
+        </el-table-column>
+        <el-table-column prop="money" label="方案金额">
+          <template slot-scope="scope">
+            ￥{{ divide(scope.row.money) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="moneyIncome" label="方案奖金">
+          <template slot-scope="scope">
+            ￥{{ divide(scope.row.moneyIncome) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="myBetCount" label="我的认购">
+          <template slot-scope="scope">
+            ￥{{ divide(scope.row.myBetCount) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="myMoneyIncome" label="我的奖金">
+          <template slot-scope="scope">
+            ￥{{ divide(scope.row.myMoneyIncome) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="p" label="完成进度">
+          <template slot-scope="scope">
+            <div>
+              <p>{{ `${scope.row.p}%` }}</p>
+              <el-progress
+                class="g-el-progress"
+                :stroke-width="12"
+                :show-text="false"
+                :percentage="scope.row.p"
+                define-back-color="#a84f2b"
+                color="#ffa92d"
+              ></el-progress>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="playerName" label="发起人"></el-table-column>
+        <el-table-column prop="status" label="订单状态">
+          <template slot-scope="scope">
+            {{ getStatus(scope.row.status) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="openStatus" label="中奖状态">
+          <template slot-scope="scope">
+            {{ getOpenStatus(scope.row.openStatus) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="createdAt" label="购买时间">
+          <template slot-scope="scope">
+            {{ $dayjsTime(scope.row.createdAt) }}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <span
+              style="color: gold; text-decoration: underline; cursor: pointer"
+              @click="goDetail(scope.row.id)"
+              >查看</span
+            >
+          </template>
+        </el-table-column>
+      </el-table> -->
       <table rules="all" align="center" class="recharge-table m-t-0">
         <tr align="center" class="recharge-table-header">
           <th height="40" width="100">游戏</th>
-          <th height="40">方案金额</th>
-          <th height="40">方案奖金</th>
+          <th height="40" width="80">方案金额</th>
+          <th height="40" width="80">方案奖金</th>
           <th height="40">我的认购</th>
           <th height="40">我的奖金</th>
-          <th height="40" width="100">完成进度</th>
-          <th height="40">发起人</th>
+          <th height="40" width="80">完成进度</th>
+          <th height="40" width="80">发起人</th>
           <th height="40">订单状态</th>
           <th height="40">中奖状态</th>
           <th height="40" width="150">购买时间</th>
@@ -101,20 +173,10 @@
                 color="#ffa92d"
               ></el-progress>
             </div>
-            <!-- <div style="margin-bottom: 3px">{{ item.p }}</div>
-            <div class="cp-progress-main">
-              <div class="cp-progress-bar" style="width: 80px; height: 10px">
-                <div class="cp-progress" style="flex: 100 1 0%"></div>
-                <div
-                  class="cp-left"
-                  :style="{
-                    flex: `0 1 ${item.p}`,
-                  }"
-                ></div>
-              </div>
-            </div> -->
           </td>
-          <td height="40">{{ item.playerName }}</td>
+          <td height="40">
+            <p class="els">{{ item.playerName }}</p>
+          </td>
           <td height="40">{{ getStatus(item.status) }}</td>
           <td height="40">{{ getOpenStatus(item.openStatus) }}</td>
           <td height="40">{{ $dayjsTime(item.createdAt) }}</td>
@@ -247,4 +309,13 @@ export default {
   },
 };
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.g-el-table {
+  ::v-deep {
+    td {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+}
+</style>
