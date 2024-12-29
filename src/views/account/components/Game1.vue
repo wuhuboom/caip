@@ -51,13 +51,13 @@
       <div
         class="cp-button-main activity-search-btn"
         v-loading="loading"
-        @click="lotteryBetsOrder"
+        @click="handleCurrentChange(1)"
       >
         查询
       </div>
     </div>
-    <div class="recharge-table-container">
-      <table rules="all" align="center" class="recharge-table">
+    <div class="recharge-table-container p-t-0">
+      <table rules="all" align="center" class="recharge-table m-t-0">
         <tr align="center" class="recharge-table-header">
           <th height="40" width="100">游戏</th>
           <th height="40">方案金额</th>
@@ -190,8 +190,8 @@ export default {
       window.open(`#/order/detail/${id}`);
     },
     getStatus(v) {
-      const item = this.$store.state.status.find((d) => d.id === v);
-      return item ? item.name : "";
+      return (this.$store.state.status.find((doc) => +doc.id === +v) || {})
+        .name;
     },
     getOpenStatus(v) {
       const item = this.$store.state.openStatus.find((d) => d.id === v);
@@ -213,8 +213,8 @@ export default {
         ...this.params,
       };
       if (Array.isArray(this.date) && this.date.length) {
-        sendData.startTime = this.date[0];
-        sendData.endTime = this.date[1];
+        sendData.start = this.date[0];
+        sendData.end = this.date[1];
       }
       if (Array.isArray(sendData.lotteryId)) {
         sendData.lotteryId = +sendData.lotteryId[sendData.lotteryId.length - 1];

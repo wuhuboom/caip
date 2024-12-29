@@ -330,30 +330,7 @@ export default {
       window.open(`#/order/detail/${id}`);
     },
     getStatus(v) {
-      //0进行中 1待出票 2待开奖 3已撤消 4已结束
-      const docs = [
-        {
-          name: "进行中",
-          status: 0,
-        },
-        {
-          name: "待出票",
-          status: 1,
-        },
-        {
-          name: "待开奖",
-          status: 2,
-        },
-        {
-          name: "已撤消",
-          status: 3,
-        },
-        {
-          name: "已结束",
-          status: 4,
-        },
-      ];
-      return (docs.find((doc) => doc.status === v) || {}).name;
+      return (this.$store.state.status.find((doc) => doc.id === v) || {}).name;
     },
     getTier(amount) {
       const tiers = [
@@ -459,7 +436,7 @@ export default {
       res.data.results.forEach((v) => {
         const curMoney = v.betCountCurr;
         const fix = (curMoney / v.betTotal).toFixed(2);
-        v.p = fix * 100;
+        v.p = parseInt(fix * 100);
         v.clientMoney = "";
         //剩余
         v.sellCount = v.betTotal - curMoney;

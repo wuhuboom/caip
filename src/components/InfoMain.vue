@@ -127,6 +127,12 @@ export default {
     bindCard,
   },
   computed: {
+    Cards() {
+      return this.$store.state.bankCard;
+    },
+    bankCard() {
+      return this.Cards.find((v) => +v.ctype === 2) || {};
+    },
     hideNAme() {
       return this.seen.name
         ? this.user.username
@@ -142,11 +148,17 @@ export default {
   },
   methods: {
     windth() {
+      if (this.bankCard.id) {
+        return;
+      }
       this.$refs.$tiphDialog.open(
         "您好，您还未绑定提款银行卡，确定现在进行绑定银行卡？"
       );
     },
     rechange() {
+      if (this.bankCard.id) {
+        return;
+      }
       this.$refs.$tiphDialog.open(
         "您好，您还未绑定提款银行卡，确定现在进行绑定银行卡？"
       );
@@ -154,6 +166,9 @@ export default {
     sure() {
       this.$refs.bindCard.show = true;
     },
+  },
+  created() {
+    this.$store.dispatch("getBankCard");
   },
 };
 </script>

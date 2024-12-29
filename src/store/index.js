@@ -9,6 +9,7 @@ Vue.use(Vuex);
 const lang = location.href.includes("zmkm") ? "zh" : "";
 export default new Vuex.Store({
   state: {
+    //0未开奖 1未中奖 2已中奖
     openStatus: [
       {
         name: "全部",
@@ -19,38 +20,58 @@ export default new Vuex.Store({
         id: 0,
       },
       {
-        name: "中奖",
+        name: "未中奖",
         id: 1,
       },
       {
-        name: "未中",
+        name: "已中奖",
         id: 2,
       },
-      {
-        name: "已撤消",
-        id: 3,
-      },
     ],
+    //0待出票 1待开奖 2已撤消 3已结束
     status: [
       {
-        name: "进行中",
-        id: 0,
+        name: "全部",
+        id: -1,
       },
       {
         name: "待出票",
-        id: 1,
+        id: 0,
       },
       {
         name: "待开奖",
-        id: 2,
+        id: 1,
       },
       {
         name: "已撤消",
-        id: 3,
+        id: 2,
       },
       {
         name: "已结束",
-        id: 4,
+        id: 3,
+      },
+    ],
+    //0待开奖 1.已撤消 2.已中奖3.未中奖
+    btmStatus: [
+      {
+        name: "全部",
+        id: -1,
+      },
+      {
+        name: "待开奖",
+        id: 0,
+      },
+      {
+        name: "已撤消",
+        id: 1,
+      },
+      {
+        name: "已中奖",
+        id: 2,
+      },
+      {
+        name: "未中奖",
+        id: 3,
       },
     ],
     shoeName: true,
@@ -106,6 +127,7 @@ export default new Vuex.Store({
     ],
     bankCard: [],
     notice: [],
+    hallId: null,
   },
   getters: {
     noticeDoc(state) {
@@ -117,6 +139,10 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    setHallId(state, data) {
+      if (!data) return;
+      state.hallId = data;
+    },
     setNotice(state, data) {
       state.notice = data;
     },

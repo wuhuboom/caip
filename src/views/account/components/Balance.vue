@@ -155,51 +155,88 @@
           <div
             class="cp-button-main activity-search-btn"
             v-loading="loading"
-            @click="lotteryBetsOrder"
+            @click="handleCurrentChange(1)"
           >
             <!---->
             查询
           </div>
         </div>
-        <div class="recharge-table-container">
-          <table rules="all" align="center" class="recharge-table">
-            <tr align="center" class="recharge-table-header">
-              <th height="40" width="260">余额宝编号</th>
-              <th height="40">返点模式</th>
-              <th height="40">转入金额</th>
-              <th height="40">利率</th>
-              <th height="40">利息</th>
-              <th height="40">状态</th>
-              <th height="40" width="136">转入时间</th>
-              <th height="40" width="136">转出时间</th>
-              <th height="40">操作</th>
-            </tr>
-            <tr v-for="(item, idx) in tableData.results" :key="idx">
-              <td>
-                {{ item.orderId }}
-              </td>
-              <td>默认</td>
-              <td>{{ divide(item.money) }}</td>
-              <td>{{ item.rate }}%</td>
-              <td>{{ divide(item.currIncome) }}</td>
-              <td>
+        <div class="m-x-16">
+          <el-table class="g-el-table" border :data="tableData.results">
+            <el-table-column prop="orderId" label="余额宝编号" width="180">
+            </el-table-column>
+            <el-table-column label="返点模式">
+              <template> 默认 </template>
+            </el-table-column>
+            <el-table-column prop="money" label="转入金额">
+              <template slot-scope="scope">
+                <span>￥{{ divide(scope.row.money) }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="rate" label="利率">
+              <template slot-scope="scope"> {{ scope.row.rate }}% </template>
+            </el-table-column>
+            <el-table-column prop="currIncome" label="利息">
+              <template slot-scope="scope">
+                <span
+                  >￥{{
+                    divide(
+                      +scope.row.status === 0
+                        ? scope.row.currIncome
+                        : scope.row.outIncome
+                    )
+                  }}</span
+                >
+              </template>
+            </el-table-column>
+            <el-table-column prop="status" label="状态">
+              <template slot-scope="scope">
                 {{
-                  item.status == 0
+                  scope.row.status == 0
                     ? "生息中"
-                    : item.status == 1
+                    : scope.row.status == 1
                     ? "已转出"
                     : "待转出"
                 }}
-              </td>
-              <td>{{ $dayjsTime(item.createTime) }}</td>
-              <td>{{ item.finishTime ? $dayjsTime(item.finishTime) : "" }}</td>
-              <td>--</td>
-            </tr>
-          </table>
-          <div class="num-color empty" v-if="!tableData.results.length">
-            没有更多的数据了
-          </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="createdAt" label="转入时间" width="160">
+              <template slot-scope="scope">
+                <span>{{ $dayjsTime(scope.row.createdAt) }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="finishTime" label="转出时间" width="160">
+              <template slot-scope="scope">
+                <span>{{
+                  scope.row.finishTime ? $dayjsTime(scope.row.finishTime) : ""
+                }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="100">
+              <template slot-scope="scope">
+                <div
+                  v-if="+scope.row.status !== 1"
+                  class="recharge-btn btn-search m-x-0"
+                  @click="withdrawOne(scope.row)"
+                  style="
+                    cursor: pointer;
+                    width: 80px;
+                    background-image: linear-gradient(
+                      to right,
+                      rgb(255, 242, 0),
+                      rgb(255, 127, 39)
+                    );
+                    margin-right: 10px;
+                  "
+                >
+                  转出
+                </div>
+                <span v-else> -- </span>
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
+
         <div class="p-t-32 center-center">
           <el-pagination
             class="g-el-pagination"
@@ -312,7 +349,7 @@ export default {
     },
     recharge() {
       if (!this.money) {
-        this.$message.error("请输入转入金额");
+        this.$message.error("请输入金额");
         return;
       }
       if (this.money < this.config.min) {
@@ -326,22 +363,42 @@ export default {
       this.$refs.$recharge.open(`确定要转入${this.money}元到余额宝吗？`);
     },
     async withdraw() {
-      if (!this.money) {
-        this.$message.error("请输入转入金额");
-        return;
-      }
-      if (this.money > this.data.canOut) {
+      if (!this.data.canOut) {
         this.$message.error(`待转出总金额为${this.data.canOut}元`);
         return;
       }
-      const [err, res] = await userApi.safeToBalance({
-        money: this.money,
-      });
+      const [err, res] = await userApi.safeToBalanceAll();
       if (err) return;
       this.money = "";
       console.log(res);
       this.$message.success("转出成功");
       this.initPage();
+    },
+    //确定转出吗
+    comfire() {
+      return new Promise((resolve) => {
+        this.$confirm("确定要转出吗？", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+          customClass: "g-confirm-box",
+        })
+          .then(() => {
+            resolve(1);
+          })
+          .catch(() => {
+            resolve(0);
+          });
+      });
+    },
+    async withdrawOne(row) {
+      const status = await this.comfire();
+      if (!status) return;
+      const [err] = await userApi.safeToBalance({ id: row.id });
+      if (err) return;
+      this.$message.success("转出成功");
+      this.handleCurrentChange(1);
+      this.safeData();
     },
     async sureRecharge() {
       const [err, res] = await userApi.safeTransfer({
@@ -367,6 +424,9 @@ export default {
     async safeData() {
       const [err, res] = await userApi.safeData();
       if (err) return;
+      for (let key in res.data) {
+        res.data[key] = +this.divide(res.data[key]);
+      }
       this.data = res.data;
     },
     initPage() {

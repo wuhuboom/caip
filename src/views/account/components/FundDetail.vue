@@ -2,7 +2,8 @@
   <div class="account-detail-main">
     <div class="my-account-welcome" style="margin-left: 10px">
       您好，尊敬的用户：
-      <span class="my-account-span">雨辰0905</span>，您当前的总余额如下：
+      <span class="my-account-span">{{ user.username }}</span
+      >，您当前的总余额如下：
     </div>
     <div class="account-detail-amount-container">
       <div class="account-detail-amount-red">
@@ -13,7 +14,9 @@
           />
         </div>
         <div class="account-detail-bar">
-          <span style="margin-left: 10px">可提现：0元</span>
+          <span style="margin-left: 10px"
+            >可以提现：{{ divide(user.balanceWithdraw) }}元</span
+          >
         </div>
         <div class="account-detail-amount" style="background: rgb(0, 150, 255)">
           <img
@@ -22,7 +25,9 @@
           />
         </div>
         <div class="account-detail-bar" style="background: rgb(0, 150, 255)">
-          <span style="margin-left: 10px">可使用：0.51元</span>
+          <span style="margin-left: 10px"
+            >可以使用：{{ divide(user.balance) }}元</span
+          >
         </div>
         <div
           class="account-detail-amount"
@@ -37,7 +42,9 @@
           class="account-detail-bar"
           style="background: rgb(133, 156, 156); border-radius: 10px"
         >
-          <span style="margin-left: 10px">待消费：0元</span>
+          <span style="margin-left: 10px"
+            >待消费：{{ divide(user.balance + user.frozenBet) }}元</span
+          >
         </div>
         <div class="account-detail-amount-bg"></div>
         <div
@@ -50,370 +57,89 @@
         ></div>
       </div>
     </div>
-    <div class="recharge-title">
-      <div class="cp-date-picker-main recharge-picker">
-        <input placeholder="请选择日期" class="cp-date-picker-input" />
-        <div class="cp-date-picker-content">
-          <section class="wh_container">
-            <div class="wh_content_all">
-              <div class="wh_top_changge">
-                <li>
-                  <div class="wh_jiantou1"></div>
-                </li>
-                <li class="wh_content_li">2024年11月</li>
-                <li>
-                  <div class="wh_jiantou2"></div>
-                </li>
-              </div>
-              <div class="wh_content-week">
-                <div class="wh_content_item">
-                  <div class="wh_top_tag">一</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_top_tag">二</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_top_tag">三</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_top_tag">四</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_top_tag">五</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_top_tag">六</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_top_tag">日</div>
-                </div>
-              </div>
-              <div class="wh_content">
-                <div class="wh_content_item">
-                  <div class="wh_item_date wh_other_dayhide">28</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date wh_other_dayhide">29</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date wh_other_dayhide">30</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date wh_other_dayhide">31</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">1</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">2</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">3</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">4</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">5</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">6</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">7</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">8</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">9</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">10</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">11</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">12</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">13</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">14</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">15</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">16</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">17</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date wh_isToday">18</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">19</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">20</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">21</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">22</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">23</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">24</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">25</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">26</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">27</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">28</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">29</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">30</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date wh_other_dayhide">1</div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      </div>
-      <span style="margin-left: 5px; margin-right: 5px">至</span>
-      <div class="cp-date-picker-main recharge-picker">
-        <input placeholder="请选择日期" class="cp-date-picker-input" />
-        <div class="cp-date-picker-content">
-          <section class="wh_container">
-            <div class="wh_content_all">
-              <div class="wh_top_changge">
-                <li>
-                  <div class="wh_jiantou1"></div>
-                </li>
-                <li class="wh_content_li">2024年11月</li>
-                <li>
-                  <div class="wh_jiantou2"></div>
-                </li>
-              </div>
-              <div class="wh_content-week">
-                <div class="wh_content_item">
-                  <div class="wh_top_tag">一</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_top_tag">二</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_top_tag">三</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_top_tag">四</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_top_tag">五</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_top_tag">六</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_top_tag">日</div>
-                </div>
-              </div>
-              <div class="wh_content">
-                <div class="wh_content_item">
-                  <div class="wh_item_date wh_other_dayhide">28</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date wh_other_dayhide">29</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date wh_other_dayhide">30</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date wh_other_dayhide">31</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">1</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">2</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">3</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">4</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">5</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">6</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">7</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">8</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">9</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">10</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">11</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">12</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">13</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">14</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">15</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">16</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">17</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date wh_isToday">18</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">19</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">20</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">21</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">22</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">23</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">24</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">25</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">26</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">27</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">28</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">29</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date">30</div>
-                </div>
-                <div class="wh_content_item">
-                  <div class="wh_item_date wh_other_dayhide">1</div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      </div>
-      <div
-        class="cp-cascader-main"
-        style="width: 80px; height: 26px; margin-left: 10px"
+    <div class="recharge-title align-center">
+      <el-date-picker
+        v-model="date"
+        class="g-el-input__inner"
+        type="daterange"
+        size="small"
+        value-format="yyyy-MM-dd"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        popper-class="g-table-popper-class"
       >
-        <div class="cp-cascader-btn">
-          <span class="cp-cascader-span">全部</span>
-          <i class="el-icon-caret-bottom" style="margin-right: 6px"></i>
-        </div>
-        <div class="cp-cascader-items" style="display: none">
-          <div
-            class="cp-cascader-columns"
-            style="background: rgb(255, 241, 192)"
+      </el-date-picker>
+      <div class="align-center" style="margin-left: 18px; width: 180px">
+        <span class="select-drop-span no-shrink">类型:</span>
+        <el-select
+          class="g-el-cascader"
+          size="small"
+          v-model="params.type"
+          clearable
+          placeholder="请选择"
+          popper-class="g-el-cascader-popper"
+        >
+          <el-option
+            v-for="item in tabSimpleList"
+            :key="item.id"
+            :label="item.text"
+            :value="item.id"
           >
-            <div class="cp-cascader-item cp-cascader-item-active">
-              <span class="cp-cascader-item-span">全部</span>
-            </div>
-            <div class="cp-cascader-item">
-              <span class="cp-cascader-item-span">入账</span>
-            </div>
-            <div class="cp-cascader-item">
-              <span class="cp-cascader-item-span">扣款</span>
-            </div>
-            <div class="cp-cascader-item">
-              <span class="cp-cascader-item-span">冻结</span>
-            </div>
-            <div class="cp-cascader-item">
-              <span class="cp-cascader-item-span">解冻</span>
-            </div>
-          </div>
-        </div>
+          </el-option>
+        </el-select>
       </div>
-      <span style="margin-left: 18px">方案编号：</span>
-      <input class="fund-input" />
-      <div class="cp-button-main recharge-btn">
+      <span style="margin-left: 18px" class="no-shrink">方案编号：</span>
+      <input v-model.trim="params.orderId" class="fund-input" />
+      <div
+        class="cp-button-main activity-search-btn"
+        v-loading="loading"
+        @click="handleCurrentChange(1)"
+      >
         <!---->
         查询
       </div>
     </div>
-    <div class="recharge-table-container">
-      <table rules="all" align="center" class="recharge-table">
-        <tr align="center" class="recharge-table-header">
-          <th height="40" width="150">方案编号</th>
-          <th height="40" width="90">交易金额</th>
-          <th height="40" width="100">交易类型</th>
-          <th height="40" width="100">可用余额</th>
-          <th height="40" width="155">交易时间</th>
-          <th height="40">交易备注</th>
-        </tr>
-      </table>
+
+    <div class="recharge-table-container p-t-0">
+      <!-- 余额变动记录,createdAt:日期,username:用户名
+      ,changeMoney:账变前金额,dnedMoney:账变后金额, orderNo:订单编号,remark备注 -->
+      <el-table class="g-el-table" border :data="tableData.results">
+        <el-table-column prop="orderNo" label="订单号" width="280">
+        </el-table-column>
+        <!-- <el-table-column prop="用户名" label="用户名"> </el-table-column> -->
+        <el-table-column prop="changeMoney" label="账变前金额">
+          <template slot-scope="scope">
+            <span>{{ divide(scope.row.changeMoney) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="dnedMoney" label="账变后金额">
+          <template slot-scope="scope">
+            <span>{{ divide(scope.row.dnedMoney) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="createdAt" label="日期">
+          <template slot-scope="scope">
+            <span>{{ $dayjsTime(scope.row.createdAt) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="remark" label="备注">
+          <template slot-scope="scope">
+            <span>{{ scope.row.remark }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+
       <div class="cp-pagination-main" style="margin-top: 40px">
-        <div class="cp-pagination-head">
-          <div class="cp-pagination-first">首页</div>
-          <div class="cp-pagination-page">上一页</div>
-          <div class="cp-pagination-num cp-pagination-num-active">1</div>
-        </div>
-        <div class="cp-pagination-middle">
-          <!---->
-          <!---->
-        </div>
-        <div class="cp-pagination-head">
-          <!---->
-          <div class="cp-pagination-page">下一页</div>
-          <div class="cp-pagination-tail">尾页</div>
-        </div>
-        <div class="cp-pagination-data">页次：1/0</div>
-        <div class="cp-pagination-data">记录：0条</div>
+        <el-pagination
+          class="g-el-pagination"
+          @current-change="handleCurrentChange"
+          :current-page="params.pageNo"
+          :page-size="params.pageSize"
+          layout="total, prev, pager, next"
+          :total="tableData.totalCount"
+        >
+        </el-pagination>
       </div>
       <div class="with-draw-state p-l-8 p-r-8">
         温馨提示： <br />
@@ -426,10 +152,90 @@
 </template>
 
 <script>
+import userApi from "@/api/user";
 export default {
   name: "AccountCenter",
   data() {
-    return {};
+    return {
+      tabSimpleList: [
+        { id: "", text: "全部" },
+        { id: 1, text: "线上充值" },
+        { id: 2, text: "提现" },
+        { id: 3, text: "投注" },
+        { id: 4, text: "投注盈利" },
+        { id: 5, text: "下级盈利返利" },
+        { id: 6, text: "人工加款" },
+        { id: 7, text: "撤消投注" },
+        { id: 8, text: "人工减款" },
+        { id: 9, text: "投注结束" },
+        { id: 10, text: "转入余额宝" },
+        { id: 11, text: "线下充值" },
+        { id: 12, text: "提现退回" },
+        { id: 13, text: "投注退回" },
+        { id: 14, text: "余额宝转入" },
+        { id: 15, text: "幸运抽奖" },
+        { id: 16, text: "宾果游戏" },
+        { id: 21, text: "下级充值返利" },
+        { id: 23, text: "邀请奖励" },
+        { id: 24, text: "首充奖励" },
+        { id: 25, text: "活动" },
+        { id: 26, text: "次充奖励" },
+        { id: 27, text: "固定日" },
+        { id: 28, text: "邀请首充奖励" },
+        { id: 29, text: "幸运转盘抽奖" },
+        { id: 30, text: "幸运转盘中奖" },
+        { id: 31, text: "线下活动" },
+        { id: 32, text: "报单上分" },
+        { id: 33, text: "冲正" },
+        { id: 34, text: "闪兑" },
+        { id: 35, text: "团队激励" },
+        { id: 36, text: "充值补偿" },
+        { id: 38, text: "累计充值返利" },
+      ],
+      loading: false,
+      date: "",
+      params: {
+        orderId: "",
+        type: "",
+        status: "",
+        pageNo: 1,
+        pageSize: 4,
+      },
+      tableData: {
+        totalCount: 0,
+        results: [],
+      },
+    };
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    },
+  },
+  methods: {
+    handleCurrentChange(val) {
+      this.params.pageNo = val;
+      this.lotteryBetsOrder();
+    },
+    async lotteryBetsOrder() {
+      const query = {
+        ...this.params,
+      };
+      //begin end
+      if (this.date) {
+        query.begin = this.date[0];
+        query.end = this.date[1];
+      }
+      const [err, res] = await userApi.balanceChangeReq(query);
+      if (err) {
+        return;
+      }
+      this.tableData = res.data;
+    },
+  },
+  created() {
+    this.$store.dispatch("getInfo");
+    this.lotteryBetsOrder();
   },
 };
 </script>

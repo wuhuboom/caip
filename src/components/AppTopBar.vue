@@ -1,20 +1,22 @@
 <template>
   <div class="app-layout-nav">
     <div class="nav-bar-main app-nav-bar">
-      <router-link
+      <div
         class="nav-bar-link"
         v-for="(item, idx) in navs"
         :key="idx"
-        :to="item.path"
+        @click="navClick(item)"
       >
         <div
           class="nav-item-main"
-          :class="{ 'nav-item-active': item.path == $route.path }"
+          :class="{
+            'nav-item-active': item.path == $route.fullPath,
+          }"
         >
           <div>{{ item.name }}</div>
           <div class="nav-item-subtitle">{{ item.desc }}</div>
         </div>
-      </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -23,8 +25,18 @@
 export default {
   name: "AppTopBar",
   data() {
-    return {
-      navs: [
+    return {};
+  },
+  computed: {
+    serveData() {
+      return this.$store.state.serveData?.serviceAddr;
+    },
+    navs() {
+      let path = "/game/hall";
+      if (this.$store.state.hallId) {
+        path += `?id=${this.$store.state.hallId}`;
+      }
+      return [
         {
           name: "首页",
           desc: "Home",
@@ -33,7 +45,7 @@ export default {
         {
           name: "游戏大厅",
           desc: "Game Hall",
-          path: "/game/hall",
+          path,
         },
         {
           name: "合买中心",
@@ -55,6 +67,12 @@ export default {
           desc: "DownLoad",
           path: "/download/app",
         },
+        //客服
+        {
+          name: "在线客服",
+          desc: "Customer Service",
+          path: "/customer/service",
+        },
         {
           name: "线路检测",
           desc: "Line Detection",
@@ -70,8 +88,23 @@ export default {
           desc: "Usdt Course",
           path: "/usdtInfo/index",
         },
-      ],
-    };
+      ];
+    },
+  },
+  methods: {
+    navClick(item) {
+      if (item.path === "/customer/service") {
+        this.$store.dispatch("getServeData");
+        window.open(this.serveData);
+        return;
+      }
+      this.$router.push(item.path);
+    },
   },
 };
 </script>
+<style>
+.nav-bar-link {
+  cursor: pointer;
+}
+</style>

@@ -168,10 +168,18 @@ export default {
         this.confirm();
       });
     },
+    sleep(v) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve();
+        }, v * 1000);
+      });
+    },
     async confirm() {
       if (this.loading) return;
       this.loading = true;
       const [err] = await userApi.editPwdPay(this.form);
+      await this.sleep(1);
       this.loading = false;
       if (err) return;
       this.$emit("close");

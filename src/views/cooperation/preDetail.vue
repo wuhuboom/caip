@@ -71,9 +71,11 @@
                       >¥{{ divide(detail.money) }}</span
                     >
                   </td>
-                  <td height="30">{{ detail.expectTotal }}</td>
-                  <td height="30">{{ detail.expectCur || 0 }}</td>
-                  <td height="30">{{ getReType(+detail.reType) }}</td>
+                  <td height="30">{{ detail.totalExpect }}</td>
+                  <td height="30">{{ detail.currExpect }}</td>
+                  <td height="30">
+                    {{ getReType(+detail.stopBingo) }}
+                  </td>
 
                   <td height="30">用户自购</td>
 
@@ -248,7 +250,7 @@
                   >
                     <td height="30">{{ item.expect }}</td>
                     <td height="30" style="color: rgb(255, 155, 0)">
-                      ¥{{ divide(item.money, false) }}
+                      ¥{{ divide(item.money) }}
                     </td>
                     <td height="30">{{ item.mulp }}</td>
                     <td height="30" width="330px">
@@ -256,7 +258,7 @@
                         <div
                           class="number-ball-main"
                           v-for="(num, idx) in item.open
-                            .split(',')
+                            ?.split(',')
                             .filter((v) => v)"
                           :key="idx"
                           style="
@@ -278,12 +280,12 @@
                     </td>
                     <td height="30">
                       <span style="color: rgb(239, 204, 82)"
-                        >¥{{ divide(item.bingo, false) }}</span
+                        >¥{{ divide(item.bingo) }}</span
                       >
                     </td>
                     <td height="30">
                       <span style="color: rgb(175, 112, 3)">{{
-                        getExpects(item.status)
+                        btmStatus(item.status)
                       }}</span>
                     </td>
                     <td height="30">
@@ -454,19 +456,14 @@ export default {
       return (docs.find((doc) => doc.status === v) || {}).name;
     },
     getReType(v) {
-      // 0 无追号 1中奖停 2中奖不停
       const docs = [
         {
-          name: "无追号",
+          name: "中奖不停",
           status: 0,
         },
         {
           name: "中奖停",
           status: 1,
-        },
-        {
-          name: "中奖不停",
-          status: 2,
         },
       ];
       return (docs.find((doc) => doc.status === v) || {}).name;
@@ -496,11 +493,34 @@ export default {
       this.$refs.$buyDialog.open();
     },
     getExpects(v) {
-      return (this.$store.state.openStatus.find((doc) => doc.id === v) || {})
-        .name;
+      //0未开奖 1未中奖 2已中奖
+      const docs = [
+        {
+          name: "待开奖",
+          status: 0,
+        },
+        {
+          name: "已撤消",
+          status: 1,
+        },
+        {
+          name: "已中奖",
+          status: 2,
+        },
+        {
+          name: "未中奖",
+          status: 3,
+        },
+      ];
+      return (docs.find((doc) => doc.status === v) || {}).name;
     },
     getStatus(v) {
-      return (this.$store.state.status.find((doc) => doc.id === v) || {}).name;
+      return (this.$store.state.status.find((doc) => +doc.id === +v) || {})
+        .name;
+    },
+    btmStatus(v) {
+      return (this.$store.state.btmStatus.find((doc) => +doc.id === +v) || {})
+        .name;
     },
     parseFourStarInput(input) {
       // 按 '/' 分割多组记录

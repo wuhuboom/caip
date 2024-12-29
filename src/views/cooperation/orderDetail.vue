@@ -71,8 +71,8 @@
                       >¥{{ divide(detail.money) }}</span
                     >
                   </td>
-                  <td height="30">{{ detail.expectTotal }}</td>
-                  <td height="30">{{ detail.expectCur || 0 }}</td>
+                  <td height="30">{{ detail.totalExpect }}</td>
+                  <td height="30">{{ detail.currExpect }}</td>
                   <td height="30">{{ getReType(+detail.reType) }}</td>
                   <td height="30">
                     <!---->
@@ -343,7 +343,7 @@
                         <div
                           class="number-ball-main"
                           v-for="(num, idx) in item.open
-                            .split(',')
+                            ?.split(',')
                             .filter((v) => v)"
                           :key="idx"
                           style="
@@ -365,12 +365,12 @@
                     </td>
                     <td height="30">
                       <span style="color: rgb(239, 204, 82)"
-                        >¥{{ divide(item.bingo, false) }}</span
+                        >¥{{ divide(item.bingo) }}</span
                       >
                     </td>
                     <td height="30">
                       <span style="color: rgb(175, 112, 3)">{{
-                        getExpects(item.status)
+                        btmStatus(item.status)
                       }}</span>
                     </td>
                     <td height="30">
@@ -543,30 +543,11 @@ export default {
         .name;
     },
     getStatus(v) {
-      //0进行中 1待出票 2待开奖 3已撤消 4已结束
-      const docs = [
-        {
-          name: "进行中",
-          status: 0,
-        },
-        {
-          name: "待出票",
-          status: 1,
-        },
-        {
-          name: "待开奖",
-          status: 2,
-        },
-        {
-          name: "已撤消",
-          status: 3,
-        },
-        {
-          name: "已结束",
-          status: 4,
-        },
-      ];
-      return (docs.find((doc) => doc.status === v) || {}).name;
+      return (this.$store.state.status.find((doc) => doc.id === v) || {}).name;
+    },
+    btmStatus(v) {
+      return (this.$store.state.btmStatus.find((doc) => doc.id === v) || {})
+        .name;
     },
     parseFourStarInput(input) {
       // 按 '/' 分割多组记录

@@ -106,6 +106,15 @@ const routes = [
       AppBtmBar,
     },
   },
+  {
+    path: "/customer/service",
+    name: "customerService",
+    components: {
+      default: () => import("@/views/account/service.vue"),
+      AppTopBar,
+      AppBtmBar,
+    },
+  },
 ];
 
 const router = new VueRouter({

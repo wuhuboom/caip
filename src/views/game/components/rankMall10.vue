@@ -15,94 +15,6 @@
               border-bottom: 1px solid rgb(198, 156, 65);
             "
           >
-            千位
-          </div>
-          <div class="table-row">
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div>0</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">1</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">2</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">3</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">4</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">5</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">6</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">7</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">8</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">9</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="table-header-border" style="flex: 10 1 0%">
-        <div>
-          <div
-            style="
-              line-height: 20px;
-              border-bottom: 1px solid rgb(198, 156, 65);
-            "
-          >
-            百位
-          </div>
-          <div class="table-row">
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div>0</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">1</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">2</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">3</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">4</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">5</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">6</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">7</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">8</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">9</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="table-header-border" style="flex: 10 1 0%">
-        <div>
-          <div
-            style="
-              line-height: 20px;
-              border-bottom: 1px solid rgb(198, 156, 65);
-            "
-          >
             十位
           </div>
           <div class="table-row">
@@ -139,14 +51,49 @@
           </div>
         </div>
       </div>
-      <div class="table-header-border" style="flex: 1 1 0%">
-        <div style="height: 41px">豹子</div>
-      </div>
-      <div class="table-header-border" style="flex: 1 1 0%">
-        <div style="height: 41px">组三</div>
-      </div>
-      <div class="table-header-border" style="flex: 1 1 0%">
-        <div style="height: 41px">组六</div>
+      <div class="table-header-border" style="flex: 10 1 0%">
+        <div>
+          <div
+            style="
+              line-height: 20px;
+              border-bottom: 1px solid rgb(198, 156, 65);
+            "
+          >
+            个位
+          </div>
+          <div class="table-row">
+            <div style="flex: 1 1 0%; line-height: 20px">
+              <div>0</div>
+            </div>
+            <div style="flex: 1 1 0%; line-height: 20px">
+              <div style="border-left: 1px solid rgb(198, 156, 65)">1</div>
+            </div>
+            <div style="flex: 1 1 0%; line-height: 20px">
+              <div style="border-left: 1px solid rgb(198, 156, 65)">2</div>
+            </div>
+            <div style="flex: 1 1 0%; line-height: 20px">
+              <div style="border-left: 1px solid rgb(198, 156, 65)">3</div>
+            </div>
+            <div style="flex: 1 1 0%; line-height: 20px">
+              <div style="border-left: 1px solid rgb(198, 156, 65)">4</div>
+            </div>
+            <div style="flex: 1 1 0%; line-height: 20px">
+              <div style="border-left: 1px solid rgb(198, 156, 65)">5</div>
+            </div>
+            <div style="flex: 1 1 0%; line-height: 20px">
+              <div style="border-left: 1px solid rgb(198, 156, 65)">6</div>
+            </div>
+            <div style="flex: 1 1 0%; line-height: 20px">
+              <div style="border-left: 1px solid rgb(198, 156, 65)">7</div>
+            </div>
+            <div style="flex: 1 1 0%; line-height: 20px">
+              <div style="border-left: 1px solid rgb(198, 156, 65)">8</div>
+            </div>
+            <div style="flex: 1 1 0%; line-height: 20px">
+              <div style="border-left: 1px solid rgb(198, 156, 65)">9</div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="table-header-border" style="flex: 10 1 0%">
         <div>
@@ -192,7 +139,7 @@
           </div>
         </div>
       </div>
-      <div class="table-header-border" style="flex: 10 1 0%">
+      <div class="table-header-border" style="flex: 4 1 0%">
         <div>
           <div
             style="
@@ -200,38 +147,46 @@
               border-bottom: 1px solid rgb(198, 156, 65);
             "
           >
-            跨度
+            十位
           </div>
           <div class="table-row">
             <div style="flex: 1 1 0%; line-height: 20px">
-              <div>0</div>
+              <div>大</div>
             </div>
             <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">1</div>
+              <div style="border-left: 1px solid rgb(198, 156, 65)">小</div>
             </div>
             <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">2</div>
+              <div style="border-left: 1px solid rgb(198, 156, 65)">单</div>
             </div>
             <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">3</div>
+              <div style="border-left: 1px solid rgb(198, 156, 65)">双</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="table-header-border" style="flex: 4 1 0%">
+        <div>
+          <div
+            style="
+              line-height: 20px;
+              border-bottom: 1px solid rgb(198, 156, 65);
+            "
+          >
+            个位
+          </div>
+          <div class="table-row">
+            <div style="flex: 1 1 0%; line-height: 20px">
+              <div>大</div>
             </div>
             <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">4</div>
+              <div style="border-left: 1px solid rgb(198, 156, 65)">小</div>
             </div>
             <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">5</div>
+              <div style="border-left: 1px solid rgb(198, 156, 65)">单</div>
             </div>
             <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">6</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">7</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">8</div>
-            </div>
-            <div style="flex: 1 1 0%; line-height: 20px">
-              <div style="border-left: 1px solid rgb(198, 156, 65)">9</div>
+              <div style="border-left: 1px solid rgb(198, 156, 65)">双</div>
             </div>
           </div>
         </div>
@@ -242,7 +197,12 @@
     </div>
     <div
       class="y-container"
-      style="position: relative; overflow: hidden auto; height: 545px"
+      style="
+        position: relative;
+        overflow: hidden auto;
+        height: 545px;
+        width: 100%;
+      "
     >
       <div class="chart-table container1" style="width: 100%">
         <div
@@ -257,11 +217,11 @@
           <div class="table-cell no-shrink" style="width: 70px">
             {{ item.openNum }}
           </div>
-          <div class="table-row bg-blue" style="flex: 10 1 0%">
+          <div class="table-row bg-blue" style="width: 255px">
             <div
               class="table-cell"
               style="flex: 1 1 0%"
-              v-for="(v, idx) in item.ballMiss?.ball1"
+              v-for="(v, idx) in item.ballMiss?.ball2"
               :key="idx"
             >
               <div
@@ -273,10 +233,10 @@
               <div v-else>{{ showLuo ? v : "" }}</div>
             </div>
           </div>
-          <div class="table-row bg-yellow" style="flex: 10 1 0%">
+          <div class="table-row bg-yellow" style="width: 256px">
             <div
               class="table-cell"
-              v-for="(v, idx) in item.ballMiss?.ball2"
+              v-for="(v, idx) in item.ballMiss?.ball3"
               style="flex: 1 1 0%"
               :key="idx"
             >
@@ -289,89 +249,77 @@
               <div v-else>{{ showLuo ? v : "" }}</div>
             </div>
           </div>
-          <div class="table-row bg-blue" style="flex: 10 1 0%">
+          <div class="table-row bg-beigo" style="width: 255px">
             <div
               class="table-cell"
               style="flex: 1 1 0%"
-              v-for="(v, idx) in item.ballMiss?.ball3"
-              :key="idx"
-            >
-              <div
-                class="green-ball js-chose3"
-                v-if="idx === +item.openNumArr[2]"
-              >
-                {{ idx }}
-              </div>
-              <div v-else>{{ showLuo ? v : "" }}</div>
-            </div>
-          </div>
-          <template v-for="(v, idx) in item.ballThree?.qs">
-            <div
-              :key="idx"
-              class="table-cell bg-beigo green-cell"
-              style="flex: 1 1 0%"
-              v-if="determineType(item.openNumArr) === '子' && idx === 0"
-            >
-              子
-            </div>
-            <div
-              :key="idx"
-              class="table-cell bg-beigo green-cell"
-              style="flex: 1 1 0%"
-              v-else-if="determineType(item.openNumArr) === '三' && idx === 1"
-            >
-              三
-            </div>
-            <div
-              :key="idx"
-              class="table-cell bg-beigo green-cell"
-              style="flex: 1 1 0%"
-              v-else-if="determineType(item.openNumArr) === '六' && idx === 2"
-            >
-              六
-            </div>
-            <div
-              :key="idx"
-              class="table-cell bg-beigo"
-              style="flex: 1 1 0%"
-              v-else
-            >
-              {{ showLuo ? v : "" }}
-            </div>
-          </template>
-
-          <div class="table-row bg-blue" style="flex: 10 1 0%">
-            <div
-              class="table-cell"
-              style="flex: 1 1 0%"
-              v-for="(v, idx) in item.threeMiss?.qs"
+              v-for="(v, idx) in item.ballMiss?.ballAll"
               :key="idx"
             >
               <div
                 class="gold-ball"
-                v-if="item.openNumArr.find((item) => +item === +idx)"
+                v-if="item.openNumArr.find((num) => num === idx)"
               >
                 {{ idx }}
               </div>
               <div v-else>{{ showLuo ? v : "" }}</div>
             </div>
           </div>
-          <div class="table-row bg-yellow" style="flex: 10 1 0%">
+          <div class="table-row bg-blue" style="width: 103px">
             <div
               class="table-cell"
               style="flex: 1 1 0%"
-              v-for="(v, idx) in item.spanThree?.qs"
+              v-for="(v, idx) in item.bsg?.shi"
               :key="idx"
             >
               <div
-                class="green-ball js-chose4"
-                v-if="+item.calculateSpan === +idx"
+                v-if="
+                  !Number.isInteger(
+                    getNumberProperty(item.openNumArr[0], idx, v)
+                  )
+                "
+                :class="{
+                  'blue-cell': ['大', '单'].includes(
+                    getNumberProperty(item.openNumArr[0], idx, v)
+                  ),
+                  'green-cell': ['小', '双'].includes(
+                    getNumberProperty(item.openNumArr[0], idx, v)
+                  ),
+                }"
               >
-                {{ idx }}
+                {{ getNumberProperty(item.openNumArr[0], idx, v) }}
               </div>
               <div v-else>{{ showLuo ? v : "" }}</div>
             </div>
           </div>
+          <div class="table-row bg-yellow" style="width: 103px">
+            <div
+              class="table-cell"
+              style="flex: 1 1 0%"
+              v-for="(v, idx) in item.bsg?.ge"
+              :key="idx"
+            >
+              <div
+                v-if="
+                  !Number.isInteger(
+                    getNumberProperty(item.openNumArr[1], idx, v)
+                  )
+                "
+                :class="{
+                  'blue-cell': ['大', '单'].includes(
+                    getNumberProperty(item.openNumArr[1], idx, v)
+                  ),
+                  'green-cell': ['小', '双'].includes(
+                    getNumberProperty(item.openNumArr[1], idx, v)
+                  ),
+                }"
+              >
+                {{ getNumberProperty(item.openNumArr[1], idx, v) }}
+              </div>
+              <div v-else>{{ showLuo ? v : "" }}</div>
+            </div>
+          </div>
+
           <div class="table-cell bg-beigo" style="flex: 1 1 0%">
             {{ item.sum }}
           </div>
@@ -403,16 +351,39 @@ export default {
           ...item,
           openNum: `${openNumArr}`,
           openNumArr,
-          threeMiss: JSON.parse(item.threeMiss),
-          spanThree: JSON.parse(item.spanThree),
-          ballThree: JSON.parse(item.ballThree),
           sum: this.sumArray(openNumArr),
-          calculateSpan: this.calculateSpan(openNumArr),
+          bsg: JSON.parse(item.bsg),
+          calculate: this.calculateLotteryObject(openNumArr),
         };
       });
     },
   },
   methods: {
+    getNumberProperty(num, type, realNum) {
+      // 检查是否是有效的数字（0-9 且是整数）
+      if (num < 0 || num > 9 || !Number.isInteger(num)) {
+        return `无效号码 (${realNum})`; // 返回错误提示
+      }
+      // 根据类型参数返回对应的文案
+      switch (type) {
+        case 0:
+          return num > 4 ? "大" : realNum; // 判断大
+        case 1:
+          return num <= 4 ? "小" : realNum; // 判断小
+        case 2:
+          return num % 2 !== 0 ? "单" : realNum; // 判断单
+        case 3:
+          return num % 2 === 0 ? "双" : realNum; // 判断双
+      }
+    },
+    calculateLotteryObject(numbers) {
+      return numbers.reduce((acc, num) => {
+        const size = num >= 5 ? "大" : "小";
+        const parity = num % 2 === 0 ? "双" : "单";
+        acc[`${num}`] = [size, parity];
+        return acc;
+      }, {});
+    },
     calculateSpan(arr) {
       if (!Array.isArray(arr) || arr.length === 0) {
         throw new Error("输入必须是非空数组");
@@ -449,7 +420,7 @@ export default {
       if (!Array.isArray(arr)) {
         throw new Error("输入必须是一个数组");
       }
-      return arr.slice(0, 3);
+      return arr.slice(-2);
     },
     draw1() {
       const container = document.querySelector(".container1");

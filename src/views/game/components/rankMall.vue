@@ -399,6 +399,7 @@ export default {
         const openNumArr = this.getFirstThree(item.openNum.split(",")).map(
           (num) => +num
         );
+        console.log(JSON.parse(item.spanThree));
         return {
           ...item,
           openNum: `${openNumArr}`,

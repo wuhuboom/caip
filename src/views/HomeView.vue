@@ -6,7 +6,11 @@
           <div>
             <el-carousel :interval="5000" arrow="always">
               <el-carousel-item v-for="(p, i) in slider" :key="i">
-                <img class="carousel-img" :src="p.imageUrl" />
+                <img
+                  class="carousel-img"
+                  @click="goDetail(p)"
+                  :src="p.imageUrl"
+                />
               </el-carousel-item>
             </el-carousel>
           </div>
@@ -33,7 +37,7 @@
               </div>
               <div class="main-page-cp">
                 <div class="common_layout_center_v">
-                  <a href="#/game/hall" class=""
+                  <a :href="`#/game/hall?id=${gid}`" class=""
                     ><div
                       class="cp-item-main"
                       style="
@@ -84,7 +88,7 @@
                     >
                       <div class="cp-item-title"></div></div
                   ></a>
-                  <a href="#/game/hall" class=""
+                  <a :href="`#/game/hall?id=${did}`" class=""
                     ><div
                       class="cp-item-main"
                       style="
@@ -142,7 +146,7 @@
                   class="d-fucai"
                   style="margin-left: 108px"
                   @click="
-                    $router.push({ path: '/game/hall', query: { id: gid } })
+                    $router.push({ path: '/game/hall', query: { id: did } })
                   "
                 >
                   <img class="d-img" src="@/assets/img/b1.png" alt="" />
@@ -379,6 +383,12 @@ export default {
     };
   },
   computed: {
+    Cards() {
+      return this.$store.state.bankCard;
+    },
+    bankCard() {
+      return this.Cards.find((v) => +v.ctype === 2) || {};
+    },
     noticeDoc() {
       return this.$store.getters.noticeDoc;
     },
@@ -401,6 +411,12 @@ export default {
     QrcodeVue,
   },
   methods: {
+    goDetail(p) {
+      this.$router.push({
+        path: "/account/center",
+        query: { id: p.policyType },
+      });
+    },
     async homeWinning() {
       const [err, res] = await userApi.homeWinning();
       if (err) return;

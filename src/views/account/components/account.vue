@@ -34,7 +34,9 @@
             />
           </div>
           <div class="account-detail-bar">
-            <span style="margin-left: 10px">可以提现：0元</span>
+            <span style="margin-left: 10px"
+              >可以提现：{{ divide(user.balanceWithdraw) }}元</span
+            >
           </div>
           <div
             class="account-detail-amount"
@@ -46,7 +48,9 @@
             />
           </div>
           <div class="account-detail-bar" style="background: rgb(0, 150, 255)">
-            <span style="margin-left: 10px">可以使用：0.51元</span>
+            <span style="margin-left: 10px"
+              >可以使用：{{ divide(user.balance) }}元</span
+            >
           </div>
           <div
             class="account-detail-amount"
@@ -61,7 +65,9 @@
             class="account-detail-bar"
             style="background: rgb(133, 156, 156); border-radius: 10px"
           >
-            <span style="margin-left: 10px">待消费：0元</span>
+            <span style="margin-left: 10px"
+              >待消费：{{ divide(user.balance + user.frozenBet) }}元</span
+            >
           </div>
           <div class="account-detail-amount-bg"></div>
           <div
@@ -106,7 +112,9 @@
               <td height="50">{{ user.nickname }}</td>
               <td height="50">{{ user.phone }}</td>
               <td height="50">{{ user.qq }}</td>
-              <td height="50"></td>
+              <td height="50">
+                {{ user.email }}
+              </td>
             </tr>
           </table>
         </div>
@@ -129,8 +137,8 @@
               <td height="50">{{ divide(statis.dayBingo) }}元</td>
               <td height="50">{{ divide(statis.dayGet) }}元</td>
               <td height="50">{{ divide(statis.weekBingo) }}元</td>
-              <td height="50">{{ divide(statis.monthBingo) }}元</td>
               <td height="50">{{ divide(statis.weekGet) }}元</td>
+              <td height="50">{{ divide(statis.monthBingo) }}元</td>
               <td height="50">{{ divide(statis.monthGet) }}元</td>
             </tr>
           </table>
@@ -235,6 +243,8 @@
     <bindUsdt ref="$bindUsdt" />
     <tipsDialog @sure="surePaySet(1)" ref="$paySet" />
     <bindPassWrod ref="$bindPassWrod" />
+    <RechargeDialog ref="$RechargeDialog" />
+    <withdrawdialog ref="$withdrawdialog" />
   </div>
 </template>
 
@@ -243,6 +253,8 @@ import bindCard from "@/views/game/components/bindCard.vue";
 import bindUsdt from "@/views/game/components/bindUsdt.vue";
 import bindPassWrod from "@/views/game/components/bindPassWrod.vue";
 import userApi from "@/api/user";
+import RechargeDialog from "@/views/components/RechargeDialog.vue";
+import withdrawdialog from "@/views/components/withdrawdialog.vue";
 //"dayUse":今日消费 "dayBingo":今日中奖 “dayGet”：今日平台赠送"weekBingo":本周中奖 "monthBingo":本月中然 "weekGet":本周平台赠送 "monthGet":木月平台赠送
 export default {
   name: "AccountCenter",
@@ -263,6 +275,8 @@ export default {
     bindCard,
     bindUsdt,
     bindPassWrod,
+    RechargeDialog,
+    withdrawdialog,
   },
   props: {
     paySet: {
@@ -313,6 +327,9 @@ export default {
       this.$refs.$bindCard.open();
     },
     bindUsdt() {
+      if (this.paySet !== 1) {
+        return this.openPayDialog();
+      }
       this.$refs.$bindUsdt.open();
     },
     openTipsDialog(v = "您好，您还未绑定提款银行卡，确定现在进行绑定银行卡？") {
@@ -322,6 +339,7 @@ export default {
       if (!this.bankCard.id) {
         return this.openTipsDialog();
       }
+      this.$refs.$RechargeDialog.open();
     },
     withdraw() {
       if (!this.bankCard.id) {
@@ -330,6 +348,7 @@ export default {
       if (this.paySet !== 1) {
         return this.openPayDialog();
       }
+      this.$refs.$withdrawdialog.open();
     },
   },
   created() {

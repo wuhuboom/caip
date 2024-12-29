@@ -7,7 +7,7 @@
         <CpInput
           v-model="form.betCountCurr"
           :min="minNum"
-          :max="tableTotal.totalMoney"
+          :max="typeTotalMoney"
         />
         <span>元，所占比例 {{ currP }} (认购金额至少为总金额的10%)</span>
       </div>
@@ -20,7 +20,7 @@
               <CpInput
                 :min="minType"
                 v-model="typeMoney"
-                :max="tableTotal.totalMoney"
+                :max="typeTotalMoney"
               />
               <span>所占比例 {{ typeP }} (至少为总金额的5%)</span>
             </div>
@@ -114,10 +114,19 @@ export default {
         return {};
       },
     },
+    typeTotalMoney: {
+      type: Number,
+      default: 0,
+    },
   },
   watch: {
     show(val) {
       this.$emit("input", val);
+    },
+    typeTotalMoney(val) {
+      //认购金额至少为总金额的10%
+      this.minNum = Math.ceil(val * 0.1);
+      this.form.betCountCurr = this.minNum;
     },
   },
   computed: {
@@ -126,10 +135,7 @@ export default {
       if (this.type) {
         orther = this.typeMoney;
       }
-      return Math.max(
-        0,
-        this.tableTotal.totalMoney - this.form.betCountCurr - orther
-      );
+      return Math.max(0, this.typeTotalMoney - this.form.betCountCurr - orther);
     },
     dataForm() {
       const { betCountCurr } = this.form;
@@ -147,7 +153,7 @@ export default {
         obj.btype = 1;
       } else if (this.type === 2) {
         // 全额保底
-        obj.betCountMin = this.tableTotal.totalMoney;
+        obj.betCountMin = this.typeTotalMoney;
         obj.btype = 0;
         obj.ftype = 0;
       }
@@ -155,11 +161,12 @@ export default {
       return obj;
     },
     currP() {
-      let p = (this.form.betCountCurr / this.tableTotal.totalMoney) * 100;
+      console.log(this.typeMoney, this.tableTotal);
+      let p = (this.form.betCountCurr / this.typeTotalMoney) * 100;
       return `${p.toFixed(2)}%`;
     },
     typeP() {
-      let p = (this.typeMoney / this.tableTotal.totalMoney) * 100;
+      let p = (this.typeMoney / this.typeTotalMoney) * 100;
       return `${p.toFixed(2)}%`;
     },
   },
@@ -171,7 +178,7 @@ export default {
       }
     },
     toggle() {
-      const num = +this.tableTotal.totalMoney || 0;
+      const num = +this.typeTotalMoney || 0;
       if (num < 2) {
         this.show = false;
         this.$refs.buyDialog.open("订单金额低于 2 元，不能发起合买");

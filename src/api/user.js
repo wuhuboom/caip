@@ -1,6 +1,101 @@
 import request from "@/plugins/request";
 export default {
-  ///home/winning
+  ///mysub2
+  mysub2() {
+    return request({
+      url: "/mysub2",
+    });
+  },
+  balanceChangeReward(data) {
+    return request({
+      url: "/balance_change_reward",
+      method: "post",
+      data,
+    });
+  },
+  safeToBalanceAll(data) {
+    return request({
+      url: "/safe/toBalanceAll",
+      method: "post",
+      data,
+    });
+  },
+  balanceChangeReq(data) {
+    return request({
+      url: "/balance_change",
+      method: "post",
+      data,
+    });
+  },
+  withdrawLogReq(data) {
+    return request({
+      url: "/withdrawal_log",
+      method: "post",
+      data,
+    });
+  },
+  rechargeLogReq(data) {
+    return request({
+      url: "/recharge_log",
+      method: "post",
+      data,
+    });
+  },
+  withdrawalReq(data) {
+    return request({
+      url: "/withdrawal",
+      method: "post",
+      data,
+    });
+  },
+  bankCardinfo() {
+    return request({
+      url: "/bank_card_info",
+    });
+  },
+  recharge() {
+    return request({
+      url: "/recharge_pre",
+    });
+  },
+  drawList(data) {
+    return request({
+      url: "/draw/list",
+      method: "post",
+      data,
+    });
+  },
+  drawDraw(data) {
+    return request({
+      url: "/draw/draw",
+      method: "post",
+      data,
+    });
+  },
+  drawConf() {
+    return request({
+      url: "/draw/conf",
+    });
+  },
+  bingoGameList(data) {
+    return request({
+      url: "/bingoGame/list",
+      method: "post",
+      data,
+    });
+  },
+  bingoGameData() {
+    return request({
+      url: "/bingoGame/data",
+    });
+  },
+  mysub(data) {
+    return request({
+      url: "/mysub",
+      method: "post",
+      data,
+    });
+  },
   homeWinning() {
     return request({
       url: "/home/winning",
@@ -362,11 +457,7 @@ export default {
       url: "/fb/msg/has",
     });
   },
-  recharge() {
-    return request({
-      url: "/recharge_pre",
-    });
-  },
+
   rechargeOrder(data) {
     return request({
       url: "/recharge",
@@ -393,13 +484,6 @@ export default {
     return request({
       url: "/virtual_currency_list",
       method: "post",
-    });
-  },
-  withdrawalReq(data) {
-    return request({
-      url: "/withdrawal",
-      method: "post",
-      data,
     });
   },
   // 发送邮件验证码,用于绑定或者换绑邮箱地址 换绑发送验证码到原邮件地址
@@ -443,11 +527,7 @@ export default {
       url: "/wallet_info",
     });
   },
-  bankCardinfo() {
-    return request({
-      url: "/bank_card_info",
-    });
-  },
+
   walletTypeReq() {
     return request({
       url: "/wallet_type",
@@ -540,27 +620,6 @@ export default {
   subPlayersReq(data) {
     return request({
       url: "/sub_players",
-      method: "post",
-      data,
-    });
-  },
-  rechargeLogReq(data) {
-    return request({
-      url: "/recharge_log",
-      method: "post",
-      data,
-    });
-  },
-  withdrawLogReq(data) {
-    return request({
-      url: "/withdrawal_log",
-      method: "post",
-      data,
-    });
-  },
-  balanceChangeReq(data) {
-    return request({
-      url: "/balance_change",
       method: "post",
       data,
     });

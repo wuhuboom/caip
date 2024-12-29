@@ -72,13 +72,6 @@
 </template>
 <script>
 import userApi from "@/api/user";
-// rankMall1: () => import("./rankMall1.vue"),
-//     rankMall2: () => import("./rankMall2.vue"),
-//     rankMall3: () => import("./rankMall3.vue"),
-//     rankMall4: () => import("./rankMall4.vue"),
-//     rankMall5: () => import("./rankMall5.vue"),
-//     rankMall6: () => import("./rankMall6.vue"),
-//     rankMall7: () => import("./rankMall7.vue"),
 import rankMall1 from "./rankMall1.vue";
 import rankMall2 from "./rankMall2.vue";
 import rankMall3 from "./rankMall3.vue";
@@ -86,6 +79,9 @@ import rankMall4 from "./rankMall4.vue";
 import rankMall5 from "./rankMall5.vue";
 import rankMall6 from "./rankMall6.vue";
 import rankMall7 from "./rankMall7.vue";
+import rankMall8 from "./rankMall8.vue";
+import rankMall9 from "./rankMall9.vue";
+import rankMall10 from "./rankMall10.vue";
 const initForm = () => ({
   ctype: 3,
   identity: "",
@@ -103,6 +99,9 @@ export default {
     rankMall5,
     rankMall6,
     rankMall7,
+    rankMall8,
+    rankMall9,
+    rankMall10,
   },
   data() {
     return {
@@ -113,15 +112,6 @@ export default {
       isDraw: false,
       form: initForm(),
       data: [],
-      navs: [
-        { name: "五星走势图", type: 1 },
-        { name: "五星综合走势图", type: 2 },
-        { name: "前三综合走势图", type: 3 },
-        { name: "中三综合走势图", type: 4 },
-        { name: "后三综合走势图", type: 5 },
-        { name: "前二综合走势图", type: 6 },
-        { name: "后二综合走势图", type: 7 },
-      ],
       curTime: 1,
       times: [
         {
@@ -154,6 +144,27 @@ export default {
     },
   },
   computed: {
+    isLeo() {
+      return this.data.find((item) => item.leo === 5);
+    },
+    navs() {
+      if (this.isLeo) {
+        return [
+          { name: "五星走势图", type: 1 },
+          { name: "五星综合走势图", type: 2 },
+          { name: "前三综合走势图", type: 3 },
+          { name: "中三综合走势图", type: 4 },
+          { name: "后三综合走势图", type: 5 },
+          { name: "前二综合走势图", type: 6 },
+          { name: "后二综合走势图", type: 7 },
+        ];
+      }
+      return [
+        { name: "三星综合走势图", type: 8 },
+        { name: "前二综合走势图", type: 9 },
+        { name: "后二综合走势图", type: 10 },
+      ];
+    },
     numList() {
       return [...Array(10).keys()];
     },
@@ -225,15 +236,17 @@ export default {
       res.data.results.forEach((item) => {
         item.openNumArr = item.openNum.split(",");
         item.ballMiss = JSON.parse(item.ballMiss);
+        item.leo = item.openNumArr.length;
       });
       this.data = res.data.results;
     },
     async open() {
-      this.lotteryHisExpect();
+      await this.lotteryHisExpect();
       this.form = initForm();
       this.show = true;
       this.curTime = 1;
       this.isDraw = false;
+      this.curType = this.isLeo ? 1 : 8;
     },
     close() {
       this.show = false;

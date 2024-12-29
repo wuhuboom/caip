@@ -5,7 +5,7 @@
         class="award-index-tab"
         v-for="(item, idx) in navs"
         :key="idx"
-        @click="id = item.id"
+        @click="changeId(item.id)"
         :class="{ 'award-index-tab-active': id === item.id }"
       >
         {{ item.name }}
@@ -17,325 +17,70 @@
           <div class="header-title">
             <div>
               <span style="color: rgb(216, 151, 32)">剩余次数：</span>
-              <span style="color: rgb(255, 216, 0)">0</span>
+              <span style="color: rgb(255, 216, 0)">{{ quantity }}</span>
             </div>
           </div>
           <div class="typecheckbox">
-            <div class="award-item-active">消费达到5000</div>
-            <div class="award-item">单笔充值1000</div>
+            <div
+              class="m-r-12"
+              :class="[type === 1 ? 'award-item-active' : '']"
+              @click="type = 1"
+            >
+              消费达到{{ config.consume }}
+            </div>
+            <div
+              :class="[type === 2 ? 'award-item-active' : '']"
+              @click="type = 2"
+            >
+              单笔充值{{ config.recharge }}
+            </div>
           </div>
+        </div>
+        <div class="center-center p-b-24 p-t-16">
+          <div id="my-lucky"></div>
         </div>
         <div class="guize">
           <div class="title">规则说明</div>
-          <div class="g_item">
+          <div class="g_item" v-if="type === 1">
             尊敬的用户，欢迎您来到幸运转盘，祝您好运连连。抽奖规则如下： <br />
-            1：如果当日您的累计消费达到5000元，您将拥有一次抽奖机会。
-            2.抽奖机会是可以叠加的，（如您消费达到10000元，您会获得2次抽奖机会)
+            1：如果当日您的累计消费达到{{
+              config.consume
+            }}元，您将拥有一次抽奖机会。<br />
+            2.抽奖机会是可以叠加的，（如您消费达到{{
+              config.consume * 2
+            }}元，您会获得2次抽奖机会) <br />
             3.当您满足抽奖条件后，当日不会生效，需要次日您才能进行抽奖。
+          </div>
+          <div class="g_item" v-else>
+            1:如果您的当日首次充值，且充值金额达到{{
+              config.recharge
+            }}元，并且当日消费{{
+              config.rechargeRate
+            }}%后，您将拥有一次抽奖机会。
+            <br />
+            2.当您满足抽奖条件后，当日不会生效，需要次日您才能进行抽奖。
           </div>
         </div>
       </div>
       <div v-if="id === 1" class="award-record-main">
-        <div class="award-record-title">
-          <div class="cp-date-picker-main award-record-picker">
-            <input placeholder="请选择日期" class="cp-date-picker-input" />
-            <div class="cp-date-picker-content">
-              <section class="wh_container">
-                <div class="wh_content_all">
-                  <div class="wh_top_changge">
-                    <li>
-                      <div class="wh_jiantou1"></div>
-                    </li>
-                    <li class="wh_content_li">2024年11月</li>
-                    <li>
-                      <div class="wh_jiantou2"></div>
-                    </li>
-                  </div>
-                  <div class="wh_content-week">
-                    <div class="wh_content_item">
-                      <div class="wh_top_tag">一</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_top_tag">二</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_top_tag">三</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_top_tag">四</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_top_tag">五</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_top_tag">六</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_top_tag">日</div>
-                    </div>
-                  </div>
-                  <div class="wh_content">
-                    <div class="wh_content_item">
-                      <div class="wh_item_date wh_other_dayhide">28</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date wh_other_dayhide">29</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date wh_other_dayhide">30</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date wh_other_dayhide">31</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">1</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">2</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">3</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">4</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">5</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">6</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">7</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">8</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">9</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">10</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">11</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">12</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">13</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">14</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">15</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">16</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">17</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date wh_isToday">18</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">19</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">20</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">21</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">22</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">23</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">24</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">25</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">26</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">27</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">28</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">29</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">30</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date wh_other_dayhide">1</div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </div>
-          </div>
-          <span style="margin-left: 5px; margin-right: 5px">至</span>
-          <div class="cp-date-picker-main award-record-picker">
-            <input placeholder="请选择日期" class="cp-date-picker-input" />
-            <div class="cp-date-picker-content">
-              <section class="wh_container">
-                <div class="wh_content_all">
-                  <div class="wh_top_changge">
-                    <li>
-                      <div class="wh_jiantou1"></div>
-                    </li>
-                    <li class="wh_content_li">2024年11月</li>
-                    <li>
-                      <div class="wh_jiantou2"></div>
-                    </li>
-                  </div>
-                  <div class="wh_content-week">
-                    <div class="wh_content_item">
-                      <div class="wh_top_tag">一</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_top_tag">二</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_top_tag">三</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_top_tag">四</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_top_tag">五</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_top_tag">六</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_top_tag">日</div>
-                    </div>
-                  </div>
-                  <div class="wh_content">
-                    <div class="wh_content_item">
-                      <div class="wh_item_date wh_other_dayhide">28</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date wh_other_dayhide">29</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date wh_other_dayhide">30</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date wh_other_dayhide">31</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">1</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">2</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">3</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">4</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">5</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">6</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">7</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">8</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">9</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">10</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">11</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">12</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">13</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">14</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">15</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">16</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">17</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date wh_isToday">18</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">19</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">20</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">21</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">22</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">23</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">24</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">25</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">26</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">27</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">28</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">29</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date">30</div>
-                    </div>
-                    <div class="wh_content_item">
-                      <div class="wh_item_date wh_other_dayhide">1</div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </div>
-          </div>
-          <div class="cp-button-main award-record-btn">
-            <!---->
+        <div class="recharge-title align-center">
+          <el-date-picker
+            v-model="date"
+            class="g-el-input__inner"
+            type="daterange"
+            size="small"
+            value-format="yyyy-MM-dd"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            popper-class="g-table-popper-class"
+          >
+          </el-date-picker>
+
+          <div
+            class="cp-button-main activity-search-btn"
+            @click="handleCurrentChange(1)"
+          >
             查询
           </div>
         </div>
@@ -348,24 +93,35 @@
               <th height="40">奖品状态</th>
               <th height="40">中奖时间</th>
             </tr>
+            <!-- drawItem:活动主题1消费 2充值
+            bingoName:中奖项目
+            bingoMoney:中奖金额
+            createdAt:日期 -->
+            <tr
+              align="center"
+              v-for="(item, idx) in tableData.results"
+              :key="idx"
+            >
+              <td height="40">
+                <span v-if="item.drawItem === 1">消费</span>
+                <span v-else>充值</span>
+              </td>
+              <td height="40">{{ item.drawName }}</td>
+              <td height="40">￥{{ divide(item.drawMoney) }}</td>
+              <td height="40">已领取</td>
+              <td height="40">{{ $dayjsTime(item.createdAt) }}</td>
+            </tr>
           </table>
-          <div class="cp-pagination-main" style="margin-top: 40px">
-            <div class="cp-pagination-head">
-              <div class="cp-pagination-first">首页</div>
-              <div class="cp-pagination-page">上一页</div>
-              <div class="cp-pagination-num cp-pagination-num-active">1</div>
-            </div>
-            <div class="cp-pagination-middle">
-              <!---->
-              <!---->
-            </div>
-            <div class="cp-pagination-head">
-              <!---->
-              <div class="cp-pagination-page">下一页</div>
-              <div class="cp-pagination-tail">尾页</div>
-            </div>
-            <div class="cp-pagination-data">页次：1/0</div>
-            <div class="cp-pagination-data">记录：0条</div>
+          <div class="p-b-32 p-t-32 center-center">
+            <el-pagination
+              class="g-el-pagination"
+              @current-change="handleCurrentChange"
+              :current-page="query.pageNo"
+              :page-size="query.pageSize"
+              layout="total, prev, pager, next"
+              :total="tableData.totalCount"
+            >
+            </el-pagination>
           </div>
         </div>
       </div>
@@ -374,10 +130,26 @@
 </template>
 
 <script>
+import userApi from "@/api/user";
+import { LuckyWheel } from "lucky-canvas";
+import startBg from "@/assets/img/prize-btn.png";
+import bgWheel from "@/assets/img/prize-circle.png";
+// recharge: 单日充值x获得1次,
+// rechargeRate: 消费达到充值的%",
+// consume: 消费达到x
+// drawRe:充值抽奖次数
+// drawCu:消费抽奖次数
 export default {
   name: "AccountCenter",
   data() {
     return {
+      query: {
+        pageNo: 1,
+        pageSize: 10,
+      },
+      date: "",
+      winIndx: null,
+      config: { oddsConfig: [] },
       navs: [
         {
           name: "幸运转盘",
@@ -389,7 +161,181 @@ export default {
         },
       ],
       id: 0,
+      type: 1,
+      tableData: {
+        totalCount: 0,
+        results: [],
+      },
     };
+  },
+  computed: {
+    quantity() {
+      return this.type === 1 ? this.config.drawCu : this.config.drawRe;
+    },
+    oddsConfig() {
+      let arr = this.config.oddsConfig.map((v) => {
+        let txts = [
+          { text: v.name, fontColor: "#f44747", top: "10%", fontSize: "24px" },
+          { text: v.item, fontColor: "#f44747", top: "40%" },
+        ];
+        if (v.name === "谢谢惠顾") {
+          txts = [
+            {
+              text: v.name,
+              fontColor: "#f44747",
+              top: "10%",
+              fontSize: "24px",
+            },
+          ];
+        }
+        return {
+          fonts: txts,
+        };
+      });
+      return arr;
+    },
+  },
+  methods: {
+    handleCurrentChange(val) {
+      this.query.pageNo = val;
+      this.mysub();
+    },
+    async mysub() {
+      const params = {
+        ...this.query,
+      };
+      if (Array.isArray(this.date)) {
+        params.begin = this.date[0];
+        params.end = this.date[1];
+      }
+      const [err, res] = await userApi.drawList(params);
+      if (err) return;
+
+      this.tableData = res.data;
+    },
+    changeId(v) {
+      this.id = v;
+      this.$nextTick(() => {
+        if (v === 0) {
+          this.initGame();
+        }
+      });
+    },
+    async drawConf() {
+      const [err, res] = await userApi.drawConf();
+      if (err) {
+        return;
+      }
+      let oddsConfig = [];
+      try {
+        oddsConfig = JSON.parse(res.data.oddsConfig);
+      } catch (e) {
+        oddsConfig = [];
+      }
+      res.data.oddsConfig = oddsConfig;
+      for (let i in res.data) {
+        this.$set(this.config, i, res.data[i]);
+      }
+    },
+    close() {
+      this.winIndx = null;
+      this.myLucky.init();
+    },
+    sleep(v) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve();
+        }, v * 1000);
+      });
+    },
+    async bingo() {
+      const [err, res] = await userApi.drawDraw({
+        type: this.type,
+      });
+      if (err) {
+        this.close();
+        return;
+      }
+      if (this.type === 1) {
+        this.config.drawCu = this.config.drawCu - 1;
+        this.config.drawCu = this.config.drawCu < 0 ? 0 : this.config.drawCu;
+      } else {
+        this.config.drawRe = this.config.drawRe - 1;
+        this.config.drawRe = this.config.drawRe < 0 ? 0 : this.config.drawRe;
+      }
+      this.winIndx = res.data;
+      //const prize = this.config.oddsConfig[res.data];
+      await this.sleep(5);
+      this.myLucky.stop(this.winIndx);
+      //this.$toast.success(`${prize.name}`);
+    },
+    startFlashing() {
+      if (!this.quantity) {
+        this.close();
+        this.$toast(this.$t("backapi.unLotteryDraw"));
+        return;
+      }
+      this.winIndx = null;
+      this.bingo();
+    },
+    initGame() {
+      this.myLucky = new LuckyWheel("#my-lucky", {
+        width: "600px",
+        height: "600px",
+        prizes: this.oddsConfig,
+        blocks: [
+          {
+            padding: "48px",
+            imgs: [
+              {
+                rotate: true,
+                src: bgWheel,
+                width: "600px",
+                height: "600px",
+              },
+            ],
+          },
+        ],
+        buttons: [
+          {
+            radius: "50px",
+          },
+          {
+            radius: "45px",
+          },
+          {
+            imgs: [
+              {
+                src: startBg,
+                top: "-50px",
+                width: "100px",
+                height: "100px",
+              },
+            ],
+          },
+        ],
+        defaultStyle: {
+          background: "#e9e8fe",
+        },
+        defaultConfig: {
+          gutter: 2,
+        },
+        start: () => {
+          this.myLucky.play();
+          this.startFlashing();
+        },
+        end: () => {
+          if (this.winIndx !== null) {
+            this.show = true;
+          }
+        },
+      });
+    },
+  },
+  async mounted() {
+    await this.drawConf();
+    this.initGame();
+    this.mysub();
   },
 };
 </script>

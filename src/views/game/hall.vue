@@ -178,12 +178,6 @@
                 </div>
                 <div class="next-result-date-text">期</div>
               </div>
-              <!-- <a
-                href="https://www.okxdownloaddemo.com/hash.html"
-                target="_blank"
-                class="next-result-bottom-remark"
-                >游戏介绍</a
-              > -->
             </div>
             <div class="next-result-bottom-time">
               截止时间：{{ $dayjsTime(detail.nextExpect.stopTime) }}
@@ -440,6 +434,7 @@
               <GroupBuy
                 v-model="isGroup"
                 :tableTotal="tableTotal"
+                :typeTotalMoney="typeTotalMoney"
                 ref="$groupBuy"
               />
             </div>
@@ -522,6 +517,20 @@ import userApi from "@/api/user";
 import GroupBuy from "@/views/game/components/GroupBuy.vue";
 import ChaseReason from "@/views/game/components/ChaseReason.vue";
 import typeConfigList from "@/plugins/typeConfigList";
+import prePrize from "./components/prePirze";
+import ball1 from "./components/ball1";
+import ball2 from "./components/ball2";
+import ball3 from "./components/ball3";
+import ball4 from "./components/ball4";
+import ball5 from "./components/ball5";
+import ball6 from "./components/ball6";
+import ball7 from "./components/ball7";
+import ball8 from "./components/ball8";
+import ball9 from "./components/ball9";
+import ball10 from "./components/ball10";
+import ball11 from "./components/ball11";
+import ball12 from "./components/ball12";
+import ball13 from "./components/ball13";
 const initData = () => {
   return {
     curTab: 0,
@@ -591,20 +600,20 @@ export default {
     ChaseReason,
     GroupBuy,
     InfoMain,
-    prePrize: () => import("./components/prePirze"),
-    ball1: () => import("./components/ball1"),
-    ball2: () => import("./components/ball2"),
-    ball3: () => import("./components/ball3"),
-    ball4: () => import("./components/ball4"),
-    ball5: () => import("./components/ball5"),
-    ball6: () => import("./components/ball6"),
-    ball7: () => import("./components/ball7"),
-    ball8: () => import("./components/ball8"),
-    ball9: () => import("./components/ball9"),
-    ball10: () => import("./components/ball10"),
-    ball11: () => import("./components/ball11"),
-    ball12: () => import("./components/ball12"),
-    ball13: () => import("./components/ball13"),
+    prePrize,
+    ball1,
+    ball2,
+    ball3,
+    ball4,
+    ball5,
+    ball6,
+    ball7,
+    ball8,
+    ball9,
+    ball10,
+    ball11,
+    ball12,
+    ball13,
   },
   computed: {
     noticeDoc() {
@@ -924,16 +933,7 @@ export default {
   },
   watch: {
     id(v) {
-      const type = this.catList.find((doc) => doc.id === v).lotteryType;
-      if (+type === 0) {
-        //高频彩
-        this.value = "四星直选复式";
-        this.curNav = "lotteryType0";
-      } else {
-        //低频彩
-        this.value = "三星直选复式";
-        this.curNav = "lotteryType1";
-      }
+      this.setlotteryType(v);
     },
     multiple(v) {
       //范围1 -999
@@ -945,6 +945,18 @@ export default {
     },
   },
   methods: {
+    setlotteryType(v) {
+      const type = this.catList.find((doc) => doc.id === v).lotteryType;
+      if (+type === 0) {
+        //高频彩
+        this.value = "四星直选复式";
+        this.curNav = "lotteryType0";
+      } else {
+        //低频彩
+        this.value = "三星直选复式";
+        this.curNav = "lotteryType1";
+      }
+    },
     changeNav(v) {
       this.curNav = v;
       this.value = this.typeList[0].list[0].txt;
@@ -1014,7 +1026,6 @@ export default {
     },
     async changeId(v) {
       //删除 body van-toast--unclickable
-
       if (+v) {
         if (this.id === v) {
           return;
@@ -1071,7 +1082,12 @@ export default {
       });
       if (err) return;
       this.clearData();
-      this.$message.success("投注成功");
+      this.$message({
+        message: "投注成功",
+        type: "success",
+        duration: 2000,
+        showClose: true,
+      });
     },
     async lotteryBetsRes(v) {
       const params = {
@@ -1089,7 +1105,13 @@ export default {
       const [err] = await userApi.lotteryBetsRe(params);
       if (err) return;
       this.clearData();
-      this.$message.success("追号成功");
+
+      this.$message({
+        message: "追号成功",
+        type: "success",
+        duration: 2000,
+        showClose: true,
+      });
     },
     async lotteryBets(v) {
       const [err] = await userApi.lotteryBets({
@@ -1099,7 +1121,13 @@ export default {
       });
       if (err) return;
       this.clearData();
-      this.$message.success("合买成功");
+
+      this.$message({
+        message: "合买成功",
+        type: "success",
+        duration: 2000,
+        showClose: true,
+      });
     },
     multipleInupt(v) {
       console.log(v);
@@ -1159,9 +1187,11 @@ export default {
       this.preData = res.data;
     },
     async getDetail() {
+      this.$store.commit("setHallId", this.id);
       const [err, res] = await userApi.betsDetail({ id: this.id });
       if (err) return;
       res.data.mulConfig = JSON.parse(res.data.mulConfig);
+      this.setlotteryType(this.id);
       if (!res.data.nextExpect) {
         res.data.nextExpect = {};
       }

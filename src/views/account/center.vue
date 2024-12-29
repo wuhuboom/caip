@@ -1,7 +1,7 @@
 <template>
   <div class="app-content account-center-main">
     <div class="account-center-content">
-      <div class="account-center-left" style="cursor: pointer">
+      <div class="account-center-left no-shrink" style="cursor: pointer">
         <div
           class="fun-item-main"
           :class="{ 'fun-item-main-active': curId === item.id }"
@@ -44,6 +44,7 @@ import FundDetail from "./components/FundDetail.vue";
 import SiteMessage from "./components/SiteMessage.vue";
 import Notice from "./components/Notice.vue";
 import MemberManage from "./components/MemberManage.vue";
+import fruteGame from "./components/fruteGame.vue";
 export default {
   name: "AccountCenter",
   data() {
@@ -56,6 +57,10 @@ export default {
         {
           name: "余额宝",
           id: 1,
+        },
+        {
+          name: "宾果游戏",
+          id: 40,
         },
         {
           name: "游戏记录",
@@ -73,10 +78,10 @@ export default {
           name: "赠送记录",
           id: 5,
         },
-        {
-          name: "红包记录",
-          id: 6,
-        },
+        // {
+        //   name: "红包记录",
+        //   id: 6,
+        // },
         {
           name: "幸运抽奖",
           id: 7,
@@ -85,10 +90,10 @@ export default {
           name: "资金明细",
           id: 8,
         },
-        {
-          name: "站内信",
-          id: 9,
-        },
+        // {
+        //   name: "站内信",
+        //   id: 9,
+        // },
         {
           name: "公告",
           id: 10,
@@ -98,7 +103,7 @@ export default {
           id: 11,
         },
       ],
-      curId: 0,
+      curId: +this.$route.query.id || 0,
     };
   },
   computed: {
@@ -129,6 +134,7 @@ export default {
         9: SiteMessage,
         10: Notice,
         11: MemberManage,
+        40: fruteGame,
       };
       return components[this.curId] || null;
     },
