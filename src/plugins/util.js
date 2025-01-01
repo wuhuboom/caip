@@ -22,7 +22,7 @@ export default {
     return isIos ? 1 : 0;
   },
   regUserName: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/,
-  regPassword: /^(?=.*[a-zA-Z])(?=.*\d)[^\s]{8,20}$/,
+  regPassword: /^(?=.*[a-zA-Z])(?=.*\d)[^\s]{6,16}$/,
   toPercent(value1, value2, decimalPlaces = 0) {
     if (typeof value1 !== "number" || typeof value2 !== "number") {
       throw new Error("输入值必须是数字");

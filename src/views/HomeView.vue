@@ -428,9 +428,8 @@ export default {
       this.slider = res.data;
     },
     async homeDialog() {
-      const [err, res] = await userApi.homeDialog();
+      const [err] = await userApi.homeDialog();
       if (err) return;
-      console.log(res);
     },
     goApp(appType) {
       if (!this.dev[appType]) {

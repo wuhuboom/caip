@@ -3,6 +3,7 @@
     class="RechargeDialog font12"
     title="充值"
     :visible.sync="show"
+    append-to-body
     width="510px"
   >
     <div class="contDialog">

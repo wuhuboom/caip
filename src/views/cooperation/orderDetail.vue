@@ -2,7 +2,11 @@
   <div class="app-content">
     <div class="order-detail-main">
       <div style="right: 20px; top: 20px; position: absolute; z-index: 3">
-        <div class="cp-button-main order-btn-share">
+        <div
+          class="cp-button-main order-btn-share"
+          v-clipboard:copy="textToCopy"
+          v-clipboard:success="onCopySuccess"
+        >
           <!---->
           分享
         </div>
@@ -148,7 +152,7 @@
                 ><span
                   class="order-detail-span"
                   style="margin-left: 10px; margin-right: 10px; font-size: 14px"
-                  >{{ detail.expect }}</span
+                  >{{ detail?.open?.cycleNum }}</span
                 ><span style="color: rgb(255, 241, 192); margin-right: 30px"
                   >期</span
                 >
@@ -403,6 +407,7 @@ export default {
     return {
       id: this.$route.params.id,
       detail: {},
+      textToCopy: location.href,
     };
   },
   computed: {
@@ -436,6 +441,9 @@ export default {
     },
   },
   methods: {
+    onCopySuccess() {
+      this.$message.success("复制链接成功");
+    },
     getName(id) {
       const item = this.catList.find((v) => v.id === id);
       return item ? item.lotteryName : "";

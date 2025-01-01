@@ -149,7 +149,7 @@ export default {
       if (value === "") {
         callback(new Error("请输入密码"));
       } else if (!this.$util.regPassword.test(value)) {
-        callback(new Error("密码必须包含字母和数字，长度在8-20之间"));
+        callback(new Error("密码必须包含字母和数字，长度在6-16之间"));
       } else {
         if (this.ruleForm.twoPassword !== "") {
           this.$refs.ruleForm.validateField("twoPassword");

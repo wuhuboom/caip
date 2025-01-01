@@ -13,6 +13,8 @@ import "element-ui/lib/theme-chalk/index.css";
 Vue.use(ElementUI);
 import vant from "./plugins/vant";
 Vue.use(vant);
+import VueClipboard from "vue-clipboard2";
+Vue.use(VueClipboard);
 import "@/assets/page.css";
 import "@/assets/base.scss";
 const num =

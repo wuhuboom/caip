@@ -104,12 +104,19 @@
       </div>
     </div>
     <tipsDialog @sure="sure" ref="$tiphDialog" />
+
     <bindCard ref="bindCard" />
+    <bindPassWrod ref="$bindPassWrod" />
+    <RechargeDialog ref="$RechargeDialog" />
+    <withdrawdialog ref="$withdrawdialog" />
   </div>
 </template>
 
 <script>
 import bindCard from "@/views/game/components/bindCard.vue";
+import RechargeDialog from "@/views/components/RechargeDialog.vue";
+import withdrawdialog from "@/views/components/withdrawdialog.vue";
+import bindPassWrod from "@/views/game/components/bindPassWrod.vue";
 export default {
   name: "InfoMain",
   data() {
@@ -125,8 +132,14 @@ export default {
   },
   components: {
     bindCard,
+    RechargeDialog,
+    withdrawdialog,
+    bindPassWrod,
   },
   computed: {
+    paySet() {
+      return this.$store.state.paySet;
+    },
     Cards() {
       return this.$store.state.bankCard;
     },
@@ -149,6 +162,11 @@ export default {
   methods: {
     windth() {
       if (this.bankCard.id) {
+        if (this.paySet !== 1) {
+          this.$message.error("请先设置支付密码");
+          return this.$refs.$bindPassWrod.open(1);
+        }
+        this.$refs.$withdrawdialog.open();
         return;
       }
       this.$refs.$tiphDialog.open(
@@ -157,6 +175,7 @@ export default {
     },
     rechange() {
       if (this.bankCard.id) {
+        this.$refs.$RechargeDialog.open();
         return;
       }
       this.$refs.$tiphDialog.open(
@@ -169,6 +188,7 @@ export default {
   },
   created() {
     this.$store.dispatch("getBankCard");
+    this.$store.dispatch("getPaySet");
   },
 };
 </script>

@@ -5,6 +5,7 @@ import userApi from "@/api/user";
 import auth from "@/plugins/auth";
 import util from "@/plugins/util";
 import app from "@/main";
+import chat from "./modules/chat";
 Vue.use(Vuex);
 const lang = location.href.includes("zmkm") ? "zh" : "";
 export default new Vuex.Store({
@@ -329,5 +330,7 @@ export default new Vuex.Store({
       commit("setCatList", res.data);
     },
   },
-  modules: {},
+  modules: {
+    chat,
+  },
 });

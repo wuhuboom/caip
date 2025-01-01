@@ -107,6 +107,15 @@ const routes = [
     },
   },
   {
+    path: "/chat/room",
+    name: "/chatRoom",
+    components: {
+      default: () => import("@/views/chat/room.vue"),
+      AppTopBar,
+      AppBtmBar,
+    },
+  },
+  {
     path: "/customer/service",
     name: "customerService",
     components: {
@@ -125,9 +134,6 @@ const router = new VueRouter({
 });
 router.beforeEach(async (to, from, next) => {
   Nprogress.start();
-  if (!store.state.notice.length) {
-    store.dispatch("getNotice");
-  }
   const ajaxs = [];
   if (!store.state.serveData.serviceAddr) {
     store.dispatch("getServeData");
@@ -141,6 +147,9 @@ router.beforeEach(async (to, from, next) => {
     if (error && auth.getToken("userInfo")) {
       store.commit("setUser", JSON.parse(auth.getToken("userInfo")));
     }
+  }
+  if (auth.getToken() && !store.state.notice.length) {
+    store.dispatch("getNotice");
   }
   if (auth.getToken()) {
     if (to.path.includes("/login")) {
