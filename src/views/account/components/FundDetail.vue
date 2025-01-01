@@ -118,7 +118,7 @@
             <span>{{ divide(scope.row.dnedMoney) }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="createdAt" label="日期">
+        <el-table-column prop="createdAt" label="日期" width="166">
           <template slot-scope="scope">
             <span>{{ $dayjsTime(scope.row.createdAt) }}</span>
           </template>

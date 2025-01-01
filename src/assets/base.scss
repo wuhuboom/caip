@@ -332,38 +332,14 @@ th,td,.cell{
   table{
     
     th,td{
+     
       &.el-table__cell{
         background-color: #623525;
+        padding:8px 0;
       }
     }
     
   }
-  
-  // tr{
-  //   border: none;
-  //   &:hover{
-  //     background:none !important;
-  //     th,td{
-  //       background:none !important;
-  //     }
-  //   }
-  // }
-  // th,td{
-  //   border: none;
-  // }
-  // th{
-  //   color: #fdd99b;
-  // }
-  // td{
-  //   color: #d8a759;
-  // }
-  // th,td{
-  //   &.el-table__cell{
-  //     background-color: #623525;
-  //     border: 1px solid #c69c41 !important;
-  //     border-collapse: collapse !important;
-  //   }
-  // }
 }
 .g-confirm-box{
   .el-message-box__title,.el-message-box__content,.el-icon-close{

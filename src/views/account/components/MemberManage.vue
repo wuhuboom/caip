@@ -11,7 +11,9 @@
         <div>
           <span>推广链接：</span
           ><span style="margin-left: 5px">
-            {{ headData.website2 }}
+            {{
+              `${headData.website2}#/login/SignIn?code=${user.invitationCode}`
+            }}
           </span>
         </div>
         <div>
