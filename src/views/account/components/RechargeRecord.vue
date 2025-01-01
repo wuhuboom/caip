@@ -75,7 +75,7 @@
         </el-table-column>
         <el-table-column prop="type" label="充值方式">
           <template slot-scope="scope">
-            {{ +scope.row.payName }}
+            {{ scope.row.payName }}
           </template>
         </el-table-column>
         <el-table-column prop="money" label="金额">
