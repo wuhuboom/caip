@@ -302,6 +302,9 @@ $unit: 'px'; // Feel free to change the unit.
 .txt-no-wrap{
   white-space: nowrap;
 }
+th,td,.cell{
+  text-align: center;
+}
 .g-el-table{
   $borderColor: #d8a759;
   border-color:$borderColor ;
