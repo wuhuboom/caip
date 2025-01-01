@@ -8,7 +8,15 @@
         content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>辰龙 官网</title>
     <link rel="shortcut icon" href="style/images/logo.png" type="image/x-icon">
-
+    <script>
+        document.write(
+          "<s" +
+            "cript type='text/javascript' src='static/config.js?" +
+            Date.now() +
+            "'></scr" +
+            "ipt>"
+        );
+      </script>
     <style type="text/css">
         * {
             margin: 0;
@@ -195,87 +203,10 @@
                 <div style="height: 30px;color:#dddddd;">
                     <div>温馨提醒：请收藏以下网址作为备用，以防由于网络波动，导致部分线路不能访问。</div>
                 </div>
-                <div class="row-start" style="flex:1;">
-                    <div class="line-item-left" style="padding:5px;">
-                        <div class="xianlu">
-                            <div style="width: 100px;display:flex;align-items:center;justify-content:center;">
-                                <span>线路1</span>
-                            </div>
-                            <div class="url_jindu2" style="color:#000;flex:1;">
-                                <span>高速访问</span><br>
+                <div class="js-lines">
 
-
-                                <div class="xianlu">
-                                    <div class="url_jindu2" style="color:#25c318;flex:1;background:none;">
-                                        <span>延迟低</span>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-
-                    </div>
-
-                    <div style="width: 100px; text-align:center; display:flex;">
-                        <a href="http://47.243.104.65:6543" class="url_btn fr">进入</a>
-                    </div>
                 </div>
-                <div class="row-start" style="flex:1;">
-                    <div class="line-item-left" style="padding:5px;">
-                        <div class="xianlu">
-                            <div style="width: 100px;display:flex;align-items:center;justify-content:center;">
-                                <span>线路2</span>
-                            </div>
-                            <div class="url_jindu2" style="color:#000;flex:1;">
-                                <span>高速访问</span><br>
-
-
-                                <div class="xianlu">
-                                    <div class="url_jindu2" style="color:#25c318;flex:1;background:none;">
-                                        <span>延迟低</span>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-
-                    </div>
-
-                    <div style="width: 100px; text-align:center; display:flex;">
-                        <a href="http://43.132.230.164:7018" class="url_btn fr">进入</a>
-                    </div>
-                </div>
-                <div class="row-start" style="flex:1;">
-                    <div class="line-item-left" style="padding:5px;">
-                        <div class="xianlu">
-                            <div style="width: 100px;display:flex;align-items:center;justify-content:center;">
-                                <span>线路3</span>
-                            </div>
-                            <div class="url_jindu2" style="color:#000;flex:1;">
-                                <span>https://webgf.clsevenyyu.top</span><br>
-
-
-                                <div class="xianlu">
-                                    <div class="url_jindu2" style="color:#25c318;flex:1;background:none;">
-                                        <span>延迟低</span>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-
-                    </div>
-
-                    <div style="width: 100px; text-align:center; display:flex;">
-                        <a href="https://webgf.clsevenyyu.top" class="url_btn fr">进入</a>
-                    </div>
-                </div>
-
-
-
+                
             </div>
         </div>
         <footer class="row-center">
@@ -285,7 +216,37 @@
             </div>
         </footer>
     </div>
+    <script>
+        var html='' 
+        var list=window.sites ||[]
+        const $dome=document.querySelector('.js-lines')
+        list.forEach(function(v){
+          html+=`
+              <div class="row-start" style="flex:1;">
+                    <div class="line-item-left" style="padding:5px;">
+                        <div class="xianlu">
+                            <div style="width: 100px;display:flex;align-items:center;justify-content:center;">
+                                <span>线路1</span>
+                            </div>
+                            <div class="url_jindu2" style="color:#000;flex:1;">
+                                <span>高速访问</span><br>
 
+                                <div class="xianlu">
+                                    <div class="url_jindu2" style="color:#25c318;flex:1;background:none;">
+                                        <span>延迟低</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width: 100px; text-align:center; display:flex;">
+                        <a href="${v}" class="url_btn fr">进入</a>
+                    </div>
+                </div>
+          `
+        })
+        $dome.innerHTML=html
+    </script>
 </body>
 
 </html>
