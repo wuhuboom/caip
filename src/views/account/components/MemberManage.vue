@@ -3,22 +3,43 @@
     <div style="margin: 0px 15px">
       <div>
         <span>官网地址：</span
-        ><span style="margin-left: 5px">
+        ><span
+          style="margin-left: 5px"
+          v-clipboard:copy="textToCopy(headData.website)"
+          v-clipboard:success="onCopySuccess"
+        >
           {{ headData.website }}
         </span>
+        <i
+          class="el-icon-document-copy m-l-8"
+          v-clipboard:copy="textToCopy(headData.website)"
+          v-clipboard:success="onCopySuccess"
+        ></i>
       </div>
       <div>
         <div>
           <span>推广链接：</span
-          ><span style="margin-left: 5px">
-            {{
-              `${headData.website2}#/login/SignIn?code=${user.invitationCode}`
-            }}
+          ><span
+            style="margin-left: 5px"
+            v-clipboard:copy="textToCopy(myLink)"
+            v-clipboard:success="onCopySuccess"
+          >
+            {{ myLink }}
           </span>
+          <i
+            class="el-icon-document-copy m-l-8"
+            v-clipboard:copy="textToCopy(myLink)"
+            v-clipboard:success="onCopySuccess"
+          ></i>
         </div>
         <div>
           <span>邀请码：</span
           ><span style="margin-left: 5px">{{ user.invitationCode }}</span>
+          <i
+            class="el-icon-document-copy m-l-8"
+            v-clipboard:copy="textToCopy(`${user.invitationCode}`)"
+            v-clipboard:success="onCopySuccess"
+          ></i>
         </div>
       </div>
     </div>
@@ -137,8 +158,17 @@ export default {
     user() {
       return this.$store.state.user;
     },
+    myLink() {
+      return `${this.headData.website2}#/login/SignIn?code=${this.user.invitationCode}`;
+    },
   },
   methods: {
+    textToCopy(v) {
+      return v;
+    },
+    onCopySuccess() {
+      this.$message.success("复制成功");
+    },
     handleCurrentChange(val) {
       this.query.pageNo = val;
       this.mysub();

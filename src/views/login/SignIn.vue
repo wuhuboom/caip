@@ -261,7 +261,7 @@ export default {
   },
   mounted() {
     if (this.$route.query.code) {
-      //this.openReg();
+      this.openReg();
     }
   },
 };
