@@ -91,9 +91,9 @@
         <el-table-column prop="status" label="状态">
           <template slot-scope="scope">
             <span>{{ getState(+scope.row.status) }}</span>
-            <p class="red" v-if="scope.row.remark">
+            <!-- <p class="red" v-if="scope.row.remark">
               {{ scope.row.remark }}
-            </p>
+            </p> -->
           </template>
         </el-table-column>
       </el-table>
