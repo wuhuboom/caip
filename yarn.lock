@@ -4498,14 +4498,9 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
-lucky-canvas@^1.7.23:
+lucky-canvas@^1.7.23, lucky-canvas@^1.7.27:
   version "1.7.27"
   resolved "https://registry.npmmirror.com/lucky-canvas/-/lucky-canvas-1.7.27.tgz#ce4689e99aa1945d981f0489304f5f3c1789023d"
-  integrity sha512-Ftz6qD+863bI7xijBmZg3dw3cNEc7odPr70EZQcGA14y3TgTAzH65HPosOCd6kKUlMwhntBaHMx3onoj9MtJRQ==
-
-lucky-canvas@^1.7.27:
-  version "1.7.27"
-  resolved "https://registry.yarnpkg.com/lucky-canvas/-/lucky-canvas-1.7.27.tgz#ce4689e99aa1945d981f0489304f5f3c1789023d"
   integrity sha512-Ftz6qD+863bI7xijBmZg3dw3cNEc7odPr70EZQcGA14y3TgTAzH65HPosOCd6kKUlMwhntBaHMx3onoj9MtJRQ==
 
 magic-string@^0.30.11:

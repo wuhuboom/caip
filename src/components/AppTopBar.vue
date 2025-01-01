@@ -98,6 +98,10 @@ export default {
         window.open(this.serveData);
         return;
       }
+      if (item.path === "/line/index") {
+        window.open(window.lineSite);
+        return;
+      }
       this.$router.push(item.path);
     },
   },
