@@ -137,7 +137,7 @@ export default {
         username: "",
         password: "",
         twoPassword: "",
-        invitationCode: "",
+        invitationCode: this.$route.query.code || "",
         qq: "",
         phone: "",
       },

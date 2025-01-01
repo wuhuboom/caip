@@ -259,6 +259,11 @@ export default {
     this.$store.commit("setPdTop", false);
     this.$store.dispatch("appDownload", false);
   },
+  mounted() {
+    if (this.$route.query.code) {
+      this.openReg();
+    }
+  },
 };
 </script>
 <style lang="scss">
