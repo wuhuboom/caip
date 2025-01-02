@@ -35,7 +35,7 @@
           </div>
           <div class="account-detail-bar">
             <span style="margin-left: 10px"
-              >可以提现：{{ divide(user.balanceWithdraw) }}元</span
+              >可以提现：{{ divide(user.balanceWithdrawCurr) }}元</span
             >
           </div>
           <div
