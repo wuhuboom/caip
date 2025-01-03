@@ -15,12 +15,11 @@
           </div>
           <div class="enter p-l-8 p-r-8">
             <el-input
-              type="text"
+              type="textarea"
               placeholder="请输入内容"
               v-model.trim="text"
               maxlength="120"
               show-word-limit
-              resize="both"
             ></el-input>
           </div>
           <ul class="send-row align-center p-x-8">

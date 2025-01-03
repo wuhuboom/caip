@@ -10,8 +10,10 @@ export default {
       state.ws = ws;
     },
     ADD_MESSAGE(state, message) {
-      // pageNo pageSize results totalCount totalPage
-
+      if (message.message) {
+        state.messages.unshift(message.message);
+        return;
+      }
       state.messages.push(message); // 添加一条聊天记录
     },
     CLEAR_MESSAGES(state) {
@@ -71,7 +73,7 @@ export default {
     handleMessage({ commit }, message) {
       if (message.type === 0) {
         // 文本消息
-        commit("ADD_MESSAGE", message);
+        commit("ADD_MESSAGE", { message });
         console.log("接收到消息: 0", message);
       } else if (message.type === 1) {
         console.log("历史消息: 1", JSON.parse(message.data));

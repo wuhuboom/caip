@@ -11,7 +11,9 @@
           <span class="m-r-8">{{ item.user }}</span>
           <span>{{ $dayjsTime(item.time) }}</span>
         </li>
-        <li class="msg-txt p-x-8 m-t-4">{{ item.data }}</li>
+        <li class="msg-txt-box d-flex">
+          <p class="msg-txt p-x-8 m-t-4">{{ item.data }}</p>
+        </li>
       </ul>
     </div>
   </div>
@@ -47,10 +49,15 @@ export default {
   .name {
     justify-content: flex-end !important;
   }
+  .msg-txt {
+    text-align: right;
+  }
+  .msg-txt-box {
+    justify-content: flex-end;
+  }
 }
 .room-msg {
   color: #000;
-
   .user-pic {
     width: 38px;
     height: 38px;
@@ -66,6 +73,7 @@ export default {
     background: #ffffff;
     border-radius: 5px 5px 5px 5px;
     border: 1px solid #f0f0f0;
+    display: inline-flex;
   }
 }
 </style>
