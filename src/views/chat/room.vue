@@ -1,14 +1,50 @@
 <template>
   <div>
-    <div v-if="playerId">12345</div>
+    <div v-if="playerId">
+      <div class="rooms flex-column">
+        <ul class="head p-l-24 justify-between align-center">
+          <li class="center-center">欢聚一堂</li>
+          <li></li>
+        </ul>
+        <div class="flex-1 cont p-t-12">
+          <roomMsg :item="v" v-for="(v, i) in messages" :key="i" />
+        </div>
+        <div class="btm">
+          <div class="tool-row align-center p-l-24">
+            <img class="d-img face" src="@/assets/img/face.png" alt="" />
+          </div>
+          <div class="enter p-l-8 p-r-8">
+            <el-input
+              type="textarea"
+              placeholder="请输入内容"
+              v-model.trim="text"
+              maxlength="120"
+              show-word-limit
+            ></el-input>
+          </div>
+          <ul class="send-row align-center p-x-8">
+            <li class="send center-center font16" @click="send">发送</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
 import auth from "@/plugins/auth";
+import roomMsg from "@/components/roomMsg.vue";
 export default {
   name: "chatRoom",
+  data() {
+    return {
+      text: "",
+    };
+  },
+  components: {
+    roomMsg,
+  },
   computed: {
     user() {
       return this.$store.state.user;
@@ -22,6 +58,14 @@ export default {
       "sendMessage",
       "fetchHistory",
     ]),
+    send() {
+      if (this.text) {
+        this.sendMessage({
+          data: this.text,
+        });
+        this.text = "";
+      }
+    },
   },
   mounted() {
     this.initWebSocket({
@@ -31,3 +75,41 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.rooms {
+  width: 800px;
+  height: 652px;
+  margin: 0 auto;
+  background: #f5f5f5;
+  border-radius: 0px 0px 0px 0px;
+  .head {
+    height: 57px;
+    font-size: 20px;
+    color: #000000;
+    border-bottom: 1px solid #dedcdb;
+  }
+  .cont {
+    overflow-y: auto;
+  }
+  .btm {
+    border-top: 1px solid #dedcdb;
+    .face {
+      width: 32px;
+      height: 32px;
+    }
+    .tool-row {
+      height: 50px;
+    }
+    .send-row {
+      justify-content: flex-end;
+    }
+    .send {
+      width: 84px;
+      height: 36px;
+      background: #2f3c57;
+      border-radius: 5px 5px 5px 5px;
+      cursor: pointer;
+    }
+  }
+}
+</style>

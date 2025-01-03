@@ -10,6 +10,8 @@ export default {
       state.ws = ws;
     },
     ADD_MESSAGE(state, message) {
+      // pageNo pageSize results totalCount totalPage
+
       state.messages.push(message); // 添加一条聊天记录
     },
     CLEAR_MESSAGES(state) {
@@ -56,10 +58,28 @@ export default {
     },
 
     // 发送消息
-    sendMessage({ state }, { type, data }) {
+    sendMessage({ state }, { type = 0, data }) {
       if (state.ws && state.ws.readyState === WebSocket.OPEN) {
         const message = JSON.stringify({ type, data });
         state.ws.send(message);
+        // data
+        // :
+        // "是多少"
+        // id
+        // :
+        // 29
+        // playerId
+        // :
+        // 27
+        // time
+        // :
+        // 1735884197879
+        // type
+        // :
+        // 0
+        // user
+        // :
+        // "arman705"
       } else {
         console.error("WebSocket 未连接或已关闭");
       }
@@ -70,11 +90,12 @@ export default {
       if (message.type === 0) {
         // 文本消息
         commit("ADD_MESSAGE", message);
+        console.log("接收到消息: 0", message);
       } else if (message.type === 1) {
-        console.log("历史消息:", JSON.parse(message.data));
-        // 历史消息
-        // const history = JSON.parse(message.data);
-        // history.forEach((msg) => commit("ADD_MESSAGE", msg));
+        console.log("历史消息: 1", JSON.parse(message.data));
+        const { results } = JSON.parse(message.data);
+        if (!results) return;
+        results.forEach((msg) => commit("ADD_MESSAGE", msg));
       }
     },
 
