@@ -62,24 +62,6 @@ export default {
       if (state.ws && state.ws.readyState === WebSocket.OPEN) {
         const message = JSON.stringify({ type, data });
         state.ws.send(message);
-        // data
-        // :
-        // "是多少"
-        // id
-        // :
-        // 29
-        // playerId
-        // :
-        // 27
-        // time
-        // :
-        // 1735884197879
-        // type
-        // :
-        // 0
-        // user
-        // :
-        // "arman705"
       } else {
         console.error("WebSocket 未连接或已关闭");
       }

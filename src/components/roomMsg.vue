@@ -44,6 +44,9 @@ export default {
   .room-msg {
     flex-direction: row-reverse;
   }
+  .name {
+    justify-content: flex-end !important;
+  }
 }
 .room-msg {
   color: #000;
