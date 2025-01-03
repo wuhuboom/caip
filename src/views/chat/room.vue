@@ -6,7 +6,11 @@
           <li class="center-center">欢聚一堂</li>
           <li></li>
         </ul>
-        <div class="flex-1 cont p-t-12">
+        <div class="flex-1 cont js-cont-room p-t-12">
+          <infinite-loading
+            direction="top"
+            @infinite="infiniteHandler"
+          ></infinite-loading>
           <roomMsg :item="v" v-for="(v, i) in messages" :key="i" />
         </div>
         <div class="btm">
@@ -32,6 +36,7 @@
 </template>
 
 <script>
+import InfiniteLoading from "vue-infinite-loading";
 import { mapState, mapActions } from "vuex";
 import auth from "@/plugins/auth";
 import roomMsg from "@/components/roomMsg.vue";
@@ -44,12 +49,13 @@ export default {
   },
   components: {
     roomMsg,
+    InfiniteLoading,
   },
   computed: {
     user() {
       return this.$store.state.user;
     },
-    ...mapState("chat", ["messages", "playerId"]), // 绑定聊天消息记录
+    ...mapState("chat", ["messages", "playerId", "query"]), // 绑定聊天消息记录
   },
   methods: {
     ...mapActions("chat", [
@@ -65,6 +71,28 @@ export default {
         });
         this.text = "";
       }
+    },
+    sleep(v) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(v);
+        }, v);
+      });
+    },
+    // eslint-disable-next-line no-unused-vars
+    async infiniteHandler($state) {
+      // $state.loaded(); $state.complete();
+      const pageNo = this.query.pageNo + 1;
+      if (this.query.totalPage && pageNo > this.query.totalPage) {
+        $state.complete();
+        return;
+      }
+      this.fetchHistory({
+        ...this.query,
+        pageNo: this.query.pageNo + 1,
+      });
+      await this.sleep(300);
+      $state.loaded();
     },
   },
   mounted() {
@@ -90,8 +118,8 @@ export default {
   }
   .cont {
     overflow-y: auto;
-    display: flex;
-    flex-direction: column-reverse;
+    // display: flex;
+    // flex-direction: column-reverse;
   }
   .btm {
     border-top: 1px solid #dedcdb;

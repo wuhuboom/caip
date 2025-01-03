@@ -4,7 +4,7 @@
       <img
         class="d-img user-pic"
         :class="[item.playerId === user.id ? 'm-l-12' : ' m-r-12']"
-        :src="item ? userPic : ''"
+        :src="item.img ? item.img : userPic"
       />
       <ul class="flex-column">
         <li class="name align-center">

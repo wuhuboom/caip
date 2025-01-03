@@ -1,20 +1,32 @@
+import app from "@/main";
 export default {
   namespaced: true,
   state: {
     ws: null, // WebSocket 实例
     messages: [], // 聊天消息记录
     playerId: null, // 当前用户的 playerId
+    query: {
+      pageNo: 1,
+      pageSize: 20,
+      totalPage: null,
+    },
   },
   mutations: {
+    setQuery(state, query) {
+      state.query = query;
+    },
     SET_WS(state, ws) {
       state.ws = ws;
     },
     ADD_MESSAGE(state, message) {
       if (message.message) {
-        state.messages.unshift(message.message);
-        return;
+        state.messages.push(message.message);
+      } else {
+        state.messages.unshift(...message.reverse());
       }
-      state.messages.push(message); // 添加一条聊天记录
+      state.messages = Array.from(
+        new Map(state.messages.map((item) => [item.id, item])).values()
+      );
     },
     CLEAR_MESSAGES(state) {
       state.messages = []; // 清空消息记录
@@ -75,11 +87,29 @@ export default {
         // 文本消息
         commit("ADD_MESSAGE", { message });
         console.log("接收到消息: 0", message);
+        app.$nextTick(() => {
+          const chatContainer = document.querySelector(".js-cont-room");
+          if (chatContainer) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+          }
+        });
       } else if (message.type === 1) {
+        //pageNo
         console.log("历史消息: 1", JSON.parse(message.data));
-        const { results } = JSON.parse(message.data);
+        const resResults = JSON.parse(message.data);
+        const { results, pageNo } = resResults;
         if (!results) return;
-        results.forEach((msg) => commit("ADD_MESSAGE", msg));
+        commit("ADD_MESSAGE", results);
+        //setQuery
+        commit("setQuery", resResults);
+        if (+pageNo === 1) {
+          app.$nextTick(() => {
+            const chatContainer = document.querySelector(".js-cont-room");
+            if (chatContainer) {
+              chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+          });
+        }
       }
     },
 
