@@ -24,9 +24,9 @@ export default {
       } else {
         state.messages.unshift(...message.reverse());
       }
-      state.messages = Array.from(
-        new Map(state.messages.map((item) => [item.id, item])).values()
-      );
+      // state.messages = Array.from(
+      //   new Map(state.messages.map((item) => [item.id, item])).values()
+      // );
     },
     CLEAR_MESSAGES(state) {
       state.messages = []; // 清空消息记录
@@ -72,15 +72,23 @@ export default {
     },
 
     // 发送消息
-    sendMessage({ state }, { type = 0, data }) {
+    sendMessage({ state }, { type = 0, data, from }) {
       if (state.ws && state.ws.readyState === WebSocket.OPEN) {
         const message = JSON.stringify({ type, data });
         state.ws.send(message);
       } else {
         console.error("WebSocket 未连接或已关闭");
+        if (from === "pageSend") {
+          app.$alert("已经离线，是否重连？", {
+            confirmButtonText: "确定",
+            showClose: false,
+            callback: () => {
+              location.reload();
+            },
+          });
+        }
       }
     },
-
     // 处理接收到的消息
     handleMessage({ commit }, message) {
       if (message.type === 0) {

@@ -3,15 +3,15 @@
     <div class="room-msg p-l-24 p-l-24 d-flex m-b-12">
       <img
         class="d-img user-pic"
-        :class="[item.playerId === user.id ? 'm-l-12' : ' m-r-12']"
-        :src="item.img ? item.img : userPic"
+        :class="[item.playerId === user.id ? 'm-l-12 m-r-24' : ' m-r-12']"
+        :src="item.img ? `${$baseURL}/${item.img}` : userPic"
       />
       <ul class="flex-column">
         <li class="name align-center">
           <span class="m-r-8">{{ item.user }}</span>
           <span>{{ $dayjsTime(item.time) }}</span>
         </li>
-        <li class="msg-txt-box d-flex">
+        <li class="msg-txt-box d-flex" @click="goPage(item)">
           <p class="msg-txt p-x-8 m-t-4">{{ item.data }}</p>
         </li>
       </ul>
@@ -34,6 +34,17 @@ export default {
     item: {
       type: Object,
       default: () => {},
+    },
+  },
+  methods: {
+    goPage(item) {
+      //如果匹配出链接 就跳转
+      item.data.replace(
+        /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g,
+        (a) => {
+          window.open(a);
+        }
+      );
     },
   },
 };

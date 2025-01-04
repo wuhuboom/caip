@@ -6,7 +6,7 @@
           <li class="center-center">欢聚一堂</li>
           <li></li>
         </ul>
-        <div class="flex-1 cont js-cont-room p-t-12">
+        <div class="flex-1 cont y-container js-cont-room p-t-12">
           <infinite-loading
             direction="top"
             @infinite="infiniteHandler"
@@ -15,7 +15,30 @@
         </div>
         <div class="btm">
           <div class="tool-row align-center p-l-24">
-            <img class="d-img face" src="@/assets/img/face.png" alt="" />
+            <emoji-picker class="face-box" @emoji="insert">
+              <div
+                slot="emoji-invoker"
+                slot-scope="{ events: { click: clickEvent } }"
+                @click.stop="clickEvent"
+                v-popover:popover
+              >
+                <img class="d-img face" src="@/assets/img/face.png" alt="" />
+              </div>
+              <div
+                class="prop-invoker p-x-8"
+                slot="emoji-picker"
+                slot-scope="{ emojis, insert }"
+              >
+                <span
+                  class="emoji"
+                  v-for="(emoji, emojiName) in emojis.People"
+                  :key="emojiName"
+                  @click="insert(emoji)"
+                  :title="emojiName"
+                  >{{ emoji }}</span
+                >
+              </div>
+            </emoji-picker>
           </div>
           <div class="enter p-l-8 p-r-8">
             <el-input
@@ -24,6 +47,7 @@
               v-model.trim="text"
               maxlength="120"
               show-word-limit
+              @keydown.enter.native="send"
             ></el-input>
           </div>
           <ul class="send-row align-center p-x-8">
@@ -36,6 +60,7 @@
 </template>
 
 <script>
+import EmojiPicker from "vue-emoji-picker";
 import InfiniteLoading from "vue-infinite-loading";
 import { mapState, mapActions } from "vuex";
 import auth from "@/plugins/auth";
@@ -50,6 +75,7 @@ export default {
   components: {
     roomMsg,
     InfiniteLoading,
+    EmojiPicker,
   },
   computed: {
     user() {
@@ -68,9 +94,13 @@ export default {
       if (this.text) {
         this.sendMessage({
           data: this.text,
+          from: "pageSend",
         });
         this.text = "";
       }
+    },
+    insert(emoji) {
+      this.text += emoji;
     },
     sleep(v) {
       return new Promise((resolve) => {
@@ -91,7 +121,7 @@ export default {
         ...this.query,
         pageNo: this.query.pageNo + 1,
       });
-      await this.sleep(300);
+      await this.sleep(800);
       $state.loaded();
     },
   },
@@ -101,9 +131,25 @@ export default {
       playerId: this.user.id,
     });
   },
+  beforeDestroy() {
+    this.closeWebSocket();
+  },
 };
 </script>
 <style lang="scss" scoped>
+.face-box {
+  position: relative;
+  .prop-invoker {
+    width: 400px;
+    position: absolute;
+    bottom: 100%;
+    background: #fff;
+  }
+  .emoji {
+    cursor: pointer;
+  }
+}
+
 .rooms {
   width: 800px;
   height: 652px;

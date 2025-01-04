@@ -95,17 +95,17 @@
             <tr align="center" class="my-account-table-body">
               <td height="50">
                 <div class="photo-picker-main">
-                  <span class="el-avatar el-avatar--circle"
-                    ><img
-                      src="https://res.cursf07img.top/DefaultAvatar.jpg"
-                      style="object-fit: cover"
-                  /></span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    hidden="hidden"
-                    class="photo-picker-input"
-                  />
+                  <van-uploader :after-read="afterRead" accept="image/*">
+                    <span class="el-avatar el-avatar--circle"
+                      ><img
+                        :src="
+                          user.headerImg
+                            ? `${$baseURL}/${user.headerImg}`
+                            : DefaultAvatar
+                        "
+                        style="object-fit: cover"
+                    /></span>
+                  </van-uploader>
                 </div>
               </td>
               <td height="50">{{ user.username }}</td>
@@ -249,6 +249,7 @@
 </template>
 
 <script>
+import DefaultAvatar from "@/assets/img/DefaultAvatar.jpg";
 import bindCard from "@/views/game/components/bindCard.vue";
 import bindUsdt from "@/views/game/components/bindUsdt.vue";
 import bindPassWrod from "@/views/game/components/bindPassWrod.vue";
@@ -260,6 +261,7 @@ export default {
   name: "AccountCenter",
   data() {
     return {
+      DefaultAvatar,
       statis: {
         dayUse: 0,
         dayBingo: 0,
@@ -302,6 +304,21 @@ export default {
     },
   },
   methods: {
+    sleep(time) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve();
+        }, time);
+      });
+    },
+    async afterRead(file) {
+      const [err] = await userApi.editHeader({
+        file: file.file,
+      });
+      if (err) return;
+      await this.sleep(1000);
+      this.$store.dispatch("getInfo");
+    },
     async myStatis() {
       const [err, res] = await userApi.myStatis();
       if (err) return;

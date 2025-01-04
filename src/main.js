@@ -32,6 +32,10 @@ Vue.prototype.$dayjsTime = (time = new Date(), f = "YYYY-MM-DD HH:mm:ss") => {
   return dayjs(time).format(f);
 };
 Vue.prototype.$util = util;
+Vue.prototype.$baseURL =
+  process.env.NODE_ENV === "production"
+    ? window.BASEPATH
+    : process.env.VUE_APP_API;
 const app = new Vue({
   router,
   store,

@@ -1,6 +1,12 @@
 import request from "@/plugins/request";
 export default {
-  ///mysub2
+  editHeader(data) {
+    return request({
+      url: "/editHeader",
+      method: "post",
+      data,
+    });
+  },
   mysub2() {
     return request({
       url: "/mysub2",

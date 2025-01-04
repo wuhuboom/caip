@@ -946,6 +946,7 @@ export default {
   },
   methods: {
     setlotteryType(v) {
+      // this.$ref.$cont?.clear();
       const type = this.catList.find((doc) => doc.id === v).lotteryType;
       if (+type === 0) {
         //高频彩
@@ -1030,6 +1031,7 @@ export default {
         if (this.id === v) {
           return;
         }
+        this.$refs.$cont?.clear();
         this.id = v;
       }
       document.body.classList.add("body-toast--visible");
