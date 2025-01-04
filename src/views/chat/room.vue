@@ -90,13 +90,14 @@ export default {
       "sendMessage",
       "fetchHistory",
     ]),
-    send() {
+    async send() {
       if (this.text) {
         this.sendMessage({
           data: this.text.trim(),
           from: "pageSend",
         });
         this.text = "";
+        await this.sleep(800);
       }
     },
     insert(emoji) {
@@ -109,7 +110,6 @@ export default {
         }, v);
       });
     },
-    // eslint-disable-next-line no-unused-vars
     async infiniteHandler($state) {
       // $state.loaded(); $state.complete();
       const pageNo = this.query.pageNo + 1;

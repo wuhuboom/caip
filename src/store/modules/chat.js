@@ -95,12 +95,12 @@ export default {
         // 文本消息
         commit("ADD_MESSAGE", { message });
         console.log("接收到消息: 0", message);
-        app.$nextTick(() => {
-          const chatContainer = document.querySelector(".js-cont-room");
-          if (chatContainer) {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-          }
-        });
+        // app.$nextTick(() => {
+        //   const chatContainer = document.querySelector(".js-cont-room");
+        //   if (chatContainer) {
+        //     chatContainer.scrollTop = chatContainer.scrollHeight;
+        //   }
+        // });
       } else if (message.type === 1) {
         //pageNo
         console.log("历史消息: 1", JSON.parse(message.data));
@@ -124,7 +124,7 @@ export default {
     // 请求历史消息
     fetchHistory({ dispatch }, { pageNo, pageSize }) {
       const data = JSON.stringify({ pageNo, pageSize });
-      dispatch("sendMessage", { type: 1, data });
+      dispatch("sendMessage", { type: 1, data, from: "pageSend" });
     },
   },
 };
