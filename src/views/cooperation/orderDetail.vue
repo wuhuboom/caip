@@ -1,14 +1,19 @@
 <template>
   <div class="app-content">
     <div class="order-detail-main">
-      <div style="right: 20px; top: 20px; position: absolute; z-index: 3">
+      <div
+        class="align-center"
+        style="right: 20px; top: 20px; position: absolute; z-index: 3"
+      >
         <div
-          class="cp-button-main order-btn-share"
+          class="cp-button-main order-btn-share m-r-16"
           v-clipboard:copy="textToCopy"
           v-clipboard:success="onCopySuccess"
         >
-          <!---->
-          分享
+          复制链接
+        </div>
+        <div class="cp-button-main order-btn-share" @click="shareToChatRoom">
+          分享到聊天室
         </div>
       </div>
       <div class="order-detail-title">
@@ -611,6 +616,27 @@ export default {
       for (let key in res.data) {
         this.$set(this.detail, key, res.data[key]);
       }
+    },
+    async shareToChatRoom() {
+      this.$toast.loading({
+        forbidClick: false, // 允许点击和滚动
+        duration: 0, // 持续时间为 0 表示不会自动关闭
+      });
+      const [err] = await userApi.lotteryBetsShare({
+        id: this.id,
+      });
+      if (err) return;
+      this.$toast.clear();
+      this.$confirm("分享成功，是否查看聊天室消息?", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "success",
+        customClass: "g-confirm-box",
+      })
+        .then(() => {
+          this.$router.push("/chat/room");
+        })
+        .catch(() => {});
     },
   },
   async created() {

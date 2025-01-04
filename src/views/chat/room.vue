@@ -44,7 +44,7 @@
             <el-input
               type="textarea"
               placeholder="请输入内容"
-              v-model.trim="text"
+              v-model="text"
               maxlength="120"
               show-word-limit
               @keydown.enter.native="send"
@@ -93,7 +93,7 @@ export default {
     send() {
       if (this.text) {
         this.sendMessage({
-          data: this.text,
+          data: this.text.trim(),
           from: "pageSend",
         });
         this.text = "";

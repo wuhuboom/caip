@@ -8,7 +8,7 @@
           v-clipboard:success="onCopySuccess"
         >
           <!---->
-          分享
+          复制链接
         </div>
       </div>
       <div class="order-detail-title">

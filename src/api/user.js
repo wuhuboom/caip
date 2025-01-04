@@ -1,5 +1,13 @@
 import request from "@/plugins/request";
 export default {
+  ///lottery/bets/share
+  lotteryBetsShare(data) {
+    return request({
+      url: "/lottery/bets/share",
+      method: "post",
+      data,
+    });
+  },
   editHeader(data) {
     return request({
       url: "/editHeader",
