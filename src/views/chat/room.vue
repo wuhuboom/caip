@@ -15,9 +15,12 @@
         </li>
       </ul>
       <div class="rooms flex-column">
-        <ul class="head p-l-24 justify-between align-center">
+        <ul class="head p-l-24 p-r-24 justify-between align-center">
           <li class="center-center">欢聚一堂</li>
-          <li></li>
+          <li class="center-center serve-line m-r-4 pointer" @click="serve">
+            <img class="d-img" src="@/assets/img/bank.png" alt="" />
+            人工充值
+          </li>
         </ul>
         <div class="flex-1 cont y-container js-cont-room p-t-12">
           <infinite-loading
@@ -31,7 +34,11 @@
             :key="i"
           />
         </div>
-        <div class="btm">
+        <div
+          class="btm"
+          :class="{ 'btm-disabled': disabled }"
+          v-loading="loadingShare"
+        >
           <div class="tool-row align-center p-l-24">
             <emoji-picker class="face-box" @emoji="insert">
               <div
@@ -61,11 +68,12 @@
           <div class="enter p-l-8 p-r-8">
             <el-input
               type="textarea"
-              placeholder="请输入内容"
+              :placeholder="placeholder"
               v-model="text"
               maxlength="120"
               show-word-limit
               @keydown.enter.native="send"
+              resize="none"
             ></el-input>
           </div>
           <ul class="send-row align-center p-x-8">
@@ -78,6 +86,7 @@
 </template>
 
 <script>
+import userApi from "@/api/user";
 import userPic from "@/assets/img/user-room.png";
 import EmojiPicker from "vue-emoji-picker";
 import InfiniteLoading from "vue-infinite-loading";
@@ -90,6 +99,11 @@ export default {
     return {
       userPic,
       text: "",
+      shareData: {
+        chatAble: 1, // 是否可聊天
+        // recharge 3000
+      },
+      loadingShare: false,
     };
   },
   directives: {
@@ -101,6 +115,17 @@ export default {
     EmojiPicker,
   },
   computed: {
+    placeholder() {
+      return this.disabled
+        ? `充值${this.shareData.recharge}才能解锁聊天`
+        : "请输入聊天内容";
+    },
+    disabled() {
+      return this.shareData.chatAble === 0;
+    },
+    serveData() {
+      return this.$store.state.serveData?.serviceAddr;
+    },
     user() {
       return this.$store.state.user;
     },
@@ -120,6 +145,18 @@ export default {
       "sendMessage",
       "fetchHistory",
     ]),
+    async chat() {
+      this.loadingShare = true;
+      const [err, res] = await userApi.chat();
+      this.loadingShare = false;
+      if (err) return;
+
+      this.shareData = res.data;
+    },
+    async serve() {
+      await this.$store.dispatch("getServeData");
+      window.open(this.serveData);
+    },
     alertReload() {
       if (this.wsStatus === false) {
         this.$alert("已经离线，是否重连？", {
@@ -184,6 +221,7 @@ export default {
     },
   },
   mounted() {
+    this.chat();
     if (this.wsStatus === true) {
       this.srcollBtm();
       return;
@@ -227,6 +265,23 @@ export default {
   }
   .btm {
     border-top: 1px solid #dedcdb;
+    position: relative;
+    &.btm-disabled {
+      ::v-deep {
+        textarea::placeholder {
+          color: #f56c6c;
+        }
+      }
+      &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+      }
+    }
     .face {
       width: 32px;
       height: 32px;
@@ -263,6 +318,13 @@ export default {
       height: 36px;
       width: 36px;
     }
+  }
+}
+.serve-line {
+  font-size: 18px;
+  img {
+    width: 20px;
+    height: 20px;
   }
 }
 </style>

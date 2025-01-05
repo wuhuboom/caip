@@ -413,6 +413,10 @@ export default {
       id: this.$route.params.id,
       detail: {},
       textToCopy: location.href,
+      shareData: {
+        // chatAble
+        // recharge 3000
+      },
     };
   },
   computed: {
@@ -596,6 +600,12 @@ export default {
 
       return parsedData;
     },
+    async chat() {
+      const [err, res] = await userApi.chat();
+      if (err) return;
+
+      this.shareData = res.data;
+    },
     async mySure() {
       const [err] = await userApi.lotteryBetsJoin({
         betId: this.detail.id,
@@ -626,8 +636,8 @@ export default {
         id: this.id,
       });
       this.sleep(1000);
-      if (err) return;
       this.$toast.clear();
+      if (err) return;
       this.$message.success("分享成功");
       // this.$confirm("分享成功，是否查看聊天室消息?", {
       //   confirmButtonText: "确定",
@@ -642,6 +652,7 @@ export default {
     },
   },
   async created() {
+    this.chat();
     let docCat = this.$store.state.cat.find((v) => v.list.length);
     if (!docCat) {
       await this.$store.dispatch("playerLotteryList");

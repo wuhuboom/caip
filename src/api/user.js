@@ -1,6 +1,10 @@
 import request from "@/plugins/request";
 export default {
-  ///lottery/bets/share
+  chat() {
+    return request({
+      url: "/chat",
+    });
+  },
   lotteryBetsShare(data) {
     return request({
       url: "/lottery/bets/share",
