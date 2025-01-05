@@ -64,6 +64,11 @@
                 >
               </div>
             </emoji-picker>
+            <img
+              class="d-img redMony m-l-16"
+              src="@/assets/img/redMony.png"
+              alt=""
+            />
           </div>
           <div class="enter p-l-8 p-r-8">
             <el-input
@@ -82,6 +87,7 @@
         </div>
       </div>
     </div>
+    <popupMoney ref="$popupMoney" />
   </div>
 </template>
 
@@ -93,6 +99,7 @@ import InfiniteLoading from "vue-infinite-loading";
 import { mapState, mapActions, mapGetters } from "vuex";
 import roomMsg from "@/components/roomMsg.vue";
 import { ObserveVisibility } from "vue-observe-visibility";
+import popupMoney from "./popupMoney.vue";
 export default {
   name: "chatRoom",
   data() {
@@ -113,6 +120,7 @@ export default {
     roomMsg,
     InfiniteLoading,
     EmojiPicker,
+    popupMoney,
   },
   computed: {
     placeholder() {
@@ -332,5 +340,9 @@ $height: 752px;
     width: 20px;
     height: 20px;
   }
+}
+.redMony {
+  width: 32px;
+  height: 32px;
 }
 </style>
