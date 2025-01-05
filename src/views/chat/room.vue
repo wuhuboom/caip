@@ -98,9 +98,9 @@ import userPic from "@/assets/img/user-room.png";
 import EmojiPicker from "vue-emoji-picker";
 import InfiniteLoading from "vue-infinite-loading";
 import { mapState, mapActions, mapGetters } from "vuex";
-import roomMsg from "@/components/roomMsg.vue";
+import roomMsg from "@/views/chat/components/roomMsg.vue";
 import { ObserveVisibility } from "vue-observe-visibility";
-import popupMoney from "./popupMoney.vue";
+import popupMoney from "@/views/chat/components/popupMoney.vue";
 export default {
   name: "chatRoom",
   data() {

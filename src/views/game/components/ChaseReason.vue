@@ -255,6 +255,7 @@ export default {
         id: this.id,
       });
       if (err) return;
+      res.data = res.data.slice(0, 5);
       this.list = res.data.map((item, idx) => {
         return {
           name: item,
