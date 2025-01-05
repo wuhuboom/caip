@@ -1,8 +1,10 @@
 import app from "@/main";
+import auth from "@/plugins/auth";
 export default {
   namespaced: true,
   state: {
     ws: null, // WebSocket 实例
+    wsStatus: null, // WebSocket 连接状态
     messages: [], // 聊天消息记录
     playerId: null, // 当前用户的 playerId
     query: {
@@ -11,16 +13,42 @@ export default {
       totalPage: null,
     },
   },
+  getters: {
+    news: (state) => {
+      const arr = state.messages.filter((v) => v.new === true);
+      return arr;
+    },
+  },
   mutations: {
+    setToOld(state) {
+      state.messages = state.messages.map((v) => {
+        v.new = false;
+        return v;
+      });
+      // const index = state.messages.findIndex((item) => +item.id === +v.id);
+      // console.log("setToOld", index);
+      // if (index === -1) return;
+      // state.messages[index].new = false;
+    },
     setQuery(state, query) {
       state.query = query;
     },
     SET_WS(state, ws) {
       state.ws = ws;
+      state.wsStatus = ws ? true : false;
+      // state.messages = [];
+      // state.query = {
+      //   pageNo: 1,
+      //   pageSize: 20,
+      //   totalPage: null,
+      // };
     },
     ADD_MESSAGE(state, message) {
       if (message.message) {
-        state.messages.push(message.message);
+        state.messages.push({
+          ...message.message,
+          new: message.message.playerId != app.$store.state.user.id,
+        });
       } else {
         state.messages.unshift(...message.reverse());
       }
@@ -37,8 +65,13 @@ export default {
   },
   actions: {
     // 初始化 WebSocket
-    initWebSocket({ commit, dispatch }, { url, playerId }) {
-      console.log("初始化 WebSocket:", url, playerId);
+    initWebSocket({ commit, dispatch }) {
+      const url = `wss://api.orz-orz.cc/player/ws/${auth.getToken()}`;
+      const playerId = app.$store.state.user.id;
+      console.log({
+        url,
+        playerId,
+      });
       const ws = new WebSocket(url);
 
       ws.onopen = () => {
@@ -59,7 +92,7 @@ export default {
         console.log("WebSocket 已关闭");
         commit("SET_WS", null);
       };
-
+      window.ws = ws;
       commit("SET_WS", ws);
     },
 
@@ -72,35 +105,30 @@ export default {
     },
 
     // 发送消息
-    sendMessage({ state }, { type = 0, data, from }) {
+    sendMessage({ state }, { type = 0, data }) {
       if (state.ws && state.ws.readyState === WebSocket.OPEN) {
         const message = JSON.stringify({ type, data });
         state.ws.send(message);
       } else {
         console.error("WebSocket 未连接或已关闭");
-        if (from === "pageSend") {
-          app.$alert("已经离线，是否重连？", {
-            confirmButtonText: "确定",
-            showClose: false,
-            callback: () => {
-              location.reload();
-            },
-          });
-        }
+        // if (from === "pageSend") {
+        // }
       }
     },
     // 处理接收到的消息
     handleMessage({ commit }, message) {
-      if (message.type === 0) {
+      if ([0, 2].includes(+message.type)) {
         // 文本消息
         commit("ADD_MESSAGE", { message });
         console.log("接收到消息: 0", message);
-        // app.$nextTick(() => {
-        //   const chatContainer = document.querySelector(".js-cont-room");
-        //   if (chatContainer) {
-        //     chatContainer.scrollTop = chatContainer.scrollHeight;
-        //   }
-        // });
+        app.$nextTick(() => {
+          if (message.playerId == app.$store.state.user.id) {
+            const chatContainer = document.querySelector(".js-cont-room");
+            if (chatContainer) {
+              chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+          }
+        });
       } else if (message.type === 1) {
         //pageNo
         console.log("历史消息: 1", JSON.parse(message.data));
@@ -124,7 +152,7 @@ export default {
     // 请求历史消息
     fetchHistory({ dispatch }, { pageNo, pageSize }) {
       const data = JSON.stringify({ pageNo, pageSize });
-      dispatch("sendMessage", { type: 1, data, from: "pageSend" });
+      dispatch("sendMessage", { type: 1, data });
     },
   },
 };

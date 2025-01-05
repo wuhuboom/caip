@@ -1,6 +1,19 @@
 <template>
-  <div>
-    <div v-if="playerId">
+  <div class="center-center">
+    <div v-if="playerId" class="align-center">
+      <ul class="slides flex-column p-t-40">
+        <li class="my-avatar m-b-40">
+          <img
+            class="d-img"
+            :src="user.headerImg ? `${$baseURL}/${user.headerImg}` : userPic"
+          />
+        </li>
+        <li class="new-msg" @click="srcollBtm">
+          <van-badge :data-badge="news.length" :content="news.length" max="99">
+            <img class="d-img" src="@/assets/img/mgs.png" alt="" />
+          </van-badge>
+        </li>
+      </ul>
       <div class="rooms flex-column">
         <ul class="head p-l-24 justify-between align-center">
           <li class="center-center">欢聚一堂</li>
@@ -11,7 +24,12 @@
             direction="top"
             @infinite="infiniteHandler"
           ></infinite-loading>
-          <roomMsg :item="v" v-for="(v, i) in messages" :key="i" />
+          <roomMsg
+            v-observe-visibility="visibilityChanged(v)"
+            :item="v"
+            v-for="(v, i) in messages"
+            :key="i"
+          />
         </div>
         <div class="btm">
           <div class="tool-row align-center p-l-24">
@@ -60,17 +78,22 @@
 </template>
 
 <script>
+import userPic from "@/assets/img/user-room.png";
 import EmojiPicker from "vue-emoji-picker";
 import InfiniteLoading from "vue-infinite-loading";
-import { mapState, mapActions } from "vuex";
-import auth from "@/plugins/auth";
+import { mapState, mapActions, mapGetters } from "vuex";
 import roomMsg from "@/components/roomMsg.vue";
+import { ObserveVisibility } from "vue-observe-visibility";
 export default {
   name: "chatRoom",
   data() {
     return {
+      userPic,
       text: "",
     };
+  },
+  directives: {
+    ObserveVisibility,
   },
   components: {
     roomMsg,
@@ -81,7 +104,14 @@ export default {
     user() {
       return this.$store.state.user;
     },
-    ...mapState("chat", ["messages", "playerId", "query"]), // 绑定聊天消息记录
+    ...mapState("chat", ["messages", "playerId", "query", "ws", "wsStatus"]), // 绑定聊天消息记录
+    ...mapGetters("chat", ["news"]),
+  },
+  watch: {
+    wsStatus(v) {
+      console.log("wsStatus", v);
+      this.alertReload();
+    },
   },
   methods: {
     ...mapActions("chat", [
@@ -90,6 +120,26 @@ export default {
       "sendMessage",
       "fetchHistory",
     ]),
+    alertReload() {
+      if (this.wsStatus === false) {
+        this.$alert("已经离线，是否重连？", {
+          confirmButtonText: "确定",
+          showClose: false,
+          callback: () => {
+            location.reload();
+          },
+        });
+      }
+    },
+    visibilityChanged(v) {
+      return (isVisible) => {
+        if (isVisible) {
+          if (v.new === true) {
+            this.$store.commit("chat/setToOld", v);
+          }
+        }
+      };
+    },
     async send() {
       if (this.text) {
         this.sendMessage({
@@ -121,18 +171,27 @@ export default {
         ...this.query,
         pageNo: this.query.pageNo + 1,
       });
-      await this.sleep(800);
+      await this.sleep(1000);
       $state.loaded();
+    },
+    srcollBtm() {
+      this.$nextTick(() => {
+        const chatContainer = document.querySelector(".js-cont-room");
+        if (chatContainer) {
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+      });
     },
   },
   mounted() {
-    this.initWebSocket({
-      url: `wss://api.orz-orz.cc/player/ws/${auth.getToken()}`,
-      playerId: this.user.id,
-    });
+    if (this.wsStatus === true) {
+      this.srcollBtm();
+      return;
+    }
+    this.initWebSocket();
   },
   beforeDestroy() {
-    this.closeWebSocket();
+    // this.closeWebSocket();
   },
 };
 </script>
@@ -153,7 +212,6 @@ export default {
 .rooms {
   width: 800px;
   height: 652px;
-  margin: 0 auto;
   background: #f5f5f5;
   border-radius: 0px 0px 0px 0px;
   .head {
@@ -185,6 +243,25 @@ export default {
       background: #2f3c57;
       border-radius: 5px 5px 5px 5px;
       cursor: pointer;
+    }
+  }
+}
+.slides {
+  width: 102px;
+  height: 652px;
+  background: #293650;
+  border-radius: 0px 0px 0px 0px;
+  align-items: center;
+  .my-avatar {
+    height: 53px;
+    width: 53px;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+  .new-msg {
+    img {
+      height: 36px;
+      width: 36px;
     }
   }
 }

@@ -358,3 +358,8 @@ th,td,.cell{
   width: auto;
   padding: 0 16px;
 }
+[data-badge="0"]{
+ .van-badge{
+  display: none;
+ }
+}

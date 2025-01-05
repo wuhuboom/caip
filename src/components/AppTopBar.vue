@@ -102,6 +102,11 @@ export default {
         window.open(window.lineSite);
         return;
       }
+      //window.location.origin
+      if (item.path === "/chat/room") {
+        location.href = `${window.location.origin}/#/chat/room`;
+        return;
+      }
       this.$router.push(item.path);
     },
   },

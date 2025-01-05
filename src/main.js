@@ -31,6 +31,9 @@ Vue.prototype.$betPrice = 2;
 Vue.prototype.$dayjsTime = (time = new Date(), f = "YYYY-MM-DD HH:mm:ss") => {
   return dayjs(time).format(f);
 };
+Vue.prototype.sleep = (time) => {
+  return new Promise((resolve) => setTimeout(resolve, time));
+};
 Vue.prototype.$util = util;
 Vue.prototype.$baseURL =
   process.env.NODE_ENV === "production"

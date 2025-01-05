@@ -625,18 +625,20 @@ export default {
       const [err] = await userApi.lotteryBetsShare({
         id: this.id,
       });
+      this.sleep(1000);
       if (err) return;
       this.$toast.clear();
-      this.$confirm("分享成功，是否查看聊天室消息?", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "success",
-        customClass: "g-confirm-box",
-      })
-        .then(() => {
-          this.$router.push("/chat/room");
-        })
-        .catch(() => {});
+      this.$message.success("分享成功");
+      // this.$confirm("分享成功，是否查看聊天室消息?", {
+      //   confirmButtonText: "确定",
+      //   cancelButtonText: "取消",
+      //   type: "success",
+      //   customClass: "g-confirm-box",
+      // })
+      //   .then(() => {
+      //     this.$router.push("/chat/room");
+      //   })
+      //   .catch(() => {});
     },
   },
   async created() {
