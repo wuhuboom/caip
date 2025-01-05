@@ -246,10 +246,10 @@ export default {
     cursor: pointer;
   }
 }
-
+$height: 752px;
 .rooms {
   width: 800px;
-  height: 652px;
+  height: $height;
   background: #f5f5f5;
   border-radius: 0px 0px 0px 0px;
   .head {
@@ -266,6 +266,12 @@ export default {
   .btm {
     border-top: 1px solid #dedcdb;
     position: relative;
+    ::v-deep {
+      textarea {
+        height: 80px;
+      }
+    }
+
     &.btm-disabled {
       ::v-deep {
         textarea::placeholder {
@@ -303,7 +309,7 @@ export default {
 }
 .slides {
   width: 102px;
-  height: 652px;
+  height: $height;
   background: #293650;
   border-radius: 0px 0px 0px 0px;
   align-items: center;
