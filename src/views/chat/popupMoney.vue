@@ -1,26 +1,37 @@
 <template>
   <van-popup class="popupMoney" v-model="show">
-    <van-form @submit="onSubmit">
+    <p class="pop-title center-center m-t-24 m-b-32">发红包</p>
+    <van-form class="ntf-yellow-form" @submit="onSubmit">
       <van-field
         v-model="form.username"
-        name="用户名"
-        label="用户名"
-        placeholder="用户名"
-        :rules="[{ required: true, message: '请填写用户名' }]"
-      />
+        class="m-b-32"
+        autocomplete="new-password"
+        label="红包个数"
+        placeholder="请填写红包个数"
+        :rules="[{ required: true, message: '请填写红包个数' }]"
+      >
+        <template #button> <span class="left-text p-r-8">个</span> </template>
+      </van-field>
       <van-field
         v-model="form.password"
-        type="password"
-        name="密码"
-        label="密码"
-        placeholder="密码"
-        :rules="[{ required: true, message: '请填写密码' }]"
-      />
-      <div style="margin: 16px">
-        <van-button round block type="info" native-type="submit"
-          >提交</van-button
-        >
-      </div>
+        autocomplete="new-password"
+        label="红包金额"
+        :rules="[{ required: true, message: '请填写金额' }]"
+      >
+        <template #button> <span class="left-text p-r-8">元</span> </template>
+      </van-field>
+      <ul class="center-center m-t-48">
+        <li class="m-r-32" @click="show = false">
+          <van-button round block type="info" native-type="button"
+            >取消</van-button
+          >
+        </li>
+        <li>
+          <van-button round block type="info" native-type="submit"
+            >提交</van-button
+          >
+        </li>
+      </ul>
     </van-form>
   </van-popup>
 </template>
@@ -32,7 +43,7 @@ export default {
   name: "PopupMoney",
   data() {
     return {
-      show: true,
+      show: false,
       form: {
         username: "",
         password: "",
@@ -51,5 +62,13 @@ export default {
   width: 510px;
   height: 307px;
   background: #774230;
+  padding-left: 58px;
+  .left-text {
+    color: #000;
+  }
+  .pop-title {
+    font-size: 16px;
+    color: #feedaf;
+  }
 }
 </style>

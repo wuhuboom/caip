@@ -628,6 +628,10 @@ export default {
       }
     },
     async shareToChatRoom() {
+      if (!this.shareData.chatAble) {
+        this.$message.error(`充值${this.shareData.recharge}才能解锁聊天`);
+        return;
+      }
       this.$toast.loading({
         forbidClick: false, // 允许点击和滚动
         duration: 0, // 持续时间为 0 表示不会自动关闭

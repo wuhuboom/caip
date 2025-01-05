@@ -65,7 +65,8 @@
               </div>
             </emoji-picker>
             <img
-              class="d-img redMony m-l-16"
+              @click="openPopup"
+              class="d-img redMony m-l-16 pointer"
               src="@/assets/img/redMony.png"
               alt=""
             />
@@ -153,6 +154,9 @@ export default {
       "sendMessage",
       "fetchHistory",
     ]),
+    openPopup() {
+      this.$refs.$popupMoney.show = true;
+    },
     async chat() {
       this.loadingShare = true;
       const [err, res] = await userApi.chat();

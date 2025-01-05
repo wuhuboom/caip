@@ -17,6 +17,7 @@ import VueClipboard from "vue-clipboard2";
 Vue.use(VueClipboard);
 import "@/assets/page.css";
 import "@/assets/base.scss";
+import "@/assets/resVant.scss";
 const num =
   process.env.NODE_ENV === "production"
     ? window.UNIFIED_NUMBER

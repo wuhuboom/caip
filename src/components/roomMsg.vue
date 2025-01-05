@@ -18,7 +18,11 @@
           <span>{{ $dayjsTime(doc.time) }}</span>
         </li>
         <li class="msg-txt-box d-flex">
-          <div class="order-detail" @click="goDetail" v-if="doc.type == 2">
+          <div
+            class="order-detail m-t-4"
+            @click="goDetail"
+            v-if="doc.type == 2"
+          >
             <p class="align-center">
               <img class="d-img m-r-4 ord" src="@/assets/img/ord.png" alt="" />
               #{{ doc.data.lottery }}
@@ -133,7 +137,7 @@ export default {
 }
 .order-detail {
   cursor: pointer;
-  width: 250px;
+  min-width: 250px;
   height: 120px;
   background: #ffffff;
   border-radius: 5px 5px 5px 5px;
@@ -149,7 +153,6 @@ export default {
   }
   .detail {
     color: #fff;
-    width: 221px;
     height: 70px;
     background: #00a752;
     border-radius: 5px 5px 5px 5px;
