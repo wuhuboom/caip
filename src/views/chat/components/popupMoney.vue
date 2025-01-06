@@ -99,9 +99,15 @@ export default {
       }
     },
     onSubmit() {
+      const params = {
+        ...this.form,
+      };
+      if (!params.describes) {
+        params.describes = "恭喜发财，大吉大利";
+      }
       this.sendMessage({
         type: 3,
-        data: JSON.stringify(this.form),
+        data: JSON.stringify(params),
       });
       this.show = false;
     },
