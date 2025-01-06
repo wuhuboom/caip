@@ -3,27 +3,45 @@
     <p class="pop-title center-center m-t-24 m-b-32">发红包</p>
     <van-form class="ntf-yellow-form" @submit="onSubmit">
       <van-field
-        v-model="form.quantity"
+        v-model.trim="form.quantity"
         class="m-b-32"
         autocomplete="new-password"
         label="红包个数"
         placeholder="请填写红包个数"
-        :rules="[{ required: true, message: '请填写红包个数' }]"
+        :rules="[
+          { required: true, message: '请填写红包个数' },
+          {
+            pattern: /^[1-9]\d*$/,
+            message: '请输入正整数',
+          },
+        ]"
       >
         <template #button> <span class="left-text p-r-8">个</span> </template>
       </van-field>
       <van-field
         class="m-b-32"
-        v-model="form.money"
+        v-model.trim="form.money"
         autocomplete="new-password"
         label="红包金额"
-        :rules="[{ required: true, message: '请填写金额' }]"
+        :rules="[
+          { required: true, message: '请填写金额' },
+          {
+            pattern: /^[1-9]\d*$/,
+            message: '请输入正整数',
+          },
+        ]"
       >
         <template #button> <span class="left-text p-r-8">元</span> </template>
       </van-field>
       <van-field
-        v-model="form.describes"
+        v-model.trim="form.describes"
         autocomplete="new-password"
+        :rules="[
+          {
+            validator: (value) => value.length <= 14, // 长度不超过 14
+            message: '最多 14 个字符',
+          },
+        ]"
         label="标题"
       >
         <template #button> <span class="left-text p-r-8"></span> </template>
