@@ -44,7 +44,7 @@
                 : userPic
             "
           />
-          收到{{ myRedMoney.nickname }}的红包
+          收到{{ doc.user }}的红包
         </li>
         <li class="d-desc m-b-8">{{ myRedMoney.describes }}</li>
         <li class="d-meng d-flex m-b-8">
@@ -108,6 +108,9 @@ export default {
   },
   computed: {
     ...mapState("chat", ["messages", "playerId", "query", "ws", "wsStatus"]),
+    shareData() {
+      return this.$store.state.shareData;
+    },
     pack() {
       return this.ajaxPack;
     },
@@ -201,6 +204,15 @@ export default {
       }
     },
     open() {
+      if (this.shareData.gainRed === 0) {
+        this.$message({
+          message: `充值${this.shareData.gainRecharge}才能参与抢红包`,
+          type: "error",
+          customClass: "index-99999",
+        });
+        this.getMoneyRecord();
+        return;
+      }
       if (this.canGet) {
         this.showOpen = true;
         return;

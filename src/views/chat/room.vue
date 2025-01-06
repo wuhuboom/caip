@@ -232,6 +232,9 @@ export default {
       });
     },
   },
+  created() {
+    this.$store.dispatch("getSharaData");
+  },
   mounted() {
     this.chat();
     if (this.wsStatus === true) {

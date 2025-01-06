@@ -129,6 +129,12 @@ export default new Vuex.Store({
     bankCard: [],
     notice: [],
     hallId: null,
+    shareData: {
+      // chatAble
+      // recharge 3000
+      //"gainRed": 1, 可抢 0否 1是
+      //gainRecharge
+    },
   },
   getters: {
     noticeDoc(state) {
@@ -140,6 +146,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    setShareData(state, data) {
+      state.shareData = data;
+    },
     setHallId(state, data) {
       if (!data) return;
       state.hallId = data;
@@ -230,6 +239,11 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    async getSharaData({ commit }) {
+      const [err, res] = await userApi.chat();
+      if (err) return;
+      commit("setShareData", res.data);
+    },
     async getNotice({ commit }) {
       const [err, res] = await userApi.notice({ pageSize: 1 });
       if (err) return;
