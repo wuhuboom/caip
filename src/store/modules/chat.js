@@ -20,11 +20,33 @@ export default {
     },
   },
   mutations: {
+    clickPacketStatus(state, v) {
+      const index = state.messages.findIndex((item) => +item.id === +v.msgId);
+      if (index === -1) return;
+      try {
+        const data = JSON.parse(v.data);
+        if ([1, 2].includes(data.code)) {
+          //// 接收消息:{"type":6,"data":"{\"code\":1}"}(0.抢到红包 1.已被抢空 2.已抢过红包)
+          app.$message.error("未抢到红包");
+        } else {
+          // 抢到红包返回{money:抢到金额,nickname:发送人,describes:红包标题}
+          state.messages[index].packet = state.messages[index].packet || {};
+          state.messages[index].packet.status = data.code;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    addMsgPacket(state, v) {
+      const index = state.messages.findIndex((item) => +item.id === +v.msgId);
+      if (index === -1) return;
+      try {
+        app.$set(state.messages[index], "packet", JSON.parse(v.data));
+      } catch (e) {
+        console.log(e);
+      }
+    },
     setToOld(state, v) {
-      // state.messages = state.messages.map((v) => {
-      //   v.new = false;
-      //   return v;
-      // });
       const index = state.messages.findIndex((item) => +item.id === +v.id);
       if (index === -1) return;
       state.messages = state.messages.map((v, k) => {
@@ -33,7 +55,6 @@ export default {
         }
         return v;
       });
-      //state.messages[index].new = false;
     },
     setQuery(state, query) {
       state.query = query;
@@ -41,12 +62,6 @@ export default {
     SET_WS(state, ws) {
       state.ws = ws;
       state.wsStatus = ws ? true : false;
-      // state.messages = [];
-      // state.query = {
-      //   pageNo: 1,
-      //   pageSize: 20,
-      //   totalPage: null,
-      // };
     },
     ADD_MESSAGE(state, message) {
       if (message.message) {
@@ -57,9 +72,6 @@ export default {
       } else {
         state.messages.unshift(...message.reverse());
       }
-      // state.messages = Array.from(
-      //   new Map(state.messages.map((item) => [item.id, item])).values()
-      // );
     },
     CLEAR_MESSAGES(state) {
       state.messages = []; // 清空消息记录
@@ -115,9 +127,13 @@ export default {
     },
 
     // 发送消息
-    sendMessage({ state }, { type = 0, data }) {
+    sendMessage({ state }, { type = 0, data, msgId }) {
       if (state.ws && state.ws.readyState === WebSocket.OPEN) {
-        const message = JSON.stringify({ type, data });
+        const query = { type, data };
+        if (msgId) {
+          query.msgId = msgId;
+        }
+        const message = JSON.stringify(query);
         state.ws.send(message);
       } else {
         console.error("WebSocket 未连接或已关闭");
@@ -170,6 +186,16 @@ export default {
           duration: 2000,
           showClose: true,
         });
+      } else if ([5].includes(+message.type)) {
+        //查询红包 状态
+        console.log("红包状态: 5", message);
+        commit("addMsgPacket", message);
+      } else if ([6].includes(+message.type)) {
+        //抢红包响应数据
+        // 接收消息:{"type":6,"data":"{\"code\":1}"}(0.抢到红包 1.已被抢空 2.已抢过红包)
+        // 抢到红包返回{money:抢到金额,nickname:发送人,describes:红包标题}
+        console.log("抢红包: 6", message);
+        commit("clickPacketStatus", message);
       }
     },
 

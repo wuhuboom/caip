@@ -1,8 +1,13 @@
 <template>
   <div class="m-t-4 red-img">
-    <img class="d-img pointer" :src="red1" alt="" @click="open" />
+    <img
+      class="d-img pointer"
+      :src="canGet ? red1 : red2"
+      alt=""
+      @click="open"
+    />
     <van-popup class="popupOpen pointer" v-model="showOpen">
-      <ul class="flex-column center-center font14">
+      <ul class="flex-column center-center getPacket font14" @click="getPacket">
         <li class="align-center font14">
           <img
             class="d-img user-red m-r-8"
@@ -65,6 +70,31 @@ export default {
   },
   computed: {
     ...mapState("chat", ["messages", "playerId", "query", "ws", "wsStatus"]),
+    packet() {
+      // {
+      //      "id": 4,
+      //      "createdAt": 1736042197315,
+      //      "describes": "每日福利2",
+      //      "nickname": "super_admin",
+      //      "quantity": 20,
+      //      "money": 1000000,
+      //      "status": 0,// 0可抢 1抢空 2过期
+      //      "list": [
+      //      //状态为0,list为空,可抢红包
+      //      //list有数据,表示已抢到该红包
+      //          {
+      //              "nickname": "User1",
+      //              "money": 50963
+      //          }
+      //      ]
+      //  }
+
+      return this.doc.packet || {};
+    },
+    //是否可抢
+    canGet() {
+      return this.packet.status === 0 && this.packet.list?.length === 0;
+    },
   },
   watch: {
     wsStatus() {
@@ -88,6 +118,14 @@ export default {
       "sendMessage",
       "fetchHistory",
     ]),
+    getStatus() {
+      //{"type":5,"data":"{\"id\":6}"}
+      this.sendMessage({
+        type: 5,
+        msgId: this.doc.id,
+        data: JSON.stringify({ id: this.doc.data?.id }),
+      });
+    },
     alertReload() {
       if (this.wsStatus === false) {
         this.showOpen = false;
@@ -95,8 +133,24 @@ export default {
       }
     },
     open() {
-      this.showFinish = true;
+      if (this.canGet) {
+        this.showOpen = true;
+      } else {
+        this.showFinish = true;
+      }
     },
+    //发送消息:{"type":6,"data":"{\"id\":2}"}
+    getPacket() {
+      this.sendMessage({
+        type: 6,
+        msgId: this.doc.id,
+        data: JSON.stringify({ id: this.doc.data?.id }),
+      });
+      this.showOpen = false;
+    },
+  },
+  created() {
+    this.getStatus();
   },
 };
 </script>
