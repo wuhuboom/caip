@@ -1,11 +1,18 @@
 <template>
   <div class="m-t-4 red-img">
-    <img
-      class="d-img pointer"
-      :src="canGet ? red1 : red2"
-      alt=""
+    <div
       @click="open"
-    />
+      class="reg-img-cont pointer"
+      :style="{ backgroundImage: `url(${canGet ? red1 : red2})` }"
+    >
+      <p class="font16 describes els">
+        {{ packet.describes }}
+      </p>
+      <!-- "status": 0,// 0可抢 1抢空 2过期 -->
+      <p class="status">
+        {{ packetStatus }}
+      </p>
+    </div>
     <van-popup class="popupOpen pointer" v-model="showOpen" @click="getPacket">
       <ul class="flex-column center-center getPacket font14">
         <li class="align-center font14">
@@ -130,6 +137,15 @@ export default {
     canGet() {
       return this.packet.status === 0 && this.packet.list?.length === 0;
     },
+    packetStatus() {
+      if (this.myRedMoney.money !== undefined) {
+        return "已领取";
+      }
+      if (this.packet.status === 0) {
+        return "点击领取红包";
+      }
+      return this.packet.status === 1 ? "抢空" : "过期";
+    },
   },
   watch: {
     wsStatus() {
@@ -153,6 +169,7 @@ export default {
       "sendMessage",
       "fetchHistory",
     ]),
+
     getMoneyRecord() {
       this.$toast.loading({
         duration: 3000, // 设置 3 秒后关闭
@@ -311,6 +328,20 @@ export default {
   .one-doc {
     height: 25px;
     border-bottom: 1px solid rgba(254, 237, 175, 0.3);
+  }
+}
+.reg-img-cont {
+  width: 234px;
+  height: 86px;
+  background-size: 100% 100%;
+  color: #fff;
+  .describes {
+    padding-top: 21px;
+    padding-left: 61px;
+    margin-bottom: 20px;
+  }
+  .status {
+    margin-left: 14px;
   }
 }
 </style>
