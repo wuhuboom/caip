@@ -161,6 +161,15 @@ export default {
             }
           });
         }
+      } else if ([3].includes(+message.type)) {
+        let data = JSON.parse(message.data);
+        // 3 发红包响应的code消息 (1余额不足 2数量不正确)
+        app.$message({
+          message: data.code == 1 ? "余额不足" : "数量不正确",
+          type: "error",
+          duration: 2000,
+          showClose: true,
+        });
       }
     },
 

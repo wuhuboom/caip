@@ -103,6 +103,7 @@ export default {
         type: 3,
         data: JSON.stringify(this.form),
       });
+      this.show = false;
     },
   },
 };
