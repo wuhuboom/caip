@@ -19,7 +19,7 @@
         </li>
         <li class="msg-txt-box d-flex">
           <component
-            v-if="[0, 2].includes(+doc.type)"
+            v-if="[2].includes(+doc.type)"
             :is="currentComponent(+doc.type)"
             :userPic="userPic"
             :doc="doc"

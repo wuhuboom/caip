@@ -20,15 +20,20 @@ export default {
     },
   },
   mutations: {
-    setToOld(state) {
-      state.messages = state.messages.map((v) => {
-        v.new = false;
+    setToOld(state, v) {
+      // state.messages = state.messages.map((v) => {
+      //   v.new = false;
+      //   return v;
+      // });
+      const index = state.messages.findIndex((item) => +item.id === +v.id);
+      if (index === -1) return;
+      state.messages = state.messages.map((v, k) => {
+        if (index >= k) {
+          v.new = false;
+        }
         return v;
       });
-      // const index = state.messages.findIndex((item) => +item.id === +v.id);
-      // console.log("setToOld", index);
-      // if (index === -1) return;
-      // state.messages[index].new = false;
+      //state.messages[index].new = false;
     },
     setQuery(state, query) {
       state.query = query;
@@ -66,7 +71,12 @@ export default {
   actions: {
     // 初始化 WebSocket
     initWebSocket({ commit, dispatch }) {
-      const url = `wss://api.orz-orz.cc/player/ws/${auth.getToken()}`;
+      //wss://api.orz-orz.cc
+      const site =
+        process.env.NODE_ENV === "production"
+          ? window.WSPATH
+          : process.env.VUE_APP_UNIFIED_NUMBER;
+      const url = `${site}/player/ws/${auth.getToken()}`;
       const playerId = app.$store.state.user.id;
       console.log({
         url,
@@ -122,11 +132,17 @@ export default {
         commit("ADD_MESSAGE", { message });
         console.log("接收到消息: 0", message);
         app.$nextTick(() => {
-          if (message.playerId == app.$store.state.user.id) {
-            const chatContainer = document.querySelector(".js-cont-room");
-            if (chatContainer) {
-              chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
+          const chatContainer = document.querySelector(".js-cont-room");
+          if (!chatContainer) return;
+          const scrollDistanceToBottom =
+            chatContainer.scrollHeight -
+            chatContainer.scrollTop -
+            chatContainer.clientHeight;
+          if (
+            message.playerId == app.$store.state.user.id ||
+            scrollDistanceToBottom < 300
+          ) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
           }
         });
       } else if (message.type === 1) {

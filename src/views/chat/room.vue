@@ -8,7 +8,7 @@
             :src="user.headerImg ? `${$baseURL}/${user.headerImg}` : userPic"
           />
         </li>
-        <li class="new-msg" @click="srcollBtm">
+        <li class="new-msg pointer" @click="srcollBtm">
           <van-badge :data-badge="news.length" :content="news.length" max="99">
             <img class="d-img" src="@/assets/img/mgs.png" alt="" />
           </van-badge>
@@ -64,12 +64,12 @@
                 >
               </div>
             </emoji-picker>
-            <img
+            <!-- <img
               @click="openPopup"
               class="d-img redMony m-l-16 pointer"
               src="@/assets/img/redMony.png"
               alt=""
-            />
+            /> -->
           </div>
           <div class="enter p-l-8 p-r-8">
             <el-input
@@ -78,7 +78,7 @@
               v-model="text"
               maxlength="120"
               show-word-limit
-              @keydown.enter.native="send"
+              @keydown.enter.native.prevent="send"
               resize="none"
             ></el-input>
           </div>
@@ -331,11 +331,11 @@ $height: 752px;
     overflow: hidden;
     border-radius: 50%;
   }
-  .new-msg {
-    img {
-      height: 36px;
-      width: 36px;
-    }
+}
+.new-msg {
+  img {
+    height: 36px;
+    width: 36px;
   }
 }
 .serve-line {
