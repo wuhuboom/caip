@@ -65,6 +65,7 @@
 <script>
 // eslint-disable-next-line no-unused-vars
 import userApi from "@/api/user";
+import { mapState, mapActions } from "vuex";
 export default {
   name: "PopupMoney",
   data() {
@@ -77,9 +78,31 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapState("chat", ["messages", "playerId", "query", "ws", "wsStatus"]),
+  },
+  watch: {
+    wsStatus() {
+      this.alertReload();
+    },
+  },
   methods: {
+    ...mapActions("chat", [
+      "initWebSocket",
+      "closeWebSocket",
+      "sendMessage",
+      "fetchHistory",
+    ]),
+    alertReload() {
+      if (this.wsStatus === false) {
+        this.show = false;
+      }
+    },
     onSubmit() {
-      console.log("submit");
+      this.sendMessage({
+        type: 3,
+        data: JSON.stringify(this.form),
+      });
     },
   },
 };

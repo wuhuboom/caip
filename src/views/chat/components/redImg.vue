@@ -50,6 +50,7 @@
 <script>
 // eslint-disable-next-line no-unused-vars
 import userApi from "@/api/user";
+import { mapState, mapActions } from "vuex";
 import red1 from "@/assets/img/red1.png";
 import red2 from "@/assets/img/red2.png";
 export default {
@@ -62,6 +63,14 @@ export default {
       showFinish: false,
     };
   },
+  computed: {
+    ...mapState("chat", ["messages", "playerId", "query", "ws", "wsStatus"]),
+  },
+  watch: {
+    wsStatus() {
+      this.alertReload();
+    },
+  },
   props: {
     doc: {
       type: Object,
@@ -73,6 +82,18 @@ export default {
     },
   },
   methods: {
+    ...mapActions("chat", [
+      "initWebSocket",
+      "closeWebSocket",
+      "sendMessage",
+      "fetchHistory",
+    ]),
+    alertReload() {
+      if (this.wsStatus === false) {
+        this.showOpen = false;
+        this.showFinish = false;
+      }
+    },
     open() {
       this.showFinish = true;
     },

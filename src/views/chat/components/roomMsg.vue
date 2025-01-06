@@ -19,7 +19,7 @@
         </li>
         <li class="msg-txt-box d-flex">
           <component
-            v-if="[2].includes(+doc.type)"
+            v-if="[2, 4].includes(+doc.type)"
             :is="currentComponent(+doc.type)"
             :userPic="userPic"
             :doc="doc"
@@ -71,7 +71,8 @@ export default {
       switch (type) {
         case 2:
           return "bindBuy";
-        // 默认情况
+        case 3:
+          return "redImg";
         default:
           return "redImg";
       }

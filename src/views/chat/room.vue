@@ -142,8 +142,7 @@ export default {
     ...mapGetters("chat", ["news"]),
   },
   watch: {
-    wsStatus(v) {
-      console.log("wsStatus", v);
+    wsStatus() {
       this.alertReload();
     },
   },
@@ -193,7 +192,6 @@ export default {
       if (this.text) {
         this.sendMessage({
           data: this.text.trim(),
-          from: "pageSend",
         });
         this.text = "";
         await this.sleep(800);

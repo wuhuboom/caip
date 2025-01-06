@@ -121,13 +121,12 @@ export default {
         state.ws.send(message);
       } else {
         console.error("WebSocket 未连接或已关闭");
-        // if (from === "pageSend") {
-        // }
       }
     },
     // 处理接收到的消息
     handleMessage({ commit }, message) {
-      if ([0, 2].includes(+message.type)) {
+      //0 文本消息 2 分享合买 4 红包消息
+      if ([0, 2, 4].includes(+message.type)) {
         // 文本消息
         commit("ADD_MESSAGE", { message });
         console.log("接收到消息: 0", message);
