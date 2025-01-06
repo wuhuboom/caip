@@ -1,5 +1,6 @@
 import app from "@/main";
 import auth from "@/plugins/auth";
+import { EventBus } from "@/plugins/bus";
 export default {
   namespaced: true,
   state: {
@@ -20,23 +21,6 @@ export default {
     },
   },
   mutations: {
-    clickPacketStatus(state, v) {
-      const index = state.messages.findIndex((item) => +item.id === +v.msgId);
-      if (index === -1) return;
-      try {
-        const data = JSON.parse(v.data);
-        if ([1, 2].includes(data.code)) {
-          //// 接收消息:{"type":6,"data":"{\"code\":1}"}(0.抢到红包 1.已被抢空 2.已抢过红包)
-          app.$message.error("未抢到红包");
-        } else {
-          // 抢到红包返回{money:抢到金额,nickname:发送人,describes:红包标题}
-          state.messages[index].packet = state.messages[index].packet || {};
-          state.messages[index].packet.status = data.code;
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    },
     addMsgPacket(state, v) {
       const index = state.messages.findIndex((item) => +item.id === +v.msgId);
       if (index === -1) return;
@@ -195,7 +179,13 @@ export default {
         // 接收消息:{"type":6,"data":"{\"code\":1}"}(0.抢到红包 1.已被抢空 2.已抢过红包)
         // 抢到红包返回{money:抢到金额,nickname:发送人,describes:红包标题}
         console.log("抢红包: 6", message);
-        commit("clickPacketStatus", message);
+        //抢红包后更新红包状态
+        EventBus.$emit("redGetStatus", {
+          ...message,
+          data: JSON.parse(message.data),
+        });
+      } else if ([7].includes(+message.type)) {
+        console.log("红包详情: 7", JSON.parse(message.data));
       }
     },
 

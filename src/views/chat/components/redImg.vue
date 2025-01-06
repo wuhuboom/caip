@@ -6,8 +6,8 @@
       alt=""
       @click="open"
     />
-    <van-popup class="popupOpen pointer" v-model="showOpen">
-      <ul class="flex-column center-center getPacket font14" @click="getPacket">
+    <van-popup class="popupOpen pointer" v-model="showOpen" @click="getPacket">
+      <ul class="flex-column center-center getPacket font14">
         <li class="align-center font14">
           <img
             class="d-img user-red m-r-8"
@@ -37,14 +37,14 @@
                 : userPic
             "
           />
-          收到{{ doc.user }}的红包
+          收到{{ myRedMoney.nickname }}的红包
         </li>
-        <li class="d-desc m-b-8">恭喜发财, 大吉大利</li>
+        <li class="d-desc m-b-8">{{ myRedMoney.describes }}</li>
         <li class="d-meng d-flex m-b-8">
-          1212.00
+          {{ divide(myRedMoney.money) }}
           <span>元</span>
         </li>
-        <li class="view pointer">
+        <li class="view pointer" @click="getMoneyRecord">
           全部领取记录<van-icon :size="12" name="arrow" />
         </li>
       </ul>
@@ -55,6 +55,7 @@
 <script>
 // eslint-disable-next-line no-unused-vars
 import userApi from "@/api/user";
+import { EventBus } from "@/plugins/bus";
 import { mapState, mapActions } from "vuex";
 import red1 from "@/assets/img/red1.png";
 import red2 from "@/assets/img/red2.png";
@@ -66,30 +67,19 @@ export default {
       red2,
       showOpen: false,
       showFinish: false,
+      ajaxPack: {}, //红包状态
     };
   },
   computed: {
     ...mapState("chat", ["messages", "playerId", "query", "ws", "wsStatus"]),
+    pack() {
+      return this.ajaxPack;
+    },
     packet() {
-      // {
-      //      "id": 4,
-      //      "createdAt": 1736042197315,
-      //      "describes": "每日福利2",
-      //      "nickname": "super_admin",
-      //      "quantity": 20,
-      //      "money": 1000000,
-      //      "status": 0,// 0可抢 1抢空 2过期
-      //      "list": [
-      //      //状态为0,list为空,可抢红包
-      //      //list有数据,表示已抢到该红包
-      //          {
-      //              "nickname": "User1",
-      //              "money": 50963
-      //          }
-      //      ]
-      //  }
-
       return this.doc.packet || {};
+    },
+    myRedMoney() {
+      return this.packet.list?.length > 0 ? this.packet.list[0] : this.ajaxPack;
     },
     //是否可抢
     canGet() {
@@ -118,7 +108,15 @@ export default {
       "sendMessage",
       "fetchHistory",
     ]),
-    getStatus() {
+    getMoneyRecord() {
+      this.sendMessage({
+        type: 7,
+        msgId: this.doc.id,
+        data: JSON.stringify({ id: this.doc.data?.id }),
+      });
+      this.showFinish = false;
+    },
+    redGetStatus() {
       //{"type":5,"data":"{\"id\":6}"}
       this.sendMessage({
         type: 5,
@@ -141,6 +139,10 @@ export default {
     },
     //发送消息:{"type":6,"data":"{\"id\":2}"}
     getPacket() {
+      this.$toast.loading({
+        message: "领取中...",
+        duration: 3000, // 设置 3 秒后关闭
+      });
       this.sendMessage({
         type: 6,
         msgId: this.doc.id,
@@ -150,7 +152,27 @@ export default {
     },
   },
   created() {
-    this.getStatus();
+    this.redGetStatus();
+    EventBus.$on("redGetStatus", ({ msgId, data }) => {
+      if (+msgId === +this.doc.id) {
+        console.log("红包状态", data);
+        const { code } = data;
+        this.$toast.clear();
+        if (+code > 0) {
+          //1.已被抢空 2.已抢过红包
+          this.$message.error(+code === 1 ? "红包已被抢空" : "您已抢过该红包");
+          return;
+        }
+
+        this.ajaxPack = data;
+        this.showFinish = true;
+        this.redGetStatus();
+      }
+    });
+  },
+  beforeDestroy() {
+    // 清理监听
+    EventBus.$off("redGetStatus");
   },
 };
 </script>
