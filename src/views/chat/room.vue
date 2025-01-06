@@ -64,12 +64,12 @@
                 >
               </div>
             </emoji-picker>
-            <!-- <img
+            <img
               @click="openPopup"
               class="d-img redMony m-l-16 pointer"
               src="@/assets/img/redMony.png"
               alt=""
-            /> -->
+            />
           </div>
           <div class="enter p-l-8 p-r-8">
             <el-input

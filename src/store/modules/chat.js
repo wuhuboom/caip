@@ -75,7 +75,7 @@ export default {
       const site =
         process.env.NODE_ENV === "production"
           ? window.WSPATH
-          : process.env.VUE_APP_UNIFIED_NUMBER;
+          : process.env.VUE_APP_WS;
       const url = `${site}/player/ws/${auth.getToken()}`;
       const playerId = app.$store.state.user.id;
       console.log({

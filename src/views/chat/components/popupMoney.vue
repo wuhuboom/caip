@@ -3,7 +3,7 @@
     <p class="pop-title center-center m-t-24 m-b-32">发红包</p>
     <van-form class="ntf-yellow-form" @submit="onSubmit">
       <van-field
-        v-model="form.username"
+        v-model="form.quantity"
         class="m-b-32"
         autocomplete="new-password"
         label="红包个数"
@@ -13,12 +13,20 @@
         <template #button> <span class="left-text p-r-8">个</span> </template>
       </van-field>
       <van-field
-        v-model="form.password"
+        class="m-b-32"
+        v-model="form.money"
         autocomplete="new-password"
         label="红包金额"
         :rules="[{ required: true, message: '请填写金额' }]"
       >
         <template #button> <span class="left-text p-r-8">元</span> </template>
+      </van-field>
+      <van-field
+        v-model="form.describes"
+        autocomplete="new-password"
+        label="标题"
+      >
+        <template #button> <span class="left-text p-r-8"></span> </template>
       </van-field>
       <ul class="center-center m-t-48">
         <li class="m-r-32" @click="show = false">
@@ -45,8 +53,9 @@ export default {
     return {
       show: false,
       form: {
-        username: "",
-        password: "",
+        quantity: "",
+        money: "",
+        describes: "恭喜发财，大吉大利",
       },
     };
   },
@@ -60,7 +69,7 @@ export default {
 <style scoped lang="scss">
 .popupMoney {
   width: 510px;
-  height: 307px;
+  height: 407px;
   background: #774230;
   padding-left: 58px;
   .left-text {
