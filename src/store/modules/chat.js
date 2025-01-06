@@ -74,10 +74,7 @@ export default {
           : process.env.VUE_APP_WS;
       const url = `${site}/player/ws/${auth.getToken()}`;
       const playerId = app.$store.state.user.id;
-      console.log({
-        url,
-        playerId,
-      });
+
       const ws = new WebSocket(url);
 
       ws.onopen = () => {
@@ -129,7 +126,7 @@ export default {
       if ([0, 2, 4].includes(+message.type)) {
         // 文本消息
         commit("ADD_MESSAGE", { message });
-        console.log("接收到消息: 0", message);
+
         app.$nextTick(() => {
           const chatContainer = document.querySelector(".js-cont-room");
           if (!chatContainer) return;
@@ -146,7 +143,7 @@ export default {
         });
       } else if (message.type === 1) {
         //pageNo
-        console.log("历史消息: 1", JSON.parse(message.data));
+
         const resResults = JSON.parse(message.data);
         const { results, pageNo } = resResults;
         if (!results) return;
@@ -172,13 +169,12 @@ export default {
         });
       } else if ([5].includes(+message.type)) {
         //查询红包 状态
-        console.log("红包状态: 5", message);
         commit("addMsgPacket", message);
       } else if ([6].includes(+message.type)) {
         //抢红包响应数据
         // 接收消息:{"type":6,"data":"{\"code\":1}"}(0.抢到红包 1.已被抢空 2.已抢过红包)
         // 抢到红包返回{money:抢到金额,nickname:发送人,describes:红包标题}
-        console.log("抢红包: 6", message);
+
         //抢红包后更新红包状态
         EventBus.$emit("redGetStatus", {
           ...message,

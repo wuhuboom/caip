@@ -1,7 +1,5 @@
 <template>
   <div class="m-t-4 red-img">
-    <!-- "status": 0,// 0可抢 1抢空 2过期 -->
-    {{ packet.status }}
     <img
       class="d-img pointer"
       :src="canGet ? red1 : red2"
@@ -56,16 +54,23 @@
       v-model="showRecord"
       @click="getRecord"
     >
-      <ul>
-        <li>领取记录</li>
+      <img class="red-close" src="@/assets/img/red-close.png" alt="" />
+      <ul class="justify-between align-center m-b-16 red-active">
+        <li class="font16">领取记录</li>
         <li>
           {{ recordList.quantity }}个红包 金额{{ divide(recordList.money) }}元
         </li>
       </ul>
       <ul>
-        <li v-for="(item, index) in recordList.list" :key="index">
-          <span>{{ item.nickname }}</span>
-          <span>{{ divide(item.money) }}</span>
+        <li
+          class="justify-between align-center one-doc"
+          v-for="(item, index) in recordList.list"
+          :key="index"
+        >
+          <span class="doc-nickname" :class="{ 'red-active': index === 0 }">{{
+            item.nickname
+          }}</span>
+          <span class="red-active">{{ divide(item.money) }}</span>
         </li>
       </ul>
     </van-popup>
@@ -209,16 +214,16 @@ export default {
   created() {
     EventBus.$on("redGetStatus", ({ msgId, data }) => {
       if (+msgId === +this.doc.id) {
+        this.redGetStatus();
         const { code } = data;
         this.$toast.clear();
         if (+code > 0) {
           //1.已被抢空 2.已抢过红包
-          this.$message.error(+code === 1 ? "红包已被抢空" : "您已抢过该红包");
+          this.$toast.fail(+code === 1 ? "红包已被抢空" : "您已抢过该红包");
           return;
         }
         this.ajaxPack = data;
         this.showFinish = true;
-        this.redGetStatus();
       }
     });
     //getMoneyRecord
@@ -232,7 +237,9 @@ export default {
   },
   beforeDestroy() {
     // 清理监听
-    EventBus.$off("redGetStatus");
+    // console.log("beforeDestroy  清理监听");
+    // EventBus.$off("redGetStatus");
+    // EventBus.$off("getMoneyRecord");
   },
 };
 </script>
@@ -291,5 +298,19 @@ export default {
   height: 324px;
   background: #774230;
   padding: 32px 52px;
+  color: #fff;
+  .red-active {
+    color: #feedaf;
+  }
+  .red-close {
+    position: absolute;
+    top: 0px;
+    right: 0;
+    width: 54px;
+  }
+  .one-doc {
+    height: 25px;
+    border-bottom: 1px solid rgba(254, 237, 175, 0.3);
+  }
 }
 </style>
