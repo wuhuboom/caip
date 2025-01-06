@@ -23,6 +23,7 @@
             :is="currentComponent(+doc.type)"
             :userPic="userPic"
             :doc="doc"
+            ref="$component"
           ></component>
           <p class="msg-txt p-x-8 m-t-4" v-else>{{ doc.data }}</p>
         </li>
@@ -67,6 +68,11 @@ export default {
     },
   },
   methods: {
+    visib() {
+      if (this.$refs.$component?.visib) {
+        this.$refs.$component?.visib();
+      }
+    },
     currentComponent(type) {
       switch (type) {
         case 2:

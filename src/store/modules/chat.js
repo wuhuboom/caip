@@ -185,7 +185,10 @@ export default {
           data: JSON.parse(message.data),
         });
       } else if ([7].includes(+message.type)) {
-        console.log("红包详情: 7", JSON.parse(message.data));
+        EventBus.$emit("getMoneyRecord", {
+          ...message,
+          data: JSON.parse(message.data),
+        });
       }
     },
 

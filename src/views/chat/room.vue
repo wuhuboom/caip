@@ -28,10 +28,11 @@
             @infinite="infiniteHandler"
           ></infinite-loading>
           <roomMsg
-            v-observe-visibility="visibilityChanged(v)"
+            v-observe-visibility="visibilityChanged(v, i)"
             :item="v"
             v-for="(v, i) in messages"
             :key="i"
+            ref="$roomMsg"
           />
         </div>
         <div
@@ -179,9 +180,10 @@ export default {
         });
       }
     },
-    visibilityChanged(v) {
+    visibilityChanged(v, i) {
       return (isVisible) => {
         if (isVisible) {
+          this.$refs.$roomMsg[i].visib && this.$refs.$roomMsg[i].visib();
           if (v.new === true) {
             this.$store.commit("chat/setToOld", v);
           }
