@@ -45,6 +45,7 @@ import SiteMessage from "./components/SiteMessage.vue";
 import Notice from "./components/Notice.vue";
 import MemberManage from "./components/MemberManage.vue";
 import fruteGame from "./components/fruteGame.vue";
+import team from "./team/index.vue";
 export default {
   name: "AccountCenter",
   data() {
@@ -99,8 +100,12 @@ export default {
           id: 10,
         },
         {
-          name: "会员管理",
+          name: "邀请好友",
           id: 11,
+        },
+        {
+          name: "我的团队",
+          id: 12,
         },
       ],
       curId: +this.$route.query.id || 0,
@@ -135,6 +140,7 @@ export default {
         10: Notice,
         11: MemberManage,
         40: fruteGame,
+        12: team,
       };
       return components[this.curId] || null;
     },
