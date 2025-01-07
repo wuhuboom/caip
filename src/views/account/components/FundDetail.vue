@@ -112,7 +112,7 @@
             <span>{{ statusType(scope.row.balanceChangeType) }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="changeMoney" label="账变前金额">
+        <el-table-column prop="changeMoney" label="账变金额">
           <template slot-scope="scope">
             <span>{{ divide(scope.row.changeMoney) }}</span>
           </template>
