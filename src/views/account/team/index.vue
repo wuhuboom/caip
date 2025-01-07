@@ -26,6 +26,9 @@ import userApi from "@/api/user";
 import Team0 from "./Team0.vue";
 import Team1 from "./Team1.vue";
 import Team2 from "./Team2.vue";
+import Team3 from "./Team3.vue";
+import Team4 from "./Team4.vue";
+import Team5 from "./Team5.vue";
 export default {
   name: "AccountTeam",
   data() {
@@ -67,9 +70,9 @@ export default {
         0: Team0,
         1: Team1,
         2: Team2,
-        3: Team0,
-        4: Team0,
-        5: Team0,
+        3: Team3,
+        4: Team4,
+        5: Team5,
       };
       return components[this.tab] || null;
     },
