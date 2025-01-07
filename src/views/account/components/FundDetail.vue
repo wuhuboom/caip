@@ -107,7 +107,11 @@
       <el-table class="g-el-table" border :data="tableData.results">
         <el-table-column prop="orderNo" label="订单号" width="280">
         </el-table-column>
-        <!-- <el-table-column prop="用户名" label="用户名"> </el-table-column> -->
+        <el-table-column prop="orderNo" label="资金类型">
+          <template slot-scope="scope">
+            <span>{{ statusType(scope.row.balanceChangeType) }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="changeMoney" label="账变前金额">
           <template slot-scope="scope">
             <span>{{ divide(scope.row.changeMoney) }}</span>
@@ -164,7 +168,7 @@ export default {
         { id: 3, text: "投注" },
         { id: 4, text: "投注盈利" },
         { id: 5, text: "下级盈利返利" },
-        { id: 6, text: "人工加款" },
+        { id: 6, text: "纠正资金" },
         { id: 7, text: "撤消投注" },
         { id: 8, text: "人工减款" },
         { id: 9, text: "投注结束" },
@@ -172,9 +176,12 @@ export default {
         { id: 11, text: "线下充值" },
         { id: 12, text: "提现退回" },
         { id: 13, text: "投注退回" },
-        { id: 14, text: "余额宝转入" },
+        { id: 14, text: "余额宝转出" },
         { id: 15, text: "幸运抽奖" },
-        { id: 16, text: "宾果游戏" },
+        { id: 16, text: "宾果游戏奖励" },
+        { id: 17, text: "发送红包" },
+        { id: 18, text: "收到红包" },
+        { id: 19, text: "红包退回" },
         { id: 21, text: "下级充值返利" },
         { id: 23, text: "邀请奖励" },
         { id: 24, text: "首充奖励" },
@@ -182,14 +189,8 @@ export default {
         { id: 26, text: "次充奖励" },
         { id: 27, text: "固定日" },
         { id: 28, text: "邀请首充奖励" },
-        { id: 29, text: "幸运转盘抽奖" },
-        { id: 30, text: "幸运转盘中奖" },
         { id: 31, text: "线下活动" },
-        { id: 32, text: "报单上分" },
         { id: 33, text: "冲正" },
-        { id: 34, text: "闪兑" },
-        { id: 35, text: "团队激励" },
-        { id: 36, text: "充值补偿" },
         { id: 38, text: "累计充值返利" },
       ],
       loading: false,
@@ -199,7 +200,7 @@ export default {
         type: "",
         status: "",
         pageNo: 1,
-        pageSize: 4,
+        pageSize: 8,
       },
       tableData: {
         totalCount: 0,
@@ -213,6 +214,9 @@ export default {
     },
   },
   methods: {
+    statusType(type) {
+      return this.tabSimpleList.find((item) => +item.id === +type)?.text;
+    },
     handleCurrentChange(val) {
       this.params.pageNo = val;
       this.lotteryBetsOrder();
