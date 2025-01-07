@@ -25,6 +25,7 @@
 import userApi from "@/api/user";
 import Team0 from "./Team0.vue";
 import Team1 from "./Team1.vue";
+import Team2 from "./Team2.vue";
 export default {
   name: "AccountTeam",
   data() {
@@ -65,7 +66,7 @@ export default {
       const components = {
         0: Team0,
         1: Team1,
-        2: Team0,
+        2: Team2,
         3: Team0,
         4: Team0,
         5: Team0,
