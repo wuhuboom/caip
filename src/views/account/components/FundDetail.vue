@@ -105,7 +105,7 @@
       <!-- 余额变动记录,createdAt:日期,username:用户名
       ,changeMoney:账变前金额,dnedMoney:账变后金额, orderNo:订单编号,remark备注 -->
       <el-table class="g-el-table" border :data="tableData.results">
-        <el-table-column prop="orderNo" label="订单号" width="280">
+        <el-table-column prop="orderNo" label="订单号" width="294">
         </el-table-column>
         <el-table-column prop="orderNo" label="资金类型">
           <template slot-scope="scope">
@@ -127,11 +127,11 @@
             <span>{{ $dayjsTime(scope.row.createdAt) }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="remark" label="备注">
+        <!-- <el-table-column prop="remark" label="备注">
           <template slot-scope="scope">
             <span>{{ scope.row.remark }}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
 
       <div class="cp-pagination-main" style="margin-top: 40px">
