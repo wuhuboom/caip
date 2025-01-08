@@ -103,15 +103,14 @@ export default {
           name: "邀请好友",
           id: 11,
         },
-        {
-          name: "我的团队",
-          id: 12,
-        },
       ],
       curId: +this.$route.query.id || 0,
     };
   },
   computed: {
+    user() {
+      return this.$store.state.user;
+    },
     paySet() {
       return this.$store.state.paySet;
     },
@@ -146,11 +145,22 @@ export default {
     },
   },
   async created() {
+    await this.$store.dispatch("getInfo");
     this.$store.dispatch("getPaySet");
     this.$store.dispatch("getBankCard");
     let docCat = this.$store.state.cat.find((v) => v.list.length);
     if (!docCat) {
       await this.$store.dispatch("playerLotteryList");
+    }
+    // {
+    //       name: "我的团队",
+    //       id: 12,
+    //     },
+    if (this.user.proxyPlayer) {
+      this.navs.push({
+        name: "我的团队",
+        id: 12,
+      });
     }
   },
 };
