@@ -1,6 +1,11 @@
 import request from "@/plugins/request";
 export default {
-  //group/proxy
+  //group/statis
+  groupStatis() {
+    return request({
+      url: "/group/statis",
+    });
+  },
   groupProxy(data) {
     return request({
       url: "/group/proxy",

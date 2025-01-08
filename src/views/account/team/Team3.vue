@@ -1,5 +1,38 @@
 <template>
   <div class="recharge-main m-t-0 p-t-0">
+    <div class="m-l-12 font16 p-t-16 m-r-12 p-b-16 p-l-32 main-cont">
+      <ul class="align-center">
+        <li class="m-r-24">本月拉新</li>
+        <li class="align-center">
+          <p class="align-center">{{ statis.monthNew }}</p>
+        </li>
+      </ul>
+      <ul class="align-center">
+        <li class="m-r-24">上月拉新</li>
+        <li class="align-center">
+          <p class="align-center">{{ statis.lastMonthNew }}</p>
+        </li>
+      </ul>
+      <ul class="align-center">
+        <li class="m-r-24">本月销售</li>
+        <li class="align-center">
+          <p class="align-center">{{ divide(statis.monthSale) }}</p>
+        </li>
+      </ul>
+      <ul class="align-center m-t-16">
+        <li class="m-r-24">推广链接</li>
+        <li class="align-center">
+          <p>{{ myLink }}</p>
+          <span
+            class="m-l-8 pointer"
+            v-clipboard:copy="textToCopy(myLink)"
+            v-clipboard:success="onCopySuccess"
+          >
+            <img class="d-img" src="@/assets/img/copy.png" alt="" />
+          </span>
+        </li>
+      </ul>
+    </div>
     <div class="recharge-title align-center">
       <span class="no-shrink">用户名：</span>
       <input v-model.trim="params.name" class="fund-input m-r-16" />
@@ -22,7 +55,7 @@
         style="width: 110px"
         class="g-el-cascader"
         size="small"
-        v-model="params.time"
+        v-model="params.status"
         clearable
         placeholder="请选择"
         popper-class="g-el-cascader-popper"
@@ -111,10 +144,43 @@ export default {
         playerName: "",
         pageNo: 1,
         pageSize: 10,
+        status: "",
+      },
+      headData: {
+        //website:官方 website2:推广链接 point:返点 month:本月返点 lastMonth:上月返点
+      },
+      statis: {
+        //         "monthSale": 本月销售,
+        // "lastMonthNew": 上月拉新,
+        // "monthNew": 本月拉新
       },
     };
   },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    },
+    myLink() {
+      return `${this.headData.website2}#/login/SignIn?code=${this.user.invitationCode}`;
+    },
+  },
   methods: {
+    onCopySuccess() {
+      this.$message.success("复制成功");
+    },
+    textToCopy(v) {
+      return v;
+    },
+    async groupStatis() {
+      const [err, res] = await userApi.groupStatis();
+      if (err) return;
+      this.statis = res.data;
+    },
+    async mysub2() {
+      const [err, res] = await userApi.mysub2();
+      if (err) return;
+      this.headData = res.data;
+    },
     handleCurrentChange(val) {
       this.params.pageNo = val;
       this.lotteryBetsOrder();
@@ -130,6 +196,12 @@ export default {
         sendData.begin = this.date[0];
         sendData.end = this.date[1];
       }
+      //删除空字符串
+      for (const key in sendData) {
+        if (sendData[key] === "") {
+          delete sendData[key];
+        }
+      }
       const [err, res] = await userApi.groupMember(sendData);
       this.loading = false;
       if (err) return;
@@ -138,7 +210,37 @@ export default {
   },
   created() {
     this.lotteryBetsOrder();
+    this.mysub2();
+    this.groupStatis();
   },
 };
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.main-cont {
+  font-size: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  & > ul {
+    & > li:first-child {
+      width: 76px;
+      text-align: right;
+    }
+    i {
+      color: #b78756;
+      font-size: 18px;
+    }
+    p {
+      height: 30px;
+      line-height: 30px;
+      background: #fdf1bd;
+      padding: 0 8px;
+      color: #000;
+    }
+    .d-img {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+</style>
