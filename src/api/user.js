@@ -1,6 +1,20 @@
 import request from "@/plugins/request";
 export default {
-  //group/bets
+  //group/bill
+  groupBill(data) {
+    return request({
+      url: "/group/bill",
+      method: "post",
+      data,
+    });
+  },
+  groupMember(data) {
+    return request({
+      url: "/group/member",
+      method: "post",
+      data,
+    });
+  },
   groupBets(data) {
     return request({
       url: "/group/bets",

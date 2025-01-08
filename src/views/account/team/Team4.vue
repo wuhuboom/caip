@@ -2,10 +2,24 @@
   <div class="recharge-main m-t-0 p-t-0">
     <div class="recharge-table-container p-t-0">
       <el-table class="g-el-table" border :data="tableData.results">
-        <el-table-column prop="orderNo" label="注册时间"> </el-table-column>
-        <el-table-column prop="orderNo" label="用户名"> </el-table-column>
-        <el-table-column prop="orderNo" label="用户编号"> </el-table-column>
-        <el-table-column prop="orderNo" label="交易类型"> </el-table-column>
+        <!-- "id": 78,
+    "createdAt": 日期,
+    "orderNo": "订单号",
+    "username": "用户",
+    "changeMoney": 金额,
+    "balanceChangeType": 类型,参与账变类型, -->
+        <el-table-column prop="createdAt" label="日期">
+          <template slot-scope="scope">
+            <span>{{ $dayjsTime(scope.row.createdAt) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="orderNo" label="订单号"> </el-table-column>
+        <el-table-column prop="username" label="用户"> </el-table-column>
+        <el-table-column prop="changeMoney" label="金额">
+          <template slot-scope="scope">
+            <span>{{ divide(scope.row.changeMoney) }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="orderNo" label="收入/支出"> </el-table-column>
       </el-table>
       <div class="cp-pagination-main" style="margin-top: 40px">
@@ -36,7 +50,8 @@ export default {
       date: "",
       loading: false,
       params: {
-        name: "",
+        pageNo: 1,
+        pageSize: 10,
       },
     };
   },
@@ -52,23 +67,7 @@ export default {
       const sendData = {
         ...this.params,
       };
-      if (Array.isArray(this.date) && this.date.length) {
-        sendData.start = this.date[0];
-        sendData.end = this.date[1];
-      }
-      if (Array.isArray(sendData.lotteryId)) {
-        sendData.lotteryId = +sendData.lotteryId[sendData.lotteryId.length - 1];
-      }
-      if (Array.isArray(sendData.status)) {
-        sendData.status = +sendData.status[sendData.status.length - 1];
-      }
-      //删除-1
-      for (let key in sendData) {
-        if (sendData[key] === -1) {
-          delete sendData[key];
-        }
-      }
-      const [err, res] = await userApi.lotteryMyOrder(sendData);
+      const [err, res] = await userApi.groupBill(sendData);
       this.loading = false;
       if (err) return;
       this.tableData = res.data;
