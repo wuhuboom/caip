@@ -229,15 +229,17 @@ export default {
         return;
       }
       const isView = auth.getToken("viewed");
+      const token = res.data.token;
       if (!isView) {
-        this.token = res.data.token;
+        this.token = token;
         return;
       }
-      this.agree(1);
+      this.agree(1, token);
     },
-    agree(v) {
+    agree(v, token) {
       if (v === 1) {
-        this.$store.commit("setToken", this.token);
+        auth.setToken(true, "viewed");
+        this.$store.commit("setToken", token || this.token);
         this.$router.push("/");
         return;
       }

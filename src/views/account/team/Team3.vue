@@ -35,7 +35,7 @@
     </div>
     <div class="recharge-title align-center">
       <span class="no-shrink">用户名：</span>
-      <input v-model.trim="params.name" class="fund-input m-r-16" />
+      <input v-model.trim="params.playerName" class="fund-input m-r-16" />
       <span class="no-shrink">充值/提现时间：</span>
       <el-date-picker
         style="width: 310px"
@@ -97,14 +97,41 @@
           </template>
         </el-table-column>
         <el-table-column prop="orderNo" label="qq"> </el-table-column>
-        <el-table-column prop="orderNo" label="累计投注">
+        <el-table-column prop="orderNo" label="投注任务">
           <template slot-scope="scope">
             <span>{{ divide(scope.row.accumulativeBet) }}</span>
           </template>
         </el-table-column>
+        <el-table-column prop="createdAt" label="注册时间">
+          <template slot-scope="scope">
+            <span>{{
+              scope.row.createdAt ? $dayjsTime(scope.row.createdAt) : ""
+            }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="theNewLoginTime" label="登录时间">
           <template slot-scope="scope">
-            <span>{{ $dayjsTime(scope.row.theNewLoginTime) }}</span>
+            <span>{{
+              scope.row.theNewLoginTime
+                ? $dayjsTime(scope.row.theNewLoginTime)
+                : ""
+            }}</span>
+          </template>
+        </el-table-column>
+        <!-- "status": 状态 0禁用 1正常, -->
+        <el-table-column prop="status" label="状态">
+          <template slot-scope="scope">
+            <span>{{ +scope.row.status ? "正常" : "禁" }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="orderNo" label="详情">
+          <template slot-scope="scope">
+            <span
+              class="pointer"
+              @click="views(scope.row)"
+              style="text-decoration: underline"
+              >查看</span
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -165,6 +192,9 @@ export default {
     },
   },
   methods: {
+    views(row) {
+      console.log(row);
+    },
     onCopySuccess() {
       this.$message.success("复制成功");
     },

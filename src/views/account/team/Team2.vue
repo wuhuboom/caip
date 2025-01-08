@@ -30,11 +30,13 @@
             <span>{{ divide(scope.row.orderMoney) }}</span>
           </template>
         </el-table-column>
-        <!-- <el-table-column label="所占百分比">
+        <el-table-column label="所占百分比">
           <template slot-scope="scope">
-            <span>{{ divide(scope.row.orderMoney / scope.row.money) }}</span>
+            <span>{{
+              `${((scope.row.money / scope.row.orderMoney) * 100).toFixed(2)}%`
+            }}</span>
           </template>
-        </el-table-column> -->
+        </el-table-column>
         <el-table-column prop="createdAt" label="认购时间">
           <template slot-scope="scope">
             <span>{{ $dayjsTime(scope.row.createdAt) }}</span>
@@ -110,9 +112,28 @@ export default {
       const sendData = {
         ...this.params,
       };
+      //删除空参数
+      for (const key in sendData) {
+        if (sendData[key] === "") {
+          delete sendData[key];
+        }
+      }
       const [err, res] = await userApi.groupBets(sendData);
       this.loading = false;
       if (err) return;
+      // 模拟 res.data.results 数据
+      // res.data.results = [
+      //   {
+      //     orderId: "202107010001",
+      //     fromUser: "admin",
+      //     playerName: "test",
+      //     money: 96.669,
+      //     orderMoney: 1000,
+      //     createdAt: 1625097600000,
+      //     moneyIncome: 0,
+      //     status: 0,
+      //   },
+      // ];
       this.tableData = res.data;
     },
   },

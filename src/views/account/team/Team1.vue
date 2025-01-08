@@ -2,7 +2,7 @@
   <div class="recharge-main m-t-0 p-t-0">
     <div class="recharge-title align-center">
       <span class="no-shrink">用户名：</span>
-      <input v-model.trim="params.name" class="fund-input" />
+      <input v-model.trim="params.playerName" class="fund-input" />
       <div
         class="cp-button-main activity-search-btn"
         v-loading="loading"
@@ -58,7 +58,7 @@ export default {
       date: "",
       loading: false,
       params: {
-        name: "",
+        playerName: "",
         pageNo: 1,
         pageSize: 10,
       },
