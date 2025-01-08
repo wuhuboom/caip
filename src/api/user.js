@@ -1,5 +1,20 @@
 import request from "@/plugins/request";
 export default {
+  //group/withdrawal
+  groupWithdrawal(data) {
+    return request({
+      url: "/group/withdrawal",
+      method: "post",
+      data,
+    });
+  },
+  groupRecharge(data) {
+    return request({
+      url: "/group/recharge",
+      method: "post",
+      data,
+    });
+  },
   chat() {
     return request({
       url: "/chat",

@@ -2,7 +2,7 @@
   <div class="recharge-main m-t-0 p-t-0">
     <div class="recharge-title align-center">
       <span class="no-shrink">用户名：</span>
-      <input v-model.trim="params.name" class="fund-input" />
+      <input v-model.trim="params.playerName" class="fund-input" />
       <div
         class="cp-button-main activity-search-btn"
         v-loading="loading"
@@ -13,10 +13,22 @@
     </div>
     <div class="recharge-table-container p-t-0">
       <el-table class="g-el-table" border :data="tableData.results">
-        <el-table-column prop="orderNo" label="客户名称"> </el-table-column>
-        <el-table-column prop="orderNo" label="提现金额"> </el-table-column>
-        <el-table-column prop="orderNo" label="申请时间"> </el-table-column>
-        <el-table-column prop="orderNo" label="状态"> </el-table-column>
+        <el-table-column prop="username" label="客户名称"> </el-table-column>
+        <el-table-column prop="money" label="充值金额">
+          <template slot-scope="scope">
+            <span>{{ divide(scope.row.money) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="createdAt" label="充值时间">
+          <template slot-scope="scope">
+            <span>{{ $dayjsTime(scope.row.createdAt) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="status" label="状态">
+          <template slot-scope="scope">
+            <span>{{ statusType(scope.row.status) }}</span>
+          </template>
+        </el-table-column>
       </el-table>
       <div class="cp-pagination-main" style="margin-top: 40px">
         <el-pagination
@@ -46,11 +58,25 @@ export default {
       date: "",
       loading: false,
       params: {
-        name: "",
+        playerName: "",
       },
     };
   },
   methods: {
+    statusType(type) {
+      switch (type) {
+        case 1:
+          return "待付款";
+        case 2:
+          return "已到账";
+        case 3:
+          return "已上分";
+        case 4:
+          return "支付超时";
+        default:
+          return "";
+      }
+    },
     handleCurrentChange(val) {
       this.params.pageNo = val;
       this.lotteryBetsOrder();
@@ -62,23 +88,7 @@ export default {
       const sendData = {
         ...this.params,
       };
-      if (Array.isArray(this.date) && this.date.length) {
-        sendData.start = this.date[0];
-        sendData.end = this.date[1];
-      }
-      if (Array.isArray(sendData.lotteryId)) {
-        sendData.lotteryId = +sendData.lotteryId[sendData.lotteryId.length - 1];
-      }
-      if (Array.isArray(sendData.status)) {
-        sendData.status = +sendData.status[sendData.status.length - 1];
-      }
-      //删除-1
-      for (let key in sendData) {
-        if (sendData[key] === -1) {
-          delete sendData[key];
-        }
-      }
-      const [err, res] = await userApi.lotteryMyOrder(sendData);
+      const [err, res] = await userApi.groupWithdrawal(sendData);
       this.loading = false;
       if (err) return;
       this.tableData = res.data;
