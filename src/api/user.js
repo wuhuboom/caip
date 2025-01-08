@@ -1,6 +1,13 @@
 import request from "@/plugins/request";
 export default {
-  //group/withdrawal
+  //group/bets
+  groupBets(data) {
+    return request({
+      url: "/group/bets",
+      method: "post",
+      data,
+    });
+  },
   groupWithdrawal(data) {
     return request({
       url: "/group/withdrawal",

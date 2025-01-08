@@ -2,11 +2,11 @@
   <div class="recharge-main m-t-0 p-t-0">
     <div class="recharge-title align-center">
       <span class="no-shrink">方案编号：</span>
-      <input v-model.trim="params.name" class="fund-input m-r-16" />
+      <input v-model.trim="params.orderId" class="fund-input m-r-16" />
       <span class="no-shrink">方案期号：</span>
-      <input v-model.trim="params.name" class="fund-input m-r-16" />
+      <input v-model.trim="params.expect" class="fund-input m-r-16" />
       <span class="no-shrink">客户名称：</span>
-      <input v-model.trim="params.name" class="fund-input m-r-16" />
+      <input v-model.trim="params.playerName" class="fund-input m-r-16" />
       <div
         class="cp-button-main activity-search-btn"
         v-loading="loading"
@@ -17,14 +17,39 @@
     </div>
     <div class="recharge-table-container p-t-0">
       <el-table class="g-el-table" border :data="tableData.results">
-        <el-table-column prop="orderNo" label="方案号"> </el-table-column>
-        <el-table-column prop="orderNo" label="发单人"> </el-table-column>
-        <el-table-column prop="orderNo" label="用户"> </el-table-column>
-        <el-table-column prop="orderNo" label="认购金额"> </el-table-column>
-        <el-table-column prop="orderNo" label="所占百分比"> </el-table-column>
-        <el-table-column prop="orderNo" label="认购时间"> </el-table-column>
-        <el-table-column prop="orderNo" label="中奖金额"> </el-table-column>
-        <el-table-column prop="orderNo" label="状态"> </el-table-column>
+        <el-table-column prop="orderId" label="方案号"> </el-table-column>
+        <el-table-column prop="fromUser" label="发单人"> </el-table-column>
+        <el-table-column prop="playerName" label="用户"> </el-table-column>
+        <el-table-column prop="money" label="认购金额">
+          <template slot-scope="scope">
+            <span>{{ divide(scope.row.money) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="orderMoney" label="订单金额">
+          <template slot-scope="scope">
+            <span>{{ divide(scope.row.orderMoney) }}</span>
+          </template>
+        </el-table-column>
+        <!-- <el-table-column label="所占百分比">
+          <template slot-scope="scope">
+            <span>{{ divide(scope.row.orderMoney / scope.row.money) }}</span>
+          </template>
+        </el-table-column> -->
+        <el-table-column prop="createdAt" label="认购时间">
+          <template slot-scope="scope">
+            <span>{{ $dayjsTime(scope.row.createdAt) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="moneyIncome" label="中奖金额">
+          <template slot-scope="scope">
+            <span>{{ divide(scope.row.moneyIncome) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="status" label="状态">
+          <template slot-scope="scope">
+            <span>{{ statusType(scope.row.status) }}</span>
+          </template>
+        </el-table-column>
       </el-table>
       <div class="cp-pagination-main" style="margin-top: 40px">
         <el-pagination
@@ -54,11 +79,26 @@ export default {
       date: "",
       loading: false,
       params: {
-        name: "",
+        orderId: "",
+        playerName: "",
+        expect: "",
+        pageNo: 1,
+        pageSize: 10,
       },
     };
   },
   methods: {
+    //"status": 状态 0待开奖 1已中 2未中,
+    statusType(status) {
+      switch (status) {
+        case 0:
+          return "待开奖";
+        case 1:
+          return "已中";
+        case 2:
+          return "未中";
+      }
+    },
     handleCurrentChange(val) {
       this.params.pageNo = val;
       this.lotteryBetsOrder();
@@ -70,23 +110,7 @@ export default {
       const sendData = {
         ...this.params,
       };
-      if (Array.isArray(this.date) && this.date.length) {
-        sendData.start = this.date[0];
-        sendData.end = this.date[1];
-      }
-      if (Array.isArray(sendData.lotteryId)) {
-        sendData.lotteryId = +sendData.lotteryId[sendData.lotteryId.length - 1];
-      }
-      if (Array.isArray(sendData.status)) {
-        sendData.status = +sendData.status[sendData.status.length - 1];
-      }
-      //删除-1
-      for (let key in sendData) {
-        if (sendData[key] === -1) {
-          delete sendData[key];
-        }
-      }
-      const [err, res] = await userApi.lotteryMyOrder(sendData);
+      const [err, res] = await userApi.groupBets(sendData);
       this.loading = false;
       if (err) return;
       this.tableData = res.data;

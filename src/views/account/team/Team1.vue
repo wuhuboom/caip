@@ -2,7 +2,7 @@
   <div class="recharge-main m-t-0 p-t-0">
     <div class="recharge-title align-center">
       <span class="no-shrink">用户名：</span>
-      <input v-model.trim="params.playerName" class="fund-input" />
+      <input v-model.trim="params.name" class="fund-input" />
       <div
         class="cp-button-main activity-search-btn"
         v-loading="loading"
@@ -13,13 +13,13 @@
     </div>
     <div class="recharge-table-container p-t-0">
       <el-table class="g-el-table" border :data="tableData.results">
-        <el-table-column prop="username" label="客户名称"> </el-table-column>
-        <el-table-column prop="money" label="充值金额">
+        <el-table-column prop="playerName" label="客户名称"> </el-table-column>
+        <el-table-column prop="money" label="提现金额">
           <template slot-scope="scope">
             <span>{{ divide(scope.row.money) }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="createdAt" label="充值时间">
+        <el-table-column prop="createdAt" label="申请时间">
           <template slot-scope="scope">
             <span>{{ $dayjsTime(scope.row.createdAt) }}</span>
           </template>
@@ -58,21 +58,30 @@ export default {
       date: "",
       loading: false,
       params: {
-        playerName: "",
+        name: "",
+        pageNo: 1,
+        pageSize: 10,
       },
     };
   },
   methods: {
-    statusType(type) {
-      switch (type) {
+    //"status": 状态 1待审核’* 2已审核’* 3失败’* 4提现成功’* 5代付中’* 6代付失败* 8.冲正,
+    statusType(status) {
+      switch (status) {
         case 1:
-          return "待付款";
+          return "待审核";
         case 2:
-          return "已到账";
+          return "已审核";
         case 3:
-          return "已上分";
+          return "失败";
         case 4:
-          return "支付超时";
+          return "提现成功";
+        case 5:
+          return "代付中";
+        case 6:
+          return "代付失败";
+        case 8:
+          return "冲正";
         default:
           return "";
       }

@@ -59,6 +59,8 @@ export default {
       loading: false,
       params: {
         playerName: "",
+        pageNo: 1,
+        pageSize: 10,
       },
     };
   },
