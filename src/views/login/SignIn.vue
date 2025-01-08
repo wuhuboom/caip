@@ -167,6 +167,7 @@ import agreenContent from "./agreen-content.vue";
 import register from "./components/register.vue";
 import forget from "./components/forget.vue";
 import userApi from "@/api/user";
+import auth from "@/plugins/auth";
 const initForm = () => ({
   username: "",
   password: "",
@@ -227,7 +228,12 @@ export default {
         this.verifyCodeReq();
         return;
       }
-      this.token = res.data.token;
+      const isView = auth.getToken("viewed");
+      if (!isView) {
+        this.token = res.data.token;
+        return;
+      }
+      this.agree(1);
     },
     agree(v) {
       if (v === 1) {
