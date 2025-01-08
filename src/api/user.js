@@ -1,6 +1,13 @@
 import request from "@/plugins/request";
 export default {
-  //group/bill
+  //group/proxy
+  groupProxy(data) {
+    return request({
+      url: "/group/proxy",
+      method: "post",
+      data,
+    });
+  },
   groupBill(data) {
     return request({
       url: "/group/bill",

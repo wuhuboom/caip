@@ -13,7 +13,7 @@
     </div>
     <div class="recharge-table-container p-t-0">
       <el-table class="g-el-table" border :data="tableData.results">
-        <el-table-column prop="username" label="客户名称"> </el-table-column>
+        <el-table-column prop="username" label="用户"> </el-table-column>
         <el-table-column prop="money" label="充值金额">
           <template slot-scope="scope">
             <span>{{ divide(scope.row.money) }}</span>

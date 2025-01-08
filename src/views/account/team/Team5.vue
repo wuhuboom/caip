@@ -2,7 +2,7 @@
   <div class="recharge-main m-t-0 p-t-0">
     <div class="recharge-title align-center">
       <span class="no-shrink">用户名：</span>
-      <input v-model.trim="params.name" class="fund-input m-r-16" />
+      <input v-model.trim="params.playerName" class="fund-input m-r-16" />
       <span class="no-shrink">充值时间：</span>
       <el-date-picker
         v-model="date"
@@ -26,11 +26,23 @@
     </div>
     <div class="recharge-table-container p-t-0">
       <el-table class="g-el-table" border :data="tableData.results">
-        <el-table-column prop="orderNo" label="客观名称"> </el-table-column>
-        <el-table-column prop="orderNo" label="充值金额"> </el-table-column>
-        <el-table-column prop="orderNo" label="用户"> </el-table-column>
-        <el-table-column prop="orderNo" label="佣金"> </el-table-column>
-        <el-table-column prop="orderNo" label="充值时间"> </el-table-column>
+        <el-table-column prop="fromName" label="用户"> </el-table-column>
+        <el-table-column prop="moneyReal" label="充值金额">
+          <template slot-scope="scope">
+            <span>{{ divide(scope.row.moneyReal) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="orderNo" label="订单号"> </el-table-column>
+        <el-table-column prop="money" label="佣金">
+          <template slot-scope="scope">
+            <span>{{ divide(scope.row.money) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="createdAt" label="充值时间">
+          <template slot-scope="scope">
+            <span>{{ $dayjsTime(scope.row.createdAt) }}</span>
+          </template>
+        </el-table-column>
       </el-table>
       <div class="cp-pagination-main" style="margin-top: 40px">
         <el-pagination
@@ -60,7 +72,7 @@ export default {
       date: "",
       loading: false,
       params: {
-        name: "",
+        playerName: "",
       },
     };
   },
@@ -77,22 +89,10 @@ export default {
         ...this.params,
       };
       if (Array.isArray(this.date) && this.date.length) {
-        sendData.start = this.date[0];
+        sendData.begin = this.date[0];
         sendData.end = this.date[1];
       }
-      if (Array.isArray(sendData.lotteryId)) {
-        sendData.lotteryId = +sendData.lotteryId[sendData.lotteryId.length - 1];
-      }
-      if (Array.isArray(sendData.status)) {
-        sendData.status = +sendData.status[sendData.status.length - 1];
-      }
-      //删除-1
-      for (let key in sendData) {
-        if (sendData[key] === -1) {
-          delete sendData[key];
-        }
-      }
-      const [err, res] = await userApi.lotteryMyOrder(sendData);
+      const [err, res] = await userApi.groupProxy(sendData);
       this.loading = false;
       if (err) return;
       this.tableData = res.data;

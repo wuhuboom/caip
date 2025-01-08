@@ -20,7 +20,11 @@
             <span>{{ divide(scope.row.changeMoney) }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="orderNo" label="收入/支出"> </el-table-column>
+        <el-table-column prop="balanceChangeType" label="类型">
+          <template slot-scope="scope">
+            <span>{{ statusType(+scope.row.balanceChangeType) }}</span>
+          </template>
+        </el-table-column>
       </el-table>
       <div class="cp-pagination-main" style="margin-top: 40px">
         <el-pagination
@@ -55,7 +59,18 @@ export default {
       },
     };
   },
+  computed: {
+    tabSimpleList() {
+      return this.$store.state.tabSimpleList;
+    },
+    user() {
+      return this.$store.state.user;
+    },
+  },
   methods: {
+    statusType(v) {
+      return this.tabSimpleList.find((item) => item.id === v).text;
+    },
     handleCurrentChange(val) {
       this.params.pageNo = val;
       this.lotteryBetsOrder();
