@@ -1,6 +1,20 @@
 import request from "@/plugins/request";
 export default {
-  //group/statis
+  ///red/receive
+  redReceive(data) {
+    return request({
+      url: "/red/receive",
+      method: "post",
+      data,
+    });
+  },
+  redSend(data) {
+    return request({
+      url: "/red/send",
+      method: "post",
+      data,
+    });
+  },
   groupStatis() {
     return request({
       url: "/group/statis",

@@ -1,9 +1,6 @@
 <template>
   <div class="recharge-main m-t-0 p-t-0">
     <div class="recharge-title align-center">
-      <span class="no-shrink">用户名：</span>
-      <input v-model.trim="params.playerName" class="fund-input m-r-16" />
-      <span class="no-shrink">充值时间：</span>
       <el-date-picker
         v-model="date"
         class="g-el-input__inner"
@@ -25,22 +22,21 @@
       </div>
     </div>
     <div class="recharge-table-container p-t-0">
+      <!-- <th height="40">红包发起人</th>
+              <th height="40">红包主题</th>
+              <th height="40">领取金额</th>
+              <th height="40">领取时间</th> -->
       <el-table class="g-el-table" border :data="tableData.results">
-        <el-table-column prop="fromName" label="用户"> </el-table-column>
-        <el-table-column prop="moneyReal" label="充值金额">
-          <template slot-scope="scope">
-            <span>{{ divide(scope.row.moneyReal) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="orderNo" label="订单号"> </el-table-column>
-        <el-table-column prop="money" label="佣金">
+        <el-table-column prop="fromUser" label="红包发起人"> </el-table-column>
+        <el-table-column prop="describes" label="红包主题"> </el-table-column>
+        <el-table-column prop="moneyReceive" label="领取金额">
           <template slot-scope="scope">
             <span>{{ divide(scope.row.money) }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="createdAt" label="充值时间">
+        <el-table-column prop="createdAt" label="领取时间">
           <template slot-scope="scope">
-            <span>{{ $dayjsTime(scope.row.createdAt) }}</span>
+            <span>{{ $dayjsTime(scope.row.updatedAt) }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -72,13 +68,24 @@ export default {
       date: "",
       loading: false,
       params: {
-        playerName: "",
         pageNo: 1,
         pageSize: 10,
       },
     };
   },
   methods: {
+    statusType(type) {
+      switch (type) {
+        case 0:
+          return "待领取";
+        case 1:
+          return "已抢光";
+        case 2:
+          return "已过期";
+        default:
+          return "";
+      }
+    },
     handleCurrentChange(val) {
       this.params.pageNo = val;
       this.lotteryBetsOrder();
@@ -94,7 +101,7 @@ export default {
         sendData.begin = this.date[0];
         sendData.end = this.date[1];
       }
-      const [err, res] = await userApi.groupProxy(sendData);
+      const [err, res] = await userApi.redReceive(sendData);
       this.loading = false;
       if (err) return;
       this.tableData = res.data;
