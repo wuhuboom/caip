@@ -1556,10 +1556,8 @@
   "detail.live.4": "会员名字",
   "detail.live.5": "最后上线时间",
   "buy.min.money": "最低投入",
-
   "buy.invest.money1": "累积投资金额",
   "buy.invest.money2": "投资冻结",
-
   "buy.invest.money4": "投入金额",
   "buy.invest.money5": "每日收益",
   "buy.invest.money6": "最高期限",
@@ -1580,21 +1578,12 @@
 "Your.PIN.set!": "您的 PIN 码已设置！",
 "Your.PIN.already": "您的 PIN 码已保存。请确保在下次交易时记住该 PIN 码！",
 "reg.username.rule": "用户由字母和数字组成，长度为8-20位。",
-"backapi.qqExsit": "QQ号已存在",
 "withdraw.loading": "提现中",
-"backapi.unableShare": "unableShare",
-
-"backapi.sameToLoginPwd": "提现密码不能和登录密码一致",
-"backapi.name_exsit": "用户名已存在",
-"backapi.phone_exsit": "电话号码已存在",
-"backapi.phoneIsInvalid": "手机号不正确",
-"backapi.aliNotSet": "未绑定支付宝",
-"backapi.wxNotSet": "未绑定微信号",
-"backapi.currClosed": "本期已停止下注",
-"backapi.orderStatusError": "订单当前无法完成此操作",
-"backapi.transTooMin": "转入金额过小",
-"backapi.betCountNotEnough": "剩余购买金额不足",
-"backapi.noDrawCounts": "无抽奖次数",
-"backapi.drawConfigError": "抽奖出现错误",
-"backapi.countCurrTooMin": "认购金额至少为总金额的10%"
+  "backapi.hasOpendExpects": "当期已停止下注",
+  "backapi.noItemTrans": "无转出金额",
+  "backapi.itemStatusError": "已转出",
+  "backapi.lotteryNotValid": "已暂停售卖",
+  "backapi.unWithdrawalCurr": "未达到提现条件",
+  "backapi.noMoneyToTrans": "当前可转入金额为0",
+  "backapi.unableShare": "充值未达到分享条件"
 }

@@ -45,7 +45,7 @@
               ></el-cascader>
             </div>
           </div>
-          <div class="select-drop-main" style="margin-left: 18px">
+          <!-- <div class="select-drop-main" style="margin-left: 18px">
             <span class="select-drop-span">系统满单:</span>
             <div class="cp-cascader-main" style="width: 117px">
               <el-cascader
@@ -61,7 +61,7 @@
                 :show-all-levels="false"
               ></el-cascader>
             </div>
-          </div>
+          </div> -->
           <span style="margin-left: 18px">发起人：</span>
           <input
             v-model.trim="params.playerName"
