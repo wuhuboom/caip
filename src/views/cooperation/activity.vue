@@ -53,7 +53,7 @@
                 popper-class="g-el-cascader-popper"
                 size="small"
                 :options="sysList"
-                v-model="params.ftype"
+                v-model="params.activity"
                 :props="{
                   value: 'id',
                   label: 'name',
