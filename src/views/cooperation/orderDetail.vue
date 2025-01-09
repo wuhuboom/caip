@@ -100,7 +100,15 @@
                     >
                   </td>
                   <td height="30">
-                    <span>{{ getStatus(detail.status) }}</span>
+                    <div
+                      class="cp-button-main order-btn-share center-center"
+                      v-if="+detail.status === 0 && isMe(detail.playerId)"
+                      style="height: auto"
+                      @click="cancelAll"
+                    >
+                      撤销
+                    </div>
+                    <span v-else>{{ getStatus(detail.status) }}</span>
                   </td>
                 </tr>
               </table>
@@ -383,7 +391,15 @@
                       }}</span>
                     </td>
                     <td height="30">
-                      <div>--</div>
+                      <div
+                        class="cp-button-main order-btn-share center-center"
+                        v-if="+item.status === 0 && isMe(detail.playerId)"
+                        style="height: auto"
+                        @click="cancel(item.expect)"
+                      >
+                        撤销
+                      </div>
+                      <div v-else>--</div>
                     </td>
                   </tr>
                 </table>
@@ -450,6 +466,45 @@ export default {
     },
   },
   methods: {
+    isMe(id) {
+      return +this.user.id === +id;
+    },
+    open() {
+      return new Promise((resolve) => {
+        this.$confirm("确定要撤销吗？", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        })
+          .then(() => {
+            resolve(true);
+          })
+          .catch(() => {
+            resolve(false);
+          });
+      });
+    },
+    async cancelAll() {
+      const status = await this.open();
+      if (!status) return;
+      const [err] = await userApi.cancelTogether({
+        id: this.id,
+      });
+      if (err) return;
+      this.$message.success("撤销成功");
+      this.getDetail();
+    },
+    async cancel(expect) {
+      const status = await this.open();
+      if (!status) return;
+      const [err] = await userApi.lotteryMyOrderCancelRe2({
+        expect,
+        id: this.id,
+      });
+      if (err) return;
+      this.$message.success("撤销成功");
+      this.getDetail();
+    },
     onCopySuccess() {
       this.$message.success("复制链接成功");
     },

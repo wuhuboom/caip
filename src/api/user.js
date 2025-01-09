@@ -1,10 +1,16 @@
 import request from "@/plugins/request";
 export default {
-  ///lottery/conf
+  //cancel/together
+  cancelTogether(data) {
+    return request({
+      url: "/lottery/my_order/cancel/together",
+      method: "post",
+      data,
+    });
+  },
   lotteryConf() {
     return request({
       url: "/lottery/conf",
-      method: "post",
     });
   },
   redReceive(data) {

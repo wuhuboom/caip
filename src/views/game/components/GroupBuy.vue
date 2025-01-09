@@ -9,7 +9,10 @@
           :min="minNum"
           :max="typeTotalMoney"
         />
-        <span>元，所占比例 {{ currP }} (认购金额至少为总金额的10%)</span>
+        <span
+          >元，所占比例 {{ currP }}
+          {{ `(认购金额至少为总金额的${this.lotteryConf.toMin})` }}</span
+        >
       </div>
       <div class="co-purse-bo">
         <div style="height: 26px">是否保底：</div>
@@ -128,7 +131,7 @@ export default {
     },
     typeTotalMoney(val) {
       //认购金额至少为总金额的10%
-      this.minNum = Math.ceil(val * 0.1);
+      this.minNum = Math.ceil(val * this.toMin);
       this.form.betCountCurr = this.minNum;
     },
   },
@@ -179,7 +182,9 @@ export default {
     vaild() {
       if (this.form.betCountCurr < this.minNum) {
         this.form.betCountCurr = this.minNum;
-        this.$refs.buyDialog.open("认购金额至少为总金额的10%");
+        this.$refs.buyDialog.open(
+          `认购金额至少为总金额的${this.lotteryConf.toMin}%`
+        );
       }
     },
     async getlotteryConf() {
@@ -204,7 +209,7 @@ export default {
       }
       this.show = !this.show;
       if (this.show) {
-        this.minNum = Math.ceil(num * 0.1);
+        this.minNum = Math.ceil(num * this.toMin);
         this.minType = Math.ceil(num * 0.05);
         this.form.betCountCurr = +this.minNum;
       }
