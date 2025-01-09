@@ -11,66 +11,14 @@
         {{ item.name }}
       </div>
     </div>
-    <div class="recharge-title align-center">
-      <span class="no-shrink">方案编号：</span>
-      <input v-model.trim="params.orderId" class="fund-input m-r-16" />
-      <div
-        class="cp-button-main activity-search-btn"
-        v-loading="loading"
-        @click="handleCurrentChange(1)"
-      >
-        查询
-      </div>
-    </div>
-    <div class="m-t-16">
-      <el-table class="g-el-table" border :data="tableData.results">
-        <el-table-column prop="orderId" label="方案号"> </el-table-column>
-        <el-table-column prop="fromUser" label="发单人"> </el-table-column>
-        <el-table-column prop="playerName" label="用户"> </el-table-column>
-        <el-table-column prop="money" label="认购金额">
-          <template slot-scope="scope">
-            <span>{{ divide(scope.row.money) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="orderMoney" label="订单金额">
-          <template slot-scope="scope">
-            <span>{{ divide(scope.row.orderMoney) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="所占百分比">
-          <template slot-scope="scope">
-            <span>{{
-              `${((scope.row.money / scope.row.orderMoney) * 100).toFixed(2)}%`
-            }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="createdAt" label="认购时间">
-          <template slot-scope="scope">
-            <span>{{ $dayjsTime(scope.row.createdAt) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="moneyIncome" label="中奖金额">
-          <template slot-scope="scope">
-            <span>{{ divide(scope.row.moneyIncome) }}</span>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div class="cp-pagination-main" style="margin-top: 40px">
-        <el-pagination
-          class="g-el-pagination"
-          @current-change="handleCurrentChange"
-          :current-page="params.pageNo"
-          :page-size="params.pageSize"
-          layout="total, prev, pager, next"
-          :total="tableData.totalCount"
-        >
-        </el-pagination>
-      </div>
-    </div>
+    <component :row="row" :is="currentComponent"></component>
   </el-dialog>
 </template>
 
 <script>
+import viewList0 from "./viewList0.vue";
+import viewList1 from "./viewList1.vue";
+import viewList2 from "./viewList2.vue";
 import userApi from "@/api/user";
 export default {
   name: "AccountCenter",
@@ -82,12 +30,8 @@ export default {
           id: 0,
         },
         {
-          name: "自动充值",
+          name: "充值记录",
           id: 1,
-        },
-        {
-          name: "手动充值",
-          id: 2,
         },
         {
           name: "提款记录",
@@ -107,6 +51,25 @@ export default {
         results: [],
       },
     };
+  },
+  components: {
+    viewList0,
+    viewList1,
+    viewList2,
+  },
+  computed: {
+    currentComponent() {
+      switch (this.tab) {
+        case 0:
+          return "viewList0";
+        case 1:
+          return "viewList1";
+        case 3:
+          return "viewList2";
+        default:
+          return "viewList0";
+      }
+    },
   },
   methods: {
     open(row) {

@@ -161,7 +161,6 @@ export default {
       return obj;
     },
     currP() {
-      console.log(this.typeMoney, this.tableTotal);
       let p = (this.form.betCountCurr / this.typeTotalMoney) * 100;
       return `${p.toFixed(2)}%`;
     },
