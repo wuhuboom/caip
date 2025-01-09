@@ -146,14 +146,19 @@
         >
         </el-pagination>
       </div>
+      <viewDiaolog ref="$viewDiaolog" />
     </div>
   </div>
 </template>
 
 <script>
+import viewDiaolog from "@/views/account/team/viewDiaolog.vue";
 import userApi from "@/api/user";
 export default {
   name: "AccountCenter",
+  components: {
+    viewDiaolog,
+  },
   data() {
     return {
       //"status": 状态 0禁用 1正常,
@@ -193,7 +198,7 @@ export default {
   },
   methods: {
     views(row) {
-      console.log(row);
+      this.$refs.$viewDiaolog.open(row);
     },
     onCopySuccess() {
       this.$message.success("复制成功");
