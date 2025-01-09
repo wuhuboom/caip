@@ -66,6 +66,8 @@
 </template>
 
 <script>
+import userApi from "@/api/user";
+
 //订单金额低于 2 元，不能发起合买
 export default {
   name: "GroupBuy",
@@ -101,6 +103,7 @@ export default {
           id: 3,
         },
       ],
+      lotteryConf: {},
     };
   },
   props: {
@@ -130,6 +133,9 @@ export default {
     },
   },
   computed: {
+    toMin() {
+      return this.lotteryConf.toMin / 100;
+    },
     sysBuy() {
       let orther = 0;
       if (this.type) {
@@ -176,12 +182,25 @@ export default {
         this.$refs.buyDialog.open("认购金额至少为总金额的10%");
       }
     },
-    toggle() {
+    async getlotteryConf() {
+      this.$toast.loading({
+        forbidClick: false, // 允许点击和滚动
+        duration: 0, // 持续时间为 0 表示不会自动关闭
+      });
+      const [err, res] = await userApi.lotteryConf();
+      this.$toast.clear();
+      if (err) return;
+      this.lotteryConf = res.data;
+    },
+    async toggle() {
       const num = +this.typeTotalMoney || 0;
       if (num < 2) {
         this.show = false;
         this.$refs.buyDialog.open("订单金额低于 2 元，不能发起合买");
         return;
+      }
+      if (!Object.keys(this.lotteryConf).length) {
+        await this.getlotteryConf();
       }
       this.show = !this.show;
       if (this.show) {

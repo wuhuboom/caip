@@ -1,6 +1,12 @@
 import request from "@/plugins/request";
 export default {
-  ///red/receive
+  ///lottery/conf
+  lotteryConf() {
+    return request({
+      url: "/lottery/conf",
+      method: "post",
+    });
+  },
   redReceive(data) {
     return request({
       url: "/red/receive",
