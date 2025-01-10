@@ -10,9 +10,15 @@
         <div class="center-box" v-if="showSelect">
           <div class="bg" @click="showSelect = false"></div>
           <div class="select-box">
-            <div class="select on">直选</div>
-            <div class="select">组选三</div>
-            <div class="select">直选</div>
+            <div
+              class="select"
+              v-for="(item, index) in firstNavs"
+              :key="index"
+              @click="curTab = item"
+              :class="{ on: curTab === item }"
+            >
+              {{ item }}
+            </div>
           </div>
         </div>
       </template>
@@ -122,21 +128,45 @@ export default {
       showMore: false,
       showSelect: false,
       showBeforeLottery: false,
-      curTab: +this.$route.query.type === 1 ? "四星" : "三星",
-      value: "",
+      curTab: +this.$route.query.type === 1 ? "三星" : "前三",
+      value: +this.$route.query.type === 1 ? "三星直选复式" : "四星直选复式",
     };
   },
   computed: {
     tabs() {
       if (+this.linkQuery.type === 1) {
-        return typeConfigList["lotteryType1"];
+        return {
+          lotteryType1: typeConfigList["lotteryType1"],
+        };
       }
       return {
         lotteryType0: typeConfigList["lotteryType0"],
-        lotteryType1: typeConfigList["lotteryType4"],
         lotteryType2: typeConfigList["lotteryType2"],
         lotteryType3: typeConfigList["lotteryType3"],
+        lotteryType4: typeConfigList["lotteryType4"],
       };
+    },
+    firstNavs() {
+      let arr = [];
+      for (let key in this.tabs) {
+        this.tabs[key].forEach((item) => {
+          if (!arr.includes(item.tip1)) {
+            arr.push(item.tip1);
+          }
+        });
+      }
+      return arr;
+    },
+    secondNavs() {
+      let arr = [];
+      for (let key in this.tabs) {
+        this.tabs[key].forEach((item) => {
+          if (item.tip1 == this.curTab) {
+            arr = item.list;
+          }
+        });
+      }
+      return arr;
     },
   },
 };
