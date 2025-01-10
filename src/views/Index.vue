@@ -28,13 +28,16 @@
           v-for="(item, idx) in catList"
           :key="idx"
         >
-          <div class="icon icon-1" :class="[`icon-${idx + 1}`]"></div>
+          <div
+            class="icon"
+            :style="{ backgroundImage: `url(${item.icoUrls || nav5Icon})` }"
+          ></div>
           <div class="name">{{ item.lotteryNameH5 }}</div>
         </div>
-        <div class="item">
+        <!-- <div class="item">
           <div class="icon icon-8"></div>
           <div class="name">查看更多</div>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -104,6 +107,7 @@ import userApi from "@/api/user";
 import { NoticeBar } from "vant";
 import labaImg from "@/assets/img/Index/laba.png";
 import { mapGetters } from "vuex";
+import nav5Icon from "@/assets/img/Index/nav5.png";
 export default {
   name: "AppHome",
   components: {
@@ -120,6 +124,7 @@ export default {
   },
   data() {
     return {
+      nav5Icon,
       labaImg,
       wins: [],
       slider: [],
