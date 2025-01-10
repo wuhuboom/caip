@@ -21,7 +21,7 @@
         </el-table-column>
         <el-table-column prop="money" label="赠送金额">
           <template slot-scope="scope">
-            <span>{{ divide(scope.row.moneyDiscount) }}</span>
+            <span>{{ divide(scope.row.moneyCommission) }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="createdAt" label="充值时间">
