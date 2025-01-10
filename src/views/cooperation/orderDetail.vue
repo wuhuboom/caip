@@ -393,7 +393,7 @@
                     <td height="30">
                       <div
                         class="cp-button-main order-btn-share center-center"
-                        v-if="+item.status === 0 && isMe"
+                        v-if="+item.status === 0 && isMe && detail.type3 == 1"
                         style="height: auto"
                         @click="cancel(item.expect)"
                       >

@@ -1008,6 +1008,8 @@ export default {
       this.preId = v;
     },
     openFish() {
+      this.isGroup = false;
+      this.isChase = false;
       this.$refs.$finshDialog.open(
         `当前期数【${this.detail.nextExpect.nextExpect}】已停止下注，是否清空已投注内容？`
       );

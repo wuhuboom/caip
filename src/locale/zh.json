@@ -1585,5 +1585,7 @@
   "backapi.lotteryNotValid": "已暂停售卖",
   "backapi.unWithdrawalCurr": "未达到提现条件",
   "backapi.noMoneyToTrans": "当前可转入金额为0",
-  "backapi.unableShare": "充值未达到分享条件"
+  "backapi.unableShare": "充值未达到分享条件",
+  "backapi.currClosed": "当期已停止下注",
+  "backapi.leastTwoExpect":"至少追号2期"
 }
