@@ -93,7 +93,6 @@
             <th height="50">游戏</th>
             <th height="50">方案金额</th>
             <th height="50">保底</th>
-            <th height="50">系统满单</th>
             <th height="50">剩余</th>
             <th height="50">中奖金额</th>
             <th height="50">进度</th>
@@ -128,10 +127,6 @@
                   ¥{{ item.betCountMin }}
                 </div>
               </div>
-            </td>
-            <td height="50">
-              {{ +item.ftype ? "是" : "否"
-              }}<span style="color: rgb(255, 216, 0)"></span>
             </td>
             <td height="50">
               ¥{{ item.sellCount }}<span style="color: rgb(255, 216, 0)"></span>
