@@ -97,7 +97,6 @@
             <span>{{ +scope.row.status ? "正常" : "禁" }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="orderNo" label="qq"> </el-table-column>
         <el-table-column prop="orderNo" label="投注任务">
           <template slot-scope="scope">
             <span>{{ divide(scope.row.taskAim) }}</span>

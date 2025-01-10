@@ -1583,7 +1583,7 @@
   "backapi.noItemTrans": "无转出金额",
   "backapi.itemStatusError": "已转出",
   "backapi.lotteryNotValid": "已暂停售卖",
-  "backapi.unWithdrawalCurr": "未达到提现条件",
+  "backapi.unWithdrawalCurr": "投注任务未达标",
   "backapi.noMoneyToTrans": "当前可转入金额为0",
   "backapi.unableShare": "充值未达到分享条件",
   "backapi.currClosed": "当期已停止下注",
