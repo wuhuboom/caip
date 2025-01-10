@@ -9,15 +9,31 @@
         </div>
         <div class="center-box" v-if="showSelect">
           <div class="bg" @click="showSelect = false"></div>
-          <div class="select-box">
-            <div
-              class="select"
-              v-for="(item, index) in firstNavs"
-              :key="index"
-              @click="curTab = item"
-              :class="{ on: curTab === item }"
-            >
-              {{ item }}
+          <div class="center-box">
+            <div class="select-box">
+              <div
+                class="select"
+                v-for="(item, index) in firstNavs"
+                :key="index"
+                @click="curTab = item"
+                :class="{ on: curTab === item }"
+              >
+                {{ item }}
+              </div>
+            </div>
+            <div v-for="(item, index) in secondNavs" :key="index">
+              <p class="desc">{{ `${item.tip1}${item.tip2}` }}</p>
+              <div class="select-box">
+                <div
+                  class="select"
+                  v-for="(v, i) in item.list"
+                  :key="i"
+                  @click="curTab = item"
+                  :class="{ on: value === v.txt }"
+                >
+                  {{ v.txt }}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -128,7 +144,7 @@ export default {
       showMore: false,
       showSelect: false,
       showBeforeLottery: false,
-      curTab: +this.$route.query.type === 1 ? "三星" : "前三",
+      curTab: +this.$route.query.type === 1 ? "三星" : "四星",
       value: +this.$route.query.type === 1 ? "三星直选复式" : "四星直选复式",
     };
   },
@@ -162,7 +178,7 @@ export default {
       for (let key in this.tabs) {
         this.tabs[key].forEach((item) => {
           if (item.tip1 == this.curTab) {
-            arr = item.list;
+            arr = this.tabs[key];
           }
         });
       }
@@ -401,6 +417,15 @@ export default {
       color: #999999;
       margin-top: 8px;
     }
+  }
+}
+.center-box {
+  background-color: #fff;
+  .desc {
+    font-size: 36px;
+    color: #0b0909;
+    text-align: left;
+    padding-left: 34px;
   }
 }
 .betting-box {
