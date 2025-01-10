@@ -5,10 +5,43 @@ import userApi from "@/api/user";
 import auth from "@/plugins/auth";
 import util from "@/plugins/util";
 import app from "@/main";
+import chat from "./modules/chat";
 Vue.use(Vuex);
 const lang = location.href.includes("zmkm") ? "zh" : "";
 export default new Vuex.Store({
   state: {
+    tabSimpleList: [
+      { id: "", text: "全部" },
+      { id: 1, text: "线上充值" },
+      { id: 2, text: "提现" },
+      { id: 3, text: "投注" },
+      { id: 4, text: "投注盈利" },
+      { id: 5, text: "下级盈利返利" },
+      { id: 6, text: "纠正资金" },
+      { id: 7, text: "撤消投注" },
+      { id: 8, text: "人工减款" },
+      { id: 9, text: "投注结束" },
+      { id: 10, text: "转入余额宝" },
+      { id: 11, text: "线下充值" },
+      { id: 12, text: "提现退回" },
+      { id: 13, text: "投注退回" },
+      { id: 14, text: "余额宝转出" },
+      { id: 15, text: "幸运抽奖" },
+      { id: 16, text: "宾果游戏奖励" },
+      { id: 17, text: "发送红包" },
+      { id: 18, text: "收到红包" },
+      { id: 19, text: "红包退回" },
+      { id: 21, text: "下级充值返利" },
+      { id: 23, text: "邀请奖励" },
+      { id: 24, text: "首充奖励" },
+      { id: 25, text: "活动" },
+      { id: 26, text: "次充奖励" },
+      { id: 27, text: "固定日" },
+      { id: 28, text: "邀请首充奖励" },
+      { id: 31, text: "线下活动" },
+      { id: 33, text: "冲正" },
+      { id: 38, text: "累计充值返利" },
+    ],
     //0未开奖 1未中奖 2已中奖
     openStatus: [
       {
@@ -128,6 +161,12 @@ export default new Vuex.Store({
     bankCard: [],
     notice: [],
     hallId: null,
+    shareData: {
+      // chatAble
+      // recharge 3000
+      //"gainRed": 1, 可抢 0否 1是
+      //gainRecharge
+    },
   },
   getters: {
     noticeDoc(state) {
@@ -137,15 +176,11 @@ export default new Vuex.Store({
       if (!state.config.area_code.length) return "";
       return state.config.area_code[0];
     },
-    catList(state) {
-      const arr = [];
-      state.cat.forEach((v) => {
-        arr.push(...v.list);
-      });
-      return arr;
-    },
   },
   mutations: {
+    setShareData(state, data) {
+      state.shareData = data;
+    },
     setHallId(state, data) {
       if (!data) return;
       state.hallId = data;
@@ -236,6 +271,11 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    async getSharaData({ commit }) {
+      const [err, res] = await userApi.chat();
+      if (err) return;
+      commit("setShareData", res.data);
+    },
     async getNotice({ commit }) {
       const [err, res] = await userApi.notice({ pageSize: 1 });
       if (err) return;
@@ -336,5 +376,7 @@ export default new Vuex.Store({
       commit("setCatList", res.data);
     },
   },
-  modules: {},
+  modules: {
+    chat,
+  },
 });
