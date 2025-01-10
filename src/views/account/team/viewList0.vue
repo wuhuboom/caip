@@ -14,8 +14,8 @@
     <div class="m-t-16">
       <el-table class="g-el-table" border :data="tableData.results">
         <el-table-column prop="orderId" label="方案号"> </el-table-column>
-        <el-table-column prop="fromUser" label="发单人"> </el-table-column>
-        <el-table-column prop="playerName" label="用户"> </el-table-column>
+        <!-- <el-table-column prop="fromUser" label="昵称"> </el-table-column> -->
+        <el-table-column prop="username" label="用户"> </el-table-column>
         <el-table-column prop="money" label="认购金额">
           <template slot-scope="scope">
             <span>{{ divide(scope.row.money) }}</span>
@@ -41,6 +41,11 @@
         <el-table-column prop="moneyIncome" label="中奖金额">
           <template slot-scope="scope">
             <span>{{ divide(scope.row.moneyIncome) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="status" label="状态">
+          <template slot-scope="scope">
+            <span>{{ statusType(scope.row.status) }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -84,6 +89,16 @@ export default {
     },
   },
   methods: {
+    statusType(status) {
+      switch (status) {
+        case 0:
+          return "待开奖";
+        case 1:
+          return "已中";
+        case 2:
+          return "未中";
+      }
+    },
     handleCurrentChange(val) {
       this.params.pageNo = val;
       this.lotteryBetsOrder();
