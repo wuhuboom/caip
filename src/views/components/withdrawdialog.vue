@@ -357,6 +357,7 @@ export default {
       if (err) return;
       this.show = false;
       this.$store.dispatch("getBankCard");
+      this.$message.success("提现成功.等待管理员审核");
     },
     open() {
       this.resData(this.bankCard);
