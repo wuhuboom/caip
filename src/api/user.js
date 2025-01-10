@@ -1,6 +1,105 @@
 import request from "@/plugins/request";
 export default {
-  ///mysub2
+  //lottery/my_order/cancel
+  lotteryMyOrderCancel(data) {
+    return request({
+      url: "/lottery/my_order/cancel",
+      method: "post",
+      data,
+    });
+  },
+  cancelTogether(data) {
+    return request({
+      url: "/lottery/my_order/cancel/together",
+      method: "post",
+      data,
+    });
+  },
+  lotteryConf() {
+    return request({
+      url: "/lottery/conf",
+    });
+  },
+  redReceive(data) {
+    return request({
+      url: "/red/receive",
+      method: "post",
+      data,
+    });
+  },
+  redSend(data) {
+    return request({
+      url: "/red/send",
+      method: "post",
+      data,
+    });
+  },
+  groupStatis() {
+    return request({
+      url: "/group/statis",
+    });
+  },
+  groupProxy(data) {
+    return request({
+      url: "/group/proxy",
+      method: "post",
+      data,
+    });
+  },
+  groupBill(data) {
+    return request({
+      url: "/group/bill",
+      method: "post",
+      data,
+    });
+  },
+  groupMember(data) {
+    return request({
+      url: "/group/member",
+      method: "post",
+      data,
+    });
+  },
+  groupBets(data) {
+    return request({
+      url: "/group/bets",
+      method: "post",
+      data,
+    });
+  },
+  groupWithdrawal(data) {
+    return request({
+      url: "/group/withdrawal",
+      method: "post",
+      data,
+    });
+  },
+  groupRecharge(data) {
+    return request({
+      url: "/group/recharge",
+      method: "post",
+      data,
+    });
+  },
+  chat() {
+    return request({
+      url: "/chat",
+    });
+  },
+  lotteryBetsShare(data) {
+    return request({
+      url: "/lottery/bets/share",
+      method: "post",
+      data,
+    });
+  },
+  editHeader(data) {
+    return request({
+      url: "/editHeader",
+      method: "post",
+      data,
+    });
+  },
   mysub2() {
     return request({
       url: "/mysub2",

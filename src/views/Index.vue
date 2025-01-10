@@ -24,7 +24,15 @@
       <div class="nav-box">
         <div
           class="item"
-          @click="$router.push(`/game/hall?id=${item.id}`)"
+          @click="
+            $router.push({
+              path: `/game/hall`,
+              query: {
+                id: item.id,
+                type: item.lotteryType,
+              },
+            })
+          "
           v-for="(item, idx) in catList"
           :key="idx"
         >
@@ -106,7 +114,6 @@
 import userApi from "@/api/user";
 import { NoticeBar } from "vant";
 import labaImg from "@/assets/img/Index/laba.png";
-import { mapGetters } from "vuex";
 import nav5Icon from "@/assets/img/Index/nav5.png";
 export default {
   name: "AppHome",
@@ -117,7 +124,13 @@ export default {
     slideCatList() {
       return this.catList.slice(0, 8);
     },
-    ...mapGetters(["catList"]),
+    catList() {
+      const arr = [];
+      this.$store.state.cat.forEach((item) => {
+        arr.push(...item.list);
+      });
+      return arr;
+    },
     noticeDoc() {
       return this.$store.getters.noticeDoc;
     },
