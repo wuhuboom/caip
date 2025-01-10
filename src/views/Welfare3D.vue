@@ -113,14 +113,31 @@
 </template>
 
 <script>
+import typeConfigList from "@/plugins/typeConfigList";
 export default {
   name: "Welfare3D",
   data() {
     return {
+      linkQuery: this.$route.query,
       showMore: false,
       showSelect: false,
       showBeforeLottery: false,
+      curTab: +this.$route.query.type === 1 ? "四星" : "三星",
+      value: "",
     };
+  },
+  computed: {
+    tabs() {
+      if (+this.linkQuery.type === 1) {
+        return typeConfigList["lotteryType1"];
+      }
+      return {
+        lotteryType0: typeConfigList["lotteryType0"],
+        lotteryType1: typeConfigList["lotteryType4"],
+        lotteryType2: typeConfigList["lotteryType2"],
+        lotteryType3: typeConfigList["lotteryType3"],
+      };
+    },
   },
 };
 </script>
