@@ -18,8 +18,8 @@
     <div class="recharge-table-container p-t-0">
       <el-table class="g-el-table" border :data="tableData.results">
         <el-table-column prop="orderId" label="方案号"> </el-table-column>
-        <el-table-column prop="fromUser" label="昵称"> </el-table-column>
-        <el-table-column prop="playerName" label="用户"> </el-table-column>
+        <!-- <el-table-column prop="fromUser" label="昵称"> </el-table-column> -->
+        <el-table-column prop="username" label="用户"> </el-table-column>
         <el-table-column prop="money" label="认购金额">
           <template slot-scope="scope">
             <span>{{ divide(scope.row.money) }}</span>

@@ -17,7 +17,10 @@
         <el-table-column prop="username" label="用户"> </el-table-column>
         <el-table-column prop="changeMoney" label="金额">
           <template slot-scope="scope">
-            <span>{{ divide(scope.row.changeMoney) }}</span>
+            <span
+              >{{ `${scope.row.changeMoney}`.includes("-") ? "" : "+"
+              }}{{ divide(scope.row.changeMoney) }}</span
+            >
           </template>
         </el-table-column>
         <el-table-column prop="balanceChangeType" label="类型">

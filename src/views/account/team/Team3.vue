@@ -86,7 +86,7 @@
       "accumulativeBet": 累计投注, -->
       <el-table class="g-el-table" border :data="tableData.results">
         <el-table-column prop="nickname" label="昵称"> </el-table-column>
-        <el-table-column prop="nickname" label="用户"> </el-table-column>
+        <el-table-column prop="username" label="用户"> </el-table-column>
         <el-table-column prop="balance" label="余额">
           <template slot-scope="scope">
             <span>{{ divide(scope.row.balance) }}</span>
