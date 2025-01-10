@@ -1,6 +1,13 @@
 import request from "@/plugins/request";
 export default {
-  //cancel/together
+  //lottery/my_order/cancel
+  lotteryMyOrderCancel(data) {
+    return request({
+      url: "/lottery/my_order/cancel",
+      method: "post",
+      data,
+    });
+  },
   cancelTogether(data) {
     return request({
       url: "/lottery/my_order/cancel/together",

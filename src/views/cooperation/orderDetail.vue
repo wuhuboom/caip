@@ -102,7 +102,7 @@
                   <td height="30">
                     <div
                       class="cp-button-main order-btn-share center-center"
-                      v-if="+detail.status === 0 && isMe(detail.playerId)"
+                      v-if="+detail.status === 0 && isMe"
                       style="height: auto"
                       @click="cancelAll"
                     >
@@ -393,7 +393,7 @@
                     <td height="30">
                       <div
                         class="cp-button-main order-btn-share center-center"
-                        v-if="+item.status === 0 && isMe(detail.playerId)"
+                        v-if="+item.status === 0 && isMe"
                         style="height: auto"
                         @click="cancel(item.expect)"
                       >
@@ -464,11 +464,11 @@ export default {
       });
       return catData;
     },
+    isMe() {
+      return +this.user.id === +this.detail?.playerId;
+    },
   },
   methods: {
-    isMe(id) {
-      return +this.user.id === +id;
-    },
     open() {
       return new Promise((resolve) => {
         this.$confirm("确定要撤销吗？", {
