@@ -498,7 +498,7 @@
         </div>
       </div>
     </div>
-    <tipsDialog @sure="sure" ref="$tipsDialog">
+    <tipsDialog @sure="sure" ref="$tipsDialog" :autoClose="false">
       <p>请确认您的投注信息</p>
       <p>游戏：{{ curGame.lotteryNameH5 }}</p>
       <p>期数：共{{ this.isChase ? totalChase.total : 1 }}期</p>

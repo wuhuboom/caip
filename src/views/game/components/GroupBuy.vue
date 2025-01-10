@@ -11,7 +11,7 @@
         />
         <span
           >元，所占比例 {{ currP }}
-          {{ `(认购金额至少为总金额的${this.lotteryConf.toMin})` }}</span
+          {{ `(认购金额至少为总金额的${this.lotteryConf.toMin}%)` }}</span
         >
       </div>
       <div class="co-purse-bo">

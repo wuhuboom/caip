@@ -45,6 +45,12 @@ export default {
       txt: "",
     };
   },
+  props: {
+    autoClose: {
+      type: Boolean,
+      default: true,
+    },
+  },
   methods: {
     close() {
       this.show = false;
@@ -57,6 +63,7 @@ export default {
       this.txt = v;
       this.show = true;
       this.trimr && clearTimeout(this.trimr);
+      if (!this.autoClose) return;
       this.trimr = setTimeout(() => {
         this.show = false;
       }, 4000);
