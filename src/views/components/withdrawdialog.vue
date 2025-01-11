@@ -224,6 +224,7 @@
                   <div class="el-form-item__content">
                     <input
                       maxlength="30"
+                      type="password"
                       class="recharge-dialog-input"
                       v-model.trim="form.payPwd"
                     /><!---->
