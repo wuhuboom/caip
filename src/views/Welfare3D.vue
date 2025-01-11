@@ -4,12 +4,12 @@
     <AppTopBar class="app-top-bar" :titleSolt="true">
       <template v-slot:title>
         <div @click="showSelect = !showSelect">
-          直选
+          {{ value }}
           <van-icon name="arrow-down" color="#fff" />
         </div>
         <div class="center-box" v-if="showSelect">
           <div class="bg" @click="showSelect = false"></div>
-          <div class="center-box">
+          <div class="downs-box">
             <div class="select-box">
               <div
                 class="select"
@@ -28,7 +28,7 @@
                   class="select"
                   v-for="(v, i) in item.list"
                   :key="i"
-                  @click="curTab = item"
+                  @click="value = v.txt"
                   :class="{ on: value === v.txt }"
                 >
                   {{ v.txt }}
@@ -419,8 +419,10 @@ export default {
     }
   }
 }
-.center-box {
+.downs-box {
   background-color: #fff;
+  position: relative;
+  z-index: 2;
   .desc {
     font-size: 36px;
     color: #0b0909;
