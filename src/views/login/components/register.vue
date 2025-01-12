@@ -3,7 +3,7 @@
     title="注册账号"
     class="reg-dialog-form"
     :visible.sync="showReg"
-    width="400px"
+    width="500px"
     :close-on-click-modal="false"
   >
     <el-form
@@ -17,10 +17,7 @@
         prop="username"
         :rules="[
           { required: true, message: '请输入用户名' },
-          {
-            pattern: $util.regUserName,
-            message: $t('reg.username.rule'),
-          },
+          { validator: $util.regUserNameFn, trigger: 'blur' },
         ]"
       >
         <el-input

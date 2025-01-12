@@ -23,6 +23,25 @@ export default {
   },
   regUserName: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/,
   regPassword: /^(?=.*[a-zA-Z])(?=.*\d)[^\s]{6,16}$/,
+  regUserNameFn(rule, value, callback) {
+    let lent = value.length;
+    const hasChinese = /[\u4e00-\u9fa5]/.test(value);
+    if (hasChinese) {
+      // 中文用户名，限制 2 到 8 个字符
+      if (lent < 2 || lent > 8) {
+        callback(new Error("用户名含中文至少2个最多8个字符,非中文5-16个字符"));
+      } else {
+        callback();
+      }
+    } else {
+      // 非中文用户名，限制 5 到 16 个字母和数字
+      if (!/^[a-zA-Z0-9]{5,16}$/.test(value)) {
+        callback(new Error("用户名含中文至少2个最多8个字符,非中文5-16个字符"));
+      } else {
+        callback();
+      }
+    }
+  },
   toPercent(value1, value2, decimalPlaces = 0) {
     if (typeof value1 !== "number" || typeof value2 !== "number") {
       throw new Error("输入值必须是数字");
