@@ -152,16 +152,17 @@ export default {
     if (!docCat) {
       await this.$store.dispatch("playerLotteryList");
     }
-    // {
-    //       name: "我的团队",
-    //       id: 12,
-    //     },
-    if (this.user.proxyPlayer) {
-      this.navs.push({
-        name: "我的团队",
-        id: 12,
-      });
-    }
+
+    // if (this.user.proxyPlayer) {
+    //   this.navs.push({
+    //     name: "我的团队",
+    //     id: 12,
+    //   });
+    // }
+    this.navs.push({
+      name: "我的团队",
+      id: 12,
+    });
   },
 };
 </script>

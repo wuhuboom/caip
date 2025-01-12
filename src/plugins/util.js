@@ -26,17 +26,20 @@ export default {
   regUserNameFn(rule, value, callback) {
     let lent = value.length;
     const hasChinese = /[\u4e00-\u9fa5]/.test(value);
+    const chineseArr = value.match(/[\u4e00-\u9fa5]/g);
     if (hasChinese) {
       // 中文用户名，限制 2 到 8 个字符
-      if (lent < 2 || lent > 8) {
-        callback(new Error("用户名含中文至少2个最多8个字符,非中文5-16个字符"));
+      if ((lent < 2 || lent > 8) && chineseArr.length < 2) {
+        callback(
+          new Error("中文,数字,字母组成,用户名含中文至少2个中文最多8个字符")
+        );
       } else {
         callback();
       }
     } else {
       // 非中文用户名，限制 5 到 16 个字母和数字
       if (!/^[a-zA-Z0-9]{5,16}$/.test(value)) {
-        callback(new Error("用户名含中文至少2个最多8个字符,非中文5-16个字符"));
+        callback(new Error("数字,字母组成5-16个字符"));
       } else {
         callback();
       }
