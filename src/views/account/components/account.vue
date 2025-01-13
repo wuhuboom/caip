@@ -35,7 +35,7 @@
           </div>
           <div class="account-detail-bar">
             <span style="margin-left: 10px"
-              >可以提现：{{ divide(user.balanceWithdrawCurr) }}元</span
+              >余额：{{ divide(user.balance) }}元</span
             >
           </div>
           <div
@@ -49,10 +49,10 @@
           </div>
           <div class="account-detail-bar" style="background: rgb(0, 150, 255)">
             <span style="margin-left: 10px"
-              >可以使用：{{ divide(user.balance) }}元</span
+              >投注任务：{{ divide(user.taskAim) }}元</span
             >
           </div>
-          <div
+          <!-- <div
             class="account-detail-amount"
             style="background: rgb(133, 156, 156)"
           >
@@ -68,16 +68,16 @@
             <span style="margin-left: 10px"
               >待消费：{{ divide(user.balance + user.frozenBet) }}元</span
             >
-          </div>
+          </div> -->
           <div class="account-detail-amount-bg"></div>
           <div
             class="account-detail-amount-bg"
             style="background: rgb(0, 150, 255); left: 280px"
           ></div>
-          <div
+          <!-- <div
             class="account-detail-amount-bg"
             style="background: rgb(133, 156, 156); left: 540px; width: 20px"
-          ></div>
+          ></div> -->
         </div>
       </div>
       <div class="my-account-person-main">
