@@ -1,5 +1,92 @@
 <template>
-  <div class="c-page bg-grey"></div>
+  <div class="c-page bg-grey">
+    <AppTopBar class="app-top-bar" :topBarTitle="$route.query.title">
+      <!-- <template v-slot:right>
+        <div class="right-box">
+          近一周
+          <van-icon name="arrow-down" class="arrow" />
+        </div>
+      </template> -->
+    </AppTopBar>
+    <ul class="tab-box justify-between p-l-48 p-r-48 align-center">
+      <li @click="openSheet">
+        {{ curCat?.name }}<van-icon class="m-l-8" name="arrow-down" />
+      </li>
+      <li
+        class="check center-center color-fff"
+        @click="lotteryBetsOrder({ pageNo: 1 })"
+      >
+        查询
+      </li>
+    </ul>
+    <BtmActionSheet @select="select" :actions="sysList" ref="$BtmActionSheet" />
+    <!-- 没有内容 -->
+    <div class="empty-box center-center" v-if="0">
+      <div class="img"></div>
+      <div class="text">暂无购彩记录，开启您的大奖之旅吧</div>
+      <div class="btn center-center">去购彩</div>
+    </div>
+    <div class="lists-box">
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="lotteryBetsOrder"
+      >
+        <div
+          class="lists font12 color777"
+          v-for="(item, i) in results"
+          :key="i"
+          @click="
+            $router.push({
+              path: '/purchase-record-details',
+              query: { id: item.id },
+            })
+          "
+        >
+          <div class="top p-l-24 p-r-24">
+            <div class="left align-center els m-r-8">
+              <span class="active font14">{{ getName(item.lotteryId) }}</span>
+              <span class="m-l-16 els">单号{{ item.orderId }}</span>
+            </div>
+            <div class="right active m-l-16">
+              {{ getOpenStatus(item.openStatus) }}
+            </div>
+          </div>
+          <ul class="say align-center">
+            <li class="align-center p-l-24">
+              <p class="els">发起人:{{ item.playerName }}</p>
+            </li>
+            <li class="center-center">
+              <p class="els">进度:{{ item.p }}%</p>
+            </li>
+            <li class="center-center">
+              <p class="els color333 underline">{{ getStatus(item.status) }}</p>
+            </li>
+          </ul>
+          <ul class="say align-center b-m-n">
+            <li class="align-center p-l-24">
+              <p class="els">
+                认购:
+                <span class="color333">{{ divide(item.myBetCount) }}</span>
+              </p>
+            </li>
+            <li class="center-center">
+              <p class="els">
+                奖金:
+                <span class="color333">{{ divide(item.myMoneyIncome) }}</span>
+              </p>
+            </li>
+            <li class="center-center">
+              <p class="els">
+                {{ $dayjsTime(item.createdAt, "MM-DD HH:mm:ss") }}
+              </p>
+            </li>
+          </ul>
+        </div>
+      </van-list>
+    </div>
+  </div>
 </template>
 
 <script>
