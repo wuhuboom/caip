@@ -3,13 +3,13 @@
     <AppTopBar class="app-top-bar" topBarTitle="资金明细">
       <template v-slot:right>
         <div class="right-box" @click="selectType">
-          近一周
+          {{ curTime.name }}
           <van-icon name="arrow-down" class="arrow" />
         </div>
       </template>
     </AppTopBar>
     <div class="info-box">
-      <div class="num">8888.88</div>
+      <div class="num">{{ divide(user.balance) }}</div>
       <div class="text">账户余额(元)</div>
     </div>
     <!-- 没有内容 -->
@@ -18,46 +18,68 @@
       <div class="text">您暂无账目明细记录</div>
     </div>
     <div class="pay-list">
-      <div class="list" v-for="(list, index) in payLists" :key="index">
-        <div class="left">
-          <div class="img" :class="[list.type]"></div>
-          <div class="n-box">
-            <div class="name">{{ list.name }}</div>
-            <div class="time">{{ list.time }}</div>
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="lotteryBetsOrder"
+      >
+        <div class="list" v-for="(row, index) in results" :key="index">
+          <div class="left">
+            <!-- <div class="img" :class="[list.type]"></div> -->
+            <div class="n-box">
+              <div class="name">{{ statusType(row.balanceChangeType) }}</div>
+              <div class="time">{{ $dayjsTime(row.createdAt) }}</div>
+            </div>
+          </div>
+          <div class="right">
+            <div class="num">
+              <!-- :class="{
+                fu: list.num.includes('-'),
+              }" -->
+              {{ divide(row.changeMoney) }}
+            </div>
           </div>
         </div>
-        <div class="right">
-          <div
-            class="num"
-            :class="{
-              fu: list.num.includes('-'),
-            }"
-          >
-            {{ list.num }}
-          </div>
-          <van-icon name="arrow" v-if="list.isDetails" class="arrow" />
-        </div>
-      </div>
+      </van-list>
     </div>
-    <van-action-sheet
+    <!-- <van-action-sheet
       v-model="selectShow"
       :actions="selectActions"
       cancel-text="取消"
       close-on-click-action
+    /> -->
+    <BtmActionSheet
+      @select="onSelect"
+      :actions="selectActions"
+      ref="$BtmActionSheet"
     />
   </div>
 </template>
 
 <script>
+import userApi from "@/api/user";
+import dayjs from "dayjs";
 export default {
   name: "FinancialDetails",
   data() {
     return {
+      loading: false,
+      finished: false,
       selectShow: false,
       selectActions: [
-        { name: "近一周" },
-        { name: "近一月" },
-        { name: "近三月" },
+        {
+          name: "近一周",
+          id: "",
+        },
+        {
+          name: "近一月",
+          id: "",
+        },
+        {
+          name: "近三月",
+          id: "",
+        },
       ],
       payLists: [
         {
@@ -72,40 +94,97 @@ export default {
           num: "+10.00",
           type: "yinhangka",
         },
-        {
-          name: "微信充值",
-          time: "2017-08-13 23:30:30",
-          num: "+10.00",
-          type: "weixin",
-        },
-        {
-          name: "提现失败退款",
-          time: "2017-08-13 23:30:30",
-          num: "+10250.00",
-          type: "shibai",
-          isDetails: true,
-        },
-        {
-          name: "提现到账",
-          time: "2017-08-13 23:30:30",
-          num: "-10250.00",
-          type: "shibai",
-          isDetails: true,
-        },
-        {
-          name: "保底返还",
-          time: "2017-08-13 23:30:30",
-          num: "+3.00",
-          type: "fanhuan",
-          isDetails: true,
-        },
       ],
+      params: {
+        begin: "",
+        orderId: "",
+        type: "",
+        status: "",
+        pageNo: 1,
+        pageSize: 25,
+      },
+      tableData: {
+        totalCount: 0,
+        results: [],
+      },
     };
   },
-  methods: {
-    selectType() {
-      this.selectShow = true;
+  computed: {
+    curTime() {
+      return this.selectActions.find((item) => item.id === this.params.begin);
     },
+    user() {
+      return this.$store.state.user;
+    },
+    results() {
+      return this.tableData.results;
+    },
+    tabSimpleList() {
+      return this.$store.state.tabSimpleList;
+    },
+  },
+  methods: {
+    onSelect(item) {
+      this.params.begin = item.id;
+      this.lotteryBetsOrder({ pageNo: 1 });
+    },
+    statusType(type) {
+      return this.tabSimpleList.find((item) => +item.id === +type)?.text;
+    },
+    async lotteryBetsOrder(obj = {}) {
+      if (obj.pageNo === 1) {
+        this.tableData.results = [];
+        window.scrollTo(0, 0);
+        this.$toast.loading({
+          forbidClick: true,
+          duration: 0,
+        });
+      }
+      this.loading = true;
+      Object.assign(this.params, obj);
+      const query = {
+        ...this.params,
+      };
+      const [err, res] = await userApi.balanceChangeReq(query);
+      this.$toast.clear();
+      this.loading = false;
+      if (err) {
+        this.finished = true;
+        return;
+      }
+      this.tableData.results = this.tableData.results.concat(res.data.results);
+      this.params.pageNo++;
+      if (this.params.pageNo > res.data.totalPage) {
+        this.finished = true;
+      }
+    },
+    selectType() {
+      this.$refs.$BtmActionSheet.open();
+    },
+    calculateDates() {
+      const today = dayjs();
+      const lastWeek = today.subtract(7, "day").format("YYYY-MM-DD");
+      const lastMonth = today.subtract(1, "month").format("YYYY-MM-DD");
+      const lastThreeMonths = today.subtract(3, "month").format("YYYY-MM-DD");
+      this.selectActions = [
+        {
+          name: "近一周",
+          id: lastWeek,
+        },
+        {
+          name: "近一月",
+          id: lastMonth,
+        },
+        {
+          name: "近三月",
+          id: lastThreeMonths,
+        },
+      ];
+      this.params.begin = lastWeek;
+    },
+  },
+  created() {
+    this.calculateDates();
   },
 };
 </script>

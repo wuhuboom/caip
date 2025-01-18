@@ -1,30 +1,80 @@
 <template>
   <div class="c-page bg-grey">
     <AppTopBar topBarTitle="公告"></AppTopBar>
-    <div class="lists-box">
-      <div
-        class="lists"
-        v-for="i in 10"
-        :key="i"
-        @click="$tool.goPage('/notice-details')"
-      >
-        <div class="left text-ellipsis">
-          <div class="name text-ellipsis">江苏快三加奖10%，活动三天</div>
-          <div class="time">2017-08-14 15:20:36</div>
-        </div>
-        <div class="right">
-          <van-icon name="arrow" color="#E5E5E5" />
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      finished-text="没有更多了"
+      @load="getNoticeList"
+    >
+      <div class="lists-box">
+        <div v-for="(item, i) in results" :key="i">
+          <div class="lists">
+            <div class="left text-ellipsis" @click="item.open = !item.open">
+              <div class="name text-ellipsis">{{ item.title }}</div>
+              <div class="time">{{ $dayjsTime(item.createdAt) }}</div>
+            </div>
+            <div class="right">
+              <van-icon
+                :name="!item.open ? 'arrow-down' : 'arrow-up'"
+                color="#E5E5E5"
+              />
+            </div>
+          </div>
+          <div class="content" v-if="item.open">
+            {{ item.content }}
+          </div>
         </div>
       </div>
-    </div>
+    </van-list>
   </div>
 </template>
 
 <script>
+import userApi from "@/api/user";
 export default {
   name: "AppNotice",
   data() {
-    return {};
+    return {
+      loading: false,
+      finished: false,
+      query: {
+        pageNo: 1,
+        pageSize: 12,
+      },
+      tableData: {
+        totalPage: null,
+        totalCount: 0,
+        results: [],
+      },
+    };
+  },
+  computed: {
+    results() {
+      return this.tableData.results;
+    },
+  },
+  methods: {
+    async getNoticeList() {
+      this.loading = true;
+      const [err, res] = await userApi.notice(this.query);
+      this.loading = false;
+      if (err) {
+        this.finished = true;
+        return;
+      }
+      this.query.pageNo++;
+      if (this.query.pageNo > res.data.totalPage) {
+        this.finished = true;
+      }
+      res.data.results = res.data.results.map((item) => {
+        return {
+          ...item,
+          open: false,
+        };
+      });
+      this.tableData.results = this.tableData.results.concat(res.data.results);
+    },
   },
 };
 </script>
@@ -36,11 +86,6 @@ export default {
     border-bottom: 1px solid #e5e5e5;
     display: flex;
     align-items: center;
-
-    &:last-child {
-      border-bottom: none;
-    }
-
     .left {
       flex: 1;
       margin-right: 40px;
@@ -59,6 +104,12 @@ export default {
     .right {
       font-size: 32px;
     }
+  }
+  .content {
+    padding: 28px;
+    color: #666666;
+    background-color: #fff;
+    border-bottom: 1px solid #e5e5e5;
   }
 }
 </style>

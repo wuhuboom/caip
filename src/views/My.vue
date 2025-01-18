@@ -11,14 +11,19 @@
       <div class="t-1" @click="$tool.goPage('/user-center')">
         <div class="left">
           <div class="img-box">
-            <img src="" class="img" />
+            <img
+              :src="
+                user.headerImg ? `${$baseURL}/${user.headerImg}` : DefaultAvatar
+              "
+              class="img"
+            />
           </div>
           <div class="info">
             <div class="name">
-              <div class="lin text-ellipsis">Patrick Lin</div>
+              <div class="lin text-ellipsis">{{ user.username }}</div>
               <div class="hy-icon"></div>
             </div>
-            <div class="text">ID: 10038</div>
+            <div class="text">ID: {{ user.id }}</div>
           </div>
         </div>
         <div class="right">
@@ -27,50 +32,71 @@
       </div>
       <div class="t-2">
         <div class="item">
-          <div class="num">120,00</div>
+          <div class="num">{{ divide(user.balance) }}</div>
           <div class="text">可用余额(元)</div>
         </div>
         <div class="item">
-          <div class="num">88,00</div>
-          <div class="text">彩金</div>
+          <div class="num">{{ divide(user.taskAim) }}</div>
+          <div class="text">投注任务(元)</div>
         </div>
         <div class="item">
-          <div class="num">220,00</div>
-          <div class="text">可提现余额</div>
+          <div class="num">{{ dieMoney }}</div>
+          <div class="text">冻结(元)</div>
         </div>
       </div>
     </div>
     <div class="cz-box">
-      <div class="item center-center" @click="$tool.goPage('/recharge')">
+      <div class="item center-center" @click="recharge">
         <div class="name">充值</div>
       </div>
-      <div class="item center-center" @click="$tool.goPage('/withdrawal')">
-        <div class="name">
-          提现
-          <div class="num center-center">2</div>
-        </div>
+      <div class="item center-center" @click="withdraw">
+        <div class="name">提现</div>
       </div>
     </div>
     <div class="lists-box">
-      <div class="item" @click="$tool.goPage('/purchase-record')">
+      <div
+        class="item"
+        @click="
+          $router.push({
+            path: '/BalanceVault',
+            query: { id: 1, title: '余额宝' },
+          })
+        "
+      >
+        <div class="left">
+          <div class="l-icon i-10"></div>
+          <div class="name">余额宝</div>
+        </div>
+        <div class="right">
+          <van-icon name="arrow" class="arrow-icon" />
+        </div>
+      </div>
+      <div
+        class="item"
+        @click="
+          $router.push({
+            path: '/purchase-record',
+            query: { id: 1, title: '自购记录' },
+          })
+        "
+      >
         <div class="left">
           <div class="l-icon i-1"></div>
-          <div class="name">购彩记录</div>
+          <div class="name">自购记录</div>
         </div>
         <div class="right">
           <van-icon name="arrow" class="arrow-icon" />
         </div>
       </div>
-      <div class="item">
-        <div class="left">
-          <div class="l-icon i-2"></div>
-          <div class="name">资金明细</div>
-        </div>
-        <div class="right">
-          <van-icon name="arrow" class="arrow-icon" />
-        </div>
-      </div>
-      <div class="item" @click="$tool.goPage('/my-buy')">
+      <div
+        class="item"
+        @click="
+          $router.push({
+            path: '/purchase-group',
+            query: { id: 2, title: '合买记录' },
+          })
+        "
+      >
         <div class="left">
           <div class="l-icon i-8"></div>
           <div class="name">合买记录</div>
@@ -79,7 +105,15 @@
           <van-icon name="arrow" class="arrow-icon" />
         </div>
       </div>
-      <div class="item">
+      <div
+        class="item"
+        @click="
+          $router.push({
+            path: '/purchase-record',
+            query: { id: 3, title: '追号记录' },
+          })
+        "
+      >
         <div class="left">
           <div class="l-icon i-9"></div>
           <div class="name">追号记录</div>
@@ -88,7 +122,16 @@
           <van-icon name="arrow" class="arrow-icon" />
         </div>
       </div>
-      <div class="item" @click="$tool.goPage('/my-discount')">
+      <div class="item" @click="$tool.goPage('/financial-details')">
+        <div class="left">
+          <div class="l-icon i-2"></div>
+          <div class="name">资金明细</div>
+        </div>
+        <div class="right">
+          <van-icon name="arrow" class="arrow-icon" />
+        </div>
+      </div>
+      <!-- <div class="item" @click="$tool.goPage('/my-discount')">
         <div class="left">
           <div class="l-icon i-3"></div>
           <div class="name">优惠活动</div>
@@ -96,11 +139,11 @@
         <div class="right">
           <van-icon name="arrow" class="arrow-icon" />
         </div>
-      </div>
+      </div> -->
       <div class="item" @click="$tool.goPage('/promotion-commission')">
         <div class="left">
           <div class="l-icon i-4"></div>
-          <div class="name">推广佣金</div>
+          <div class="name">我的团队</div>
         </div>
         <div class="right">
           <van-icon name="arrow" class="arrow-icon" />
@@ -115,7 +158,7 @@
           <van-icon name="arrow" class="arrow-icon" />
         </div>
       </div>
-      <div class="item" @click="$tool.goPage('/chat')">
+      <div class="item" @click="$store.dispatch('getServeData', 1)">
         <div class="left">
           <div class="l-icon i-6"></div>
           <div class="name">在线客服</div>
@@ -125,15 +168,72 @@
         </div>
       </div>
     </div>
+    <tipsDialog ref="$bankDialog" @sure="goBank" />
     <AppBtmBar></AppBtmBar>
   </div>
 </template>
 
 <script>
+import DefaultAvatar from "@/assets/img/DefaultAvatar.jpg";
 export default {
   name: "AppMy",
   data() {
-    return {};
+    return {
+      DefaultAvatar,
+    };
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    },
+    dieMoney() {
+      //frozenBet 投注  frozenWithdrawa 提现冻结
+      return this.divide(this.user.frozenBet + this.user.frozenWithdrawal);
+    },
+    paySet() {
+      return this.$store.state.paySet;
+    },
+    Cards() {
+      return this.$store.state.bankCard;
+    },
+    bankCard() {
+      return this.Cards.find((v) => +v.ctype === 2) || {};
+    },
+    usdtCard() {
+      return this.Cards.find((v) => +v.ctype === 3) || {};
+    },
+  },
+  methods: {
+    openTipsDialog() {
+      this.$refs.$bankDialog.open(
+        "您好，您还未绑定提款银行卡，确定现在进行绑定银行卡？"
+      );
+    },
+    goBank() {
+      this.$router.push("/bindCard");
+    },
+    recharge() {
+      if (!this.bankCard.id) {
+        return this.openTipsDialog();
+      }
+      this.$router.push("/recharge");
+    },
+    withdraw() {
+      if (!this.bankCard.id) {
+        return this.openTipsDialog();
+      }
+      if (this.paySet !== 1) {
+        this.$toast.fail("请先设置支付密码");
+        return this.$router.push("/payPassword");
+      }
+      ///withdrawal
+      this.$router.push("/withdrawal");
+    },
+  },
+  async created() {
+    this.$store.dispatch("getPaySet");
+    this.$store.dispatch("getBankCard");
+    await this.$store.dispatch("getInfo");
   },
 };
 </script>
@@ -313,6 +413,9 @@ export default {
         }
         &.i-9 {
           background-image: url("@/assets/img/My/m9.png");
+        }
+        &.i-10 {
+          background-image: url("@/assets/img/My/m10.png");
         }
       }
     }

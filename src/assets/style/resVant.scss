@@ -4,7 +4,7 @@
   padding-right: 6px !important;
 }
 
-$max: 40;
+$max: 100;
 $offset: 4;
 $unit: 'px'; // Feel free to change the unit.
 @mixin list-loop($className, $styleName) {
@@ -158,4 +158,55 @@ input::placeholder {
     color: #fff !important;
   }
    
+}
+
+
+.forms-input-wrap {
+  background: #fff;
+  .lable{
+    padding: 32px 32px 0;
+  }
+  &.label-input-wrap{
+    .van-field__value{
+      position: static;
+    }
+    .van-field--error{
+      padding-bottom:48px;
+    }
+    .van-field__error-message{
+      position: absolute;
+      left: 32px;
+      bottom: 0;
+    }
+  }
+  .input-box {
+    border-bottom: 1px solid #e5e5e5;
+    align-items: center;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .input {
+    flex: 1;
+    border: none;
+    position: relative;
+  }
+
+  .code-btn {
+    color: #bf2834;
+    margin-right: 28px;
+  }
+}
+
+.forms-submit-btn {
+  width: 694px;
+  height: 88px;
+  background: #bf2935;
+  border-radius: 126px 126px 126px 126px;
+  color: #fff;
+  font-size: 32px;
+  margin: 0 auto;
+  margin-top: 132px;
 }

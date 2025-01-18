@@ -2,10 +2,6 @@
   <div class="c-page bg-grey">
     <AppTopBar topBarTitle="设置"></AppTopBar>
     <div class="item-box">
-      <div class="item">
-        <div class="left">清理缓存</div>
-        <div class="right">4.6M</div>
-      </div>
       <div class="item" @click="$tool.goPage('/invite-friends')">
         <div class="left">分享给好友</div>
         <div class="right">
@@ -25,7 +21,9 @@
         </div>
       </div>
     </div>
-    <div class="btn-box center-center">退出登录</div>
+    <div class="btn-box center-center" @click="$store.commit('loginOut')">
+      退出登录
+    </div>
   </div>
 </template>
 

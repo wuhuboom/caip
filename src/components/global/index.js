@@ -2,7 +2,8 @@
 import AppTopBar from "@/components/global/AppTopBar";
 import AppBtmBar from "@/components/global/AppBtmBar";
 import Countdown from "@choujiaojiao/vue2-countdown";
-
+import tipsDialog from "@/components/tipsDialog";
+import BtmActionSheet from "@/components/global/BtmActionSheet";
 import {
   Form,
   Field,
@@ -33,12 +34,20 @@ import {
   Step,
   Steps,
   countDown,
+  tabs,
+  tab,
+  popover,
 } from "vant";
 export default {
   install(Vue) {
     Vue.component("Count-down", Countdown);
     Vue.component(AppBtmBar.name, AppBtmBar);
     Vue.component(AppTopBar.name, AppTopBar);
+    Vue.component(tipsDialog.name, tipsDialog);
+    Vue.component(BtmActionSheet.name, BtmActionSheet);
+    Vue.use(popover);
+    Vue.use(tabs);
+    Vue.use(tab);
     Vue.use(Form);
     Vue.use(Field);
     Vue.use(Button);

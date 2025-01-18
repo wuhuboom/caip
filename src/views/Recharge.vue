@@ -2,51 +2,62 @@
   <div class="c-page bg-grey">
     <AppTopBar class="app-top-bar" topBarTitle="充值">
       <template v-slot:right>
-        <div class="right-box">充值记录</div>
+        <div class="right-box" @click="$router.push('/RechargeRecord')">
+          充值记录
+        </div>
       </template>
     </AppTopBar>
-    <div class="item-box">
+    <div class="item-box p-t-24 p-b-24">
       <div class="left">账户余额</div>
-      <div class="right on">0.00元</div>
+      <div class="right on">{{ divide(user.balance) }}元</div>
     </div>
     <div class="cz-box">
-      <div class="item-box">
+      <div class="item-box align-center">
         <div class="left">充值金额</div>
-        <div class="right">10.00元</div>
+        <div class="right">
+          <van-field
+            v-model.trim="amount"
+            type="number"
+            placeholder="请输入充值金额"
+          >
+            <template #button> 元 </template>
+          </van-field>
+        </div>
       </div>
       <div class="num-box">
-        <div class="num on">50元</div>
-        <div class="num">100元</div>
-        <div class="num">500元</div>
-        <div class="num">100元</div>
+        <div
+          class="num"
+          @click="amount = item"
+          :class="{ on: amount === item }"
+          v-for="(item, i) in quickAmountList"
+          :key="i"
+        >
+          {{ item }}元
+        </div>
       </div>
     </div>
     <div class="fs-box">
-      <div class="item on">
+      <div
+        class="item"
+        @click="chose(item)"
+        v-for="(item, index) in rechargeList"
+        :key="index"
+        :class="{ on: chooseRecType.id === item.id }"
+      >
         <div class="left">
-          <div class="zf-icon zhifubao"></div>
-          <div class="name">支付宝充值<span class="on">(2%手续费)</span></div>
+          <!-- <div class="zf-icon yinhang"></div> -->
+          <div class="name">
+            {{ item.name }}
+            <!-- <span class="on">(2%手续费)</span> -->
+          </div>
         </div>
         <div class="right">
-          <van-icon name="checked" class="check-icon" />
-        </div>
-      </div>
-      <div class="item">
-        <div class="left">
-          <div class="zf-icon weixin"></div>
-          <div class="name">微信充值</div>
-        </div>
-        <div class="right">
-          <van-icon name="circle" class="check-icon" />
-        </div>
-      </div>
-      <div class="item">
-        <div class="left">
-          <div class="zf-icon yinhang"></div>
-          <div class="name">银行卡充值</div>
-        </div>
-        <div class="right">
-          <van-icon name="circle" class="check-icon" />
+          <van-icon
+            name="checked"
+            v-if="chooseRecType.id === item.id"
+            class="check-icon"
+          />
+          <van-icon v-else name="circle" class="check-icon" />
         </div>
       </div>
     </div>
@@ -70,17 +81,88 @@
     <div class="bottom-box">
       <div class="height"></div>
       <div class="btn-box">
-        <div class="btn center-center">立即充值</div>
+        <div class="btn center-center" @click="onSubmit">立即充值</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import userApi from "@/api/user";
 export default {
   name: "AppRecharge",
   data() {
-    return {};
+    return {
+      amount: "",
+      rechargeList: [],
+      chooseRecType: {},
+    };
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    },
+    quickAmountList() {
+      if (this.chooseRecType.fast) {
+        return this.chooseRecType.fast.split("-");
+      }
+      return [];
+    },
+    minMax() {
+      if (!this.chooseRecType.minMax) return "";
+      return this.chooseRecType.minMax.split("-").map((v) => +v);
+    },
+  },
+  methods: {
+    chose(item) {
+      this.amount = "";
+      if (!item) return;
+      for (let k in item) {
+        this.$set(this.chooseRecType, k, item[k]);
+      }
+      if (this.quickAmountList.length) {
+        this.amount = this.quickAmountList[0];
+      } else if (this.minMax.length) {
+        this.amount = this.minMax[0];
+      }
+    },
+    async recharge() {
+      const [err, res] = await userApi.recharge();
+      if (err) return;
+      this.rechargeList = res.data;
+      // this.rechargeList = res.data.filter((item) => +item.type !== 3);
+      // this.usdtPay = res.data.find((item) => +item.type === 3) || {};
+      if (!this.rechargeList.length) return;
+      this.chose(this.rechargeList[0]);
+    },
+    async onSubmit() {
+      if (!this.amount) {
+        this.$toast("请输入金额");
+        return;
+      }
+      if (this.minMax.length) {
+        if (this.amount < this.minMax[0] || this.amount > this.minMax[1]) {
+          this.$toast(`金额在${this.minMax[0]}-${this.minMax[1]}之间`);
+          return;
+        }
+      }
+      this.$toast.loading({ duration: 0 });
+      const [err, res] = await userApi.rechargeOrder({
+        payId: this.chooseRecType.id,
+        money: this.amount * 1,
+      });
+      if (err) {
+        return;
+      }
+      this.$toast.clear();
+      if (res.data.UrlAddress) {
+        window.location.href = res.data.UrlAddress;
+      }
+    },
+  },
+  created() {
+    this.$store.dispatch("getInfo");
+    this.recharge();
   },
 };
 </script>
@@ -95,12 +177,18 @@ export default {
 .item-box {
   display: flex;
   background: #fff;
-  padding: 30px 28px;
+  padding: 0 28px;
   .left {
     flex: 1;
   }
   .on {
     color: #bf2935;
+  }
+  .right {
+    text-align: right;
+    ::v-deep input {
+      text-align: right;
+    }
   }
 }
 .cz-box {

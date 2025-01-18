@@ -1,6 +1,13 @@
 import request from "@/plugins/request";
 export default {
-  //lottery/my_order/cancel
+  //editNickname
+  editNickname(data) {
+    return request({
+      url: "/editNickname",
+      method: "post",
+      data,
+    });
+  },
   lotteryMyOrderCancel(data) {
     return request({
       url: "/lottery/my_order/cancel",

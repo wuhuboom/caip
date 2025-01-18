@@ -17,6 +17,7 @@
             v-model.trim="form.password"
             autocomplete="new-password"
             :placeholder=" $t('form.password.text')"
+            type="password"
             :rules="[
               { required: true, message: $t('backapi.passwordIsEmpty') },
             ]"
@@ -40,7 +41,7 @@
             </van-field>
             <ul class="justify-between align-center m-b-32">
               <li @click="$router.push('/login/register')">注册新账号</li>
-              <li class="active">忘记密码?</li>
+              <li class="active" @click="$router.push('/login/forgot-password')">忘记密码?</li>
             </ul>
             <van-button
               class="ntf-vant-btn"
@@ -50,19 +51,20 @@
               >{{ $t("login.btn.text") }}</van-button
             >
       </van-form> 
-      <div class="radio-box">
-        <van-radio-group v-model="isRadio">
-          <van-radio name="1" class="radio" icon-size="20px">
-            我已同意 <a href="javascript:;">《用户协议》</a> 和
-            <a href="javascript:;">《隐私政策》</a>
-          </van-radio>
-        </van-radio-group>
+      <div class="radio-box align-center">
+        <van-checkbox class="m-r-16" icon-size="20px" v-model="isRadio" checked-color="#ee0a24"></van-checkbox>
+            我已同意 <a class="active" href="javascript:;" @click="show=true">《用户协议》</a> 和
+            <a class="active"  href="javascript:;" @click="show=true">《隐私政策》</a>
       </div>
     </div>
+    <van-popup v-model="show" position="bottom" >
+     <Notice @back="show=false" />
+    </van-popup>
   </div>
 </template>
 
 <script>
+import Notice from "@/components/Notice";
 import userApi from "@/api/user";
 const initForm = () => ({
   username: "",
@@ -74,12 +76,14 @@ export default {
   name: "AppLogin",
   data() {
     return {
-      isRadio: 1,
+      show: false,
+      isRadio: true,
       type: "login",
       form: initForm(),
       codeData: {},
     };
   },
+  components: { Notice },
   methods: {
     async verifyCodeReq() {
       const [err, res] = await userApi.verifyCodeReq();
@@ -90,6 +94,10 @@ export default {
       this.codeData = res.data;
     },
     async login() {
+      if (!this.isRadio) {
+        this.$toast.fail("请同意用户协议和隐私政策");
+        return;
+      }
       this.$toast.loading({ duration: 0 });
       const [err, res] = await userApi.login(this.form);
       if (err) {

@@ -5,9 +5,16 @@
       <div class="item">
         <div class="left">头像</div>
         <div class="right">
-          <van-uploader>
+          <van-uploader :after-read="afterRead" accept="image/*">
             <div class="center-center">
-              <img src="" class="img" />
+              <img
+                :src="
+                  user.headerImg
+                    ? `${$baseURL}/${user.headerImg}`
+                    : DefaultAvatar
+                "
+                class="img"
+              />
               <van-icon name="arrow" class="arrow-icon" />
             </div>
           </van-uploader>
@@ -15,20 +22,20 @@
       </div>
     </div>
     <div class="item-box">
-      <div class="item" @click="$tool.goPage('/nick-name')">
-        <div class="left">昵称</div>
-        <div class="right">
-          <van-icon name="arrow" class="arrow-icon" />
-        </div>
-      </div>
-      <div class="item" @click="$tool.goPage('/name-authentication')">
+      <!-- <div class="item" @click="$tool.goPage('/name-authentication')">
         <div class="left">实名认证</div>
         <div class="right">
           <van-icon name="arrow" class="arrow-icon" />
         </div>
-      </div>
-      <div class="item" @click="$tool.goPage('/binding')">
+      </div> -->
+      <div class="item" @click="$tool.goPage('/bindCard')">
         <div class="left">我的银行卡</div>
+        <div class="right">
+          <van-icon name="arrow" class="arrow-icon" />
+        </div>
+      </div>
+      <div class="item" @click="bindUsdt">
+        <div class="left">我的USDT</div>
         <div class="right">
           <van-icon name="arrow" class="arrow-icon" />
         </div>
@@ -37,15 +44,61 @@
         <div class="left">手机号码</div>
         <div class="right">188****3221</div>
       </div>
+      <div class="item">
+        <!-- @click="$tool.goPage('/nick-name')" -->
+        <div class="left">昵称</div>
+        <div class="right">
+          {{ user.nickname }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import DefaultAvatar from "@/assets/img/DefaultAvatar.jpg";
+import userApi from "@/api/user";
 export default {
   name: "UserCenter",
   data() {
-    return {};
+    return { DefaultAvatar };
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    },
+    paySet() {
+      return this.$store.state.paySet;
+    },
+    Cards() {
+      return this.$store.state.bankCard;
+    },
+    bankCard() {
+      return this.Cards.find((v) => +v.ctype === 2) || {};
+    },
+    usdtCard() {
+      return this.Cards.find((v) => +v.ctype === 3) || {};
+    },
+  },
+  methods: {
+    async afterRead(file) {
+      const [err] = await userApi.editHeader({
+        file: file.file,
+      });
+      if (err) return;
+      await this.sleep(1000);
+      this.$store.dispatch("getInfo");
+    },
+    bindUsdt() {
+      if (this.paySet !== 1) {
+        this.$toast.fail("请先设置支付密码");
+        return this.$router.push("/payPassword");
+      }
+      this.$router.push("/bindUsdt");
+    },
+  },
+  async created() {
+    this.$store.dispatch("getPaySet");
   },
 };
 </script>

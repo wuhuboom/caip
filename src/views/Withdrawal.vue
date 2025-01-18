@@ -2,7 +2,9 @@
   <div class="c-page bg-grey">
     <AppTopBar class="app-top-bar" topBarTitle="提现">
       <template v-slot:right>
-        <div class="right-box">提现记录</div>
+        <div class="right-box" @click="$router.push('/WithdrawRecord')">
+          提现记录
+        </div>
       </template>
     </AppTopBar>
 
@@ -46,35 +48,80 @@
     <!-- 提现 已绑定 -->
     <template>
       <div class="yh-box">
-        <div class="khm-box">开户名：宋**</div>
-        <div class="gh-box">
+        <div class="gh-box" @click="resData(bankCard)" v-if="bankCard.id">
           <div class="left">
-            <div class="yuan"></div>
+            <div class="yuan">
+              <img
+                class="d-img"
+                src="@/assets/img/Recharge/yinhang.png"
+                alt=""
+              />
+            </div>
             <div class="info">
-              <div class="i-1">工商银行</div>
-              <div class="i-2">**** **** **** 3316</div>
+              <div class="i-1">{{ bankCard.bankName }}</div>
+              <div class="i-2">
+                **** **** ****{{ bankCard.cardNumber.slice(-4) }}
+              </div>
             </div>
           </div>
           <div class="right">
-            <van-icon name="arrow" class="arrow-icon" />
+            <van-icon
+              name="checked"
+              v-if="form.id === bankCard.id"
+              class="check-icon"
+              :size="24"
+            />
+            <van-icon v-else name="circle" :size="24" class="check-icon" />
+          </div>
+        </div>
+        <div class="gh-box" v-if="usdtCard.id" @click="resData(usdtCard)">
+          <div class="left">
+            <div class="yuan">
+              <img class="d-img" src="@/assets/img/Recharge/usdt.png" alt="" />
+            </div>
+            <div class="info">
+              <div class="i-1">{{ usdtCard.bankName }}</div>
+              <div class="i-2">
+                **** **** ****{{ usdtCard.cardNumber.slice(-4) }}
+              </div>
+            </div>
+          </div>
+          <div class="right">
+            <van-icon
+              name="checked"
+              v-if="form.id === usdtCard.id"
+              class="check-icon"
+              :size="24"
+            />
+            <van-icon :size="24" v-else name="circle" class="check-icon" />
           </div>
         </div>
       </div>
       <div class="tx-box">
         <div class="item">
           可提现余额
-          <div class="on">1000.00元</div>
+          <div class="on">{{ divide(user.balance) }}元</div>
         </div>
         <div class="item">
           提现金额
           <input
             type="text"
             class="input"
-            placeholder="请输入提款金额，最少10元"
+            placeholder="请输入提款金额"
+            v-model.trim="form.money"
+          />
+        </div>
+        <div class="item">
+          支付密码
+          <input
+            type="text"
+            class="input"
+            placeholder="请输入支付密码"
+            v-model.trim="form.payPwd"
           />
         </div>
       </div>
-      <div class="btn-box center-center">确定</div>
+      <div class="btn-box center-center" @click="ajaxBindCard">确定</div>
       <div class="ts-box">
         <div class="content-box">
           <div class="tips">
@@ -94,10 +141,82 @@
 </template>
 
 <script>
+import userApi from "@/api/user";
+const initForm = () => {
+  return {
+    ctype: 2,
+    cardName: "",
+    identity: "",
+    cardNumber: "",
+    bankName: "",
+    subBranch: "",
+  };
+};
 export default {
   name: "AppWithdrawal",
   data() {
-    return {};
+    return {
+      form: initForm(),
+    };
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    },
+    Cards() {
+      return this.$store.state.bankCard;
+    },
+    bankCard() {
+      const doc = this.Cards.find((v) => +v.ctype === 2) || {};
+      return doc;
+    },
+    usdtCard() {
+      return this.Cards.find((v) => +v.ctype === 3) || {};
+    },
+  },
+  methods: {
+    resData(obj) {
+      this.form = {
+        ...initForm(),
+        ...obj,
+        usdtId: obj.id,
+        type: obj.ctype,
+        money: "",
+        payPwd: "",
+      };
+    },
+    async ajaxBindCard() {
+      //金额必须正整数
+      if (!/^[1-9]\d*$/.test(this.form.money)) {
+        this.$toast.fail("提现金额必须为正整数");
+        return;
+      }
+      //支付密码必须为6位数字
+      if (!/^\d{6}$/.test(this.form.payPwd)) {
+        this.$toast.fail("支付密码必须是6位数字");
+        return;
+      }
+      this.$toast.loading({ duration: 0 });
+      const [err] = await userApi.withdrawalReq({
+        ...this.form,
+      });
+      if (err) return;
+      this.$toast.clear();
+      this.$store.dispatch("getBankCard");
+      this.$toast.success("提现成功.等待管理员审核");
+      this.$router.back();
+    },
+  },
+  async created() {
+    this.$store.dispatch("getInfo");
+    this.$toast.loading({ duration: 0 });
+    await this.$store.dispatch("getBankCard");
+    this.$toast.clear();
+    if (this.bankCard.id) {
+      this.resData(this.bankCard);
+    } else if (this.usdtCard.id) {
+      this.resData(this.usdtCard);
+    }
   },
 };
 </script>
@@ -164,9 +283,8 @@ export default {
       display: flex;
       align-items: center;
       .yuan {
-        width: 48px;
-        height: 48px;
-        background: #e50012;
+        width: 80px;
+        height: 80px;
         border-radius: 100%;
       }
       .info {
@@ -241,5 +359,8 @@ export default {
       margin-top: 2px;
     }
   }
+}
+.check-icon {
+  color: #bf2935 !important;
 }
 </style>

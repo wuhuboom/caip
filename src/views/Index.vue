@@ -58,7 +58,7 @@
               <div class="icon"></div>
               <div class="text-ellipsis">{{ v.playerName }}</div>
             </div>
-            <div class="des text-ellipsis">购买福彩3D</div>
+            <!-- <div class="des text-ellipsis">购买福彩3D</div> -->
           </div>
           <div class="right text-ellipsis">
             喜中<span class="num">{{ divide(v.money) }}</span
@@ -122,7 +122,7 @@ export default {
   },
   computed: {
     slideCatList() {
-      return this.catList.slice(0, 8);
+      return this.catList;
     },
     catList() {
       const arr = [];

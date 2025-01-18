@@ -1,17 +1,24 @@
 <template>
   <div class="c-page bg-grey">
-    <AppTopBar class="app-top-bar" topBarTitle="购彩记录">
-      <template v-slot:right>
+    <AppTopBar class="app-top-bar" :topBarTitle="$route.query.title">
+      <!-- <template v-slot:right>
         <div class="right-box">
           近一周
           <van-icon name="arrow-down" class="arrow" />
         </div>
-      </template>
+      </template> -->
     </AppTopBar>
     <div class="tab-box">
-      <div class="tab on">全部</div>
-      <div class="tab">待开奖</div>
-      <div class="tab">已开奖</div>
+      <!-- on -->
+      <div
+        class="tab"
+        v-for="(item, i) in navs"
+        :key="i"
+        :class="{ on: item.status === params.status }"
+        @click="lotteryBetsOrder({ status: item.status, pageNo: 1 })"
+      >
+        {{ item.name }}
+      </div>
     </div>
     <!-- 没有内容 -->
     <div class="empty-box center-center" v-if="0">
@@ -20,42 +27,156 @@
       <div class="btn center-center">去购彩</div>
     </div>
     <div class="lists-box">
-      <div
-        class="lists"
-        v-for="i in 3"
-        :key="i"
-        :class="{
-          bonus: i === 2,
-        }"
-        @click="$tool.goPage('/purchase-record-details')"
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="lotteryBetsOrder"
       >
-        <div class="top">
-          <div class="left">排列三</div>
-          <div class="right">第20170903期</div>
-        </div>
-        <div class="bottom">
-          <div class="left">
-            <div class="d1 text-ellipsis">
-              投注金额：<span class="on">10000.00元</span>
+        <div
+          class="lists"
+          v-for="(item, i) in results"
+          :key="i"
+          :class="{
+            bonus: +item.openStatus === 2,
+          }"
+          @click="
+            $router.push({
+              path: id == 1 ? '/purchase-my-details' : '/purchase-pre-details',
+              query: { id: item.id },
+            })
+          "
+        >
+          <div class="top">
+            <div class="left">{{ getName(item.lotteryId) }}</div>
+            <div class="right">第{{ item.expect }}期</div>
+          </div>
+          <div class="bottom">
+            <div class="left">
+              <div class="d1 text-ellipsis">
+                投注金额：<span class="on">{{ divide(item.money) }}元</span>
+              </div>
+              <div class="d2">投注时间： {{ $dayjsTime(item.createdAt) }}</div>
             </div>
-            <div class="d2">投注时间：2017-08-13 23:00:00</div>
-          </div>
-          <div class="right">
-            <div v-if="i === 2" class="num text-ellipsis">1000000000.00元</div>
-            <div v-else>待开奖</div>
-            <van-icon name="arrow" class="arrow" />
+            <div class="right">
+              <div v-if="+item.openStatus === 2" class="num text-ellipsis">
+                {{ divide(item.moneyIncome) }}元
+              </div>
+              <div v-else>
+                {{ getOpenStatus(item.openStatus) }}
+              </div>
+              <van-icon name="arrow" class="arrow" />
+            </div>
           </div>
         </div>
-      </div>
+      </van-list>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import userApi from "@/api/user";
 export default {
   name: "PurchaseRecord",
   data() {
-    return {};
+    return {
+      id: +this.$route.query.id,
+      tabId: -1,
+      navs: [
+        {
+          name: "全部",
+          status: -1,
+        },
+        {
+          name: "待开奖",
+          status: 0,
+        },
+        {
+          name: "已开奖", //3 是已结束状态
+          status: 3,
+        },
+      ],
+      date: [],
+      loading: false,
+      finished: false,
+      params: {
+        lotteryId: -1,
+        status: -1,
+        pageNo: 1,
+        pageSize: 10,
+      },
+      tableData: {
+        totalPage: null,
+        totalCount: 0,
+        results: [],
+      },
+    };
+  },
+  computed: {
+    results() {
+      return this.tableData.results;
+    },
+    ...mapGetters(["catList"]),
+    apiName() {
+      switch (this.id) {
+        case 1:
+          //自购
+          return "lotteryMyOrder";
+        case 3:
+          //追号
+          return "lotteryMyOrderRe";
+        default:
+          return "lotteryMyOrder";
+      }
+    },
+  },
+  methods: {
+    getOpenStatus(v) {
+      const item = this.$store.state.openStatus.find((d) => d.id === v);
+      return item ? item.name : "";
+    },
+    getName(id) {
+      const item = this.catList.find((v) => v.id === id);
+      return item ? item.lotteryName : "";
+    },
+    async lotteryBetsOrder(obj = {}) {
+      if (obj.pageNo === 1) {
+        this.tableData.results = [];
+        window.scrollTo(0, 0);
+        this.$toast.loading({
+          forbidClick: true,
+          duration: 0,
+        });
+      }
+      this.loading = true;
+      Object.assign(this.params, obj);
+      const sendData = {
+        ...this.params,
+      };
+      // if (Array.isArray(this.date) && this.date.length) {
+      //   sendData.start = this.date[0];
+      //   sendData.end = this.date[1];
+      // }
+      //删除-1
+      for (let key in sendData) {
+        if (sendData[key] === -1) {
+          delete sendData[key];
+        }
+      }
+      const [err, res] = await userApi[`${this.apiName}`](sendData);
+      this.$toast.clear();
+      this.loading = false;
+      if (err) {
+        this.finished = true;
+        return;
+      }
+      this.tableData.results = this.tableData.results.concat(res.data.results);
+      this.params.pageNo++;
+      if (this.params.pageNo > res.data.totalPage) {
+        this.finished = true;
+      }
+    },
   },
 };
 </script>
@@ -164,7 +285,6 @@ export default {
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        flex: 1;
         .arrow {
           font-size: 32px;
           color: #999999;

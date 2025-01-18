@@ -1,3 +1,1 @@
-window.sites=[
-    'https://hrt21.com/',
-]
+window.sites = ["https://hrt21.com/"];

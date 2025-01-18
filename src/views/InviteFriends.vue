@@ -4,7 +4,7 @@
     <div class="i-main">
       <div class="title">推荐链接</div>
       <div class="l-box">
-        <div class="left">https://huaban.com/pins</div>
+        <div class="left">{{ myLink }}</div>
         <div class="right center-center" @click="copy">复制链接地址</div>
       </div>
       <div class="text">
@@ -16,18 +16,38 @@
 
 <script>
 import { Toast } from "vant";
-
+import userApi from "@/api/user";
 export default {
   name: "InviteFriends",
   data() {
-    return {};
+    return {
+      headData: {
+        //website:官方 website2:推广链接 point:返点 month:本月返点 lastMonth:上月返点
+      },
+    };
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    },
+    myLink() {
+      return `${this.headData.website2}#/login/SignIn?code=${this.user.invitationCode}`;
+    },
   },
   methods: {
+    async mysub2() {
+      const [err, res] = await userApi.mysub2();
+      if (err) return;
+      this.headData = res.data;
+    },
     copy() {
-      navigator.clipboard.writeText("https://huaban.com/pins").then(() => {
+      navigator.clipboard.writeText(this.myLink).then(() => {
         Toast("复制成功");
       });
     },
+  },
+  created() {
+    this.mysub2();
   },
 };
 </script>

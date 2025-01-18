@@ -56,7 +56,7 @@ export default {
           icon: "medal-o",
         },
         {
-          text: "跟单",
+          text: "合买",
           active: false,
           name: "AppDocumentation",
           icon: "orders-o",

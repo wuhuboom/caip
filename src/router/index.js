@@ -17,6 +17,48 @@ const routes = [
     },
   },
   {
+    path: "/bindCard",
+    name: "BindCard",
+    components: {
+      default: () => import("@/views/bindCard.vue"),
+    },
+  },
+  {
+    path: "/BalanceVault",
+    name: "BalanceVault",
+    components: {
+      default: () => import("@/views/BalanceVault.vue"),
+    },
+  },
+  {
+    path: "/bindUsdt",
+    name: "BindUsdt",
+    components: {
+      default: () => import("@/views/bindUsdt.vue"),
+    },
+  },
+  {
+    path: "/RechargeRecord",
+    name: "RechargeRecord",
+    components: {
+      default: () => import("@/views/RechargeRecord.vue"),
+    },
+  },
+  {
+    path: "/WithdrawRecord",
+    name: "WithdrawRecord",
+    components: {
+      default: () => import("@/views/WithdrawRecord.vue"),
+    },
+  },
+  {
+    path: "/payPassword",
+    name: "PayPassword",
+    components: {
+      default: () => import("@/views/payPassword.vue"),
+    },
+  },
+  {
     path: "/invoice",
     name: "invoice",
     components: {
@@ -37,9 +79,8 @@ const routes = [
       default: () => import("@/views/Login.vue"),
     },
   },
-
   {
-    path: "/forgot-password",
+    path: "/login/forgot-password",
     name: "ForgotPassword",
     components: {
       default: () => import("@/views/ForgotPassword.vue"),
@@ -105,23 +146,23 @@ const routes = [
     path: "/chat",
     name: "AppChat",
     components: {
-      default: () => import("@/views/Chat.vue"),
+      default: () => import("@/views/chat/Chat.vue"),
     },
   },
-  {
-    path: "/bet-on",
-    name: "BetOn",
-    components: {
-      default: () => import("@/views/BetOn.vue"),
-    },
-  },
-  {
-    path: "/buy-together",
-    name: "BuyTogether",
-    components: {
-      default: () => import("@/views/BuyTogether.vue"),
-    },
-  },
+  // {
+  //   path: "/bet-on",
+  //   name: "BetOn",
+  //   components: {
+  //     default: () => import("@/views/BetOn.vue"),
+  //   },
+  // },
+  // {
+  //   path: "/buy-together",
+  //   name: "BuyTogether",
+  //   components: {
+  //     default: () => import("@/views/BuyTogether.vue"),
+  //   },
+  // },
   {
     path: "/draw-winner-result",
     name: "DrawWinnerResult",
@@ -157,13 +198,13 @@ const routes = [
       default: () => import("@/views/BuyDetails.vue"),
     },
   },
-  {
-    path: "/append-chase",
-    name: "AppendChase",
-    components: {
-      default: () => import("@/views/AppendChase.vue"),
-    },
-  },
+  // {
+  //   path: "/append-chase",
+  //   name: "AppendChase",
+  //   components: {
+  //     default: () => import("@/views/AppendChase.vue"),
+  //   },
+  // },
   {
     path: "/my",
     name: "AppMy",
@@ -242,10 +283,31 @@ const routes = [
     },
   },
   {
+    path: "/purchase-group",
+    name: "PurchaseGroup",
+    components: {
+      default: () => import("@/views/PurchaseGroup.vue"),
+    },
+  },
+  {
     path: "/purchase-record-details",
     name: "PurchaseRecordDetails",
     components: {
       default: () => import("@/views/PurchaseRecordDetails.vue"),
+    },
+  },
+  {
+    path: "/purchase-my-details",
+    name: "PurchaseMyDetails",
+    components: {
+      default: () => import("@/views/PurchaseMydDetails.vue"),
+    },
+  },
+  {
+    path: "/purchase-pre-details",
+    name: "PurchasePreDetails",
+    components: {
+      default: () => import("@/views/PurchasePreDetails.vue"),
     },
   },
   {
@@ -298,6 +360,13 @@ const routes = [
     },
   },
   {
+    path: "/promotion-team",
+    name: "PromotionTeam",
+    components: {
+      default: () => import("@/views/viewDiaolog.vue"),
+    },
+  },
+  {
     path: "/invite-friends",
     name: "InviteFriends",
     components: {
@@ -335,14 +404,7 @@ const router = new VueRouter({
 });
 router.beforeEach(async (to, from, next) => {
   Nprogress.start();
-  const ajaxs = [];
-  if (!store.state.serveData.serviceAddr) {
-    store.dispatch("getServeData");
-  }
-  if (!store.state.config.area_code.length) {
-    // ajaxs.push(store.dispatch("getCodeList"));
-  }
-  await Promise.all(ajaxs);
+
   if (auth.getToken() && !store.state.user.id) {
     const [error] = await store.dispatch("getInfo");
     if (error && auth.getToken("userInfo")) {
@@ -352,7 +414,19 @@ router.beforeEach(async (to, from, next) => {
   if (auth.getToken() && !store.state.notice.length) {
     store.dispatch("getNotice");
   }
+  // const ajaxs = [];
+  // if (!store.state.serveData.serviceAddr) {
+  //   ajaxs.push(store.dispatch("getServeData"));
+  // }
+  // if (!store.getters.catList.length) {
+  //   ajaxs.push(store.dispatch("playerLotteryList"));
+  // }
+  // await Promise.all(ajaxs);
   if (auth.getToken()) {
+    if (!store.getters.catList.length) {
+      await store.dispatch("playerLotteryList");
+    }
+
     if (to.path.includes("/login")) {
       Nprogress.done();
       next("/");

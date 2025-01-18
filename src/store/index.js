@@ -169,6 +169,13 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    catList(state) {
+      const arr = [];
+      state.cat.forEach((item) => {
+        arr.push(...item.list);
+      });
+      return arr;
+    },
     noticeDoc(state) {
       return state.notice[0] || {};
     },

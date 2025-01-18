@@ -13,13 +13,11 @@ import element from "./plugins/element";
 import "@/assets/style/base.less";
 import "@/assets/font/iconfont.css";
 import "@/assets/style/resVant.scss";
-import { Locale } from "vant";
 // 引入英文语言包
-import enUS from "vant/es/locale/lang/en-US";
+
 import VueLuckyCanvas from "@lucky-canvas/vue";
 import Tool from "@/utils/tool";
 Vue.use(VueLuckyCanvas);
-Locale.use("en-US", enUS);
 Vue.config.productionTip = false;
 Vue.use(global);
 Vue.use(VueClipboard);
@@ -40,6 +38,13 @@ Vue.prototype.$dayjsTime = (time = new Date(), f = "YYYY-MM-DD HH:mm:ss") => {
   return dayjs(time).format(f);
 };
 Vue.prototype.$util = util;
+Vue.prototype.$baseURL =
+  process.env.NODE_ENV === "production"
+    ? window.BASEPATH
+    : process.env.VUE_APP_API;
+Vue.prototype.sleep = (time) => {
+  return new Promise((resolve) => setTimeout(resolve, time));
+};
 const app = new Vue({
   router,
   store,
