@@ -1587,5 +1587,6 @@
   "backapi.noMoneyToTrans": "当前可转入金额为0",
   "backapi.unableShare": "充值未达到分享条件",
   "backapi.currClosed": "当期已停止下注",
-  "backapi.leastTwoExpect":"至少追号2期"
+  "backapi.leastTwoExpect":"至少追号2期",
+  "backapi.name_exsit":"用户名已存在"
 }
