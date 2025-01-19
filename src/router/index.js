@@ -24,6 +24,27 @@ const routes = [
     },
   },
   {
+    path: "/edtMyCard",
+    name: "EdtMyCard",
+    components: {
+      default: () => import("@/views/edtBindCard.vue"),
+    },
+  },
+  {
+    path: "/GiftRecord",
+    name: "GiftRecord",
+    components: {
+      default: () => import("@/views/GiftRecord.vue"),
+    },
+  },
+  {
+    path: "/FundDetail",
+    name: "FundDetail",
+    components: {
+      default: () => import("@/views/FundDetail.vue"),
+    },
+  },
+  {
     path: "/BalanceVault",
     name: "BalanceVault",
     components: {

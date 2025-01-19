@@ -8,12 +8,12 @@
           <van-icon name="arrow" class="arrow-icon" />
         </div>
       </div>
-      <div class="item" @click="$tool.goPage('/feed-back')">
+      <!-- <div class="item" @click="$tool.goPage('/feed-back')">
         <div class="left">意见反馈</div>
         <div class="right">
           <van-icon name="arrow" class="arrow-icon" />
         </div>
-      </div>
+      </div> -->
       <div class="item" @click="$tool.goPage('/about-us')">
         <div class="left">关于我们</div>
         <div class="right">

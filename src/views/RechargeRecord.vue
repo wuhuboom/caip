@@ -8,10 +8,10 @@
         </div> -->
       </template>
     </AppTopBar>
-    <div class="info-box">
+    <!-- <div class="info-box">
       <div class="num">{{ divide(user.balance) }}</div>
       <div class="text">账户余额(元)</div>
-    </div>
+    </div> -->
     <!-- 没有内容 -->
     <div class="empty-box center-center" v-if="0">
       <div class="img"></div>

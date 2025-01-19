@@ -57,29 +57,30 @@
       </ul>
     </van-popup>
     <van-popup
-      class="popupOpen pointer redRecord"
+      class="popupOpen pointer redRecord p-x-0"
       v-model="showRecord"
       @click="getRecord"
     >
-      <img class="red-close" src="@/assets/img/red-close.png" alt="" />
-      <ul class="justify-between align-center m-b-16 red-active">
+      <ul class="justify-between align-center color333 p-x-16 active">
         <li class="font16">领取记录</li>
         <li>
           {{ recordList.quantity }}个红包 金额{{ divide(recordList.money) }}元
         </li>
       </ul>
-      <ul>
-        <li
-          class="justify-between align-center one-doc"
-          v-for="(item, index) in recordList.list"
+      <div class="table-lists">
+        <div class="row hearder">
+          <div class="col">用户</div>
+          <div class="col">红包金额</div>
+        </div>
+        <div
+          class="row"
+          v-for="(row, index) in [...recordList.list]"
           :key="index"
         >
-          <span class="doc-nickname" :class="{ 'red-active': index === 0 }">{{
-            item.nickname
-          }}</span>
-          <span class="red-active">{{ divide(item.money) }}</span>
-        </li>
-      </ul>
+          <div class="col els">{{ row.nickname }}</div>
+          <div class="col els">{{ divide(row.money) }}</div>
+        </div>
+      </div>
     </van-popup>
   </div>
 </template>
@@ -205,11 +206,7 @@ export default {
     },
     open() {
       if (this.shareData.gainRed === 0) {
-        this.$message({
-          message: `充值${this.shareData.gainRecharge}才能参与抢红包`,
-          type: "error",
-          customClass: "index-99999",
-        });
+        this.$toast(`充值${this.shareData.gainRecharge}才能参与抢红包`);
         this.getMoneyRecord();
         return;
       }
@@ -322,12 +319,30 @@ export default {
     font-size: 24px;
   }
 }
+.table-lists {
+  .hearder {
+    background: #f0f0f0;
+    color: #333 !important;
+    margin: 0 !important;
+    padding: 0 30px;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    color: #777777;
+    border-bottom: 1px solid #eaeaea;
+    align-items: center;
+  }
+  .col {
+    padding: 24px 0;
+    text-align: center;
+  }
+}
 .redRecord {
-  width: 994px;
-  height: 648px;
-  background: #774230;
-  padding: 64px 104px;
-  color: #fff;
+  //width: 994px;
+  //height: 648px;
+
+  background: #fff;
   .red-active {
     color: #feedaf;
   }

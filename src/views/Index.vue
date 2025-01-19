@@ -14,38 +14,45 @@
     <div class="nav-wrap">
       <NoticeBar
         class="notice-bar"
-        background="#FFFBF5"
+        background="#FFE5E5"
         color="#333333"
         :left-icon="labaImg"
         @click="$router.push('/notice')"
       >
         {{ noticeDoc.content }}
       </NoticeBar>
-      <div class="nav-box">
-        <div
-          class="item"
-          @click="
-            $router.push({
-              path: `/game/hall`,
-              query: {
-                id: item.id,
-                type: item.lotteryType,
-              },
-            })
-          "
-          v-for="(item, idx) in catList"
-          :key="idx"
-        >
-          <div
-            class="icon"
-            :style="{ backgroundImage: `url(${item.icoUrls || nav5Icon})` }"
-          ></div>
-          <div class="name">{{ item.lotteryNameH5 }}</div>
-        </div>
-        <!-- <div class="item">
-          <div class="icon icon-8"></div>
-          <div class="name">查看更多</div>
-        </div> -->
+      <div class="my-cats m-t-28" v-for="(p, i) in cat" :key="i">
+        <p class="font16 align-center m-b-24">{{ p.lotteryName }}</p>
+        <ul class="hall flex-wrap">
+          <li
+            class="m-b-24"
+            v-for="(item, idx) in p.list"
+            :key="idx"
+            @click="
+              $router.push({
+                path: `/game/hall`,
+                query: {
+                  id: item.id,
+                  type: item.lotteryType,
+                },
+              })
+            "
+          >
+            <ul class="conts align-center">
+              <li>
+                <img
+                  class="d-img icons"
+                  :src="`${item.icoUrls || nav5Icon}`"
+                  alt=""
+                />
+              </li>
+              <li class="art font12">
+                <p class="lotteryNameH5 font14">{{ item.lotteryNameH5 }}</p>
+                <p>{{ `全天${item.totalExpect}期` }}</p>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </div>
     </div>
 
@@ -134,6 +141,9 @@ export default {
     noticeDoc() {
       return this.$store.getters.noticeDoc;
     },
+    cat() {
+      return this.$store.state.cat;
+    },
   },
   data() {
     return {
@@ -199,7 +209,6 @@ export default {
 }
 .nav-wrap {
   border-radius: 12px 12px 12px 12px;
-  background: #ffffff;
   margin: 24px 24px 0;
   overflow: hidden;
   .notice-bar {
@@ -431,6 +440,53 @@ export default {
         font-size: 24px;
         margin-top: 10px;
       }
+    }
+  }
+}
+.my-cats {
+  & > p {
+    position: relative;
+    padding-left: 12px;
+    height: 40px;
+    line-height: 1;
+    &::after {
+      content: "";
+      display: block;
+      width: 8px;
+      height: 40px;
+      background: #bf2834;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+  .hall {
+    .conts {
+      padding: 16px 0 16px 26px;
+      background: #ffffff;
+      box-shadow: 0px 2px 8px 2px rgba(157, 157, 157, 0.4);
+      border-radius: 12px 12px 12px 12px;
+    }
+    .art {
+      margin-left: 34px;
+      color: #919191;
+      .lotteryNameH5 {
+        color: #686990;
+      }
+    }
+    .icons {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+    }
+    & > li {
+      width: 50%;
+    }
+    & > li:nth-child(odd) {
+      padding-right: 7px;
+    }
+    & > li:nth-child(even) {
+      padding-left: 7px;
     }
   }
 }

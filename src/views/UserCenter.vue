@@ -28,7 +28,10 @@
           <van-icon name="arrow" class="arrow-icon" />
         </div>
       </div> -->
-      <div class="item" @click="$tool.goPage('/bindCard')">
+      <div
+        class="item"
+        @click="$tool.goPage(bankCard.id ? '/edtMyCard' : '/bindCard')"
+      >
         <div class="left">我的银行卡</div>
         <div class="right">
           <van-icon name="arrow" class="arrow-icon" />
@@ -98,7 +101,10 @@ export default {
     },
   },
   async created() {
+    this.$toast.loading({ duration: 0 });
     this.$store.dispatch("getPaySet");
+    await this.$store.dispatch("getBankCard");
+    this.$toast.clear();
   },
 };
 </script>

@@ -1,32 +1,101 @@
 <template>
   <div class="c-page bg-grey">
-    <AppTopBar topBarTitle="福彩3D开奖信息列表"></AppTopBar>
+    <AppTopBar :topBarTitle="lotteryName"></AppTopBar>
     <div class="lists-wrap">
-      <div class="lists" v-for="i in 10" :key="i">
-        <div class="left">
-          <div class="time">第2017093期 08-10 10:30</div>
-          <div class="info">
-            <div class="item on center-center">07</div>
-            <div class="item center-center">08</div>
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="lotteryBetsOrder"
+      >
+        <div class="lists" v-for="(v, i) in tableData.results" :key="i">
+          <div class="left">
+            <div class="time">
+              第{{ v.cycleNum }}期 {{ $dayjsTime(v.openTime) }}
+            </div>
+            <div class="info">
+              <div
+                class="item center-center on"
+                v-for="(v2, i2) in v.openArr"
+                :key="i2"
+              >
+                {{ v2 }}
+              </div>
+            </div>
           </div>
         </div>
-        <div class="right">
-          <van-icon name="arrow" color="#E5E5E5" />
-        </div>
-      </div>
+      </van-list>
     </div>
     <div class="buy-box">
       <div class="height"></div>
-      <div class="btn center-center">去购彩</div>
+      <div
+        class="btn center-center"
+        @click="
+          $router.push({
+            path: '/game/hall',
+            query: {
+              id: params.id,
+              type: cur.lotteryType,
+            },
+          })
+        "
+      >
+        去购彩
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import userApi from "@/api/user";
 export default {
   name: "WinningList",
   data() {
-    return {};
+    return {
+      loading: false,
+      finished: false,
+      tableData: {
+        totalCount: 0,
+        results: [],
+      },
+      lotteryName: this.$route.query.lotteryName,
+      params: {
+        id: +this.$route.query.id,
+        pageNo: 1,
+        pageSize: 25,
+      },
+    };
+  },
+  computed: {
+    ...mapGetters(["catList"]),
+    cur() {
+      return this.catList.find((v) => v.id === this.params.id) || {};
+    },
+  },
+  methods: {
+    async lotteryBetsOrder(obj = {}) {
+      this.loading = true;
+      Object.assign(this.params, obj);
+      const query = {
+        ...this.params,
+      };
+      const [err, res] = await userApi.lotteryHisExpect(query);
+      this.loading = false;
+      if (err) {
+        this.finished = true;
+        return;
+      }
+      res.data.results = res.data.results.map((v) => {
+        v.openArr = v.openNum.split(",");
+        return v;
+      });
+      this.tableData.results = this.tableData.results.concat(res.data.results);
+      this.params.pageNo++;
+      if (this.params.pageNo > res.data.totalPage) {
+        this.finished = true;
+      }
+    },
   },
 };
 </script>

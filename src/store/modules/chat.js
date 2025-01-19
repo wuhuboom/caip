@@ -54,7 +54,13 @@ export default {
           new: message.message.playerId != app.$store.state.user.id,
         });
       } else {
-        state.messages.unshift(...message.reverse());
+        //过滤id相同的消息
+        const messagefilter = message.filter((v) => {
+          return !state.messages.some((item) => item.id === v.id);
+        });
+        console.log("messagefilter", messagefilter);
+        state.messages.unshift(...messagefilter.reverse());
+        //state.messages.unshift(...message.reverse());
       }
     },
     CLEAR_MESSAGES(state) {

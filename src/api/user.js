@@ -1,6 +1,11 @@
 import request from "@/plugins/request";
 export default {
-  //editNickname
+  ///draw-winner-result
+  drawWinnerResult() {
+    return request({
+      url: "/lottery/curr_expect_new",
+    });
+  },
   editNickname(data) {
     return request({
       url: "/editNickname",

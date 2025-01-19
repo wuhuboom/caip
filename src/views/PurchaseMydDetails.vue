@@ -482,11 +482,11 @@ export default {
     },
     async shareToChatRoom() {
       if (this.detail.status !== 0) {
-        this.$message.error("合买已结束，无法分享");
+        this.$toast("合买已结束，无法分享");
         return;
       }
       if (!this.shareData.chatAble) {
-        this.$message.error(`充值${this.shareData.recharge}才能解锁聊天`);
+        this.$toast(`充值${this.shareData.recharge}才能解锁聊天`);
         return;
       }
       this.$toast.loading({

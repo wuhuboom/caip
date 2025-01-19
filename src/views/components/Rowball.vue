@@ -7,17 +7,29 @@
           <div class="num-bottom">遗漏</div>
         </div>
       </div>
-      <div class="right">
-        <div
-          class="item"
-          v-for="(item, index) in left"
-          :key="index"
-          @click="addNum(item)"
-        >
-          <div class="num-top" :class="{ on: nums.includes(item.up) }">
-            {{ item.up }}
+      <div class="right flex-column">
+        <ul class="align-center operation">
+          <li
+            v-for="(item, idx) in right"
+            :class="{ 'operation-active': item == type }"
+            @click="filterLeft(item)"
+            :key="idx"
+          >
+            {{ item }}
+          </li>
+        </ul>
+        <div class="flex-wrap">
+          <div
+            class="item"
+            v-for="(item, index) in left"
+            :key="index"
+            @click="addNum(item)"
+          >
+            <div class="num-top" :class="{ on: nums.includes(item.up) }">
+              {{ item.up }}
+            </div>
+            <div class="num-bottom">{{ curPre[index] }}</div>
           </div>
-          <div class="num-bottom">{{ curPre[index] }}</div>
         </div>
       </div>
     </div>
@@ -298,6 +310,22 @@ export default {
         margin-top: 24px;
       }
     }
+  }
+}
+.operation {
+  height: 48px;
+  background: linear-gradient(180deg, #e6e6e6 0%, #f2f2f2 52%, #e6e6e6 100%);
+  border-radius: 24px 24px 24px 24px;
+  margin-bottom: 28px;
+  overflow: hidden;
+  & > li {
+    width: 20%;
+    text-align: center;
+    height: 100%;
+  }
+  .operation-active {
+    background: #0091ff;
+    color: #fff;
   }
 }
 </style>

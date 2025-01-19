@@ -1,26 +1,15 @@
 <template>
   <div class="c-page bg-grey">
-    <AppTopBar
-      :topBarTitle="usdtCard.id ? '修改USDT-TRC20' : '绑定USDT-TRC20'"
-    ></AppTopBar>
+    <AppTopBar topBarTitle="修改银行卡"></AppTopBar>
     <van-form @submit="confirm">
       <div class="forms-input-wrap">
         <div class="input-box flex-wrap">
           <van-field
-            v-model.trim="form.cardNumber"
+            v-model.trim="form.cardName"
             class="input"
             type="text"
-            placeholder="请输入USDT-TRC20地址"
-            :rules="[
-              {
-                required: true,
-                message: 'USDT-TRC20不能为空',
-              },
-              {
-                pattern: /^T[a-zA-Z1-9]{10,}$/,
-                message: '请输入有效的 TRC20 地址',
-              },
-            ]"
+            placeholder="请输入持卡人"
+            :rules="[{ required: true, message: '持卡人不能为空' }]"
           />
         </div>
         <div class="input-box flex-wrap">
@@ -36,6 +25,39 @@
                 message: '请输入有效的身份证号',
               },
             ]"
+          />
+        </div>
+        <div class="input-box flex-wrap">
+          <van-field
+            v-model.trim="form.cardNumber"
+            class="input"
+            type="text"
+            placeholder="请输入银行卡号"
+            :rules="[
+              { required: true, message: '银行卡号不能为空' },
+              {
+                validator: bankCardValidator,
+                message: '请输入有效的银行卡号',
+              },
+            ]"
+          />
+        </div>
+        <div class="input-box flex-wrap">
+          <van-field
+            v-model.trim="form.bankName"
+            class="input"
+            type="text"
+            placeholder="请输入银行名称"
+            :rules="[{ required: true, message: '银行名称不能为空' }]"
+          />
+        </div>
+        <div class="input-box flex-wrap">
+          <van-field
+            v-model.trim="form.subBranch"
+            class="input"
+            type="text"
+            placeholder="请输入开户支行"
+            :rules="[{ required: true, message: '开户支行不能为空' }]"
           />
         </div>
         <div class="input-box flex-wrap">
@@ -68,11 +90,12 @@ export default {
   data() {
     return {
       form: {
-        ctype: 3,
+        ctype: 2,
+        cardName: "",
         identity: "",
         cardNumber: "",
-        bankName: "TRC20",
-        payPwd: "",
+        bankName: "",
+        subBranch: "",
       },
     };
   },
@@ -100,8 +123,7 @@ export default {
     },
     async confirm() {
       this.$toast.loading({ duration: 0 });
-      const keys = this.usdtCard.id ? "bindBankCardEditReq" : "bindBankCard";
-      const [err] = await userApi[`${keys}`]({
+      const [err] = await userApi.bindBankCardEditReq({
         ...this.form,
         cardNumberTwice: this.form.cardNumber,
       });
@@ -114,7 +136,7 @@ export default {
   },
   async created() {
     await this.$store.dispatch("getBankCard");
-    Object.assign(this.form, this.usdtCard);
+    Object.assign(this.form, this.bankCard);
   },
 };
 </script>

@@ -48,7 +48,7 @@
     </div>
     <div ref="bottomBox" class="bottom-box">
       <div class="height"></div>
-      <div class="wrap-box">
+      <div class="wrap-box" :class="{ 'btm-disabled': disabled }">
         <van-popover
           v-model="showPopover"
           trigger="click"
@@ -170,13 +170,6 @@ export default {
     },
     alertReload() {
       if (this.wsStatus === false) {
-        this.$alert("已经离线，是否重连？", {
-          confirmButtonText: "确定",
-          showClose: false,
-          callback: () => {
-            location.reload();
-          },
-        });
         this.$dialog
           .alert({
             message: "已经离线，是否重连？",
@@ -373,5 +366,19 @@ export default {
 .redMony {
   height: 60px;
   width: 60px;
+}
+.btm-disabled {
+  .input::placeholder {
+    color: #f56c6c;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+  }
 }
 </style>

@@ -5,7 +5,7 @@
       :showLeft="false"
       :showRight="false"
     ></AppTopBar>
-    <div class="top-box">
+    <!-- <div class="top-box">
       <div class="t-1">
         <div class="num item">9</div>
         <div class="num item">2</div>
@@ -18,25 +18,33 @@
         <div class="item">万</div>
       </div>
       <div class="t-2">平台累计中奖(元)</div>
-    </div>
+    </div> -->
     <div class="lists-box">
       <div
         class="lists"
-        v-for="i in 10"
+        v-for="(v, i) in list"
         :key="i"
-        @click="$tool.goPage('/winning-list')"
+        @click="
+          $router.push({
+            path: '/winning-list',
+            query: {
+              id: v.lotteryId,
+              lotteryName: v.lotteryName,
+            },
+          })
+        "
       >
         <div class="info">
           <div class="t-1">
-            <span class="s-1">福彩3D</span>
-            <span class="s-2">第2017093期 08-10 10:3</span>
+            <span class="s-1">{{ v.lotteryName }}</span>
+            <span class="s-2"
+              >第{{ v.cycleNum }}期 {{ $dayjsTime(v.openTime) }}</span
+            >
           </div>
           <div class="t-2">
-            <div class="item">08</div>
-            <div class="item">08</div>
-            <div class="item">08</div>
-            <div class="item">08</div>
-            <div class="item blue">07</div>
+            <div class="item" v-for="(v2, i2) in v.openArr" :key="i2">
+              {{ v2 }}
+            </div>
           </div>
         </div>
         <van-icon name="arrow" class="icon" color="#E5E5E5" />
@@ -47,10 +55,29 @@
 </template>
 
 <script>
+import userApi from "@/api/user";
 export default {
   name: "DrawWinnerResult",
   data() {
-    return {};
+    return {
+      list: [],
+    };
+  },
+  methods: {
+    async drawWinnerResult() {
+      const [err, res] = await userApi.drawWinnerResult();
+      if (err) {
+        return;
+      }
+      res.data = res.data.map((v) => {
+        v.openArr = v.openNum.split(",");
+        return v;
+      });
+      this.list = res.data;
+    },
+  },
+  created() {
+    this.drawWinnerResult();
   },
 };
 </script>

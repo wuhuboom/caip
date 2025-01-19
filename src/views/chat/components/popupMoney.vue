@@ -1,6 +1,6 @@
 <template>
   <van-popup class="popupMoney" v-model="show">
-    <p class="pop-title center-center m-t-24 m-b-32">发红包</p>
+    <p class="pop-title center-center m-t-24 m-b-32 active">发红包</p>
     <van-form class="ntf-yellow-form" @submit="onSubmit">
       <van-field
         v-model.trim="form.quantity"
@@ -46,14 +46,14 @@
       >
         <template #button> <span class="left-text p-r-8"></span> </template>
       </van-field>
-      <ul class="center-center m-t-48">
-        <li class="m-r-32" @click="show = false">
+      <ul class="center-center m-t-48 m-b-48 btn-box" style="width: 100%">
+        <li class="flex-1" @click="show = false">
           <van-button round block type="info" native-type="button"
             >取消</van-button
           >
         </li>
-        <li>
-          <van-button round block type="info" native-type="submit"
+        <li class="flex-1">
+          <van-button class="on" round block type="info" native-type="submit"
             >提交</van-button
           >
         </li>
@@ -116,16 +116,31 @@ export default {
 </script>
 <style scoped lang="scss">
 .popupMoney {
-  width: 1020px;
-  height: 814px;
-  background: #774230;
-  padding-left: 116px;
+  width: 678px;
+  border-radius: 16px;
   .left-text {
     color: #000;
   }
   .pop-title {
     font-size: 32px;
-    color: #feedaf;
+  }
+  .btn-box {
+    display: flex;
+    ::v-deep {
+      .van-button {
+        color: #333;
+        flex: 1;
+        height: 88px;
+        line-height: 88px;
+        text-align: center;
+        border: 1px solid #be2834;
+        background-color: transparent;
+        border: none;
+        &.on {
+          color: #1989fa;
+        }
+      }
+    }
   }
 }
 </style>

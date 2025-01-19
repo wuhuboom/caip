@@ -17,9 +17,8 @@
           "
         />
         <ul class="flex-column">
-          <li class="name align-center">
+          <li class="name align-center m-b-8">
             <span class="m-r-8 color333">{{ doc.user }}</span>
-            <span></span>
           </li>
           <li class="msg-txt-box d-flex">
             <component

@@ -58,6 +58,22 @@
         class="item"
         @click="
           $router.push({
+            path: '/chat',
+          })
+        "
+      >
+        <div class="left">
+          <div class="l-icon i-13"></div>
+          <div class="name">聊天室</div>
+        </div>
+        <div class="right">
+          <van-icon name="arrow" class="arrow-icon" />
+        </div>
+      </div>
+      <div
+        class="item"
+        @click="
+          $router.push({
             path: '/BalanceVault',
             query: { id: 1, title: '余额宝' },
           })
@@ -131,6 +147,24 @@
           <van-icon name="arrow" class="arrow-icon" />
         </div>
       </div>
+      <div class="item" @click="$tool.goPage('/FundDetail')">
+        <div class="left">
+          <div class="l-icon i-11"></div>
+          <div class="name">红包记录</div>
+        </div>
+        <div class="right">
+          <van-icon name="arrow" class="arrow-icon" />
+        </div>
+      </div>
+      <div class="item" @click="$tool.goPage('/GiftRecord')">
+        <div class="left">
+          <div class="l-icon i-12"></div>
+          <div class="name">赠送记录</div>
+        </div>
+        <div class="right">
+          <van-icon name="arrow" class="arrow-icon" />
+        </div>
+      </div>
       <!-- <div class="item" @click="$tool.goPage('/my-discount')">
         <div class="left">
           <div class="l-icon i-3"></div>
@@ -149,6 +183,7 @@
           <van-icon name="arrow" class="arrow-icon" />
         </div>
       </div>
+
       <div class="item" @click="$tool.goPage('/invite-friends')">
         <div class="left">
           <div class="l-icon i-5"></div>
@@ -416,6 +451,15 @@ export default {
         }
         &.i-10 {
           background-image: url("@/assets/img/My/m10.png");
+        }
+        &.i-11 {
+          background-image: url("@/assets/img/My/rediocn.png");
+        }
+        &.i-12 {
+          background-image: url("@/assets/img/My/gift.png");
+        }
+        &.i-13 {
+          background-image: url("@/assets/img/My/room.png");
         }
       }
     }

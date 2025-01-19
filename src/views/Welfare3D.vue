@@ -34,7 +34,7 @@
                   @click="value = v.txt"
                   :class="{ on: value === v.txt }"
                 >
-                  {{ v.txt }}
+                  {{ v.txt.replace(item.tip1, "") }}
                 </div>
               </div>
             </div>
@@ -95,10 +95,10 @@
     <div class="main-wrap">
       <div class="des-box">
         <div class="left">{{ curItemValue.desc }}</div>
-        <div class="right" @click="$tool.goPage('/chat')">
+        <!-- <div class="right" @click="$tool.goPage('/chat')">
           <div class="lt-icon"></div>
           进入聊天室
-        </div>
+        </div> -->
       </div>
       <transition name="fade" mode="out-in">
         <component
@@ -255,13 +255,7 @@ export default {
   },
   watch: {
     curTab() {
-      this.secondNavs.forEach((item, index) => {
-        item.list.forEach((v, idx) => {
-          if (index === 0 && idx === 0) {
-            this.value = v.txt;
-          }
-        });
-      });
+      this.setValue();
     },
   },
   computed: {
@@ -507,7 +501,16 @@ export default {
           }
         });
       }
+      arr.forEach((item) => {
+        item.list = item.list.filter(
+          (v) => !this.hideMulConfig.includes(v.txt)
+        );
+      });
       return arr;
+    },
+    hideMulConfig() {
+      const arr = this.detail.mulConfig.filter((item) => +item.show === 0);
+      return arr.map((item) => item.title);
     },
     curItemValue() {
       let arr = {};
@@ -525,6 +528,16 @@ export default {
     },
   },
   methods: {
+    setValue() {
+      this.secondNavs.forEach((item, index) => {
+        item.list.forEach((v, idx) => {
+          if (index === 0 && idx === 0) {
+            console.log(v.txt, "-----");
+            this.value = v.txt;
+          }
+        });
+      });
+    },
     changeCount(v) {
       const { days, hours, minutes, seconds, milliseconds } = v;
       // 转换为总毫秒数
@@ -579,10 +592,16 @@ export default {
       const [err, res] = await userApi.betsDetail({ id: this.id });
       if (err) return;
       res.data.mulConfig = JSON.parse(res.data.mulConfig);
+      //value
       if (!res.data.nextExpect) {
         res.data.nextExpect = {};
       }
       this.detail = res.data;
+      if (this.hideMulConfig.includes(this.value)) {
+        this.value = "";
+      }
+      this.curTab = +this.$route.query.type === 1 ? "三星" : "四星";
+      this.setValue();
     },
     initDetail() {
       // this.getDetail();
