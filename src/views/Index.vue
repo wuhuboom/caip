@@ -96,18 +96,22 @@
     </div>
 
     <!-- 发现新版本 -->
-    <div class="version-box" v-if="0">
+    <div class="version-box" v-if="fromModal2">
       <div class="bg"></div>
       <div class="version-wrap">
         <div class="top-icon"></div>
         <!-- 立即更新 -->
-        <div class="wrap-box" v-if="0">
+        <div class="wrap-box" v-if="!progressBarState">
           <div class="text">发现新版本</div>
-          <div class="btn center-center">立即更新</div>
+          <div class="btn center-center" @click="simulateProgressBar">
+            立即更新
+          </div>
         </div>
         <!-- 更新中 -->
-        <div class="wrap-box">
-          <div class="text">更新中 <span class="num">97%</span></div>
+        <div class="wrap-box" v-else>
+          <div class="text">
+            更新中 <span class="num">{{ this.progressBar }}%</span>
+          </div>
           <div class="dex center-center">正在更新中,请勿关闭当前页面…</div>
         </div>
       </div>
@@ -122,8 +126,22 @@ import userApi from "@/api/user";
 import { NoticeBar } from "vant";
 import labaImg from "@/assets/img/Index/laba.png";
 import nav5Icon from "@/assets/img/Index/nav5.png";
+import auth from "@/plugins/auth";
 export default {
   name: "AppHome",
+  data() {
+    return {
+      nav5Icon,
+      labaImg,
+      wins: [],
+      slider: [],
+      version: "",
+      progressBarState: false,
+      fromModal2: false,
+      progressBar: 0,
+      key: "storageVersion",
+    };
+  },
   components: {
     NoticeBar,
   },
@@ -145,15 +163,25 @@ export default {
       return this.$store.state.cat;
     },
   },
-  data() {
-    return {
-      nav5Icon,
-      labaImg,
-      wins: [],
-      slider: [],
-    };
-  },
   methods: {
+    simulateProgressBar() {
+      this.progressBarState = true;
+      var duration = Math.floor(Math.random() * 6) + 5; // 生成5到10之间的随机秒数
+      var increment = 100 / (duration * 10); // 计算每100毫秒增加的进度
+
+      var progress = 0;
+
+      this.interval = setInterval(() => {
+        progress += increment;
+        this.progressBar = parseInt(progress);
+        if (progress >= 100) {
+          console.log("done");
+          auth.setToken(this.version, this.key);
+          location.reload();
+          clearInterval(this.interval);
+        }
+      }, 100);
+    },
     goDetail() {
       //p.policyType 1 余额宝 11 会员管理
       //this.$router.push(`/game/hall?id=${p.lotteryId}`);
@@ -168,11 +196,29 @@ export default {
       if (err) return;
       this.wins = res.data;
     },
+    isNumber(val) {
+      return typeof val === "number" && !isNaN(val);
+    },
+    async getVersion() {
+      const [err] = await userApi.versionReq();
+      if (!this.isNumber(+err)) {
+        return;
+      }
+      const res = +err;
+      let storageVersion = auth.getToken(this.key);
+      if (storageVersion && storageVersion != res) {
+        this.fromModal2 = true;
+        this.version = res;
+      } else {
+        auth.setToken(res, this.key);
+      }
+    },
   },
   created() {
     this.$store.dispatch("playerLotteryList");
     this.homeWinning();
     this.sliderSlide();
+    this.getVersion();
   },
 };
 </script>
