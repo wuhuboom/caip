@@ -633,7 +633,15 @@ export default {
       return num;
     },
     typeList() {
-      return this.typeConfigList[this.curNav] || [];
+      const arr = this.typeConfigList[this.curNav] || [];
+      arr.forEach((v) => {
+        v.list = v.list.filter((doc) => !this.hideMulConfig.includes(doc.txt));
+      });
+      return arr;
+    },
+    hideMulConfig() {
+      const arr = this.detail.mulConfig.filter((item) => +item.show === 0);
+      return arr.map((item) => item.title);
     },
     lotteryType() {
       const doc =
@@ -950,17 +958,18 @@ export default {
       const type = this.catList.find((doc) => doc.id === v).lotteryType;
       if (+type === 0) {
         //高频彩
-        this.value = "四星直选复式";
+        //  this.value = "四星直选复式";
         this.curNav = "lotteryType0";
       } else {
         //低频彩
-        this.value = "三星直选复式";
+        // this.value = "三星直选复式";
         this.curNav = "lotteryType1";
       }
     },
     changeNav(v) {
       this.curNav = v;
-      this.value = this.typeList[0].list[0].txt;
+      //this.value = this.typeList[0].list[0].txt;
+      this.setValue();
     },
     changeTab(v) {
       if (v === 2) {
@@ -1190,6 +1199,16 @@ export default {
       if (err) return;
       this.preData = res.data;
     },
+    setValue() {
+      this.typeList.forEach((item, index) => {
+        item.list.forEach((v, idx) => {
+          if (index === 0 && idx === 0) {
+            console.log(v.txt, "-----");
+            this.value = v.txt;
+          }
+        });
+      });
+    },
     async getDetail() {
       this.$store.commit("setHallId", this.id);
       const [err, res] = await userApi.betsDetail({ id: this.id });
@@ -1200,6 +1219,10 @@ export default {
         res.data.nextExpect = {};
       }
       this.detail = res.data;
+      if (this.hideMulConfig.includes(this.value)) {
+        this.value = "";
+      }
+      this.setValue();
     },
     initDetail() {
       // this.getDetail();
