@@ -1,7 +1,11 @@
 <template>
   <div class="c-page bg-grey">
     <!-- 顶栏 -->
-    <AppTopBar class="app-top-bar" :titleSolt="true">
+    <AppTopBar
+      class="app-top-bar"
+      :styleObj="{ backgroundColor: '#202521' }"
+      :titleSolt="true"
+    >
       <template v-slot:title>
         <div @click="showSelect = !showSelect">
           {{ detail.lotteryNameH5 }}-{{ value }}
@@ -42,63 +46,68 @@
         </div>
       </template>
       <template v-slot:right>
-        <div class="m-r-32">
-          <van-badge :content="tableList.length" :data-badge="tableList.length">
-            <van-icon @click="badge" name="cart-o" color="#fff" size="26" />
-          </van-badge>
+        <div
+          class="m-r-32 colorfff font14"
+          @click="
+            $router.push({
+              path: '/winning-list',
+              query: {
+                id: id,
+                lotteryName: detail.lotteryNameH5,
+              },
+            })
+          "
+        >
+          往期开奖
         </div>
       </template>
     </AppTopBar>
-
-    <div class="before-lottery" v-if="showBeforeLottery">
-      <div
-        class="lists"
-        v-for="(item, index) in tableData.results"
-        :key="index"
-      >
-        <div class="left text-ellipsis">{{ item.cycleNum }}期</div>
-        <div class="right text-ellipsis">
-          <div class="num-box">
-            <div class="num" v-for="(v, i) in item.openNum.split(',')" :key="i">
-              {{ v }}
-            </div>
-          </div>
-          <div class="time">
-            {{ $dayjsTime(item.createdAt) }}
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="periods-box">
-      <div class="left text-ellipsis">{{ detail.nextExpect.nextExpect }}期</div>
-      <div class="right text-ellipsis" @click="showTop">
-        <div class="time text-ellipsis center-center">
+    <div class="justify-between header-desc font12">
+      <ul>
+        <li>第{{ detail.nextExpect.nextExpect }}期</li>
+        <li class="font10 m-t-8 m-b-16">投注截止时间</li>
+        <li>
           <van-count-down
-            class="time"
             @finish="openFish"
             @change="changeCount"
             :time="detail.nextExpect?.countdown * 1000"
-            format="HH小时mm分ss秒"
-          />
-          <!-- {{ $dayjsTime(detail.nextExpect.stopTime) }} -->
-          截止
-        </div>
-        <van-icon
-          :name="showBeforeLottery ? 'arrow-up' : 'arrow-down'"
-          color="#999"
-          class="icon"
-        />
-      </div>
+          >
+            <template #default="timeData">
+              <div class="colorfff timeData align-center">
+                <span class="block center-center">{{ timeData.hours }}</span>
+                <span class="colon center-center">:</span>
+                <span class="block center-center">{{ timeData.minutes }}</span>
+                <span class="colon center-center">:</span>
+                <span class="block center-center">{{ timeData.seconds }}</span>
+              </div>
+            </template>
+          </van-count-down>
+        </li>
+      </ul>
+      <ul class="flex-column justify-between">
+        <li>第{{ preData.lastExpect.cycleNum }}开奖号码</li>
+        <li
+          v-if="preData.lastExpect.openNum"
+          class="align-center chose-ball-list"
+        >
+          <p
+            class="chose-ball font16 center-center colorfff m-l-16"
+            v-for="(item, idx) in preData.lastExpect.openNum.split(',')"
+            :key="idx"
+          >
+            {{ item }}
+          </p>
+        </li>
+      </ul>
     </div>
 
     <div class="main-wrap">
       <div class="des-box">
         <div class="left">{{ curItemValue.desc }}</div>
-        <!-- <div class="right" @click="$tool.goPage('/chat')">
-          <div class="lt-icon"></div>
-          进入聊天室
-        </div> -->
+        <div class="right font10 center-center" @click="randem">
+          <img class="d-img ramd m-r-12" src="@/assets/img/ramd.png" alt="" />
+          随机一注
+        </div>
       </div>
       <transition name="fade" mode="out-in">
         <component
@@ -648,6 +657,12 @@ export default {
       }
       this.$refs.$BetOn.open();
     },
+    randem() {
+      this.$refs.$cont.randem();
+      this.$nextTick(() => {
+        this.add();
+      });
+    },
     add() {
       const status = this.$refs.$cont.add();
       if (!status) {
@@ -831,24 +846,13 @@ export default {
     .left {
       flex: 1;
       font-size: 24px;
-      color: #999999;
+      color: #6e634f;
     }
     .right {
-      height: 60px;
-      border-radius: 60px;
-      border: 1px solid #fc302b;
-      line-height: 60px;
-      padding: 0 20px;
-      color: #fc302b;
-      font-size: 24px;
-      display: flex;
-      align-items: center;
-      .lt-icon {
+      color: #b18600;
+      .ramd {
         width: 32px;
         height: 32px;
-        background: url("@/assets/img/Welfare3D/lt.png") no-repeat;
-        background-size: 100% auto;
-        margin-right: 10px;
       }
     }
   }
@@ -982,6 +986,37 @@ export default {
     color: #fff;
     font-size: 32px;
     text-align: center;
+  }
+}
+.header-desc {
+  background-color: #202521;
+}
+.header-desc {
+  color: #ccc;
+  padding: 0 28px 28px;
+}
+.chose-ball {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(#bf2935 0%, #f72f3f 100%);
+}
+.chose-ball-list {
+  justify-content: flex-end;
+}
+.timeData {
+  line-height: 1;
+  & > span {
+    margin-right: 16px;
+  }
+  .colon {
+    padding-bottom: 12px;
+  }
+  .block {
+    min-width: 42px;
+    height: 42px;
+    background: #000000;
+    border-radius: 6px 6px 6px 6px;
   }
 }
 </style>
