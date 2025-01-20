@@ -13,25 +13,7 @@
         popper-class="g-table-popper-class"
       >
       </el-date-picker>
-      <div class="align-center" style="margin-left: 18px; width: 180px">
-        <span class="select-drop-span no-shrink">类型:</span>
-        <el-select
-          class="g-el-cascader"
-          size="small"
-          v-model="params.type"
-          clearable
-          placeholder="请选择"
-          popper-class="g-el-cascader-popper"
-        >
-          <el-option
-            v-for="item in tabSimpleList"
-            :key="item.id"
-            :label="item.text"
-            :value="item.id"
-          >
-          </el-option>
-        </el-select>
-      </div>
+
       <span style="margin-left: 18px" class="no-shrink">方案编号：</span>
       <input v-model.trim="params.orderId" class="fund-input" />
       <div
@@ -51,14 +33,14 @@
         <el-table-column prop="orderNo" label="订单号" width="280">
         </el-table-column>
         <!-- <el-table-column prop="用户名" label="用户名"> </el-table-column> -->
-        <el-table-column prop="changeMoney" label="账变前金额">
+        <el-table-column prop="moneySys" label="充值金额">
           <template slot-scope="scope">
-            <span>{{ divide(scope.row.changeMoney) }}</span>
+            <span>{{ divide(scope.row.moneySys) }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="dnedMoney" label="账变后金额">
+        <el-table-column prop="moneyDiscount" label="赠送金额">
           <template slot-scope="scope">
-            <span>{{ divide(scope.row.dnedMoney) }}</span>
+            <span>{{ divide(scope.row.moneyDiscount) }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="createdAt" label="日期" width="166">
