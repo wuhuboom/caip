@@ -135,8 +135,9 @@
             :key="i"
             class="orders-item align-center p-b-24"
           >
-            <span class="no-shrink">
-              {{ v.model }}
+            <span class="no-shrink m-r-8">
+              {{ v.model }} {{ v.total }}注
+              {{ divide(v.total * multiple * $betPrice, false) }}元
             </span>
             <span>
               {{ v.text }}
@@ -191,19 +192,23 @@
     />
     <!-- 底部 BuyTogether -->
     <div class="betting-box">
-      <div class="height"></div>
       <div class="fixed">
-        <div class="left">
-          <div class="del-icon"></div>
-          <div class="text" @click="pageDell">删除</div>
-        </div>
         <div class="center">
-          <div class="t1">{{ total }}注</div>
+          <div class="t1">{{ totalALL }}注</div>
           <div class="t2">共{{ totalMoney }}元</div>
         </div>
-        <div class="right" @click="add">确定</div>
+        <div class="right" @click="openChase" style="background-color: #484848">
+          追号
+        </div>
+        <div class="right" @click="sure">投注</div>
       </div>
     </div>
+    <img
+      class="d-img together"
+      @click="openGroupBuy"
+      src="@/assets/img/together.png"
+      alt=""
+    />
   </div>
 </template>
 
@@ -543,8 +548,14 @@ export default {
       });
       return arr;
     },
+    totalALL() {
+      return this.tableList.reduce((pre, cur) => pre + cur.total, 0);
+    },
     totalMoney() {
-      return this.divide(this.total * this.multiple * this.$betPrice, false);
+      return this.tableList.reduce(
+        (pre, cur) => pre + cur.total * this.multiple * this.$betPrice,
+        0
+      );
     },
   },
   methods: {
@@ -568,11 +579,19 @@ export default {
         seconds * 1000 +
         milliseconds;
     },
-    openChase(v) {
-      this.$refs.$AppendChase.open(v);
+    openChase() {
+      this.$refs.$AppendChase.open({
+        multiple: this.multiple, //倍数
+        totalALL: this.totalALL, //多数注数
+        totalMoney: this.totalMoney, //总金额
+      });
     },
-    openGroupBuy(v) {
-      this.$refs.$BuyTogether.open(v);
+    openGroupBuy() {
+      this.$refs.$BuyTogether.open({
+        multiple: this.multiple, //倍数
+        totalALL: this.totalALL, //多数注数
+        totalMoney: this.totalMoney, //总金额
+      });
     },
     pageDell() {
       this.$refs.$cont.clear();
@@ -673,6 +692,33 @@ export default {
       this.$nextTick(() => {
         this.add();
       });
+    },
+    async sure() {
+      if (!this.tableList.length) {
+        this.$toast("请先选择投注");
+        return;
+      }
+      let dataStr = "";
+      this.tableList.forEach((v) => {
+        //dataStr += `${v.model} ${v.text} ${v.multiple}/`;
+        if (!dataStr) {
+          dataStr = `${v.model} ${v.text} ${this.multiple} ${v.total}`;
+        } else {
+          dataStr += `/${v.model} ${v.text} ${this.multiple} ${v.total}`;
+        }
+      });
+      await this.ajaxPay(dataStr);
+    },
+    async ajaxPay(v) {
+      this.$toast.loading({ duration: 0, message: "投注中..." });
+      const [err] = await userApi.lotteryBet({
+        lotteryId: this.id,
+        betCode: v,
+      });
+      if (err) return;
+      this.multiple = 1;
+      this.buySuccess();
+      this.$toast("投注成功");
     },
     add() {
       const status = this.$refs.$cont.add();
@@ -1079,7 +1125,7 @@ export default {
   .orders-item {
     overflow-x: auto;
     & > span:first-child {
-      width: 200px;
+      //width: 200px;
     }
   }
 }
@@ -1089,5 +1135,15 @@ export default {
     height: 96px;
     border-bottom: 1px solid #ececec;
   }
+}
+.together {
+  position: fixed;
+  right: 0;
+  bottom: 118px;
+  width: 100px;
+  height: 100px;
+}
+.c-page {
+  padding-bottom: 118px+ 96px;
 }
 </style>
