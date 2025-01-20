@@ -680,6 +680,11 @@ export default {
         total: this.total,
       });
       // this.$refs.$BetOn.open();
+      this.$toast("添加成功");
+      //body滑动底部
+      this.$nextTick(() => {
+        window.scrollTo(0, document.body.scrollHeight);
+      });
       this.$refs.$cont.clear();
     },
   },
