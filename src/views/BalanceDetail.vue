@@ -10,6 +10,7 @@
         <div class="row hearder">
           <div class="col">状态</div>
           <div class="col">金额</div>
+          <div class="col">利息</div>
           <div class="col">转入时间</div>
           <div class="col">操作</div>
         </div>
@@ -20,6 +21,9 @@
             }}
           </div>
           <div class="col">￥{{ divide(row.money) }}</div>
+          <div class="col">
+            ￥{{ divide(+row.status === 0 ? row.currIncome : row.outIncome) }}
+          </div>
           <div class="col">
             {{ $dayjsTime(row.createdAt, "YYYY/MM/DD") }}
           </div>
@@ -131,7 +135,7 @@ export default {
   }
   .row {
     display: grid;
-    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-columns: 20% 20% 20% 20% 20%;
     color: #777777;
     border-bottom: 1px solid #eaeaea;
     margin: 0 30px;

@@ -9,13 +9,13 @@
     >
       <div class="table-lists">
         <div class="row hearder">
-          <div class="col">账变前金额</div>
-          <div class="col">账变后金额</div>
+          <div class="col">充值金额</div>
+          <div class="col">赠送金额</div>
           <div class="col">日期</div>
         </div>
         <div class="row" v-for="(row, index) in tableData.results" :key="index">
-          <div class="col els">{{ divide(row.changeMoney) }}</div>
-          <div class="col els">{{ divide(row.dnedMoney) }}</div>
+          <div class="col els">{{ divide(row.moneySys) }}</div>
+          <div class="col els">{{ divide(row.moneyDiscount) }}</div>
           <div class="col">{{ $dayjsTime(row.createdAt) }}</div>
         </div>
       </div>
