@@ -1,13 +1,10 @@
 <template>
   <div class="xuan-box" :class="className">
-    <div class="xuan-list">
-      <div class="left">
+    <div class="xuan-list flex-column">
+      <div class="left justify-between">
         <div class="item small">
-          <div class="num-top on">{{ title }}</div>
-          <div class="num-bottom">遗漏</div>
+          <div class="num-top operation-active center-center">{{ title }}</div>
         </div>
-      </div>
-      <div class="right flex-column">
         <ul class="align-center operation">
           <li
             v-for="(item, idx) in right"
@@ -18,6 +15,8 @@
             {{ item }}
           </li>
         </ul>
+      </div>
+      <div class="right flex-column">
         <div class="flex-wrap">
           <div
             class="item"
@@ -25,7 +24,10 @@
             :key="index"
             @click="addNum(item)"
           >
-            <div class="num-top" :class="{ on: nums.includes(item.up) }">
+            <div
+              class="num-ball center-center"
+              :class="{ on: nums.includes(item.up) }"
+            >
               {{ item.up }}
             </div>
             <div class="num-bottom">{{ curPre[index] }}</div>
@@ -267,7 +269,7 @@ export default {
   .xuan-list {
     border-bottom: 1px solid #e5e5e5;
     display: flex;
-    padding: 40px 28px;
+    padding: 40px 28px 0;
     .left {
     }
     .right {
@@ -285,19 +287,20 @@ export default {
           font-weight: 400;
           font-size: 28px;
           width: 90px;
+          height: 50px;
           border-radius: 60px;
         }
       }
-      .num-top {
-        border: 2px solid #bf2935;
+      .num-ball {
         height: 60px;
-        line-height: 60px;
         font-weight: bold;
         font-size: 32px;
-        color: #bf2935;
+        color: #1f1e1f;
         min-width: 60px;
         text-align: center;
         border-radius: 100%;
+        width: 60px;
+        background: linear-gradient(347deg, #dddddd 0%, #f0f0f0 100%);
         &.on {
           background: #bf2935;
           color: #fff;
@@ -313,6 +316,7 @@ export default {
   }
 }
 .operation {
+  width: 452px;
   height: 48px;
   background: linear-gradient(180deg, #e6e6e6 0%, #f2f2f2 52%, #e6e6e6 100%);
   border-radius: 24px 24px 24px 24px;
@@ -323,9 +327,9 @@ export default {
     text-align: center;
     height: 100%;
   }
-  .operation-active {
-    background: #0091ff;
-    color: #fff;
-  }
+}
+.operation-active {
+  background: #00b6c3;
+  color: #fff;
 }
 </style>

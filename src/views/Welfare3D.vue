@@ -119,33 +119,35 @@
           v-bind="getComponentProps"
         ></component>
       </transition>
-      <!-- <div class="xuan-box">
-        <div class="xuan-list" v-for="o in 3" :key="o">
-          <div class="left">
-            <div class="item small">
-              <div class="num-top on">百位</div>
-              <div class="num-bottom">遗漏</div>
-            </div>
-          </div>
-          <div class="right">
-            <div class="item" v-for="i in 10" :key="i">
-              <div
-                class="num-top"
-                :class="{
-                  on: i === 1,
-                }"
-              >
-                {{ i }}
-              </div>
-              <div class="num-bottom">4</div>
-            </div>
-          </div>
-        </div>
-      </div> -->
-      <div class="tips-box">
-        <div class="t1">玩法提示：</div>
-        <div class="t2">{{ curItemValue.desc }}</div>
+      <div class="m-t-32">
+        <ul class="bets-desc colorfff font14 justify-around align-center">
+          <li class="clear-list list-btn center-center" @click="delALL">
+            <van-icon name="delete-o" class="m-r-16" />
+            清空列表
+          </li>
+          <li class="add-list list-btn center-center" @click="add">
+            <van-icon name="plus" class="m-r-16" />
+            添加至投注列表
+          </li>
+        </ul>
       </div>
+      <ul class="orders-list m-b-32">
+        <li class="font16 align-center">投注列表</li>
+        <li class="orders-cont m-t-32 p-x-24">
+          <p
+            v-for="(v, i) in tableList"
+            :key="i"
+            class="orders-item align-center p-b-24"
+          >
+            <span class="no-shrink">
+              {{ v.model }}
+            </span>
+            <span>
+              {{ v.text }}
+            </span>
+          </p>
+        </li>
+      </ul>
     </div>
     <BetOn
       :id="id"
@@ -677,7 +679,7 @@ export default {
         text: this.$refs.$cont.text,
         total: this.total,
       });
-      this.$refs.$BetOn.open();
+      // this.$refs.$BetOn.open();
       this.$refs.$cont.clear();
     },
   },
@@ -1017,6 +1019,51 @@ export default {
     height: 42px;
     background: #000000;
     border-radius: 6px 6px 6px 6px;
+  }
+}
+.bets-desc {
+  .clear-list {
+    width: 296px;
+    height: 78px;
+    background: linear-gradient(180deg, #999999 0%, #4d4d4d 100%);
+    border-radius: 16px 16px 16px 16px;
+  }
+  .add-list {
+    width: 374px;
+    height: 78px;
+    background: linear-gradient(180deg, #00b6c3 0%, #006d76 100%);
+    border-radius: 16px 16px 16px 16px;
+  }
+}
+.orders-list {
+  padding: 0 28px;
+  margin-top: 44px;
+  .orders-cont {
+    min-height: 208px;
+    background: #ececec;
+  }
+  & > li:first-child {
+    color: #0d0d0d;
+    position: relative;
+    height: 20px;
+    padding-left: 20px;
+    height: 44px;
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 10px;
+      height: 44px;
+      background: #e50012;
+      border-radius: 0px 0px 0px 0px;
+    }
+  }
+  .orders-item {
+    overflow-x: auto;
+    & > span:first-child {
+      width: 200px;
+    }
   }
 }
 </style>
