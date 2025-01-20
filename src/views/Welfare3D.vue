@@ -7,12 +7,8 @@
       :titleSolt="true"
     >
       <template v-slot:title>
-        <div @click="showSelect = !showSelect">
-          {{ detail.lotteryNameH5 }}-{{ value }}
-          <van-icon
-            :name="showSelect ? 'arrow-up' : 'arrow-down'"
-            color="#fff"
-          />
+        <div>
+          {{ detail.lotteryNameH5 }}
         </div>
         <div class="center-box" v-if="showSelect">
           <div class="bg" @click="showSelect = false"></div>
@@ -146,6 +142,19 @@
               {{ v.text }}
             </span>
           </p>
+        </li>
+      </ul>
+      <ul class="bets-way">
+        <li class="justify-between align-center">
+          <p class="color999">倍数:</p>
+          <p><van-stepper v-model="multiple" /></p>
+        </li>
+        <li
+          class="justify-between align-center"
+          @click="showSelect = !showSelect"
+        >
+          <p class="color999">投注方式:</p>
+          <p>{{ value }} <van-icon name="arrow" /></p>
         </li>
       </ul>
     </div>
@@ -636,7 +645,7 @@ export default {
     buySuccess() {
       this.delALL();
       this.closeContDialog();
-      this.$refs.$BetOn.multiple = 1;
+      this.multiple = 1;
     },
     openFish() {
       this.closeContDialog();
@@ -705,6 +714,8 @@ export default {
     left: 0;
     width: 100%;
     height: calc(100% - 90px);
+    display: flex;
+    align-items: flex-end;
     .bg {
       position: absolute;
       top: 0;
@@ -720,6 +731,7 @@ export default {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-gap: 40px;
+      width: 100%;
       .select {
         width: 200px;
         height: 68px;
@@ -1069,6 +1081,13 @@ export default {
     & > span:first-child {
       width: 200px;
     }
+  }
+}
+.bets-way {
+  padding: 0 28px;
+  & > li {
+    height: 96px;
+    border-bottom: 1px solid #ececec;
   }
 }
 </style>

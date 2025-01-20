@@ -37,6 +37,7 @@ import {
   tabs,
   tab,
   popover,
+  Stepper,
 } from "vant";
 export default {
   install(Vue) {
@@ -77,5 +78,6 @@ export default {
     Vue.use(Step);
     Vue.use(Steps);
     Vue.use(countDown);
+    Vue.use(Stepper);
   },
 };
