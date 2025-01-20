@@ -1,8 +1,12 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <div class="page">
+    <AppTopBar :showLeft="false" topBarTitle="登录"></AppTopBar>
     <!-- 登录 -->
     <div class="main-box">
+      <div class="logo-box center-center">
+        <img class="d-img" src="@/assets/img/logo.png" alt="">
+      </div>
         <van-form class="full100 ntf-form" @submit="login">
             <van-field
               v-model.trim="form.username"
@@ -118,7 +122,6 @@ export default {
 <style scoped lang="less">
 .page {
   min-height: 100vh;
-  background: url("@/assets/img/Login/top.png") no-repeat;
   background-size: 100% auto;
   overflow: hidden;
   .code-img {
@@ -128,12 +131,9 @@ export default {
   .main-box {
     width: 678px;
     background: #fff;
-    box-shadow: 0 4px 14px 2px rgba(0, 0, 0, 0.07);
     border-radius: 12px 12px 12px 12px;
     margin: 0 auto;
-    margin-top: 464px;
     padding: 76px 60px 40px;
-
     .input-box {
       background: #f6f8f8;
       border-radius: 58px;
@@ -221,6 +221,14 @@ export default {
     a {
       color: #4029d8;
     }
+  }
+}
+.logo-box {
+  img {
+    width: 192px;
+    height: 192px;
+    margin-top: 50px;
+    margin-bottom: 60px;
   }
 }
 </style>
