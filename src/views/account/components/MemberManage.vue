@@ -30,10 +30,10 @@
       <ul class="align-center">
         <li class="m-r-24">官方地址</li>
         <li class="align-center">
-          <p class="align-center">{{ headData.website }}</p>
+          <p class="align-center">{{ website }}</p>
           <span
             class="m-l-8 pointer"
-            v-clipboard:copy="textToCopy(headData.website)"
+            v-clipboard:copy="textToCopy(website)"
             v-clipboard:success="onCopySuccess"
           >
             <img class="d-img" src="@/assets/img/copy.png" alt="" />
@@ -72,7 +72,10 @@ export default {
       return this.$store.state.user;
     },
     myLink() {
-      return `${this.headData.website2}#/login/SignIn?code=${this.user.invitationCode}`;
+      return `${this.website}#/login/SignIn?code=${this.user.invitationCode}`;
+    },
+    website() {
+      return `${window.location.protocol}//${window.location.host}/`;
     },
   },
   methods: {
