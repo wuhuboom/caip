@@ -116,7 +116,12 @@
         </div>
       </div>
     </div>
-
+    <img
+      class="d-img serve"
+      src="@/assets/img/serve.png"
+      alt=""
+      @click="$store.dispatch('getServeData', 1)"
+    />
     <AppBtmBar></AppBtmBar>
   </div>
 </template>
@@ -517,7 +522,7 @@ export default {
       margin-left: 34px;
       color: #919191;
       .lotteryNameH5 {
-        color: #686990;
+        color: #000;
       }
     }
     .icons {
@@ -535,5 +540,18 @@ export default {
       padding-left: 7px;
     }
   }
+}
+.serve {
+  position: fixed;
+  right: 0;
+  bottom: 140px;
+  z-index: 100;
+  width: 100px;
+  height: 100px;
+  width: 160px;
+  height: 160px;
+}
+.index-page {
+  padding-bottom: 120px + 30px;
 }
 </style>

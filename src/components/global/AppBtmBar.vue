@@ -62,6 +62,12 @@ export default {
           icon: "orders-o",
         },
         {
+          text: "聊天室",
+          active: false,
+          name: "AppChat",
+          icon: "chats-o",
+        },
+        {
           text: "我的",
           active: false,
           name: "AppMy",
@@ -121,6 +127,14 @@ export default {
     color: #999999;
     font-size: 20px;
     margin-top: 2px;
+  }
+  ::v-deep {
+    .van-icon-chats-o {
+      height: 40px;
+      width: 40px;
+      background: url("@/assets/img/chats.png") no-repeat center center;
+      background-size: 100% 100%;
+    }
   }
 }
 </style>
