@@ -1,13 +1,5 @@
 <template>
-  <div class="c-page bg-grey">
-    <AppTopBar class="app-top-bar" :topBarTitle="$route.query.title">
-      <!-- <template v-slot:right>
-        <div class="right-box">
-          近一周
-          <van-icon name="arrow-down" class="arrow" />
-        </div>
-      </template> -->
-    </AppTopBar>
+  <div>
     <ul class="tab-box justify-between p-l-48 p-r-48 align-center">
       <li @click="openSheet">
         {{ curCat?.name }}<van-icon class="m-l-8" name="arrow-down" />
@@ -167,6 +159,11 @@ export default {
     },
   },
   methods: {
+    copy(v) {
+      navigator.clipboard.writeText(v).then(() => {
+        this.$toast("复制成功");
+      });
+    },
     openSheet() {
       this.$refs.$BtmActionSheet.open();
     },

@@ -91,48 +91,13 @@
         class="item"
         @click="
           $router.push({
-            path: '/purchase-record',
-            query: { id: 1, title: '自购记录' },
+            path: '/myBallRecord',
           })
         "
       >
         <div class="left">
           <div class="l-icon i-1"></div>
-          <div class="name">自购记录</div>
-        </div>
-        <div class="right">
-          <van-icon name="arrow" class="arrow-icon" />
-        </div>
-      </div>
-      <div
-        class="item"
-        @click="
-          $router.push({
-            path: '/purchase-group',
-            query: { id: 2, title: '合买记录' },
-          })
-        "
-      >
-        <div class="left">
-          <div class="l-icon i-8"></div>
-          <div class="name">合买记录</div>
-        </div>
-        <div class="right">
-          <van-icon name="arrow" class="arrow-icon" />
-        </div>
-      </div>
-      <div
-        class="item"
-        @click="
-          $router.push({
-            path: '/purchase-record',
-            query: { id: 3, title: '追号记录' },
-          })
-        "
-      >
-        <div class="left">
-          <div class="l-icon i-9"></div>
-          <div class="name">追号记录</div>
+          <div class="name">购票记录</div>
         </div>
         <div class="right">
           <van-icon name="arrow" class="arrow-icon" />

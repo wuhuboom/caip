@@ -1,13 +1,5 @@
 <template>
-  <div class="c-page bg-grey">
-    <AppTopBar class="app-top-bar" :topBarTitle="$route.query.title">
-      <!-- <template v-slot:right>
-        <div class="right-box">
-          近一周
-          <van-icon name="arrow-down" class="arrow" />
-        </div>
-      </template> -->
-    </AppTopBar>
+  <div>
     <div class="tab-box">
       <!-- on -->
       <div
@@ -81,7 +73,6 @@ export default {
   name: "PurchaseRecord",
   data() {
     return {
-      id: +this.$route.query.id,
       tabId: -1,
       navs: [
         {
@@ -112,6 +103,12 @@ export default {
         results: [],
       },
     };
+  },
+  props: {
+    id: {
+      type: Number,
+      default: 1,
+    },
   },
   computed: {
     results() {
@@ -196,15 +193,16 @@ export default {
   display: flex;
   background: #fff;
   justify-content: space-around;
+  background-color: #f0f0f0;
   .tab {
     width: 120px;
-    height: 98px;
-    line-height: 98px;
+    height: 88px;
+    line-height: 88px;
     text-align: center;
     color: #999999;
     &.on {
       color: #bf2935;
-      border-bottom: 4px solid #bf2935;
+
       font-weight: bold;
     }
   }

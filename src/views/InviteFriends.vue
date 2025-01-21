@@ -31,7 +31,7 @@ export default {
       return this.$store.state.user;
     },
     myLink() {
-      return `${this.headData.website2}#/login/SignIn?code=${this.user.invitationCode}`;
+      return `${window.location.protocol}//${window.location.host}/#/login/SignIn?code=${this.user.invitationCode}`;
     },
   },
   methods: {

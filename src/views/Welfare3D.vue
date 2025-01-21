@@ -128,7 +128,12 @@
         </ul>
       </div>
       <ul class="orders-list m-b-32">
-        <li class="font16 align-center">投注列表</li>
+        <li class="font16 align-center justify-between">
+          投注列表
+          <p class="font14" @click="$router.push('/MyBallRecord')">
+            购票记录 <van-icon name="arrow" />
+          </p>
+        </li>
         <li class="orders-cont m-t-32 p-x-24">
           <p
             v-for="(v, i) in tableList"

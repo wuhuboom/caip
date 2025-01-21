@@ -18,7 +18,9 @@
       <ul class="nav align-center justify-between p-l-24 p-r-24">
         <li class="align-center els">
           <span class="color999">方案编号</span>
-          <span class="els m-l-24 color333">{{ detail.orderId }}</span>
+          <span class="els m-l-24 color333" @click="copy(detail.orderId)">{{
+            detail.orderId
+          }}</span>
         </li>
         <li class="active font16 m-l-24 no-shrink">
           {{ getOpenStatus(detail.openStatus) }}
@@ -305,6 +307,11 @@ export default {
     },
   },
   methods: {
+    copy(v) {
+      navigator.clipboard.writeText(v).then(() => {
+        this.$toast("复制成功");
+      });
+    },
     getOpenStatus(v) {
       const item = this.$store.state.openStatus.find((d) => d.id === v);
       return item ? item.name : "";

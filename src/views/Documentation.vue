@@ -53,7 +53,15 @@
                 <p class="active font16 m-b-24">{{ item.lotteryName }}</p>
                 <p class="color333">发起人：{{ item.playerName }}</p>
               </div>
-              <p class="buy center-center color-fff">跟一单</p>
+              <p
+                class="buy center-center color-fff"
+                v-if="item.sellCount && +item.status === 0"
+              >
+                跟一单
+              </p>
+              <p class="status center-center" v-else>
+                {{ getStatus(item.status) }}
+              </p>
             </li>
             <li class="align-center b-t-m p-l-12">
               <p class="color777 align-center m-r-80">
@@ -146,6 +154,9 @@ export default {
     },
   },
   methods: {
+    getStatus(v) {
+      return (this.$store.state.status.find((doc) => doc.id === v) || {}).name;
+    },
     openSheet() {
       this.$refs.$BtmActionSheet.open();
     },
@@ -234,6 +245,11 @@ export default {
     width: 148px;
     height: 58px;
     background: #bf2935;
+    border-radius: 4px 4px 4px 4px;
+  }
+  .status {
+    width: 148px;
+    height: 58px;
     border-radius: 4px 4px 4px 4px;
   }
   .b-t-m {

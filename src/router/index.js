@@ -38,6 +38,13 @@ const routes = [
     },
   },
   {
+    path: "/myBallRecord",
+    name: "MyBallRecord",
+    components: {
+      default: () => import("@/views/MyBallRecord.vue"),
+    },
+  },
+  {
     path: "/FundDetail",
     name: "FundDetail",
     components: {

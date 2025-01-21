@@ -286,8 +286,9 @@ export default {
           color: #fff;
           font-weight: 400;
           font-size: 28px;
-          width: 90px;
+          min-width: 90px;
           height: 50px;
+          padding: 0 8px;
           border-radius: 60px;
         }
       }
