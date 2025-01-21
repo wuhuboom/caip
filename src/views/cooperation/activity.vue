@@ -233,7 +233,11 @@
           :current-page="params.pageNo"
           :page-size="params.pageSize"
           layout="total, prev, pager, next"
-          :total="tableData.totalCount"
+          :total="
+            tableData.totalCount > totalCount
+              ? totalCount
+              : tableData.totalCount
+          "
         >
         </el-pagination>
       </div>
@@ -310,6 +314,9 @@ export default {
     };
   },
   computed: {
+    totalCount() {
+      return 100 * this.params.pageSize;
+    },
     cat() {
       return [
         {
@@ -437,7 +444,6 @@ export default {
         v.sellCount = v.betTotal - curMoney;
       });
       this.tableData = res.data;
-      console.log(this.tableData);
     },
   },
   async created() {
