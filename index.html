@@ -236,9 +236,14 @@
         </footer>
     </div>
     <script>
+        var  isMobile=function() {
+            var userAgent = navigator.userAgent.toLowerCase();
+            return /android|iphone|ipad|ipod|windows phone|blackberry|opera mini|iemobile|mobile/i.test(
+                userAgent
+            );
+        }
         var html='' 
-        var list=window.sites ||[]
-        list=[...list,...list]
+        var list=isMobile() ? window.H5 : window.PC
         const $dome=document.querySelector('.js-lines')
         list.forEach(function(v){
           html+=`
