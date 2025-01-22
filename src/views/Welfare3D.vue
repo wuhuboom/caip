@@ -693,7 +693,7 @@ export default {
       this.$refs.$BetOn.open();
     },
     randem() {
-      this.$refs.$cont.randem();
+      this.$refs.$cont?.randem();
       this.$nextTick(() => {
         this.add();
       });
