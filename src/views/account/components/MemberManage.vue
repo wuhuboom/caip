@@ -78,7 +78,7 @@ export default {
       return this.user.invitationCode;
     },
     website() {
-      return `${window.location.protocol}//${window.location.host}`;
+      return this.headData.website;
     },
   },
   methods: {
