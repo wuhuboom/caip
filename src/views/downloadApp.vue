@@ -12,10 +12,10 @@
       </div>
     </div>
     <ul class="center-center download-box flex-column">
-      <li>
+      <li @click="goApp(1)">
         <img class="d-img" src="@/assets/img/down1.png" alt="" />
       </li>
-      <li>
+      <li @click="goApp(0)">
         <img class="d-img" src="@/assets/img/down2.png" alt="" />
       </li>
     </ul>
@@ -27,6 +27,22 @@ export default {
   name: "AboutUs",
   data() {
     return {};
+  },
+  computed: {
+    dev() {
+      return this.$store.state.devApp;
+    },
+  },
+  methods: {
+    goApp(appType) {
+      if (!this.dev[appType]) {
+        return;
+      }
+      window.open(this.dev[appType].appUrl);
+    },
+  },
+  created() {
+    this.$store.dispatch("appDownload", false);
   },
 };
 </script>

@@ -457,11 +457,14 @@ router.beforeEach(async (to, from, next) => {
   //   ajaxs.push(store.dispatch("playerLotteryList"));
   // }
   // await Promise.all(ajaxs);
+  if (to.path == "/downloadApp") {
+    next();
+    return;
+  }
   if (auth.getToken()) {
     if (!store.getters.catList.length) {
       await store.dispatch("playerLotteryList");
     }
-
     if (to.path.includes("/login")) {
       Nprogress.done();
       next("/");

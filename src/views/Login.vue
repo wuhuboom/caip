@@ -1,7 +1,11 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <div class="page">
-    <AppTopBar :showLeft="false" topBarTitle="登录"></AppTopBar>
+    <AppTopBar :showLeft="false" topBarTitle="登录">
+      <template #right>
+        <img class="d-img down-app m-r-24"  @click="$tool.goPage('/downloadApp')" src="@/assets/img/lgo.png" alt="">
+      </template>
+    </AppTopBar>
     <!-- 登录 -->
     <div class="main-box">
       <div class="logo-box center-center">
@@ -230,5 +234,9 @@ export default {
     margin-top: 50px;
     margin-bottom: 60px;
   }
+}
+.down-app {
+  width: 129px;
+  height: 38px;
 }
 </style>
