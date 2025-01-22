@@ -2,10 +2,10 @@
   <div class="c-page bg-grey">
     <AppTopBar topBarTitle="邀请好友"></AppTopBar>
     <div class="i-main">
-      <div class="title">推荐链接</div>
+      <div class="title">邀请码</div>
       <div class="l-box">
         <div class="left">{{ myLink }}</div>
-        <div class="right center-center" @click="copy">复制链接地址</div>
+        <div class="right center-center" @click="copy">复制邀请码</div>
       </div>
       <div class="text">
         你可以将以上地址通过QQ、MSN、微博、邮件等⽅式发给您的好友
@@ -30,8 +30,11 @@ export default {
     user() {
       return this.$store.state.user;
     },
+    sites() {
+      return `${window.location.protocol}//${window.location.host}`;
+    },
     myLink() {
-      return `${window.location.protocol}//${window.location.host}/#/login/SignIn?code=${this.user.invitationCode}`;
+      return this.user.invitationCode;
     },
   },
   methods: {
@@ -41,9 +44,16 @@ export default {
       this.headData = res.data;
     },
     copy() {
-      navigator.clipboard.writeText(this.myLink).then(() => {
-        Toast("复制成功");
-      });
+      navigator.clipboard
+        .writeText(
+          `
+      官网地址:${this.sites}
+      邀请码:${this.myLink}
+      `
+        )
+        .then(() => {
+          Toast("复制成功");
+        });
     },
   },
   created() {
