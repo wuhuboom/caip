@@ -183,6 +183,7 @@
 
 <script>
 import DefaultAvatar from "@/assets/img/DefaultAvatar.jpg";
+import userApi from "@/api/user";
 export default {
   name: "AppMy",
   data() {
@@ -220,9 +221,31 @@ export default {
     goBank() {
       this.$router.push("/bindCard");
     },
-    recharge() {
+    async recharge() {
       if (!this.bankCard.id) {
         return this.openTipsDialog();
+      }
+      this.$toast.loading({
+        duration: 0,
+        forbidClick: true,
+      });
+      const [err, res] = await userApi.recharge();
+      if (err) return;
+      this.$toast.clear();
+      if (!res.data || !res.data.length) {
+        this.$dialog
+          .confirm({
+            message: "请联系人工客服",
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+          })
+          .then(() => {
+            this.$store.dispatch("getServeData", 1);
+          })
+          .catch(() => {
+            // on cancel
+          });
+        return;
       }
       this.$router.push("/recharge");
     },
