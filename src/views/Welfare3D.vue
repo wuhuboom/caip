@@ -7,8 +7,10 @@
       :titleSolt="true"
     >
       <template v-slot:title>
-        <div>
-          {{ detail.lotteryNameH5 }}
+        <div class="title-desc center-center" @click="showSelect = !showSelect">
+          <!-- {{ detail.lotteryNameH5 }} -->
+          {{ value }}
+          <img class="d-img downd m-l-8" src="@/assets/img/downd.png" alt="" />
         </div>
         <div class="center-box" v-if="showSelect">
           <div class="bg" @click="showSelect = false"></div>
@@ -155,13 +157,13 @@
           <p class="color999">倍数:</p>
           <p><van-stepper v-model="multiple" /></p>
         </li>
-        <li
+        <!-- <li
           class="justify-between align-center"
           @click="showSelect = !showSelect"
         >
           <p class="color999">投注方式:</p>
           <p>{{ value }} <van-icon name="arrow" /></p>
-        </li>
+        </li> -->
       </ul>
     </div>
     <BetOn
@@ -1150,5 +1152,18 @@ export default {
 }
 .c-page {
   padding-bottom: 118px+ 96px;
+}
+.title-desc {
+  padding-left: 16px;
+  padding-right: 8px;
+  min-width: 214px;
+  height: 52px;
+  line-height: 1;
+  border-radius: 12px 12px 12px 12px;
+  border: 2px solid #ffffff;
+  .downd {
+    width: 32px;
+    height: 32px;
+  }
 }
 </style>

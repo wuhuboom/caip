@@ -4,8 +4,13 @@
     <div class="i-main">
       <div class="title">邀请码</div>
       <div class="l-box">
-        <div class="left">{{ myLink }}</div>
+        <div class="left">{{ `${myLink}` }}</div>
         <div class="right center-center" @click="copy">复制邀请码</div>
+      </div>
+      <div class="title">官网地址</div>
+      <div class="l-box">
+        <div class="left">{{ `${sites}` }}</div>
+        <div class="right center-center" @click="copy">复制地址</div>
       </div>
       <div class="text">
         你可以将以上地址通过QQ、MSN、微博、邮件等⽅式发给您的好友
@@ -31,7 +36,7 @@ export default {
       return this.$store.state.user;
     },
     sites() {
-      return `${window.location.protocol}//${window.location.host}`;
+      return this.headData.website;
     },
     myLink() {
       return this.user.invitationCode;
