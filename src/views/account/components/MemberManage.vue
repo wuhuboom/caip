@@ -1,7 +1,7 @@
 <template>
   <div class="recharge-main center-center">
     <div class="m-l-12 font16 p-t-16 m-r-12 p-b-16 p-l-32 main-cont">
-      <ul class="m-b-32 align-center">
+      <!-- <ul class="m-b-32 align-center">
         <li class="m-r-24">推广码</li>
         <li class="align-center">
           {{ user.invitationCode }}
@@ -13,14 +13,17 @@
             <img class="d-img" src="@/assets/img/copy.png" alt="" />
           </span>
         </li>
-      </ul>
+      </ul> -->
       <ul class="m-b-32 align-center">
-        <li class="m-r-24">推广链接</li>
+        <li class="m-r-24">邀请码</li>
         <li class="align-center">
           <p>{{ myLink }}</p>
           <span
             class="m-l-8 pointer"
-            v-clipboard:copy="textToCopy(myLink)"
+            v-clipboard:copy="
+              textToCopy(`官网地址:${website}\n邀请码:${myLink}
+            `)
+            "
             v-clipboard:success="onCopySuccess"
           >
             <img class="d-img" src="@/assets/img/copy.png" alt="" />
@@ -72,10 +75,10 @@ export default {
       return this.$store.state.user;
     },
     myLink() {
-      return `${this.website}#/login/SignIn?code=${this.user.invitationCode}`;
+      return this.user.invitationCode;
     },
     website() {
-      return `${window.location.protocol}//${window.location.host}/`;
+      return `${window.location.protocol}//${window.location.host}`;
     },
   },
   methods: {

@@ -20,12 +20,15 @@
         </li>
       </ul>
       <ul class="align-center m-t-16">
-        <li class="m-r-24">推广链接</li>
+        <li class="m-r-24">邀请码</li>
         <li class="align-center">
           <p>{{ myLink }}</p>
           <span
             class="m-l-8 pointer"
-            v-clipboard:copy="textToCopy(myLink)"
+            v-clipboard:copy="
+              textToCopy(`官网地址:${website}\n邀请码:${myLink}
+            `)
+            "
             v-clipboard:success="onCopySuccess"
           >
             <img class="d-img" src="@/assets/img/copy.png" alt="" />
@@ -193,7 +196,10 @@ export default {
       return this.$store.state.user;
     },
     myLink() {
-      return `${window.location.protocol}//${window.location.host}/#/login/SignIn?code=${this.user.invitationCode}`;
+      return this.user.invitationCode;
+    },
+    website() {
+      return `${window.location.protocol}//${window.location.host}`;
     },
   },
   methods: {
