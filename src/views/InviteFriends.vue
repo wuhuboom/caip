@@ -5,12 +5,19 @@
       <div class="title">邀请码</div>
       <div class="l-box">
         <div class="left">{{ `${myLink}` }}</div>
-        <div class="right center-center" @click="copy">复制邀请码</div>
+        <div
+          class="right center-center"
+          @click="copy(`官网地址:${sites}\n邀请码:${myLink}`)"
+        >
+          复制邀请码
+        </div>
       </div>
       <div class="title">官网地址</div>
       <div class="l-box">
         <div class="left">{{ `${sites}` }}</div>
-        <div class="right center-center" @click="copy">复制地址</div>
+        <div class="right center-center" @click="copy(`${sites}`)">
+          复制地址
+        </div>
       </div>
       <div class="text">
         你可以将以上地址通过QQ、MSN、微博、邮件等⽅式发给您的好友
@@ -48,12 +55,10 @@ export default {
       if (err) return;
       this.headData = res.data;
     },
-    copy() {
-      navigator.clipboard
-        .writeText(`官网地址:${this.sites}\n邀请码:${this.myLink}`)
-        .then(() => {
-          Toast("复制成功");
-        });
+    copy(v) {
+      navigator.clipboard.writeText(v).then(() => {
+        Toast("复制成功");
+      });
     },
   },
   created() {
