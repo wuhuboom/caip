@@ -207,9 +207,38 @@ export default {
       }
       //this.amount = this.chooseRecType.def;
     },
+    comfire() {
+      return new Promise((resolve) => {
+        this.$confirm("请联系人工客服", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+          customClass: "g-confirm-box",
+        })
+          .then(() => {
+            this.$store.dispatch("getServeData", 1);
+            resolve(1);
+          })
+          .catch(() => {
+            resolve(0);
+          });
+      });
+    },
     async recharge() {
+      this.$toast.loading({
+        duration: 0,
+        forbidClick: true,
+      });
       const [err, res] = await userApi.recharge();
       if (err) return;
+      this.$toast.clear();
+      if (!res.data || !res.data.length) {
+        this.comfire();
+        setTimeout(() => {
+          this.show = false;
+        }, 0);
+        return;
+      }
       this.rechargeList = res.data.filter((item) => +item.type !== 3);
       this.usdtPay = res.data.find((item) => +item.type === 3) || {};
       if (!this.rechargeList.length) return;
@@ -223,13 +252,11 @@ export default {
       this.money = "";
       this.id = id;
     },
-    open(id = 0) {
+    async open(id = 0) {
+      await this.recharge();
       this.show = true;
       this.id = id;
     },
-  },
-  created() {
-    this.recharge();
   },
 };
 </script>
