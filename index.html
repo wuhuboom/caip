@@ -72,7 +72,7 @@
 
         .lines {
             width: 46%;
-            height: 400px;
+            min-height: 400px;
             z-index: 1;
             background: rgba(0, 0, 0, .5);
             border-radius: 10px;
@@ -187,6 +187,25 @@
             display: flex;
             flex-direction: column;
         }
+        @media screen and (max-width: 768px) {
+            .logo,.lines{
+                width: 100% !important;
+                border-radius: 0 !important;
+            }
+            .lines{
+                padding: 12px !important;
+                padding-bottom: 73px;
+            }
+            .logo img{
+                width: 100px !important;
+            }
+            .row-center{
+                margin-top: 0  !important;
+            }
+            .js-lines .row-start{
+                margin-top: 24px;
+            }
+        }
     </style>
 
 </head>
@@ -200,7 +219,7 @@
         </div>
         <div class="row-center">
             <div class="lines">
-                <div style="height: 30px;color:#dddddd;">
+                <div style="color:#dddddd;">
                     <div>温馨提醒：请收藏以下网址作为备用，以防由于网络波动，导致部分线路不能访问。</div>
                 </div>
                 <div class="js-lines">
@@ -212,13 +231,14 @@
         <footer class="row-center">
             <div class="footer">
                 <img src="style/images/footer-img.png" />
-                <p>Copyright&nbsp;&copy;&nbsp;2010-2023&nbsp;辰龙&nbsp;版权所有</p>
+                <p>Copyright&nbsp;&copy;&nbsp;2010-2025&nbsp;永旺&nbsp;版权所有</p>
             </div>
         </footer>
     </div>
     <script>
         var html='' 
         var list=window.sites ||[]
+        list=[...list,...list]
         const $dome=document.querySelector('.js-lines')
         list.forEach(function(v){
           html+=`
