@@ -137,6 +137,7 @@ export default {
         invitationCode: this.$route.query.code || "",
         qq: "",
         phone: "",
+        from: 1,
       },
       showReg: false,
     };
