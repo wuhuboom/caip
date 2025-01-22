@@ -24,6 +24,13 @@ const routes = [
     },
   },
   {
+    path: "/downloadApp",
+    name: "downloadApp",
+    components: {
+      default: () => import("@/views/downloadApp.vue"),
+    },
+  },
+  {
     path: "/edtMyCard",
     name: "EdtMyCard",
     components: {

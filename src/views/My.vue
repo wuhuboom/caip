@@ -148,7 +148,15 @@
           <van-icon name="arrow" class="arrow-icon" />
         </div>
       </div>
-
+      <div class="item" @click="$tool.goPage('/downloadApp')">
+        <div class="left">
+          <div class="l-icon i-14"></div>
+          <div class="name">下载APP</div>
+        </div>
+        <div class="right">
+          <van-icon name="arrow" class="arrow-icon" />
+        </div>
+      </div>
       <div class="item" @click="$tool.goPage('/invite-friends')">
         <div class="left">
           <div class="l-icon i-5"></div>
@@ -425,6 +433,9 @@ export default {
         }
         &.i-13 {
           background-image: url("@/assets/img/My/room.png");
+        }
+        &.i-14 {
+          background-image: url("@/assets/img/downapp.png");
         }
       }
     }
