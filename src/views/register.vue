@@ -119,6 +119,7 @@ const initForm = () => ({
   invitationCode: "",
   qq: "",
   phone: "",
+  from: 1,
 });
 export default {
   name: "AppLogin",

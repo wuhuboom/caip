@@ -45,12 +45,7 @@ export default {
     },
     copy() {
       navigator.clipboard
-        .writeText(
-          `
-      官网地址:${this.sites}
-      邀请码:${this.myLink}
-      `
-        )
+        .writeText(`官网地址:${this.sites}\n邀请码:${this.myLink}`)
         .then(() => {
           Toast("复制成功");
         });
