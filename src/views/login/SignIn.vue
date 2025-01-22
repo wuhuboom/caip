@@ -113,7 +113,7 @@
               <div @click="goApp(0)" class="login-download-qr pointer">
                 <div class="app-bar-div">
                   <div id="id_android">
-                    <QrcodeVue :value="dev[0] || ''" :size="110" />
+                    <QrcodeVue :value="dev[0]?.appUrl || ''" :size="110" />
                   </div>
                 </div>
                 <div class="login-app-android">
@@ -134,7 +134,7 @@
               >
                 <div class="app-bar-div">
                   <div id="id_ios">
-                    <QrcodeVue :value="dev[1] || ''" :size="110" />
+                    <QrcodeVue :value="dev[1]?.appUrl || ''" :size="110" />
                   </div>
                 </div>
                 <div class="login-app-android">
@@ -188,6 +188,7 @@ export default {
   },
   computed: {
     dev() {
+      console.log(this.$store.state.devApp);
       return this.$store.state.devApp;
     },
   },

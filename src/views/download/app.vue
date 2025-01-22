@@ -10,7 +10,7 @@
         <div class="download-android">
           <div class="download-android-image">
             <div id="id_android" @click="goApp(0)">
-              <QrcodeVue :value="dev[0] || ''" :size="130" />
+              <QrcodeVue :value="dev[0]?.appUrl || ''" :size="130" />
             </div>
           </div>
           <div>
@@ -24,7 +24,7 @@
         <div class="download-iphone">
           <div class="download-android-image" @click="goApp(1)">
             <div id="id_ios">
-              <QrcodeVue :value="dev[1] || ''" :size="130" />
+              <QrcodeVue :value="dev[1]?.appUrl || ''" :size="130" />
             </div>
           </div>
           <div>

@@ -345,7 +345,7 @@
               <div class="app-bar-item">
                 <div class="app-bar-div">
                   <div id="id_android" @click="goApp(0)">
-                    <QrcodeVue :value="dev[0] || ''" :size="67" />
+                    <QrcodeVue :value="dev[0]?.appUrl || ''" :size="67" />
                   </div>
                 </div>
                 <div class="app-bar-title">App安卓版</div>
@@ -353,7 +353,7 @@
               <div class="app-bar-item">
                 <div class="app-bar-div">
                   <div id="id_ios" @click="goApp(1)">
-                    <QrcodeVue :value="dev[1] || ''" :size="67" />
+                    <QrcodeVue :value="dev[1]?.appUrl || ''" :size="67" />
                   </div>
                 </div>
                 <div class="app-bar-title">App苹果版</div>
