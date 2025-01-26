@@ -1,6 +1,13 @@
 <template>
   <div class="bg-grey flex-column" :style="{ height: `${chatHeight}px` }">
-    <AppTopBar ref="topBar" topBarTitle="欢聚一堂"></AppTopBar>
+    <AppTopBar ref="topBar" topBarTitle="欢聚一堂">
+      <template #right>
+        <p class="center-center colorfff serve m-r-24" @click="serve">
+          <img class="d-img" src="@/assets/img/card.png" alt="" />
+          人工充值
+        </p>
+      </template>
+    </AppTopBar>
     <div ref="chatBox" class="flex-1 chat-box js-cont-room">
       <infinite-loading
         direction="top"
@@ -166,7 +173,7 @@ export default {
     },
     async serve() {
       await this.$store.dispatch("getServeData");
-      window.open(this.serveData);
+      location.href = this.serveData;
     },
     alertReload() {
       if (this.wsStatus === false) {
@@ -379,6 +386,12 @@ export default {
     right: 0;
     bottom: 0;
     z-index: 1;
+  }
+}
+.serve {
+  img {
+    width: 40px;
+    height: 40px;
   }
 }
 </style>

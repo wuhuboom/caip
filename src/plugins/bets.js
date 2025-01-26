@@ -261,7 +261,8 @@ export default {
     return betCount;
   },
   chose9(selection) {
-    if (selection.length < 3) {
+    //直选组合需要购买8个号码
+    if (selection.length < 3 || selection.length > 8) {
       return {
         err: err1,
       };
