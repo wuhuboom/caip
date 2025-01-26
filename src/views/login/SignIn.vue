@@ -173,6 +173,7 @@ const initForm = () => ({
   password: "",
   code: "",
   verifyKey: "",
+  from: 0,
 });
 export default {
   data() {

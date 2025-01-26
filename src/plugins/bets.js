@@ -261,7 +261,7 @@ export default {
     return betCount;
   },
   chose9(selection) {
-    if (selection.length < 3) {
+    if (selection.length < 3 || selection.length > 8) {
       return {
         err: err1,
       };
