@@ -38,7 +38,8 @@
           <div class="t-1">
             <span class="s-1">{{ v.lotteryName }}</span>
             <span class="s-2"
-              >第{{ v.cycleNum }}期 {{ $dayjsTime(v.openTime) }}</span
+              >第{{ v.cycleNum }}期
+              {{ $dayjsTime(v.openTime, "MM-DD HH:mm:ss") }}</span
             >
           </div>
           <div class="t-2">
