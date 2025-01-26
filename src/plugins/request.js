@@ -7,7 +7,7 @@ const baseURL =
     : process.env.VUE_APP_API;
 const instance = axios.create({
   baseURL: `${baseURL}/player`,
-  timeout: 20 * 1000,
+  timeout: 8 * 1000,
   responseType: "json", // Add this line to set the default responseType
 });
 instance.interceptors.request.use(

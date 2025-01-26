@@ -292,14 +292,19 @@ export default {
       ],
       curType: 0,
       //statusCheck 0待审核1通过2拒绝
-      statusCheck: [
-        { name: "正在审核中!", id: 0 },
-        { name: "通过", id: 1 },
-        { name: "拒绝", id: 2 },
-      ],
     };
   },
   computed: {
+    statusCheck() {
+      return [
+        { name: `您的${this.bankTxt}还在审核中,清审核通过再提现`, id: 0 },
+        { name: `审核通过`, id: 1 },
+        { name: `您的${this.bankTxt}审核不通过,无法提现`, id: 2 },
+      ];
+    },
+    bankTxt() {
+      return this.curType === 0 ? "银行卡" : "USDT地址";
+    },
     Cards() {
       return this.$store.state.bankCard;
     },
@@ -363,7 +368,7 @@ export default {
       if (+this.form.statusCheck !== 1) {
         const msg =
           this.statusCheck.find((v) => +v.id === +this.form.statusCheck) || {};
-        this.$message.error(`当前卡状态为${msg.name}`);
+        this.$message.error(msg.name);
         return;
       }
       this.loading = true;
