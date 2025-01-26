@@ -250,8 +250,8 @@ export default {
       showMore: false,
       showSelect: false,
       showBeforeLottery: false,
-      curTab: +this.$route.query.type === 1 ? "三星" : "四星",
-      value: +this.$route.query.type === 1 ? "三星直选复式" : "四星直选复式",
+      curTab: +this.$route.query.type === 1 ? "三星" : "前三",
+      value: +this.$route.query.type === 1 ? "三星直选复式" : "前三直选复式",
       tableData: {},
       preData: {
         hot: [],
@@ -507,7 +507,7 @@ export default {
         };
       }
       return {
-        lotteryType0: typeConfigList["lotteryType0"],
+        // lotteryType0: typeConfigList["lotteryType0"],
         lotteryType2: typeConfigList["lotteryType2"],
         lotteryType3: typeConfigList["lotteryType3"],
         lotteryType4: typeConfigList["lotteryType4"],
@@ -646,7 +646,7 @@ export default {
       if (this.hideMulConfig.includes(this.value)) {
         this.value = "";
       }
-      this.curTab = +this.$route.query.type === 1 ? "三星" : "四星";
+      this.curTab = +this.$route.query.type === 1 ? "三星" : "前三";
       this.setValue();
     },
     initDetail() {
