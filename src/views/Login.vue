@@ -79,6 +79,7 @@ const initForm = () => ({
   password: "",
   code: "",
   verifyKey: "",
+  from: 1,
 });
 export default {
   name: "AppLogin",

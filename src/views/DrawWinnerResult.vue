@@ -43,7 +43,12 @@
             >
           </div>
           <div class="t-2">
-            <div class="item" v-for="(v2, i2) in v.openArr" :key="i2">
+            <div
+              class="item"
+              :class="{ on: i == 0 }"
+              v-for="(v2, i2) in v.openArr"
+              :key="i2"
+            >
               {{ v2 }}
             </div>
           </div>
@@ -137,17 +142,17 @@ export default {
         .item {
           width: 60px;
           height: 60px;
-          background: #bf2935;
-          color: #fff;
+          color: #bf2935;
           border-radius: 100%;
           line-height: 60px;
           text-align: center;
-          font-size: 30px;
+          font-size: 40px;
           font-weight: bold;
           margin-right: 20px;
           margin-top: 18px;
-          &.blue {
-            background: #3291ff;
+          &.on {
+            background: #bf2935;
+            color: #fff;
           }
         }
       }
