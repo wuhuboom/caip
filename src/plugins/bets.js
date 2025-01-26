@@ -263,7 +263,7 @@ export default {
   chose9(selection) {
     if (selection.length < 3 || selection.length > 8) {
       return {
-        err: err1,
+        err: "从0-9中任意选择3个或3个以上号码，最多8个号码。",
       };
     }
     // 计算阶乘
