@@ -290,4 +290,7 @@ export default {
     }
   }
 }
+.logo {
+  width: auto;
+}
 </style>

@@ -139,7 +139,7 @@
               <div>{{ item.name }}</div>
             </div>
           </div>
-          <div v-if="curTab == 0" class="next-result-current">
+          <div v-show="curTab == 0" class="next-result-current">
             <div class="next-result-current-item">
               <div class="next-result-left">
                 <div class="next-result-left-text">
@@ -651,10 +651,10 @@ export default {
     choseNavs() {
       if (this.lotteryType === 0) {
         return [
-          {
-            name: "四星",
-            id: "lotteryType0",
-          },
+          // {
+          //   name: "四星",
+          //   id: "lotteryType0",
+          // },
           {
             name: "前三",
             id: "lotteryType2",
@@ -959,7 +959,7 @@ export default {
       if (+type === 0) {
         //高频彩
         //  this.value = "四星直选复式";
-        this.curNav = "lotteryType0";
+        this.curNav = "lotteryType2";
       } else {
         //低频彩
         // this.value = "三星直选复式";
