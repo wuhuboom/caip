@@ -1,26 +1,29 @@
 <template>
   <div class="index-page c-page bg-grey">
-    <div class="top-bg"></div>
-    <van-swipe class="swipe-box" :autoplay="3000" indicator-color="white">
-      <van-swipe-item v-for="(p, i) in slider" :key="i">
-        <p
-          @click="goDetail(p)"
-          class="item"
-          :style="{ backgroundImage: `url(${p.imageUrl})` }"
-        ></p>
-      </van-swipe-item>
-    </van-swipe>
-
+    <div class="top-header">
+      <p class="center-center">
+        <img class="d-img lo1" src="@/assets/img/lo1.png" alt="" />
+      </p>
+      <van-swipe class="swipe-box" :autoplay="3000" indicator-color="white">
+        <van-swipe-item v-for="(p, i) in slider" :key="i">
+          <p
+            @click="goDetail(p)"
+            class="item"
+            :style="{ backgroundImage: `url(${p.imageUrl})` }"
+          ></p>
+        </van-swipe-item>
+      </van-swipe>
+    </div>
+    <NoticeBar
+      class="notice-bar"
+      background="#FFE5E5"
+      color="#333333"
+      :left-icon="labaImg"
+      @click="$router.push('/notice')"
+    >
+      {{ noticeDoc.content }}
+    </NoticeBar>
     <div class="nav-wrap">
-      <NoticeBar
-        class="notice-bar"
-        background="#FFE5E5"
-        color="#333333"
-        :left-icon="labaImg"
-        @click="$router.push('/notice')"
-      >
-        {{ noticeDoc.content }}
-      </NoticeBar>
       <div class="my-cats m-t-28" v-for="(p, i) in cat" :key="i">
         <p class="font16 align-center m-b-24">{{ p.lotteryName }}</p>
         <ul class="hall flex-wrap">
@@ -243,19 +246,18 @@ export default {
   border-radius: 0 0 20% 20%;
 }
 .swipe-box {
-  width: 702px;
-  margin: 40px auto 0;
-  border-radius: 20px;
+  width: 694px;
+  margin: 0 auto 0;
+  border-radius: 16px;
   overflow: hidden;
 
   .item {
     display: block;
-    width: 702px;
-    height: 322px;
+    width: 694px;
+    height: 272px;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
-    border-radius: 20px;
   }
 }
 .nav-wrap {
@@ -553,5 +555,14 @@ export default {
 }
 .index-page {
   padding-bottom: 120px + 30px;
+}
+.top-header {
+  background: url("@/assets/img/lo2.png") no-repeat;
+  background-size: 100% 100%;
+  .lo1 {
+    margin: 28px 0;
+    width: 252px;
+    height: 74px;
+  }
 }
 </style>

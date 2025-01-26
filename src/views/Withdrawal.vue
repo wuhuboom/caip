@@ -160,6 +160,16 @@ export default {
     };
   },
   computed: {
+    statusCheck() {
+      return [
+        { name: `您的${this.bankTxt}还在审核中,请审核通过再提现`, id: 0 },
+        { name: `审核通过`, id: 1 },
+        { name: `您的${this.bankTxt}审核不通过,无法提现`, id: 2 },
+      ];
+    },
+    bankTxt() {
+      return this.ctype === 2 ? "银行卡" : "USDT地址";
+    },
     user() {
       return this.$store.state.user;
     },
@@ -186,6 +196,12 @@ export default {
       };
     },
     async ajaxBindCard() {
+      if (+this.form.statusCheck !== 1) {
+        const msg =
+          this.statusCheck.find((v) => +v.id === +this.form.statusCheck) || {};
+        this.$toast(msg.name);
+        return;
+      }
       //金额必须正整数
       if (!/^[1-9]\d*$/.test(this.form.money)) {
         this.$toast.fail("提现金额必须为正整数");
