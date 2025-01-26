@@ -56,6 +56,7 @@
                   </label>
                   <div class="el-form-item__content">
                     <input
+                      disabled
                       maxlength="30"
                       class="recharge-dialog-input"
                       v-model.trim="form.cardName"
@@ -79,6 +80,7 @@
                   >
                   <div class="el-form-item__content">
                     <input
+                      disabled
                       maxlength="30"
                       class="recharge-dialog-input"
                       v-model.trim="form.identity"
@@ -109,6 +111,7 @@
                     >
                     <div class="el-form-item__content">
                       <input
+                        disabled
                         maxlength="30"
                         class="recharge-dialog-input"
                         v-model.trim="form.cardNumber"
@@ -139,6 +142,7 @@
                     >
                     <div class="el-form-item__content">
                       <input
+                        disabled
                         maxlength="30"
                         class="recharge-dialog-input"
                         v-model.trim="form.cardNumber"
@@ -161,6 +165,7 @@
                   >
                   <div class="el-form-item__content">
                     <input
+                      disabled
                       maxlength="30"
                       class="recharge-dialog-input"
                       v-model.trim="form.bankName"
@@ -183,6 +188,7 @@
                   >
                   <div class="el-form-item__content">
                     <input
+                      disabled
                       style="width: 296px"
                       class="recharge-dialog-input"
                       v-model.trim="form.subBranch"
@@ -285,6 +291,12 @@ export default {
         { name: "usdt提现", id: 1 },
       ],
       curType: 0,
+      //statusCheck 0待审核1通过2拒绝
+      statusCheck: [
+        { name: "正在审核中!", id: 0 },
+        { name: "通过", id: 1 },
+        { name: "拒绝", id: 2 },
+      ],
     };
   },
   computed: {
@@ -348,6 +360,12 @@ export default {
       });
     },
     async ajaxBindCard() {
+      if (+this.form.statusCheck !== 1) {
+        const msg =
+          this.statusCheck.find((v) => +v.id === +this.form.statusCheck) || {};
+        this.$message.error(`当前卡状态为${msg.name}`);
+        return;
+      }
       this.loading = true;
       const [err] = await userApi.withdrawalReq({
         ...this.form,
@@ -358,7 +376,12 @@ export default {
       this.$store.dispatch("getBankCard");
       this.$message.success("提现成功.等待管理员审核");
     },
-    open() {
+    async open() {
+      this.$toast.loading({
+        duration: 0,
+      });
+      await this.$store.dispatch("getBankCard");
+      this.$toast.clear();
       this.resData(this.bankCard);
       this.show = true;
     },
