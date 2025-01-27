@@ -1588,5 +1588,8 @@
   "backapi.unableShare": "充值未达到分享条件",
   "backapi.currClosed": "当期已停止下注",
   "backapi.leastTwoExpect":"至少追号2期",
-  "backapi.name_exsit":"用户名已存在"
+  "backapi.name_exsit":"用户名已存在",
+  "backapi.buyBetsError": "下注数超过限制",
+  "backapi.waitingCheck": "您的卡号正在审核中",
+  "backapi.cardDisabled": "您的卡号审核未通过"
 }

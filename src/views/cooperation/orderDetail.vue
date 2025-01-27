@@ -305,7 +305,7 @@
                     <td height="30" width="20%">{{ item.playerName }}</td>
                     <td height="30" width="20%">¥{{ divide(item.money) }}</td>
                     <td height="30" width="20%">
-                      {{ $dayjsTime(item.createdAt) }}
+                      {{ $dayjsTime(item.time) }}
                     </td>
                     <td height="30" width="20%">
                       {{ $util.toPercent(item.money, detail.money, 4) }}
