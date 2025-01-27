@@ -206,7 +206,7 @@ export default {
           delete sendData[key];
         }
       }
-      const [err, res] = await userApi[`${this.apiName}`](sendData);
+      const [err, res] = await userApi[`lotteryMyOrderTogether`](sendData);
       this.$toast.clear();
       this.loading = false;
       if (err) {
