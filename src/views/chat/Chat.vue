@@ -56,7 +56,7 @@
     <div ref="bottomBox" class="bottom-box">
       <div class="height"></div>
       <div class="wrap-box" :class="{ 'btm-disabled': disabled }">
-        <!-- <van-popover
+        <van-popover
           v-model="showPopover"
           trigger="click"
           placement="top-start"
@@ -71,11 +71,10 @@
               <van-icon name="smile-o" class="icon" />
             </div>
           </template>
-        </van-popover> -->
-        <!-- m-l-16 -->
+        </van-popover>
         <img
           @click="openPopup"
-          class="d-img redMony pointer"
+          class="d-img redMony m-l-16 pointer"
           src="@/assets/img/redMony.png"
           alt=""
         />
