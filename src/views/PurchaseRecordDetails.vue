@@ -1,6 +1,10 @@
 <template>
   <div class="c-page bg-grey">
-    <AppTopBar topBarTitle="订单详情"></AppTopBar>
+    <AppTopBar topBarTitle="订单详情">
+      <template v-slot:right>
+        <p class="colorfff m-r-16">分享到聊天室</p>
+      </template>
+    </AppTopBar>
     <ul
       class="nav active font16 bg-fff m-b-24 align-center justify-between p-l-24 p-r-24"
     >
