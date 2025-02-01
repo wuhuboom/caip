@@ -2,7 +2,7 @@
   <div class="c-page bg-grey">
     <AppTopBar topBarTitle="订单详情">
       <template v-slot:right>
-        <p class="colorfff m-r-16">分享到聊天室</p>
+        <p class="colorfff m-r-16" @click="shareToChatRoom">分享到聊天室</p>
       </template>
     </AppTopBar>
     <ul
@@ -285,6 +285,10 @@ export default {
       id: +this.$route.query.id,
       detail: {},
       expect: "",
+      shareData: {
+        // chatAble
+        // recharge 3000
+      },
     };
   },
   computed: {
@@ -558,6 +562,7 @@ export default {
     },
   },
   created() {
+    this.chat();
     this.getDetail();
   },
 };

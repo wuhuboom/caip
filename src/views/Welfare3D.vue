@@ -518,9 +518,9 @@ export default {
       }
       return {
         // lotteryType0: typeConfigList["lotteryType0"],
-        lotteryType2: typeConfigList["lotteryType2"],
-        lotteryType3: typeConfigList["lotteryType3"],
         lotteryType4: typeConfigList["lotteryType4"],
+        lotteryType3: typeConfigList["lotteryType3"],
+        lotteryType2: typeConfigList["lotteryType2"],
       };
     },
     firstNavs() {
@@ -656,7 +656,7 @@ export default {
       if (this.hideMulConfig.includes(this.value)) {
         this.value = "";
       }
-      this.curTab = +this.$route.query.type === 1 ? "三星" : "前三";
+      this.curTab = +this.$route.query.type === 1 ? "三星" : "后三";
       this.setValue();
     },
     initDetail() {
