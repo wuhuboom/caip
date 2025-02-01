@@ -1,6 +1,7 @@
 import app from "@/main";
 import auth from "@/plugins/auth";
 import { EventBus } from "@/plugins/bus";
+let trimrWs = null;
 export default {
   namespaced: true,
   state: {
@@ -102,6 +103,14 @@ export default {
         commit("SET_WS", null);
       };
       window.ws = ws;
+      trimrWs && clearInterval(trimrWs);
+      trimrWs = setInterval(() => {
+        try {
+          ws.send(1);
+        } catch (e) {
+          console.log("ping error", e);
+        }
+      }, 20 * 1000);
       commit("SET_WS", ws);
     },
 
