@@ -656,16 +656,17 @@ export default {
           //   id: "lotteryType0",
           // },
           {
-            name: "前三",
-            id: "lotteryType2",
+            name: "后三",
+            id: "lotteryType4",
           },
           {
             name: "中三",
             id: "lotteryType3",
           },
+
           {
-            name: "后三",
-            id: "lotteryType4",
+            name: "前三",
+            id: "lotteryType2",
           },
         ];
       } else {
@@ -959,7 +960,7 @@ export default {
       if (+type === 0) {
         //高频彩
         //  this.value = "四星直选复式";
-        this.curNav = "lotteryType2";
+        this.curNav = "lotteryType4";
       } else {
         //低频彩
         // this.value = "三星直选复式";
