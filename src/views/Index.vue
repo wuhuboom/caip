@@ -148,6 +148,9 @@ export default {
       fromModal2: false,
       progressBar: 0,
       key: "storageVersion",
+      noticeDoc: {
+        content: "",
+      },
     };
   },
   components: {
@@ -164,7 +167,7 @@ export default {
       });
       return arr;
     },
-    noticeDoc() {
+    itemDoc() {
       return this.$store.getters.noticeDoc;
     },
     cat() {
@@ -172,6 +175,12 @@ export default {
     },
   },
   methods: {
+    async homeDialog() {
+      const [err, res] = await userApi.homeDialog();
+      if (err) return;
+      if (!res.data?.length) return;
+      this.noticeDoc = res.data[0];
+    },
     simulateProgressBar() {
       this.progressBarState = true;
       var duration = Math.floor(Math.random() * 6) + 5; // 生成5到10之间的随机秒数
@@ -221,8 +230,25 @@ export default {
         auth.setToken(res, this.key);
       }
     },
+    dilogHome() {
+      this.$dialog
+        .alert({
+          title: this.itemDoc.title,
+          message: this.itemDoc.content,
+          theme: "round-button",
+        })
+        .then(() => {
+          // on close
+        });
+    },
   },
   created() {
+    this.homeDialog();
+
+    if (!auth.getToken("homeDialog")) {
+      auth.setToken(true, "homeDialog");
+      this.dilogHome();
+    }
     this.$store.dispatch("playerLotteryList");
     this.homeWinning();
     this.sliderSlide();
