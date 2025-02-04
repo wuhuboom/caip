@@ -48,7 +48,9 @@
             @click="gotDetails(item)"
           >
             <div class="top">
-              <div class="left">{{ getName(item.lotteryId) }}</div>
+              <div class="left">
+                {{ getName(item.lotteryId) }}（{{ getTxt(item) }}）
+              </div>
               <div class="right">第{{ item.expect }}期</div>
             </div>
             <div class="bottom">
@@ -176,6 +178,18 @@ export default {
     },
   },
   methods: {
+    getTxt(item) {
+      // type1 自购 0否1是 /purchase-my-details
+      // type2 合买 0否1是 /purchase-record-details
+      // type3 追号 0否1是 /purchase-pre-details
+      if (item.type1 === 1) {
+        return "自购";
+      } else if (item.type2 === 1) {
+        return "合买";
+      } else if (item.type3 === 1) {
+        return "追号";
+      }
+    },
     gotDetails(item) {
       // type1 自购 0否1是 /purchase-my-details
       // type2 合买 0否1是 /purchase-record-details
