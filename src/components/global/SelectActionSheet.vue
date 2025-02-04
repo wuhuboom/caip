@@ -59,10 +59,7 @@ export default {
       this.show = true;
     },
     onSelect(item) {
-      this.$emit("select", {
-        ...item,
-        name: item.name.replace(this.fix, ""),
-      });
+      this.$emit("select", item.id);
       this.close();
     },
     close() {

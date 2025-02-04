@@ -3,13 +3,31 @@
     <AppTopBar class="app-top-bar" topBarTitle="购票记录"> </AppTopBar>
     <ul class="align-center justify-around header">
       <li class="color333">
-        <SelectActionSheet :id="-1" :actions="types" />
+        <SelectActionSheet
+          @select="params.type = $event"
+          :id="params.type"
+          :actions="types"
+        />
       </li>
       <li class="color333">
-        <SelectActionSheet :id="-1" :actions="navs" />
+        <SelectActionSheet
+          @select="params.status = $event"
+          :id="params.status"
+          :actions="navs"
+        />
       </li>
       <li class="color333">
-        <SelectActionSheet :id="-1" :actions="sysList" />
+        <SelectActionSheet
+          @select="params.lotteryId = $event"
+          :id="params.lotteryId"
+          :actions="sysList"
+        />
+      </li>
+      <li
+        class="check center-center color-fff"
+        @click="lotteryBetsOrder({ pageNo: 1 })"
+      >
+        查询
       </li>
     </ul>
     <div>
@@ -27,13 +45,7 @@
             :class="{
               bonus: +item.openStatus === 2,
             }"
-            @click="
-              $router.push({
-                path:
-                  id == 1 ? '/purchase-my-details' : '/purchase-pre-details',
-                query: { id: item.id },
-              })
-            "
+            @click="gotDetails(item)"
           >
             <div class="top">
               <div class="left">{{ getName(item.lotteryId) }}</div>
@@ -111,6 +123,7 @@ export default {
       params: {
         lotteryId: -1,
         status: -1,
+        type: -1,
         pageNo: 1,
         pageSize: 10,
       },
@@ -163,6 +176,23 @@ export default {
     },
   },
   methods: {
+    gotDetails(item) {
+      // type1 自购 0否1是 /purchase-my-details
+      // type2 合买 0否1是 /purchase-record-details
+      // type3 追号 0否1是 /purchase-pre-details
+      let path = "";
+      if (item.type1 === 1) {
+        path = "/purchase-my-details";
+      } else if (item.type2 === 1) {
+        path = "/purchase-record-details";
+      } else if (item.type3 === 1) {
+        path = "/purchase-pre-details";
+      }
+      this.$router.push({
+        path: path,
+        query: { id: item.id },
+      });
+    },
     getOpenStatus(v) {
       const item = this.$store.state.openStatus.find((d) => d.id === v);
       return item ? item.name : "";
@@ -195,7 +225,7 @@ export default {
           delete sendData[key];
         }
       }
-      const [err, res] = await userApi[`${this.apiName}`](sendData);
+      const [err, res] = await userApi[`lotteryMyOrderAll`](sendData);
       this.$toast.clear();
       this.loading = false;
       if (err) {
@@ -333,5 +363,11 @@ export default {
       }
     }
   }
+}
+.check {
+  width: 114px;
+  height: 56px;
+  background: #bf2834;
+  border-radius: 12px 12px 12px 12px;
 }
 </style>

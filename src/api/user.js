@@ -1,6 +1,13 @@
 import request from "@/plugins/request";
 export default {
-  ///draw-winner-result
+  //lottery/my_order/all
+  lotteryMyOrderAll(data) {
+    return request({
+      url: "/lottery/my_order/all",
+      method: "post",
+      data,
+    });
+  },
   drawWinnerResult() {
     return request({
       url: "/lottery/curr_expect_new",
