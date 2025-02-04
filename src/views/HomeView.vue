@@ -364,7 +364,16 @@
         <div style="z-index: 999">
           <!---->
         </div>
-        <!---->
+        <el-dialog
+          :title="itemDoc.title"
+          :visible.sync="show"
+          width="30%"
+          center
+        >
+          <div class="p-b-48">
+            {{ itemDoc.content }}
+          </div>
+        </el-dialog>
       </div>
     </section>
   </div>
@@ -374,12 +383,17 @@
 import QrcodeVue from "qrcode.vue";
 import userApi from "@/api/user";
 import InfoMain from "@/components/InfoMain";
+import auth from "@/plugins/auth";
 export default {
   name: "HomePage",
   data() {
     return {
+      show: false,
       wins: [],
       slider: [],
+      noticeDoc: {
+        content: "",
+      },
     };
   },
   computed: {
@@ -388,9 +402,6 @@ export default {
     },
     bankCard() {
       return this.Cards.find((v) => +v.ctype === 2) || {};
-    },
-    noticeDoc() {
-      return this.$store.getters.noticeDoc;
     },
     dev() {
       return this.$store.state.devApp;
@@ -404,6 +415,9 @@ export default {
       const gdoc = this.$store.state.cat.find((v) => v.id === 1);
       const doc = gdoc.list.find((v) => v.id) || {};
       return doc.id;
+    },
+    itemDoc() {
+      return this.$store.getters.noticeDoc;
     },
   },
   components: {
@@ -428,8 +442,10 @@ export default {
       this.slider = res.data;
     },
     async homeDialog() {
-      const [err] = await userApi.homeDialog();
+      const [err, res] = await userApi.homeDialog();
       if (err) return;
+      if (!res.data?.length) return;
+      this.noticeDoc = res.data[0];
     },
     goApp(appType) {
       if (!this.dev[appType]) {
@@ -439,6 +455,11 @@ export default {
     },
   },
   async created() {
+    if (!auth.getToken("homeDialog")) {
+      auth.setToken(true, "homeDialog");
+      this.show = true;
+    }
+
     this.$store.commit("setPdTop", false);
     this.$store.dispatch("appDownload", false);
     this.homeDialog();
@@ -473,5 +494,15 @@ export default {
 }
 .lottery-tab-discover {
   margin-top: -3px;
+}
+::v-deep {
+  [role="dialog"] {
+    background-color: #623525;
+
+    .el-dialog__body,
+    .el-dialog__title {
+      color: rgb(253, 217, 155);
+    }
+  }
 }
 </style>
