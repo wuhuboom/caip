@@ -1,18 +1,16 @@
 <template>
   <div class="c-page bg-grey">
     <AppTopBar class="app-top-bar" topBarTitle="购票记录"> </AppTopBar>
-    <ul class="align-center justify-around header">
-      <li class="color333">
-        <SelectActionSheet :id="0" :actions="navs" />
+    <!-- <ul class="align-center justify-around header">
+      <li
+        v-for="(item, index) in navs"
+        :key="index"
+        @click="tab = item.id"
+        :class="{ active: tab === item.id }"
+      >
+        {{ item.name }}
       </li>
-      <li class="color333">
-        <SelectActionSheet :id="0" :actions="navs" />
-      </li>
-      <li class="color333">
-        <SelectActionSheet :id="0" :actions="navs" />
-      </li>
-    </ul>
-
+    </ul> -->
     <van-tabs v-model="tab">
       <van-tab
         v-for="(v, index) in navs"
@@ -42,10 +40,6 @@ export default {
     return {
       tab: 0,
       navs: [
-        {
-          name: "全部记录",
-          id: 0,
-        },
         {
           name: "自购记录",
           id: 1,
@@ -78,6 +72,6 @@ export default {
 <style scoped lang="less">
 .header {
   height: 96px;
-  background-color: #fff;
+  color: #f0f0f0;
 }
 </style>

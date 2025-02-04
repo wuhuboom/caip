@@ -4,6 +4,7 @@ import AppBtmBar from "@/components/global/AppBtmBar";
 import Countdown from "@choujiaojiao/vue2-countdown";
 import tipsDialog from "@/components/tipsDialog";
 import BtmActionSheet from "@/components/global/BtmActionSheet";
+import SelectActionSheet from "@/components/global/SelectActionSheet";
 import {
   Form,
   Field,
@@ -46,6 +47,7 @@ export default {
     Vue.component(AppTopBar.name, AppTopBar);
     Vue.component(tipsDialog.name, tipsDialog);
     Vue.component(BtmActionSheet.name, BtmActionSheet);
+    Vue.component(SelectActionSheet.name, SelectActionSheet);
     Vue.use(popover);
     Vue.use(tabs);
     Vue.use(tab);
