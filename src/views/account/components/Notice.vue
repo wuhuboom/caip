@@ -66,7 +66,9 @@
       width="30%"
       center
     >
-      {{ item.content }}
+      <div class="p-b-48">
+        {{ item.content }}
+      </div>
     </el-dialog>
   </div>
 </template>
