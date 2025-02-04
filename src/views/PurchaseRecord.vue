@@ -9,7 +9,7 @@
         <SelectActionSheet :id="-1" :actions="navs" />
       </li>
       <li class="color333">
-        <SelectActionSheet :id="-1" :actions="navs" />
+        <SelectActionSheet :id="-1" :actions="sysList" />
       </li>
     </ul>
     <div>
@@ -128,6 +128,23 @@ export default {
     },
   },
   computed: {
+    sysList() {
+      const arr = [
+        {
+          lotteryName: "全部游戏",
+          id: -1,
+        },
+      ];
+      this.$store.state.cat.forEach((item) => {
+        arr.push(...item.list);
+      });
+      return arr.map((v) => {
+        return {
+          name: v.lotteryName,
+          id: v.id,
+        };
+      });
+    },
     results() {
       return this.tableData.results;
     },
