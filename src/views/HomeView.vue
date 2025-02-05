@@ -453,10 +453,7 @@ export default {
       }
       window.open(this.dev[appType].appUrl);
     },
-  },
-  async created() {
-    if (auth.getToken("loginSuccess")) {
-      auth.clearToken("loginSuccess");
+    showDliog() {
       const dialogs = auth.getToken("dialogs")
         ? JSON.parse(auth.getToken("dialogs"))
         : [];
@@ -468,10 +465,11 @@ export default {
       if (dialogs.length > 10) {
         dialogs.shift();
       }
-      console.log(dialogs, this.itemDoc.id);
       auth.setToken(JSON.stringify(dialogs), "dialogs");
-    }
-
+    },
+  },
+  async created() {
+    this.showDliog();
     this.$store.commit("setPdTop", false);
     this.$store.dispatch("appDownload", false);
     this.homeDialog();
