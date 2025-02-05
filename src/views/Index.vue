@@ -241,14 +241,27 @@ export default {
           // on close
         });
     },
+    async showDliog() {
+      await this.$store.dispatch("getNotice");
+      const dialogs = auth.getToken("dialogs")
+        ? JSON.parse(auth.getToken("dialogs"))
+        : [];
+      if (!dialogs.includes(this.itemDoc.id) && this.itemDoc.id) {
+        this.dilogHome();
+        dialogs.push(this.itemDoc.id);
+        //dialogs 取最后10个
+        if (dialogs.length > 10) {
+          dialogs.shift();
+        }
+        console.log(dialogs, this.itemDoc.id);
+        auth.setToken(JSON.stringify(dialogs), "dialogs");
+      }
+    },
   },
   created() {
     this.homeDialog();
 
-    if (!auth.getToken("homeDialog")) {
-      auth.setToken(true, "homeDialog");
-      this.dilogHome();
-    }
+    this.showDliog();
     this.$store.dispatch("playerLotteryList");
     this.homeWinning();
     this.sliderSlide();
