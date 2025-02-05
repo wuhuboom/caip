@@ -453,19 +453,22 @@ export default {
       }
       window.open(this.dev[appType].appUrl);
     },
-    showDliog() {
+    async showDliog() {
+      await this.$store.dispatch("getNotice");
       const dialogs = auth.getToken("dialogs")
         ? JSON.parse(auth.getToken("dialogs"))
         : [];
+      console.log(dialogs, this.itemDoc);
       if (!dialogs.includes(this.itemDoc.id)) {
         this.show = true;
         dialogs.push(this.itemDoc.id);
+        //dialogs 取最后10个
+        if (dialogs.length > 10) {
+          dialogs.shift();
+        }
+        console.log(dialogs, this.itemDoc.id);
+        auth.setToken(JSON.stringify(dialogs), "dialogs");
       }
-      //dialogs 取最后10个
-      if (dialogs.length > 10) {
-        dialogs.shift();
-      }
-      auth.setToken(JSON.stringify(dialogs), "dialogs");
     },
   },
   async created() {

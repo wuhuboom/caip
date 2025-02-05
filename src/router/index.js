@@ -148,9 +148,6 @@ router.beforeEach(async (to, from, next) => {
       store.commit("setUser", JSON.parse(auth.getToken("userInfo")));
     }
   }
-  if (auth.getToken() && !store.state.notice.length) {
-    store.dispatch("getNotice");
-  }
   if (auth.getToken()) {
     if (to.path.includes("/login")) {
       Nprogress.done();
