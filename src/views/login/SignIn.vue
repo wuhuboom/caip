@@ -243,6 +243,7 @@ export default {
         auth.setToken(true, "viewed");
         this.$store.commit("setToken", token || this.token);
         this.$router.push("/");
+        auth.setToken(true, "loginSuccess");
         return;
       }
       this.token = "";

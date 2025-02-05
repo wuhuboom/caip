@@ -455,9 +455,21 @@ export default {
     },
   },
   async created() {
-    if (!auth.getToken("homeDialog")) {
-      auth.setToken(true, "homeDialog");
-      this.show = true;
+    if (auth.getToken("loginSuccess")) {
+      auth.clearToken("loginSuccess");
+      const dialogs = auth.getToken("dialogs")
+        ? JSON.parse(auth.getToken("dialogs"))
+        : [];
+      if (!dialogs.includes(this.itemDoc.id)) {
+        this.show = true;
+        dialogs.push(this.itemDoc.id);
+      }
+      //dialogs 取最后10个
+      if (dialogs.length > 10) {
+        dialogs.shift();
+      }
+      console.log(dialogs, this.itemDoc.id);
+      auth.setToken(JSON.stringify(dialogs), "dialogs");
     }
 
     this.$store.commit("setPdTop", false);
