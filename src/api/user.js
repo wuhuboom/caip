@@ -1,6 +1,13 @@
 import request from "@/plugins/request";
 export default {
-  //lottery/my_order/cancel
+  //lottery/my_order/all
+  lotteryMyOrderAll(data) {
+    return request({
+      url: "/lottery/my_order/all",
+      method: "post",
+      data,
+    });
+  },
   lotteryMyOrderCancel(data) {
     return request({
       url: "/lottery/my_order/cancel",
