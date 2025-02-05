@@ -446,9 +446,6 @@ router.beforeEach(async (to, from, next) => {
       store.commit("setUser", JSON.parse(auth.getToken("userInfo")));
     }
   }
-  if (auth.getToken() && !store.state.notice.length) {
-    store.dispatch("getNotice");
-  }
   // const ajaxs = [];
   // if (!store.state.serveData.serviceAddr) {
   //   ajaxs.push(store.dispatch("getServeData"));
