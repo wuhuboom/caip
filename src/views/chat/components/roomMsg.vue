@@ -3,7 +3,11 @@
     <div class="center-center time-box p-t-24 p-b-24">
       <p class="time">{{ $dayjsTime(doc.time) }}</p>
     </div>
-    <div class="d-flex" :class="{ 'my-msg': doc.playerId === user.id }">
+    <div
+      class="d-flex"
+      style="overflow: hidden"
+      :class="{ 'my-msg': doc.playerId === user.id }"
+    >
       <div class="room-msg p-l-24 p-l-24 d-flex m-b-12">
         <img
           class="d-img user-pic"

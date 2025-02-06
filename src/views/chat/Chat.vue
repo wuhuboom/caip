@@ -163,13 +163,35 @@ export default {
     openPopup() {
       this.$refs.$popupMoney.show = true;
     },
+    notAllow() {
+      this.$dialog.alert({
+        message: "你已经被禁言",
+        confirmButtonColor: "#3291FF",
+      });
+    },
+    notView() {
+      this.$dialog
+        .alert({
+          message: "你已经被踢出聊天室",
+          confirmButtonColor: "#3291FF",
+        })
+        .then(() => {
+          this.$router.push("/");
+        });
+    },
     async chat() {
       this.loadingShare = true;
       const [err, res] = await userApi.chat();
       this.loadingShare = false;
       if (err) return;
-
       this.shareData = res.data;
+      if (+res.data.chatStatus === 1) {
+        //禁言
+        this.notAllow();
+      } else if (+res.data.chatStatus === 2) {
+        //踢出
+        this.notView();
+      }
     },
     async serve() {
       await this.$store.dispatch("getServeData");
