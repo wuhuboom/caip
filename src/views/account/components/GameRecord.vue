@@ -208,13 +208,17 @@ export default {
       // type1 自购 0否1是 /purchase-my-details
       // type2 合买 0否1是 /purchase-record-details
       // type3 追号 0否1是 /purchase-pre-details
+      const arr = [];
       if (item.type1 === 1) {
-        return "自购";
-      } else if (item.type2 === 1) {
-        return "合买";
-      } else if (item.type3 === 1) {
-        return "追号";
+        arr.push("自购");
       }
+      if (item.type2 === 1) {
+        arr.push("合买");
+      }
+      if (item.type3 === 1) {
+        arr.push("追号");
+      }
+      return arr.join(",");
     },
     goDetail(item) {
       // type1 自购 0否1是 /purchase-my-details

@@ -154,6 +154,22 @@ export default {
       "sendMessage",
       "fetchHistory",
     ]),
+    notAllow() {
+      this.$alert("你已经被禁言", {
+        confirmButtonText: "确定",
+        showClose: false,
+        callback: () => {},
+      });
+    },
+    notView() {
+      this.$alert("你已经被踢出聊天室", {
+        confirmButtonText: "确定",
+        showClose: false,
+        callback: () => {
+          this.$router.push("/");
+        },
+      });
+    },
     openPopup() {
       this.$refs.$popupMoney.show = true;
     },
@@ -162,8 +178,14 @@ export default {
       const [err, res] = await userApi.chat();
       this.loadingShare = false;
       if (err) return;
-
       this.shareData = res.data;
+      if (+res.data.chatStatus === 1) {
+        //禁言
+        this.notAllow();
+      } else if (+res.data.chatStatus === 2) {
+        //踢出
+        this.notView();
+      }
     },
     async serve() {
       await this.$store.dispatch("getServeData");
