@@ -48,9 +48,11 @@ instance.interceptors.response.use(
       app.$toast.clear();
       if (!isLogin) {
         app.$store.commit("loginOut");
-        app.$router.push({
-          name: "SignIn",
-        });
+        if (!location.href.includes("/login/SignIn")) {
+          app.$router.push({
+            name: "SignIn",
+          });
+        }
       }
       if (code == 403 && isLogin) {
         app.$message.error(app.$t("login.fail"));
