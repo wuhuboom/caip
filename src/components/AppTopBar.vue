@@ -107,6 +107,16 @@ export default {
         location.href = `${window.location.origin}/#/chat/room`;
         return;
       }
+
+      if (
+        item.path === "/cooperation/activity" &&
+        location.href.includes("/cooperation/activity")
+      ) {
+        location.reload();
+        console.log(item, `${window.location.origin}/#/cooperation/activity`);
+        return;
+      }
+
       this.$router.push(item.path);
     },
   },
