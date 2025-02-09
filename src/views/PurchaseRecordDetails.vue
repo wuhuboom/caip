@@ -2,7 +2,13 @@
   <div class="c-page bg-grey">
     <AppTopBar topBarTitle="订单详情">
       <template v-slot:right>
-        <p class="colorfff m-r-16" @click="shareToChatRoom">分享到聊天室</p>
+        <p
+          class="colorfff m-r-16"
+          v-if="shareData.chatAble !== undefined"
+          @click="shareToChatRoom"
+        >
+          分享到聊天室
+        </p>
       </template>
     </AppTopBar>
     <ul
