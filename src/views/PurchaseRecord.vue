@@ -257,9 +257,7 @@ export default {
       }
       this.tableData.results = this.tableData.results.concat(res.data.results);
       this.params.pageNo++;
-      if (this.params.pageNo > res.data.totalPage) {
-        this.finished = true;
-      }
+      this.finished = this.params.pageNo > res.data.totalPage;
     },
   },
 };
