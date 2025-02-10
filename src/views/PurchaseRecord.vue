@@ -11,8 +11,8 @@
       </li>
       <li class="color333">
         <SelectActionSheet
-          @select="params.status = $event"
-          :id="params.status"
+          @select="params.openStatus = $event"
+          :id="params.openStatus"
           :actions="navs"
         />
       </li>
@@ -105,18 +105,23 @@ export default {
           id: 3,
         },
       ],
+      //0未开奖1未中奖2已中奖
       navs: [
         {
           name: "全部状态",
           id: -1,
         },
         {
-          name: "待开奖",
+          name: "未开奖",
           id: 0,
         },
         {
-          name: "已开奖", //3 是已结束状态
-          id: 3,
+          name: "未中奖",
+          id: 1,
+        },
+        {
+          name: "已中奖",
+          id: 2,
         },
       ],
       date: [],
@@ -124,7 +129,7 @@ export default {
       finished: false,
       params: {
         lotteryId: -1,
-        status: -1,
+        openStatus: -1,
         type: -1,
         pageNo: 1,
         pageSize: 10,
