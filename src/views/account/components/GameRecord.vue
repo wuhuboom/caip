@@ -59,8 +59,8 @@
             class="g-el-cascader"
             popper-class="g-el-cascader-popper"
             size="small"
-            :options="$store.state.openStatus"
-            v-model="params.status"
+            :options="navs"
+            v-model="params.openStatus"
             :props="{
               value: 'id',
               label: 'name',
@@ -153,6 +153,24 @@ export default {
       },
       date: "",
       loading: false,
+      navs: [
+        {
+          name: "全部状态",
+          id: -1,
+        },
+        {
+          name: "未开奖",
+          id: 0,
+        },
+        {
+          name: "未中奖",
+          id: 1,
+        },
+        {
+          name: "已中奖",
+          id: 2,
+        },
+      ],
       types: [
         {
           name: "全部记录",
@@ -173,7 +191,7 @@ export default {
       ],
       params: {
         lotteryId: -1,
-        status: -1,
+        openStatus: -1,
         type: -1,
         pageNo: 1,
         pageSize: 10,
@@ -267,8 +285,9 @@ export default {
       if (Array.isArray(sendData.lotteryId)) {
         sendData.lotteryId = +sendData.lotteryId[sendData.lotteryId.length - 1];
       }
-      if (Array.isArray(sendData.status)) {
-        sendData.status = +sendData.status[sendData.status.length - 1];
+      if (Array.isArray(sendData.openStatus)) {
+        sendData.openStatus =
+          +sendData.openStatus[sendData.openStatus.length - 1];
       }
       //删除-1
       for (let key in sendData) {
