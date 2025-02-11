@@ -216,7 +216,7 @@
             >
               ?
             </div>
-            <div>{{ choseValue.desc }}</div>
+            <div>{{ descTxt }}</div>
           </div>
           <div
             class="ssc-panel-select"
@@ -938,6 +938,12 @@ export default {
     },
     choseValue() {
       return this.fullTxt.find((v) => v.key === this.value) || {};
+    },
+    descTxt() {
+      const newAmount = this.choseValue.value || "";
+      const text = this.choseValue.desc || "";
+      if (!newAmount) return text;
+      return text.replace(/\d+元/, newAmount + "元");
     },
   },
   watch: {
