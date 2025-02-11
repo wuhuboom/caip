@@ -65,6 +65,13 @@
                 >
               </div>
             </emoji-picker>
+            <van-uploader class="m-l-16" :after-read="afterRead"
+              ><i
+                class="el-icon-picture"
+                style="font-size: 30px; color: #ee8453"
+              ></i
+            ></van-uploader>
+
             <img
               @click="openPopup"
               class="d-img redMony m-l-16 pointer"
@@ -154,6 +161,30 @@ export default {
       "sendMessage",
       "fetchHistory",
     ]),
+    async afterRead({ file }) {
+      //type "image/jpeg"
+      if (file.type.indexOf("image/") === -1) {
+        this.$toast("请上传图片");
+        return;
+      }
+      //限制图片大小10M
+      if (file.size > 1024 * 1024 * 10) {
+        this.$toast("图片大小不能超过10M");
+        return;
+      }
+      this.$toast.loading({
+        duration: 0,
+        forbidClick: true,
+      });
+      const [err, res] = await userApi.uploadImg({ file });
+      if (err) return;
+      this.$toast.clear();
+      console.log(res);
+      // this.sendMessage({
+      //   data: res.data,
+      //   type: 3,
+      // });
+    },
     notAllow() {
       this.$alert("你已经被禁言", {
         confirmButtonText: "确定",

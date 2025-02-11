@@ -1,6 +1,21 @@
 <template>
-  <div class="d-flex" :class="{ 'my-msg': doc.playerId === user.id }">
-    <div class="room-msg p-l-24 p-l-24 d-flex m-b-12">
+  <div
+    class="d-flex"
+    :class="{
+      'my-msg': doc.playerId === user.id,
+      'center-center': doc.status == 1,
+    }"
+  >
+    <ul
+      v-if="doc.status == 1"
+      class="center-center flex-column m-t-12 m-b-12 font14 color999"
+    >
+      <li class="m-b-4">{{ $dayjsTime(doc.time) }}</li>
+      <li>
+        {{ isMe ? "你撤回了一条消息" : `${doc.user}撤回了一条消息` }}
+      </li>
+    </ul>
+    <div v-else class="room-msg p-l-24 p-l-24 d-flex m-b-12">
       <img
         class="d-img user-pic"
         :class="[doc.playerId === user.id ? 'm-l-12 m-r-24' : ' m-r-12']"
@@ -18,16 +33,18 @@
           <span>{{ $dayjsTime(doc.time) }}</span>
         </li>
         <li class="msg-txt-box d-flex">
-          <component
-            v-if="[2, 4, 8].includes(+doc.type)"
-            :is="currentComponent(+doc.type)"
-            :userPic="userPic"
-            :doc="doc"
-            ref="$component"
-          ></component>
-          <p class="msg-txt p-x-8 m-t-4" v-else>
-            {{ doc.data }}
-          </p>
+          <div @contextmenu="recallMessage($event, doc)">
+            <component
+              v-if="[2, 4, 8].includes(+doc.type)"
+              :is="currentComponent(+doc.type)"
+              :userPic="userPic"
+              :doc="doc"
+              ref="$component"
+            ></component>
+            <p class="msg-txt p-x-8 m-t-4" v-else>
+              {{ doc.data }}
+            </p>
+          </div>
         </li>
       </ul>
     </div>
@@ -35,6 +52,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import userPic from "@/assets/img/user-room.png";
 import bindBuy from "@/views/chat/components/bindBuy.vue";
 import redImg from "@/views/chat/components/redImg.vue";
@@ -49,6 +67,9 @@ export default {
     imgMsg,
   },
   computed: {
+    isMe() {
+      return this.doc.playerId === this.user.id;
+    },
     user() {
       return this.$store.state.user;
     },
@@ -72,6 +93,41 @@ export default {
     },
   },
   methods: {
+    ...mapActions("chat", [
+      "initWebSocket",
+      "closeWebSocket",
+      "sendMessage",
+      "fetchHistory",
+    ]),
+    comfire(v) {
+      return new Promise((resolve) => {
+        this.$confirm(v, "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+          customClass: "g-confirm-box",
+        })
+          .then(() => {
+            resolve(1);
+          })
+          .catch(() => {
+            resolve(0);
+          });
+      });
+    },
+    async recallMessage(event, doc) {
+      event.preventDefault();
+      //time 1739257809520 两分钟内才能撤回
+      if (new Date().getTime() - doc.time > 120000) return;
+      if (!this.isMe) return;
+      const status = await this.comfire("是否撤回消息？");
+      if (!status) return;
+      console.log("recallMessage", doc);
+      this.sendMessage({
+        type: 9,
+        data: JSON.stringify({ id: doc.id }),
+      });
+    },
     visib() {
       if (this.$refs.$component?.visib) {
         this.$refs.$component?.visib();

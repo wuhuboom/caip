@@ -12,6 +12,7 @@
     class="m-t-12"
     style="width: 100px; height: 100px"
     :src="httpSrc"
+    fit="cover"
     :preview-src-list="[httpSrc]"
   >
   </el-image>
