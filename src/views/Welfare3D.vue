@@ -111,7 +111,7 @@
 
     <div class="main-wrap">
       <div class="des-box">
-        <div class="left">{{ curItemValue.desc }}</div>
+        <div class="left">{{ descTxt }}</div>
         <div class="right font10 center-center" @click="randem">
           <img class="d-img ramd m-r-12" src="@/assets/img/ramd.png" alt="" />
           随机一注
@@ -555,8 +555,9 @@ export default {
       return arr.map((item) => item.title);
     },
     descTxt() {
-      const newAmount = 120;
+      const newAmount = this.curItemValue.value || "";
       const text = this.curItemValue.desc || "";
+      if (!newAmount) return text;
       return text.replace(/\d+元/, newAmount + "元");
     },
     curItemValue() {
