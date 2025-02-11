@@ -146,7 +146,7 @@ export default {
     // 处理接收到的消息
     handleMessage({ commit }, message) {
       //0 文本消息 2 分享合买 4 红包消息
-      if ([0, 2, 4].includes(+message.type)) {
+      if ([0, 2, 4, 8].includes(+message.type)) {
         // 文本消息
         commit("ADD_MESSAGE", { message });
 

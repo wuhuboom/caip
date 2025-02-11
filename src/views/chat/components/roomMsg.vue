@@ -160,6 +160,9 @@ export default {
   }
   .msg-txt-box {
     justify-content: flex-end;
+    user-select: none; /* 禁止选中文本 */
+    -webkit-user-select: none; /* 兼容 iOS & Safari */
+    -webkit-touch-callout: none; /* 禁止长按弹出菜单 */
   }
 }
 .room-msg {
