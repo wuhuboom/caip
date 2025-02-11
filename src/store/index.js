@@ -38,6 +38,7 @@ export default new Vuex.Store({
       { id: 26, text: "次充奖励" },
       { id: 27, text: "固定日" },
       { id: 28, text: "邀请首充奖励" },
+      { id: 29, text: "赠送金额" },
       { id: 31, text: "线下活动" },
       { id: 33, text: "冲正" },
       { id: 38, text: "累计充值返利" },
