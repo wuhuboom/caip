@@ -41,6 +41,13 @@ export default {
         return v;
       });
     },
+    setToBack(state, v) {
+      console.log("setToBack", v);
+      const index = state.messages.findIndex((item) => +item.id === +v.id);
+      if (index === -1) return;
+      console.log(state.messages[index]);
+      app.$set(state.messages[index], "status", 1);
+    },
     setQuery(state, query) {
       state.query = query;
     },
@@ -130,6 +137,7 @@ export default {
           query.msgId = msgId;
         }
         const message = JSON.stringify(query);
+        console.log("发送消息:", message);
         state.ws.send(message);
       } else {
         console.error("WebSocket 未连接或已关闭");
@@ -200,6 +208,9 @@ export default {
           ...message,
           data: JSON.parse(message.data),
         });
+      } else if ([9].includes(+message.type)) {
+        //撤回消息修改status
+        commit("setToBack", JSON.parse(message.data));
       }
     },
 

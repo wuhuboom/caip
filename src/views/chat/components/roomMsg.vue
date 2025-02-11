@@ -3,15 +3,21 @@
     <div class="center-center time-box p-t-24 p-b-24">
       <p class="time">{{ $dayjsTime(doc.time) }}</p>
     </div>
+    <div v-if="doc.status == 1">
+      <p class="center-center m-t-12 m-b-12 font14 color999">
+        {{ isMe ? "你撤回了一条消息" : `${doc.user}撤回了一条消息` }}
+      </p>
+    </div>
     <div
+      v-else
       class="d-flex"
       style="overflow: hidden"
-      :class="{ 'my-msg': doc.playerId === user.id }"
+      :class="{ 'my-msg': isMe }"
     >
       <div class="room-msg p-l-24 p-l-24 d-flex m-b-12">
         <img
           class="d-img user-pic"
-          :class="[doc.playerId === user.id ? 'm-l-12 m-r-24' : ' m-r-12']"
+          :class="[isMe ? 'm-l-12 m-r-24' : ' m-r-12']"
           :src="
             doc.img
               ? doc.img.includes('http')
@@ -59,6 +65,9 @@ export default {
     imgMsg,
   },
   computed: {
+    isMe() {
+      return this.doc.playerId === this.user.id;
+    },
     user() {
       return this.$store.state.user;
     },
@@ -104,14 +113,15 @@ export default {
       });
     },
     async recallMessage(doc) {
+      //time 1739257809520 两分钟内才能撤回
+      if (new Date().getTime() - doc.time > 120000) return;
+      if (!this.isMe) return;
       const status = await this.comfire("是否撤回消息");
       if (!status) return;
-      this.sendMsg({
-        type: 1,
-        data: JSON.stringify({
-          type: 1,
-          data: doc.id,
-        }),
+      console.log("recallMessage", doc);
+      this.sendMessage({
+        type: 9,
+        data: JSON.stringify({ id: doc.id }),
       });
     },
     visib() {
