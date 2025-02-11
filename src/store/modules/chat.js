@@ -14,6 +14,7 @@ export default {
       pageSize: 20,
       totalPage: null,
     },
+    linePlayers: [],
   },
   getters: {
     news: (state) => {
