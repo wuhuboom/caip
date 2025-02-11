@@ -24,7 +24,10 @@
           <li class="name align-center m-b-8">
             <span class="m-r-8 color333">{{ doc.user }}</span>
           </li>
-          <li class="msg-txt-box d-flex">
+          <li
+            class="msg-txt-box d-flex"
+            v-long-press="() => recallMessage(doc)"
+          >
             <component
               v-if="[2, 4, 8].includes(+doc.type)"
               :is="currentComponent(+doc.type)"
@@ -45,6 +48,7 @@ import userPic from "@/assets/img/user-room.png";
 import bindBuy from "@/views/chat/components/bindBuy.vue";
 import redImg from "@/views/chat/components/redImg.vue";
 import imgMsg from "@/views/chat/components/imgMsg.vue";
+import { mapActions } from "vuex";
 export default {
   data() {
     return { userPic };
@@ -78,6 +82,38 @@ export default {
     },
   },
   methods: {
+    ...mapActions("chat", [
+      "initWebSocket",
+      "closeWebSocket",
+      "sendMessage",
+      "fetchHistory",
+    ]),
+    comfire(v) {
+      return new Promise((resolve) => {
+        this.$dialog
+          .confirm({
+            message: v,
+            confirmButtonColor: "#3291FF",
+          })
+          .then(() => {
+            resolve(1);
+          })
+          .catch(() => {
+            resolve(0);
+          });
+      });
+    },
+    async recallMessage(doc) {
+      const status = await this.comfire("是否撤回消息");
+      if (!status) return;
+      this.sendMsg({
+        type: 1,
+        data: JSON.stringify({
+          type: 1,
+          data: doc.id,
+        }),
+      });
+    },
     visib() {
       if (this.$refs.$component?.visib) {
         this.$refs.$component?.visib();

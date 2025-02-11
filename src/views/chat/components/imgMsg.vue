@@ -2,7 +2,7 @@
   <van-image
     width="100"
     height="100"
-    fit="contain"
+    fit="cover"
     :showIndex="false"
     @click="preview"
     :src="httpSrc"
@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import { ImagePreview } from "vant";
 export default {
   name: "imgMsg",
@@ -31,6 +32,12 @@ export default {
     },
   },
   methods: {
+    ...mapActions("chat", [
+      "initWebSocket",
+      "closeWebSocket",
+      "sendMessage",
+      "fetchHistory",
+    ]),
     preview() {
       console.log("preview", this.httpSrc);
       ImagePreview([this.httpSrc]);
