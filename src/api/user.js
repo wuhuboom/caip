@@ -1,6 +1,13 @@
 import request from "@/plugins/request";
 export default {
-  //lottery/my_order/all
+  ///home/upload_img
+  uploadImg(data) {
+    return request({
+      url: "/home/upload_img",
+      method: "post",
+      data,
+    });
+  },
   lotteryMyOrderAll(data) {
     return request({
       url: "/lottery/my_order/all",

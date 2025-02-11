@@ -554,6 +554,11 @@ export default {
       const arr = this.detail.mulConfig.filter((item) => +item.show === 0);
       return arr.map((item) => item.title);
     },
+    descTxt() {
+      const newAmount = 120;
+      const text = this.curItemValue.desc || "";
+      return text.replace(/\d+元/, newAmount + "元");
+    },
     curItemValue() {
       let arr = {};
       this.secondNavs.forEach((item) => {
