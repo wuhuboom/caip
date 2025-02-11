@@ -26,7 +26,7 @@
           </li>
           <li class="msg-txt-box d-flex">
             <component
-              v-if="[2, 4].includes(+doc.type)"
+              v-if="[2, 4, 8].includes(+doc.type)"
               :is="currentComponent(+doc.type)"
               :userPic="userPic"
               :doc="doc"
@@ -44,6 +44,7 @@
 import userPic from "@/assets/img/user-room.png";
 import bindBuy from "@/views/chat/components/bindBuy.vue";
 import redImg from "@/views/chat/components/redImg.vue";
+import imgMsg from "@/views/chat/components/imgMsg.vue";
 export default {
   data() {
     return { userPic };
@@ -51,6 +52,7 @@ export default {
   components: {
     bindBuy,
     redImg,
+    imgMsg,
   },
   computed: {
     user() {
@@ -87,6 +89,8 @@ export default {
           return "bindBuy";
         case 3:
           return "redImg";
+        case 8:
+          return "imgMsg";
         default:
           return "redImg";
       }

@@ -72,9 +72,9 @@
             </div>
           </template>
         </van-popover>
-        <!-- <van-uploader class="m-l-8" :after-read="afterRead">
+        <van-uploader class="m-l-8" :after-read="afterRead">
           <van-icon :size="28" name="photo-o" />
-        </van-uploader> -->
+        </van-uploader>
         <img
           @click="openPopup"
           class="d-img redMony m-l-8 pointer"
@@ -174,10 +174,10 @@ export default {
       if (err) return;
       this.$toast.clear();
       console.log(res);
-      this.sendMessage({
-        data: res.data,
-        type: 3,
-      });
+      // this.sendMessage({
+      //   data: res.data,
+      //   type: 3,
+      // });
     },
     onSelect(action) {
       console.log(action);
