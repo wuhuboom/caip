@@ -166,6 +166,11 @@ export default {
         this.$toast("请上传图片");
         return;
       }
+      //限制图片大小10M
+      if (file.size > 1024 * 1024 * 10) {
+        this.$toast("图片大小不能超过10M");
+        return;
+      }
       this.$toast.loading({
         duration: 0,
         forbidClick: true,
