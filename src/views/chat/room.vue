@@ -40,6 +40,19 @@
           :class="{ 'btm-disabled': disabled }"
           v-loading="loadingShare"
         >
+          <div
+            class="unread-mention center-center"
+            @click="goBtm"
+            v-if="aites.length"
+          >
+            <van-badge
+              :data-badge="aites.length"
+              :content="aites.length"
+              max="99"
+            >
+              <span class="at-symbol center-center">@</span>
+            </van-badge>
+          </div>
           <ul v-if="showUserList" class="user-list">
             <li
               class="align-center"
@@ -183,7 +196,7 @@ export default {
       "wsStatus",
       "onlineUser",
     ]), // 绑定聊天消息记录
-    ...mapGetters("chat", ["news"]),
+    ...mapGetters("chat", ["news", "aites"]),
   },
   watch: {
     showUserList() {
@@ -196,6 +209,13 @@ export default {
     },
   },
   methods: {
+    goBtm() {
+      //js-cont-room 划到底部 document.querySelector(".js-cont-room");
+      const room = document.querySelector(".js-cont-room");
+      if (room) {
+        room.scrollTop = room.scrollHeight;
+      }
+    },
     /** 选择用户 */
     selectUser(user = null) {
       if (!user) {
@@ -363,7 +383,7 @@ export default {
           this.sendMessage({
             type: 10,
             data: JSON.stringify({
-              playerId: `${playerId}`,
+              playerId: playerId,
               msg: this.text,
             }),
           });
@@ -554,5 +574,29 @@ $height: 752px;
 }
 .user-list li.active {
   background: #f1f1f1;
+}
+.unread-mention {
+  top: -40px;
+  right: 16px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+
+  color: #666;
+}
+
+/* 让 @ 符号稍微变小 */
+.at-symbol {
+  font-size: 14px;
+  width: 32px; /* 控制徽章大小 */
+  border-radius: 50%; /* 圆形 */
+  height: 32px;
+  background-color: #ffffff; /* 近似 Telegram 的蓝色 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 轻微阴影 */
 }
 </style>

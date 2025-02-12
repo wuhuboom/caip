@@ -42,9 +42,11 @@
               ref="$component"
             ></component>
             <template v-else>
-              <p class="msg-txt p-x-8 m-t-4" v-if="doc.data?.msg">
-                {{ doc.data?.msg }}
-              </p>
+              <p
+                class="msg-txt p-x-8 m-t-4"
+                v-if="doc.data?.msg"
+                v-html="highlightedText(doc.data?.msg)"
+              ></p>
               <p class="msg-txt p-x-8 m-t-4" v-else>
                 {{ doc.data }}
               </p>
@@ -104,6 +106,12 @@ export default {
       "sendMessage",
       "fetchHistory",
     ]),
+    highlightedText(v) {
+      return v.replace(
+        /@(\w+)/g,
+        '<span class="m-r-4" style="color:#488fca;">@$1</span>'
+      );
+    },
     comfire(v) {
       return new Promise((resolve) => {
         this.$confirm(v, "提示", {
