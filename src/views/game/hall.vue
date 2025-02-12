@@ -679,29 +679,53 @@ export default {
       }
     },
     curPre() {
-      const { losses, hot, zu3, zu3_hot, zu6, zu6_hot } = this.preData;
+      const {
+        losses,
+        hot,
+        // zu3,
+        // zu3_hot,
+        zu6,
+        zu6_hot,
+        zxzh1,
+        zxzh1_hot,
+        zxzh2,
+        zxzh2_hot,
+        zxzh3,
+        zxzh3_hot,
+      } = this.preData;
 
       switch (this.value) {
         // 三星直选复式
         case "三星直选复式":
           return this.preId === 0 ? losses : hot;
 
-        case "三星组三复式":
-        case "后三组三复式":
-        case "中三组三复式":
-        case "前三组三复式":
-        case "三星组三胆拖":
-        case "前三组三胆拖":
-          return this.preId === 0 ? [zu3] : [zu3_hot];
-
         case "三星组六复式":
-        case "后三组六复式":
-        case "中三组六复式":
-        case "前三组六复式":
         case "三星组六胆拖":
-        case "前三组六胆拖":
           return this.preId === 0 ? [zu6] : [zu6_hot];
+        //-------------------
+        case "三星组三复式":
+        case "三星组三胆拖":
+        case "前三组三复式":
+        case "前三组三胆拖":
+        case "前三组六复式":
+        case "前三组六胆拖":
+        case "前三直选组合":
+          return this.preId === 0 ? [zxzh1] : [zxzh1_hot];
 
+        case "中三组三复式":
+        case "中三组三胆拖":
+        case "中三组六复式":
+        case "中三组六胆拖":
+        case "中三直选组合":
+          return this.preId === 0 ? [zxzh2] : [zxzh2_hot];
+
+        case "后三组三复式":
+        case "后三组三胆拖":
+        case "后三组六复式":
+        case "后三组六胆拖":
+        case "后三直选组合":
+          return this.preId === 0 ? [zxzh3] : [zxzh3_hot];
+        //-------------------
         // 四星直选复式
         case "四星直选复式":
           return this.preId === 0
@@ -726,51 +750,9 @@ export default {
             ? losses.filter((_, k) => k > 1 && k < 5)
             : hot.filter((_, k) => k > 1 && k < 5);
 
-        // 中三组三胆拖
-        case "中三组三胆拖":
-          return this.preId === 0
-            ? [this.preData.zu3_z3]
-            : [this.preData.zu3_hot_z3];
-
-        // 中三组六胆拖
-        case "中三组六胆拖":
-          return this.preId === 0
-            ? [this.preData.zu6_z3]
-            : [this.preData.zu6_hot_z3];
-
-        // 后三组三胆拖
-        case "后三组三胆拖":
-          return this.preId === 0
-            ? [this.preData.zu3_h3]
-            : [this.preData.zu3_hot_h3];
-
-        // 后三组六胆拖
-        case "后三组六胆拖":
-          return this.preId === 0
-            ? [this.preData.zu6_h3]
-            : [this.preData.zu6_hot_h3];
-        case "前三直选组合":
-          return this.preId === 0
-            ? [this.preData.zxzh1]
-            : [this.preData.zxzh_hot1];
-        case "中三直选组合":
-          return this.preId === 0
-            ? [this.preData.zxzh2]
-            : [this.preData.zxzh_hot2];
-        case "后三直选组合":
-          return this.preId === 0
-            ? [this.preData.zxzh3]
-            : [this.preData.zxzh_hot3];
         // 默认情况
         default:
           return [];
-
-        //"zxzh1": 前三直选组合遗漏
-        //"zxzh_hot1": 前三直选组合冷热
-        //"zxzh2": 中三直选组合遗漏
-        //"zxzh_hot2": 中三直选组合冷热
-        //"zxzh3": 后三直选组合遗漏
-        //"zxzh_hot3": 后三直选组合冷热
       }
     },
 
