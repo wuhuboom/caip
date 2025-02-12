@@ -48,6 +48,16 @@
               :class="{ active: index === selectedIndex }"
               @click="selectUser(user)"
             >
+              <img
+                class="d-img user-pic m-l-12 m-r-24"
+                :src="
+                  user.img
+                    ? user.img.includes('http')
+                      ? user.img
+                      : `${$baseURL}/${user.img}`
+                    : userPic
+                "
+              />
               @{{ user.username }}
             </li>
           </ul>
@@ -529,7 +539,6 @@ $height: 752px;
   border-top: 1px solid #ddd;
   width: 100%;
   list-style: none;
-
   max-height: 150px;
   overflow-y: auto;
   color: #333;
@@ -538,6 +547,10 @@ $height: 752px;
   padding: 0 5px;
   height: 48px;
   cursor: pointer;
+  .user-pic {
+    width: 38px;
+    height: 38px;
+  }
 }
 .user-list li.active {
   background: #f1f1f1;
