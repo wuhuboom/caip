@@ -340,9 +340,28 @@ export default {
           this.selectUser(this.filteredUsers[this.selectedIndex]);
           return;
         }
-        this.sendMessage({
-          data: this.text.trim(),
-        });
+        const matches = [...this.text.matchAll(/@(\S*)/g)]
+          .map((m) => m[1])
+          .filter((name) => name.length > 0);
+        if (matches.length > 0) {
+          const users = this.onlineUser.filter((user) =>
+            matches.includes(user.username)
+          );
+          let playerId = users.map((v) => v.playerId);
+          //去重复 playerId
+          playerId = [...new Set(playerId)];
+          this.sendMessage({
+            type: 10,
+            data: JSON.stringify({
+              playerId: `${playerId}`,
+              msg: this.text,
+            }),
+          });
+        } else {
+          this.sendMessage({
+            data: this.text.trim(),
+          });
+        }
         this.text = "";
         await this.sleep(800);
       }

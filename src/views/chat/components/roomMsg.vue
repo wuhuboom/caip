@@ -41,9 +41,14 @@
               :doc="doc"
               ref="$component"
             ></component>
-            <p class="msg-txt p-x-8 m-t-4" v-else>
-              {{ doc.data }}
-            </p>
+            <template v-else>
+              <p class="msg-txt p-x-8 m-t-4" v-if="doc.data?.msg">
+                {{ doc.data?.msg }}
+              </p>
+              <p class="msg-txt p-x-8 m-t-4" v-else>
+                {{ doc.data }}
+              </p>
+            </template>
           </div>
         </li>
       </ul>
