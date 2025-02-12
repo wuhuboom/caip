@@ -28,6 +28,8 @@
             @infinite="infiniteHandler"
           ></infinite-loading>
           <roomMsg
+            :disabled="disabled"
+            @replay="replay"
             :data-msg-id="v.id"
             v-observe-visibility="visibilityChanged(v, i)"
             :item="v"
@@ -163,6 +165,7 @@ export default {
       showUserList: false,
       selectedIndex: 0,
       mentionPosition: -1, // 记录 `@` 位置
+      doc: {},
     };
   },
   directives: {
@@ -210,6 +213,10 @@ export default {
     },
   },
   methods: {
+    replay(v) {
+      this.text = `@${v.username} `;
+      this.$refs.inputRef.$refs.textarea.focus();
+    },
     goBtm() {
       //aites  :data-msg-id="v.id" 滑动到可视区域
       const lastId = this.aites[this.aites.length - 1].id;

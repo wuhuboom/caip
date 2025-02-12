@@ -751,8 +751,8 @@ export default {
             : [this.preData.zu6_hot_h3];
         case "前三直选组合":
           return this.preId === 0
-            ? [this.preData.zxzh3]
-            : [this.preData.zxzh_hot3];
+            ? [this.preData.zxzh1]
+            : [this.preData.zxzh_hot1];
         case "中三直选组合":
           return this.preId === 0
             ? [this.preData.zxzh2]

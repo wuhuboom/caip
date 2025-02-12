@@ -39,6 +39,7 @@
             width="30"
             trigger="hover"
             class="p-x-4"
+            :disabled="disabled"
             @show="show(doc)"
           >
             <ul class="popover-content">
@@ -126,6 +127,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     ...mapActions("chat", [
@@ -164,7 +169,9 @@ export default {
     onSelect(v) {
       if (v === 1) {
         this.recallMessage(this.doc);
+        return;
       }
+      this.emit("reply", this.doc);
     },
     show(doc) {
       if (new Date().getTime() - doc.time > 120000 || !this.isMe) {
