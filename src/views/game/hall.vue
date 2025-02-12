@@ -684,8 +684,8 @@ export default {
         hot,
         // zu3,
         // zu3_hot,
-        zu6,
-        zu6_hot,
+        // zu6,
+        // zu6_hot,
         zxzh1,
         zxzh1_hot,
         zxzh2,
@@ -701,8 +701,6 @@ export default {
 
         case "三星组六复式":
         case "三星组六胆拖":
-          return this.preId === 0 ? [zu6] : [zu6_hot];
-        //-------------------
         case "三星组三复式":
         case "三星组三胆拖":
         case "前三组三复式":
