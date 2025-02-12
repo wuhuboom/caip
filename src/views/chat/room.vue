@@ -49,7 +49,7 @@
               @click="selectUser(user)"
             >
               <img
-                class="d-img user-pic m-l-12 m-r-24"
+                class="d-img user-pic m-r-8"
                 :src="
                   user.img
                     ? user.img.includes('http')
