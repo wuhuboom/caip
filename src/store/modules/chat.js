@@ -14,6 +14,7 @@ export default {
       pageSize: 20,
       totalPage: null,
     },
+    onlineUser: [],
   },
   getters: {
     news: (state) => {
@@ -22,6 +23,9 @@ export default {
     },
   },
   mutations: {
+    setOnlineUser(state, v) {
+      state.onlineUser = v;
+    },
     addMsgPacket(state, v) {
       const index = state.messages.findIndex((item) => +item.id === +v.msgId);
       if (index === -1) return;
@@ -204,6 +208,28 @@ export default {
       } else if ([9].includes(+message.type)) {
         //撤回消息修改status
         commit("setToBack", JSON.parse(message.data));
+      } else if ([12].includes(+message.type)) {
+        // headImg
+        // :
+        // null
+        // playerId
+        // :
+        // 42
+        // username
+        // :
+        // "arman706"
+        commit(
+          "setOnlineUser",
+          JSON.parse(message.data).filter(
+            (v) => v.playerId != app.$store.state.user.id
+          )
+        );
+        console.log(
+          "12--",
+          JSON.parse(message.data).filter(
+            (v) => v.playerId != app.$store.state.user.id
+          )
+        );
       }
     },
 

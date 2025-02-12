@@ -40,6 +40,17 @@
           :class="{ 'btm-disabled': disabled }"
           v-loading="loadingShare"
         >
+          <ul v-if="showUserList" class="user-list">
+            <li
+              class="align-center"
+              v-for="(user, index) in filteredUsers"
+              :key="index"
+              :class="{ active: index === selectedIndex }"
+              @click="selectUser(user)"
+            >
+              @{{ user.username }}
+            </li>
+          </ul>
           <div class="tool-row align-center p-l-24">
             <emoji-picker class="face-box" @emoji="insert">
               <div
@@ -88,6 +99,10 @@
               show-word-limit
               @keydown.enter.native.prevent="send"
               resize="none"
+              @input="onInput"
+              @keydown.down.native.prevent="moveDown"
+              @keydown.up.native.prevent="moveUp"
+              ref="inputRef"
             ></el-input>
           </div>
           <ul class="send-row align-center p-x-8">
@@ -120,6 +135,10 @@ export default {
         // recharge 3000
       },
       loadingShare: false,
+      filteredUsers: [],
+      showUserList: false,
+      selectedIndex: 0,
+      mentionPosition: -1, // 记录 `@` 位置
     };
   },
   directives: {
@@ -146,15 +165,87 @@ export default {
     user() {
       return this.$store.state.user;
     },
-    ...mapState("chat", ["messages", "playerId", "query", "ws", "wsStatus"]), // 绑定聊天消息记录
+    ...mapState("chat", [
+      "messages",
+      "playerId",
+      "query",
+      "ws",
+      "wsStatus",
+      "onlineUser",
+    ]), // 绑定聊天消息记录
     ...mapGetters("chat", ["news"]),
   },
   watch: {
+    showUserList() {
+      if (this.showUserList) {
+        this.selectedIndex = 0;
+      }
+    },
     wsStatus() {
       this.alertReload();
     },
   },
   methods: {
+    /** 选择用户 */
+    selectUser(user = null) {
+      if (!user) {
+        user = this.filteredUsers[this.selectedIndex];
+      }
+      if (user) {
+        const beforeMention = this.text.slice(0, this.mentionPosition);
+        const afterMention = this.text.slice(this.getCursorPosition());
+        this.text = `${beforeMention}@${user.username} ${afterMention}`;
+        this.showUserList = false;
+      }
+    },
+    /** 获取光标位置 */
+    getCursorPosition() {
+      const textarea = this.$refs.inputRef.$refs.textarea;
+      return textarea ? textarea.selectionStart : -1;
+    },
+    moveDown() {
+      if (this.showUserList) {
+        this.selectedIndex =
+          (this.selectedIndex + 1) % this.filteredUsers.length;
+      }
+    },
+    moveUp() {
+      if (this.showUserList) {
+        this.selectedIndex =
+          (this.selectedIndex - 1 + this.filteredUsers.length) %
+          this.filteredUsers.length;
+      }
+    },
+    onInput(value) {
+      const cursorPos = this.$refs.inputRef.$refs.textarea.selectionStart;
+      const atIndex = value.lastIndexOf("@", cursorPos - 1);
+      //以@结尾
+      if (value[value.length - 1] == "@") {
+        this.filteredUsers = this.onlineUser.map((v) => v);
+        this.showUserList = true;
+        this.mentionPosition = atIndex;
+        return;
+      }
+      const matches = [...value.matchAll(/@(\S*)/g)]
+        .map((m) => m[1])
+        .filter((name) => name.length > 0);
+      //取最后一个数组元素
+      const lastMatch = matches[matches.length - 1];
+      if (lastMatch) {
+        if (!value.endsWith(`@${lastMatch}`)) {
+          this.showUserList = false;
+          return;
+        }
+        this.selectedIndex = 0;
+        this.filteredUsers = this.onlineUser.filter((user) =>
+          user.username.toLowerCase().includes(lastMatch.toLowerCase())
+        );
+        this.showUserList = true;
+        this.mentionPosition = atIndex;
+      } else {
+        this.showUserList = false;
+      }
+    },
     ...mapActions("chat", [
       "initWebSocket",
       "closeWebSocket",
@@ -245,6 +336,10 @@ export default {
     },
     async send() {
       if (this.text) {
+        if (this.showUserList) {
+          this.selectUser(this.filteredUsers[this.selectedIndex]);
+          return;
+        }
         this.sendMessage({
           data: this.text.trim(),
         });
@@ -404,5 +499,28 @@ $height: 752px;
 .redMony {
   width: 32px;
   height: 32px;
+}
+
+.user-list {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid #ddd;
+  width: 100%;
+  list-style: none;
+
+  max-height: 150px;
+  overflow-y: auto;
+  color: #333;
+}
+.user-list li {
+  padding: 0 5px;
+  height: 48px;
+  cursor: pointer;
+}
+.user-list li.active {
+  background: #f1f1f1;
 }
 </style>
