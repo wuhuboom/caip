@@ -28,6 +28,7 @@
             @infinite="infiniteHandler"
           ></infinite-loading>
           <roomMsg
+            :data-msg-id="v.id"
             v-observe-visibility="visibilityChanged(v, i)"
             :item="v"
             v-for="(v, i) in messages"
@@ -210,11 +211,9 @@ export default {
   },
   methods: {
     goBtm() {
-      //js-cont-room 划到底部 document.querySelector(".js-cont-room");
-      const room = document.querySelector(".js-cont-room");
-      if (room) {
-        room.scrollTop = room.scrollHeight;
-      }
+      //aites  :data-msg-id="v.id" 滑动到可视区域
+      const lastId = this.aites[this.aites.length - 1].id;
+      document.querySelector(`[data-msg-id="${lastId}"]`)?.scrollIntoView();
     },
     /** 选择用户 */
     selectUser(user = null) {

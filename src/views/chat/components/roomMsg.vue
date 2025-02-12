@@ -33,25 +33,44 @@
           <span>{{ $dayjsTime(doc.time) }}</span>
         </li>
         <li class="msg-txt-box d-flex">
-          <div @contextmenu="recallMessage($event, doc)">
-            <component
-              v-if="[2, 4, 8].includes(+doc.type)"
-              :is="currentComponent(+doc.type)"
-              :userPic="userPic"
-              :doc="doc"
-              ref="$component"
-            ></component>
-            <template v-else>
-              <p
-                class="msg-txt p-x-8 m-t-4"
-                v-if="doc.data?.msg"
-                v-html="highlightedText(doc.data?.msg)"
-              ></p>
-              <p class="msg-txt p-x-8 m-t-4" v-else>
-                {{ doc.data }}
-              </p>
-            </template>
-          </div>
+          <!-- @contextmenu recallMessage($event, doc) -->
+          <el-popover
+            placement="bottom-start"
+            width="30"
+            trigger="hover"
+            class="p-x-4"
+            @show="show(doc)"
+          >
+            <ul class="popover-content">
+              <li
+                class="center-center"
+                v-for="action in countActions"
+                :key="action.value"
+                @click="onSelect(action.value)"
+              >
+                {{ action.text }}
+              </li>
+            </ul>
+            <div slot="reference">
+              <component
+                v-if="[2, 4, 8].includes(+doc.type)"
+                :is="currentComponent(+doc.type)"
+                :userPic="userPic"
+                :doc="doc"
+                ref="$component"
+              ></component>
+              <template v-else>
+                <p
+                  class="msg-txt p-x-8 m-t-4"
+                  v-if="doc.data?.msg"
+                  v-html="highlightedText(doc.data?.msg)"
+                ></p>
+                <p class="msg-txt p-x-8 m-t-4" v-else>
+                  {{ doc.data }}
+                </p>
+              </template>
+            </div>
+          </el-popover>
         </li>
       </ul>
     </div>
@@ -66,7 +85,13 @@ import redImg from "@/views/chat/components/redImg.vue";
 import imgMsg from "@/views/chat/components/imgMsg.vue";
 export default {
   data() {
-    return { userPic };
+    return {
+      userPic,
+      actions: [
+        { text: "撤回", value: 1, disabled: false },
+        { text: "回复", value: 2, disabled: false },
+      ],
+    };
   },
   components: {
     bindBuy,
@@ -74,6 +99,9 @@ export default {
     imgMsg,
   },
   computed: {
+    countActions() {
+      return this.actions.filter((v) => !v.disabled);
+    },
     isMe() {
       return this.doc.playerId === this.user.id;
     },
@@ -106,10 +134,15 @@ export default {
       "sendMessage",
       "fetchHistory",
     ]),
+    contextmenu(event) {
+      event.preventDefault();
+      this.showPopover = true;
+      console.log("contextmenu", event);
+    },
     highlightedText(v) {
       return v.replace(
         /@(\w+)/g,
-        '<span class="m-r-4" style="color:#488fca;">@$1</span>'
+        '<span style="color:#488fca;margin:0 2px;">@$1</span>'
       );
     },
     comfire(v) {
@@ -128,14 +161,19 @@ export default {
           });
       });
     },
-    async recallMessage(event, doc) {
-      event.preventDefault();
-      //time 1739257809520 两分钟内才能撤回
-      if (new Date().getTime() - doc.time > 120000) return;
-      if (!this.isMe) return;
+    onSelect(v) {
+      if (v === 1) {
+        this.recallMessage(this.doc);
+      }
+    },
+    show(doc) {
+      if (new Date().getTime() - doc.time > 120000 || !this.isMe) {
+        this.actions[0].disabled = true;
+      }
+    },
+    async recallMessage(doc) {
       const status = await this.comfire("是否撤回消息？");
       if (!status) return;
-      console.log("recallMessage", doc);
       this.sendMessage({
         type: 9,
         data: JSON.stringify({ id: doc.id }),
@@ -197,6 +235,16 @@ export default {
     border-radius: 5px 5px 5px 5px;
     border: 1px solid #f0f0f0;
     display: inline-flex;
+  }
+}
+.popover-content {
+  li {
+    height: 30px;
+    border-bottom: 1px solid #ebedf0;
+    cursor: pointer;
+  }
+  li:last-child {
+    border-bottom-color: transparent;
   }
 }
 </style>
