@@ -36,10 +36,11 @@
           <!-- @contextmenu recallMessage($event, doc) -->
           <el-popover
             placement="bottom-start"
-            width="30"
+            width="128"
             trigger="hover"
             class="p-x-4"
             :disabled="disabled"
+            popper-class="popper-class-replay"
             @show="show(doc)"
           >
             <ul class="popover-content">
@@ -252,6 +253,14 @@ export default {
   }
   li:last-child {
     border-bottom-color: transparent;
+  }
+}
+</style>
+<style lang="scss">
+body {
+  .popper-class-replay[role="tooltip"] {
+    min-width: auto;
+    padding: 4px;
   }
 }
 </style>
