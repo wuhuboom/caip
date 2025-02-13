@@ -35,13 +35,22 @@
             v-long-press="() => recallMessage(doc)"
           >
             <component
-              v-if="[2, 4, 8].includes(+doc.type)"
+              v-if="[2, 4, 8, 13].includes(+doc.type)"
               :is="currentComponent(+doc.type)"
               :userPic="userPic"
               :doc="doc"
               ref="$component"
             ></component>
-            <p class="msg-txt p-x-8 m-t-4" v-else>{{ doc.data }}</p>
+            <template v-else>
+              <p
+                class="msg-txt p-x-8 m-t-4"
+                v-if="[10, 13].includes(+doc.type)"
+                v-html="highlightedText(doc.data?.msg)"
+              ></p>
+              <p class="msg-txt p-x-8 m-t-4" v-else>
+                {{ doc.data }}
+              </p>
+            </template>
           </li>
         </ul>
       </div>
@@ -54,17 +63,34 @@ import userPic from "@/assets/img/user-room.png";
 import bindBuy from "@/views/chat/components/bindBuy.vue";
 import redImg from "@/views/chat/components/redImg.vue";
 import imgMsg from "@/views/chat/components/imgMsg.vue";
+import repalyMsg from "@/views/chat/components/repalyMsg.vue";
 import { mapActions } from "vuex";
 export default {
   data() {
-    return { userPic };
+    return {
+      userPic,
+      actions: [
+        { text: "撤回", value: 1, disabled: false },
+        { text: "回复", value: 2, disabled: false },
+      ],
+    };
   },
   components: {
     bindBuy,
     redImg,
     imgMsg,
+    repalyMsg,
   },
   computed: {
+    popoverDisabled() {
+      if (![0, 8, 10, 13].includes(+this.doc.type)) {
+        return true;
+      }
+      return this.disabled;
+    },
+    countActions() {
+      return this.actions.filter((v) => !v.disabled);
+    },
     isMe() {
       return this.doc.playerId === this.user.id;
     },
@@ -85,6 +111,10 @@ export default {
     },
   },
   props: {
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
     item: {
       type: Object,
       default: () => {},
@@ -132,11 +162,17 @@ export default {
     currentComponent(type) {
       switch (type) {
         case 2:
+          //合买
           return "bindBuy";
-        case 3:
+        case 4:
+          //红包
           return "redImg";
         case 8:
+          //图片
           return "imgMsg";
+        case 13:
+          //回复
+          return "repalyMsg";
         default:
           return "redImg";
       }

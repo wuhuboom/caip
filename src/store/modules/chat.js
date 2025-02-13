@@ -14,15 +14,29 @@ export default {
       pageSize: 20,
       totalPage: null,
     },
-    linePlayers: [],
+    onlineUser: [],
   },
   getters: {
     news: (state) => {
       const arr = state.messages.filter((v) => v.new === true);
       return arr;
     },
+    aites(state, getters) {
+      if (!getters.news) return [];
+      return getters.news?.filter((v) => {
+        if ([10, 13].includes(+v.type)) {
+          const data = JSON.parse(v.data);
+          if (!data.playerId) return false;
+          return data.playerId.includes(app.$store.state.user.id);
+        }
+        return false;
+      });
+    },
   },
   mutations: {
+    setOnlineUser(state, v) {
+      state.onlineUser = v;
+    },
     addMsgPacket(state, v) {
       const index = state.messages.findIndex((item) => +item.id === +v.msgId);
       if (index === -1) return;
@@ -31,6 +45,13 @@ export default {
       } catch (e) {
         console.log(e);
       }
+    },
+    setToBack(state, v) {
+      console.log("setToBack", v);
+      const index = state.messages.findIndex((item) => +item.id === +v.id);
+      if (index === -1) return;
+      console.log(state.messages[index]);
+      app.$set(state.messages[index], "status", 1);
     },
     setToOld(state, v) {
       const index = state.messages.findIndex((item) => +item.id === +v.id);
@@ -41,13 +62,6 @@ export default {
         }
         return v;
       });
-    },
-    setToBack(state, v) {
-      console.log("setToBack", v);
-      const index = state.messages.findIndex((item) => +item.id === +v.id);
-      if (index === -1) return;
-      console.log(state.messages[index]);
-      app.$set(state.messages[index], "status", 1);
     },
     setQuery(state, query) {
       state.query = query;
@@ -138,7 +152,6 @@ export default {
           query.msgId = msgId;
         }
         const message = JSON.stringify(query);
-        console.log("发送消息:", message);
         state.ws.send(message);
       } else {
         console.error("WebSocket 未连接或已关闭");
@@ -146,8 +159,8 @@ export default {
     },
     // 处理接收到的消息
     handleMessage({ commit }, message) {
-      //0 文本消息 2 分享合买 4 红包消息
-      if ([0, 2, 4, 8].includes(+message.type)) {
+      //0 文本消息 2 分享合买 4 红包消息 8图片 10 @消息 13 回复消息
+      if ([0, 2, 4, 8, 10, 13].includes(+message.type)) {
         // 文本消息
         commit("ADD_MESSAGE", { message });
 
@@ -212,6 +225,28 @@ export default {
       } else if ([9].includes(+message.type)) {
         //撤回消息修改status
         commit("setToBack", JSON.parse(message.data));
+      } else if ([12].includes(+message.type)) {
+        // headImg
+        // :
+        // null
+        // playerId
+        // :
+        // 42
+        // username
+        // :
+        // "arman706"
+        commit(
+          "setOnlineUser",
+          JSON.parse(message.data).filter(
+            (v) => v.playerId != app.$store.state.user.id
+          )
+        );
+        console.log(
+          "12--",
+          JSON.parse(message.data).filter(
+            (v) => v.playerId != app.$store.state.user.id
+          )
+        );
       }
     },
 

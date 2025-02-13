@@ -14,6 +14,8 @@
         @infinite="infiniteHandler"
       ></infinite-loading>
       <roomMsg
+        :data-msg-id="v.id"
+        :disabled="disabled"
         v-observe-visibility="visibilityChanged(v, i)"
         :item="v"
         v-for="(v, i) in messages"
@@ -146,7 +148,7 @@ export default {
       return this.$store.state.user;
     },
     ...mapState("chat", ["messages", "playerId", "query", "ws", "wsStatus"]), // 绑定聊天消息记录
-    ...mapGetters("chat", ["news"]),
+    ...mapGetters("chat", ["news", "aites"]),
   },
   watch: {
     wsStatus() {
