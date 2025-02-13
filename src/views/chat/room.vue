@@ -428,14 +428,14 @@ export default {
             id: this.doc.id,
             msg: this.text,
           };
-          // if (matches.length > 0) {
-          //   const users = this.onlineUser.filter((user) =>
-          //     matches.includes(user.username)
-          //   );
-          //   let playerId = users.map((v) => v.playerId);
-          //   //去重复 playerId
-          //   cont.playerId = [...new Set(playerId)];
-          // }
+          if (matches.length > 0) {
+            const users = this.onlineUser.filter((user) =>
+              matches.includes(user.username)
+            );
+            let playerId = users.map((v) => v.playerId);
+            //去重复 playerId
+            cont.playerId = [...new Set(playerId)];
+          }
           this.sendMessage({
             type: 13,
             data: JSON.stringify(cont),

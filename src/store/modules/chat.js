@@ -26,6 +26,7 @@ export default {
       return getters.news?.filter((v) => {
         if ([10, 13].includes(+v.type)) {
           const data = JSON.parse(v.data);
+          if (!data.playerId) return false;
           return data.playerId.includes(app.$store.state.user.id);
         }
         return false;

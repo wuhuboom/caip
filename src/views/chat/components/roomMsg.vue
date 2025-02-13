@@ -37,6 +37,7 @@
           <el-popover
             placement="bottom-start"
             width="128"
+            :open-delay="300"
             trigger="hover"
             class="p-x-4"
             :disabled="popoverDisabled"
@@ -177,12 +178,12 @@ export default {
       });
     },
     onSelect(v) {
-      this.$refs.popoverRef.doClose();
       if (v === 1) {
         this.recallMessage(this.doc);
         return;
       }
       this.$emit("reply", this.doc);
+      this.$refs.popoverRef.doClose();
     },
     show(doc) {
       if (new Date().getTime() - doc.time > 120000 || !this.isMe) {
