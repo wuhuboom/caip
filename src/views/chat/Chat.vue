@@ -22,38 +22,15 @@
         :key="i"
         ref="$roomMsg"
       />
-
-      <!-- <div class="time-box center-center">
-        <div class="time">2024-11-15 00:52:11</div>
-      </div>
-      <div class="item-box left">
-        <div class="img-box">
-          <img src="" class="img" />
-        </div>
-        <div class="info-box">
-          <div class="name text-ellipsis">阿萌</div>
-          <div class="content-box">
-            <div class="content">小双:245</div>
-          </div>
-        </div>
-      </div>
-      <div class="time-box center-center">
-        <div class="time">2024-11-15 00:52:11</div>
-      </div>
-      <div class="item-box right">
-        <div class="info-box">
-          <div class="name text-ellipsis">阿萌</div>
-          <div class="content-box">
-            <div class="content">
-              <div>@阿萌 下注成功</div>
-              <div>小双:245 余分:4138.25</div>
-            </div>
-          </div>
-        </div>
-        <div class="img-box">
-          <img src="" class="img" />
-        </div>
-      </div> -->
+    </div>
+    <div
+      v-if="aites.length"
+      class="unread-mention center-center"
+      @click="goBtm"
+    >
+      <van-badge :data-badge="aites.length" :content="aites.length" max="99">
+        <span class="at-symbol center-center">@</span>
+      </van-badge>
     </div>
     <div ref="bottomBox" class="bottom-box">
       <div class="height"></div>
@@ -87,6 +64,7 @@
           <input
             type="text"
             class="input"
+            ref="inputRef"
             :placeholder="placeholder"
             v-model="text"
           />
@@ -122,6 +100,7 @@ export default {
         // recharge 3000
       },
       loadingShare: false,
+      doc: {},
     };
   },
   directives: {
@@ -156,6 +135,22 @@ export default {
     },
   },
   methods: {
+    highlightedText(v) {
+      console.log(v);
+      return v.replace(
+        /@(\w+)/g,
+        '<span style="color:#488fca;margin:0 2px;">@$1</span>'
+      );
+    },
+    replay(v) {
+      this.doc = v;
+      this.$refs.inputRef.focus();
+    },
+    goBtm() {
+      //aites  :data-msg-id="v.id" 滑动到可视区域
+      const lastId = this.aites[this.aites.length - 1].id;
+      document.querySelector(`[data-msg-id="${lastId}"]`)?.scrollIntoView();
+    },
     ...mapActions("chat", [
       "initWebSocket",
       "closeWebSocket",
@@ -444,5 +439,33 @@ export default {
     width: 40px;
     height: 40px;
   }
+}
+.unread-mention {
+  bottom: 140px;
+  right: 16px;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  font-size: 32px;
+  font-weight: bold;
+
+  color: #666;
+}
+/* 让 @ 符号稍微变小 */
+.at-symbol {
+  font-size: 28px;
+  width: 62px; /* 控制徽章大小 */
+  border-radius: 50%; /* 圆形 */
+  height: 64px;
+  background-color: #ffffff; /* 近似 Telegram 的蓝色 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 轻微阴影 */
+}
+.reply-txt {
+  background: #ffffff;
+  border-radius: 5px 5px 5px 5px;
+  border: 1px solid #f0f0f0;
 }
 </style>

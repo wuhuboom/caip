@@ -127,6 +127,12 @@ export default {
       "sendMessage",
       "fetchHistory",
     ]),
+    highlightedText(v) {
+      return v.replace(
+        /@(\w+)/g,
+        '<span style="color:#488fca;margin:0 2px;">@$1</span>'
+      );
+    },
     comfire(v) {
       return new Promise((resolve) => {
         this.$dialog
