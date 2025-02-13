@@ -27,9 +27,7 @@
             />
           </div>
         </template>
-        <template v-else>
-          {{ replayData?.msg || replayData }}
-        </template>
+        <template v-else> {{ replayData?.msg || replayData }} </template>
       </li>
     </ul>
     <p v-html="highlightedText(doc.data?.msg)"></p>

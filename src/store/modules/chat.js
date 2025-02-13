@@ -22,10 +22,9 @@ export default {
       return arr;
     },
     aites(state, getters) {
-      //data.playerId type
       if (!getters.news) return [];
       return getters.news?.filter((v) => {
-        if (v.type === 10) {
+        if ([10, 13].includes(+v.type)) {
           const data = JSON.parse(v.data);
           return data.playerId.includes(app.$store.state.user.id);
         }

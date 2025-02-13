@@ -424,12 +424,21 @@ export default {
           .filter((name) => name.length > 0);
         if (this.doc.id) {
           //发送数据:{"type":13,"data":"{\"id\":回复消息ID,\"msg\":\"消息内容\"}}"}
+          const cont = {
+            id: this.doc.id,
+            msg: this.text,
+          };
+          // if (matches.length > 0) {
+          //   const users = this.onlineUser.filter((user) =>
+          //     matches.includes(user.username)
+          //   );
+          //   let playerId = users.map((v) => v.playerId);
+          //   //去重复 playerId
+          //   cont.playerId = [...new Set(playerId)];
+          // }
           this.sendMessage({
             type: 13,
-            data: JSON.stringify({
-              id: this.doc.id,
-              msg: this.text,
-            }),
+            data: JSON.stringify(cont),
           });
           this.doc = {};
         } else if (matches.length > 0) {
