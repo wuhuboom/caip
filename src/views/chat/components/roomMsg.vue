@@ -39,9 +39,10 @@
             width="128"
             trigger="hover"
             class="p-x-4"
-            :disabled="disabled"
+            :disabled="popoverDisabled"
             popper-class="popper-class-replay"
             @show="show(doc)"
+            ref="popoverRef"
           >
             <ul class="popover-content">
               <li
@@ -53,9 +54,9 @@
                 {{ action.text }}
               </li>
             </ul>
-            <div slot="reference">
+            <div slot="reference" :data-reference="doc.type">
               <component
-                v-if="[2, 4, 8].includes(+doc.type)"
+                v-if="[2, 4, 8, 13].includes(+doc.type)"
                 :is="currentComponent(+doc.type)"
                 :userPic="userPic"
                 :doc="doc"
@@ -64,7 +65,7 @@
               <template v-else>
                 <p
                   class="msg-txt p-x-8 m-t-4"
-                  v-if="doc.data?.msg"
+                  v-if="[10, 13].includes(+doc.type)"
                   v-html="highlightedText(doc.data?.msg)"
                 ></p>
                 <p class="msg-txt p-x-8 m-t-4" v-else>
@@ -85,6 +86,7 @@ import userPic from "@/assets/img/user-room.png";
 import bindBuy from "@/views/chat/components/bindBuy.vue";
 import redImg from "@/views/chat/components/redImg.vue";
 import imgMsg from "@/views/chat/components/imgMsg.vue";
+import repalyMsg from "@/views/chat/components/repalyMsg.vue";
 export default {
   data() {
     return {
@@ -99,8 +101,15 @@ export default {
     bindBuy,
     redImg,
     imgMsg,
+    repalyMsg,
   },
   computed: {
+    popoverDisabled() {
+      if (![0, 8, 10, 13].includes(+this.doc.type)) {
+        return true;
+      }
+      return this.disabled;
+    },
     countActions() {
       return this.actions.filter((v) => !v.disabled);
     },
@@ -168,11 +177,12 @@ export default {
       });
     },
     onSelect(v) {
+      this.$refs.popoverRef.doClose();
       if (v === 1) {
         this.recallMessage(this.doc);
         return;
       }
-      this.emit("reply", this.doc);
+      this.$emit("reply", this.doc);
     },
     show(doc) {
       if (new Date().getTime() - doc.time > 120000 || !this.isMe) {
@@ -195,11 +205,17 @@ export default {
     currentComponent(type) {
       switch (type) {
         case 2:
+          //合买
           return "bindBuy";
-        case 3:
+        case 4:
+          //红包
           return "redImg";
         case 8:
+          //图片
           return "imgMsg";
+        case 13:
+          //回复
+          return "repalyMsg";
         default:
           return "redImg";
       }

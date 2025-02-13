@@ -153,8 +153,8 @@ export default {
     },
     // 处理接收到的消息
     handleMessage({ commit }, message) {
-      //0 文本消息 2 分享合买 4 红包消息
-      if ([0, 2, 4, 8, 10].includes(+message.type)) {
+      //0 文本消息 2 分享合买 4 红包消息 8图片 10 @消息 13 回复消息
+      if ([0, 2, 4, 8, 10, 13].includes(+message.type)) {
         // 文本消息
         commit("ADD_MESSAGE", { message });
 

@@ -1,13 +1,4 @@
 <template>
-  <!-- <van-image
-    class="m-t-12"
-    width="100"
-    height="100"
-    fit="cover"
-    :showIndex="false"
-    @click="preview"
-    :src="httpSrc"
-  /> -->
   <el-image
     class="m-t-12"
     style="width: 100px; height: 100px"

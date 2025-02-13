@@ -28,6 +28,7 @@
             @infinite="infiniteHandler"
           ></infinite-loading>
           <roomMsg
+            @reply="replay"
             :disabled="disabled"
             @replay="replay"
             :data-msg-id="v.id"
@@ -115,6 +116,40 @@
               src="@/assets/img/redMony.png"
               alt=""
             />
+            <div
+              class="m-l-16 color999 reply-txt p-l-4 p-r-4 align-center"
+              v-if="doc.id"
+            >
+              <!-- 0 文本, 8图片, 10 @ -->
+              <ul class="m-r-8">
+                <li>
+                  回复：<span>{{ doc.user }}</span>
+                </li>
+                <li class="font12 els" style="max-width: 400px">
+                  <template v-if="[10, 13].includes(+doc.type)">
+                    <p class="" v-html="highlightedText(doc.data?.msg)"></p>
+                  </template>
+                  <template v-else-if="doc.type === 8">
+                    <div style="width: 20px; height: 20px">
+                      <img
+                        class="d-img"
+                        :src="
+                          doc.data.includes('http')
+                            ? doc.data
+                            : `${$baseURL}/${doc.data}`
+                        "
+                      />
+                    </div>
+                  </template>
+                  <template v-else>
+                    {{ doc.data }}
+                  </template>
+                </li>
+              </ul>
+              <p class="center-center" @click="doc = {}">
+                <van-icon name="cross" color="#000" />
+              </p>
+            </div>
           </div>
           <div class="enter p-l-8 p-r-8">
             <el-input
@@ -213,8 +248,15 @@ export default {
     },
   },
   methods: {
+    highlightedText(v) {
+      console.log(v);
+      return v.replace(
+        /@(\w+)/g,
+        '<span style="color:#488fca;margin:0 2px;">@$1</span>'
+      );
+    },
     replay(v) {
-      this.text = `@${v.username} `;
+      this.doc = v;
       this.$refs.inputRef.$refs.textarea.focus();
     },
     goBtm() {
@@ -376,10 +418,21 @@ export default {
           this.selectUser(this.filteredUsers[this.selectedIndex]);
           return;
         }
+
         const matches = [...this.text.matchAll(/@(\S*)/g)]
           .map((m) => m[1])
           .filter((name) => name.length > 0);
-        if (matches.length > 0) {
+        if (this.doc.id) {
+          //发送数据:{"type":13,"data":"{\"id\":回复消息ID,\"msg\":\"消息内容\"}}"}
+          this.sendMessage({
+            type: 13,
+            data: JSON.stringify({
+              id: this.doc.id,
+              msg: this.text,
+            }),
+          });
+          this.doc = {};
+        } else if (matches.length > 0) {
           const users = this.onlineUser.filter((user) =>
             matches.includes(user.username)
           );
@@ -604,5 +657,10 @@ $height: 752px;
   height: 32px;
   background-color: #ffffff; /* 近似 Telegram 的蓝色 */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 轻微阴影 */
+}
+.reply-txt {
+  background: #ffffff;
+  border-radius: 5px 5px 5px 5px;
+  border: 1px solid #f0f0f0;
 }
 </style>
