@@ -17,6 +17,13 @@
             "ipt>"
         );
       </script>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=" + window.trackingId></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', window.trackingId);  // Use the variable here
+      </script>
     <style type="text/css">
         * {
             margin: 0;
