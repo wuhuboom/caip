@@ -529,7 +529,9 @@ export default {
       if (err) return;
       res.data.clientMoney = "";
       res.data.sellCount = res.data.betTotal - res.data.betCountCurr;
-      res.data.betListArr = this.parseFourStarInput(res.data.betCode);
+      res.data.betListArr = res.data.betCode
+        ? this.parseFourStarInput(res.data.betCode)
+        : [];
       //res.data.clientMoney = res.data.sellCount;
       for (let key in res.data) {
         this.$set(this.detail, key, res.data[key]);
