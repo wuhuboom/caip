@@ -175,6 +175,8 @@ export default {
       } else {
         this.nums.push(num.up);
       }
+      //升序
+      this.nums.sort((a, b) => a - b);
     },
     randem(v = []) {
       // 检查参数是否有效，默认为 1
