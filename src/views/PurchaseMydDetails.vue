@@ -279,7 +279,7 @@ export default {
       this.$refs.$canAllDialog.open("确定要撤销吗？");
     },
     async ALLSure() {
-      const [err] = await userApi.cancelTogether({
+      const [err] = await userApi.lotteryMyOrderCancel({
         id: this.id,
       });
       if (err) return;
