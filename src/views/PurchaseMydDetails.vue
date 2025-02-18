@@ -440,7 +440,10 @@ export default {
         const positions = positionsString.split("|").map(
           (pos) => pos.split(",").map(Number) // 将每个位拆分为数字数组
         );
-
+        //positions 里面每个数组再升序
+        positions.forEach((item) => {
+          item.sort((a, b) => a - b);
+        });
         return {
           name,
           positions,
