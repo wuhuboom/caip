@@ -32,6 +32,33 @@
         <span class="at-symbol center-center">@</span>
       </van-badge>
     </div>
+    <van-action-sheet
+      :overlay="false"
+      v-model="showUserList"
+      class="aite-box-sheet"
+    >
+      <ul class="user-list">
+        <li
+          class="align-center"
+          v-for="(user, index) in filteredUsers"
+          :key="index"
+          :class="{ active: index === selectedIndex }"
+          @click="selectUser(user)"
+        >
+          <img
+            class="d-img user-pic m-r-8"
+            :src="
+              user.img
+                ? user.img.includes('http')
+                  ? user.img
+                  : `${$baseURL}/${user.img}`
+                : userPic
+            "
+          />
+          @{{ user.username }}
+        </li>
+      </ul>
+    </van-action-sheet>
     <div ref="bottomBox" class="bottom-box">
       <div class="height"></div>
       <div class="wrap-box" :class="{ 'btm-disabled': disabled }">
@@ -66,6 +93,7 @@
             class="input"
             ref="inputRef"
             :placeholder="placeholder"
+            @input="onInput"
             v-model="text"
           />
         </div>
@@ -89,6 +117,11 @@ export default {
   name: "chatRoom",
   data() {
     return {
+      filteredUsers: [],
+      showUserList: false,
+      selectedIndex: 0,
+      mentionPosition: -1, // 记录 `@` 位置
+
       dataFace: dataFace.filter((v, i) => i < 50),
       showPopover: false,
       actions: [{ text: "选项一" }, { text: "选项二" }, { text: "选项三" }],
@@ -126,7 +159,14 @@ export default {
     user() {
       return this.$store.state.user;
     },
-    ...mapState("chat", ["messages", "playerId", "query", "ws", "wsStatus"]), // 绑定聊天消息记录
+    ...mapState("chat", [
+      "messages",
+      "playerId",
+      "query",
+      "ws",
+      "wsStatus",
+      "onlineUser",
+    ]), // 绑定聊天消息记录
     ...mapGetters("chat", ["news", "aites"]),
   },
   watch: {
@@ -135,6 +175,54 @@ export default {
     },
   },
   methods: {
+    /** 选择用户 */
+    selectUser(user = null) {
+      if (!user) {
+        user = this.filteredUsers[this.selectedIndex];
+      }
+      if (user) {
+        const beforeMention = this.text.slice(0, this.mentionPosition);
+        const afterMention = this.text.slice(this.getCursorPosition());
+        this.text = `${beforeMention}@${user.username} ${afterMention}`;
+        this.showUserList = false;
+      }
+    },
+    /** 获取光标位置 */
+    getCursorPosition() {
+      const textarea = this.$refs.inputRef;
+      return textarea ? textarea.selectionStart : -1;
+    },
+    onInput() {
+      const value = this.text;
+      const cursorPos = this.$refs.inputRef.selectionStart;
+      const atIndex = value.lastIndexOf("@", cursorPos - 1);
+      //以@结尾
+      if (value[value.length - 1] == "@") {
+        this.filteredUsers = this.onlineUser.map((v) => v);
+        this.showUserList = true;
+        this.mentionPosition = atIndex;
+        return;
+      }
+      const matches = [...value.matchAll(/@(\S*)/g)]
+        .map((m) => m[1])
+        .filter((name) => name.length > 0);
+      //取最后一个数组元素
+      const lastMatch = matches[matches.length - 1];
+      if (lastMatch) {
+        if (!value.endsWith(`@${lastMatch}`)) {
+          this.showUserList = false;
+          return;
+        }
+        this.selectedIndex = 0;
+        this.filteredUsers = this.onlineUser.filter((user) =>
+          user.username.toLowerCase().includes(lastMatch.toLowerCase())
+        );
+        this.showUserList = true;
+        this.mentionPosition = atIndex;
+      } else {
+        this.showUserList = false;
+      }
+    },
     highlightedText(v) {
       console.log(v);
       return v.replace(
@@ -245,9 +333,29 @@ export default {
     },
     async send() {
       if (this.text) {
-        this.sendMessage({
-          data: this.text.trim(),
-        });
+        const matches = [...this.text.matchAll(/@(\S*)/g)]
+          .map((m) => m[1])
+          .filter((name) => name.length > 0);
+        if (matches.length > 0) {
+          const users = this.onlineUser.filter((user) =>
+            matches.includes(user.username)
+          );
+          let playerId = users.map((v) => v.playerId);
+          //去重复 playerId
+          playerId = [...new Set(playerId)];
+          this.sendMessage({
+            type: 10,
+            data: JSON.stringify({
+              playerId: playerId,
+              msg: this.text,
+            }),
+          });
+        } else {
+          this.sendMessage({
+            data: this.text.trim(),
+          });
+        }
+
         this.text = "";
         await this.sleep(800);
       }
@@ -303,6 +411,7 @@ export default {
 };
 </script>
 <style scoped lang="less">
+@height: 104px;
 .chat-box {
   overflow-y: auto;
   .time-box {
@@ -366,15 +475,17 @@ export default {
   }
 }
 .bottom-box {
+  z-index: 13;
+  position: relative;
   .height {
-    height: 104px;
+    height: @height;
   }
   .wrap-box {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 104px;
+    height: @height;
     background: #fff;
     padding: 0 16px;
     display: flex;
@@ -467,5 +578,24 @@ export default {
   background: #ffffff;
   border-radius: 5px 5px 5px 5px;
   border: 1px solid #f0f0f0;
+}
+.aite-box-sheet {
+  padding-bottom: @height;
+  z-index: 9 !important;
+}
+.user-list {
+  color: #333;
+}
+.user-list li {
+  padding: 0 10px;
+  height: 86px;
+  cursor: pointer;
+  .user-pic {
+    width: 76px;
+    height: 76px;
+  }
+}
+.user-list li.active {
+  background: #f1f1f1;
 }
 </style>
