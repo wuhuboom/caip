@@ -23,7 +23,7 @@
               <div class="lin text-ellipsis">{{ user.username }}</div>
               <div class="hy-icon"></div>
             </div>
-            <div class="text">ID: {{ user.id }}</div>
+            <div class="text">ID: {{ user.idNo }}</div>
           </div>
         </div>
         <div class="right">
