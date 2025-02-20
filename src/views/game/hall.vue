@@ -863,6 +863,7 @@ export default {
       this.typeList.forEach((v) => {
         v.list.forEach((doc) => {
           list.push({
+            value: doc.value,
             txt: `${doc.txt}`,
             desc: doc.desc,
             key: doc.txt,
@@ -883,6 +884,10 @@ export default {
       return model.txt;
     },
     choseValue() {
+      // console.log(
+      //   this.fullTxt.find((v) => v.key === this.value),
+      //   "this.value"
+      // );
       return this.fullTxt.find((v) => v.key === this.value) || {};
     },
     descTxt() {
