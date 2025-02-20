@@ -194,10 +194,10 @@
               class="play-tab-item"
               v-for="(item, idx) in choseNavs"
               :key="idx"
-              :class="{ 'play-tab-item-active': item.id === curNav }"
-              @click="changeNav(item.id)"
+              :class="{ 'play-tab-item-active': item === curNav }"
+              @click="changeNav(item)"
             >
-              {{ item.name }}
+              {{ item }}
             </div>
           </div>
           <div class="play-tab-right"></div>
@@ -210,12 +210,7 @@
             >
               示例
             </div>
-            <div
-              class="ssc-panel-symbol"
-              title="从千位、百位、十位、个位中，各选择1个号码组成一注，所选号码与开奖号码后4位相同，且顺序一致，即为中奖。"
-            >
-              ?
-            </div>
+            <div class="ssc-panel-symbol">?</div>
             <div>{{ descTxt }}</div>
           </div>
           <div
@@ -223,7 +218,7 @@
             v-for="(item, idx) in typeList"
             :key="idx"
           >
-            <div class="ssc-panel-label">{{ item.tip1 + item.tip2 }}：</div>
+            <div class="ssc-panel-label">{{ item.name }}：</div>
             <div class="ssc-panel-radios-div">
               <div
                 class="cp-radio-main ssc-panel-radio"
@@ -551,12 +546,13 @@ const initData = () => {
     price: 2,
     multiple: 1,
     total: 0,
-    value: "直选复式",
+    value: "",
     detail: {
       mulConfig: [],
       nextExpect: {},
     },
     tableList: [],
+    catTree: [],
   };
 };
 export default {
@@ -633,11 +629,7 @@ export default {
       return num;
     },
     typeList() {
-      const arr = this.typeConfigList[this.curNav] || [];
-      arr.forEach((v) => {
-        v.list = v.list.filter((doc) => !this.hideMulConfig.includes(doc.txt));
-      });
-      return arr;
+      return this.catTree.find((item) => item.name === this.curNav)?.list || [];
     },
     hideMulConfig() {
       const arr = this.detail.mulConfig.filter((item) => +item.show === 0);
@@ -649,34 +641,7 @@ export default {
       return doc.lotteryType;
     },
     choseNavs() {
-      if (this.lotteryType === 0) {
-        return [
-          // {
-          //   name: "四星",
-          //   id: "lotteryType0",
-          // },
-          {
-            name: "后三",
-            id: "lotteryType4",
-          },
-          {
-            name: "中三",
-            id: "lotteryType3",
-          },
-
-          {
-            name: "前三",
-            id: "lotteryType2",
-          },
-        ];
-      } else {
-        return [
-          {
-            name: "三星",
-            id: "lotteryType1",
-          },
-        ];
-      }
+      return this.catTree.map((item) => item.name);
     },
     curPre() {
       const {
@@ -904,12 +869,13 @@ export default {
           });
         });
       });
-      list.forEach((v) => {
-        const model = this.detail.mulConfig.find((doc) => doc.title === v.txt);
-        if (model) {
-          v.value = model.value;
-        }
-      });
+      // list.forEach((v) => {
+      //   const model = this.detail.mulConfig.find((doc) => doc.title === v.txt);
+      //   if (model) {
+      //     console.log(model, "------model");
+      //     v.value = model.value;
+      //   }
+      // });
       return list;
     },
     model() {
@@ -1200,15 +1166,15 @@ export default {
       this.$store.commit("setHallId", this.id);
       const [err, res] = await userApi.betsDetail({ id: this.id });
       if (err) return;
+      this.catTree = JSON.parse(res.data.mulConfig);
       res.data.mulConfig = JSON.parse(res.data.mulConfig);
+      console.log(res.data.mulConfig);
       this.setlotteryType(this.id);
       if (!res.data.nextExpect) {
         res.data.nextExpect = {};
       }
       this.detail = res.data;
-      if (this.hideMulConfig.includes(this.value)) {
-        this.value = "";
-      }
+      this.curNav = this.catTree[0]?.name;
       this.setValue();
     },
     initDetail() {
