@@ -1,231 +1,246 @@
 <template>
   <div class="c-page bg-grey">
-    <!-- 顶栏 -->
-    <AppTopBar
-      class="app-top-bar"
-      :styleObj="{ backgroundColor: '#202521' }"
-      :titleSolt="true"
-    >
-      <template v-slot:title>
-        <div class="title-desc center-center" @click="showSelect = !showSelect">
-          <!-- {{ detail.lotteryNameH5 }} -->
-          {{ value }}
-          <img class="d-img downd m-l-8" src="@/assets/img/downd.png" alt="" />
-        </div>
-        <div class="center-box" v-if="showSelect">
-          <div class="bg" @click="showSelect = false"></div>
-          <div class="downs-box">
-            <div class="select-box">
-              <div
-                class="select"
-                v-for="(item, index) in firstNavs"
-                :key="index"
-                @click="curTab = item"
-                :class="{ on: curTab === item }"
-              >
-                {{ item }}
-              </div>
-            </div>
-            <div v-for="(item, index) in secondNavs" :key="index">
-              <p class="desc">{{ `${item.tip1}${item.tip2}` }}</p>
+    <div class="center-center m-t-48" v-if="!value">
+      <van-loading color="#bf2935" />
+    </div>
+    <template v-else>
+      <!-- 顶栏 -->
+      <AppTopBar
+        class="app-top-bar"
+        :styleObj="{ backgroundColor: '#202521' }"
+        :titleSolt="true"
+      >
+        <template v-slot:title>
+          <div
+            class="title-desc center-center"
+            @click="showSelect = !showSelect"
+          >
+            <!-- {{ detail.lotteryNameH5 }} -->
+            {{ value }}
+            <img
+              class="d-img downd m-l-8"
+              src="@/assets/img/downd.png"
+              alt=""
+            />
+          </div>
+          <div class="center-box" v-if="showSelect">
+            <div class="bg" @click="showSelect = false"></div>
+            <div class="downs-box">
               <div class="select-box">
                 <div
                   class="select"
-                  v-for="(v, i) in item.list"
-                  :key="i"
-                  @click="value = v.txt"
-                  :class="{ on: value === v.txt }"
+                  v-for="(item, index) in firstNavs"
+                  :key="index"
+                  @click="curTab = item"
+                  :class="{ on: curTab === item }"
                 >
-                  {{ v.txt.replace(item.tip1, "") }}
+                  {{ item }}
+                </div>
+              </div>
+              <div v-for="(item, index) in secondNavs" :key="index">
+                <p class="desc">{{ `${item.name}` }}</p>
+                <div class="select-box">
+                  <div
+                    class="select"
+                    v-for="(v, i) in item.list"
+                    :key="i"
+                    @click="value = v.txt"
+                    :class="{ on: value === v.txt }"
+                  >
+                    {{ v.txt.replace(curTab, "") }}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </template>
-      <template v-slot:right>
-        <div
-          class="m-r-32 colorfff font14"
-          @click="
-            $router.push({
-              path: '/winning-list',
-              query: {
-                id: id,
-                lotteryName: detail.lotteryNameH5,
-              },
-            })
-          "
-        >
-          往期开奖
-        </div>
-      </template>
-    </AppTopBar>
-    <div class="justify-between header-desc font12">
-      <ul>
-        <li>第{{ detail.nextExpect.nextExpect }}期</li>
-        <li class="font10 m-t-8 m-b-16">投注截止时间</li>
-        <li>
-          <van-count-down
-            @finish="openFish"
-            @change="changeCount"
-            :time="detail.nextExpect?.countdown * 1000"
+        </template>
+        <template v-slot:right>
+          <div
+            class="m-r-32 colorfff font14"
+            @click="
+              $router.push({
+                path: '/winning-list',
+                query: {
+                  id: id,
+                  lotteryName: detail.lotteryNameH5,
+                },
+              })
+            "
           >
-            <template #default="timeData">
-              <div class="colorfff timeData align-center">
-                <span class="block center-center">{{
-                  timeData.hours > 10 ? timeData.hours : `0${timeData.hours}`
-                }}</span>
-                <span class="colon center-center">:</span>
-                <span class="block center-center">{{
-                  timeData.minutes > 10
-                    ? timeData.minutes
-                    : `0${timeData.minutes}`
-                }}</span>
-                <span class="colon center-center">:</span>
-                <span class="block center-center">{{
-                  timeData.seconds > 10
-                    ? timeData.seconds
-                    : `0${timeData.seconds}`
-                }}</span>
-              </div>
-            </template>
-          </van-count-down>
-        </li>
-      </ul>
-      <ul class="flex-column justify-between">
-        <li>第{{ preData.lastExpect.cycleNum }}开奖号码</li>
-        <li
-          v-if="preData.lastExpect.openNum"
-          class="align-center chose-ball-list"
-        >
-          <p
-            class="chose-ball font16 center-center colorfff m-l-16"
-            v-for="(item, idx) in preData.lastExpect.openNum.split(',')"
-            :key="idx"
-          >
-            {{ item }}
-          </p>
-        </li>
-      </ul>
-    </div>
-
-    <div class="main-wrap">
-      <div class="des-box">
-        <div class="left">{{ descTxt }}</div>
-        <div class="right font10 center-center" @click="randem">
-          <img class="d-img ramd m-r-12" src="@/assets/img/ramd.png" alt="" />
-          随机一注
-        </div>
-      </div>
-      <transition name="fade" mode="out-in">
-        <component
-          :curPre="curPre"
-          ref="$cont"
-          @total="total = $event"
-          :is="currentComponent"
-          :key="value"
-          v-bind="getComponentProps"
-        ></component>
-      </transition>
-      <div class="m-t-32">
-        <ul class="bets-desc colorfff font14 justify-around align-center">
-          <li class="clear-list list-btn center-center" @click="delALL">
-            <van-icon name="delete-o" class="m-r-16" />
-            清空列表
+            往期开奖
+          </div>
+        </template>
+      </AppTopBar>
+      <div class="justify-between header-desc font12">
+        <ul>
+          <li>第{{ detail.nextExpect.nextExpect }}期</li>
+          <li class="font10 m-t-8 m-b-16">投注截止时间</li>
+          <li>
+            <van-count-down
+              @finish="openFish"
+              @change="changeCount"
+              :time="detail.nextExpect?.countdown * 1000"
+            >
+              <template #default="timeData">
+                <div class="colorfff timeData align-center">
+                  <span class="block center-center">{{
+                    timeData.hours > 10 ? timeData.hours : `0${timeData.hours}`
+                  }}</span>
+                  <span class="colon center-center">:</span>
+                  <span class="block center-center">{{
+                    timeData.minutes > 10
+                      ? timeData.minutes
+                      : `0${timeData.minutes}`
+                  }}</span>
+                  <span class="colon center-center">:</span>
+                  <span class="block center-center">{{
+                    timeData.seconds > 10
+                      ? timeData.seconds
+                      : `0${timeData.seconds}`
+                  }}</span>
+                </div>
+              </template>
+            </van-count-down>
           </li>
-          <li class="add-list list-btn center-center" @click="add">
-            <van-icon name="plus" class="m-r-16" />
-            添加至投注列表
+        </ul>
+        <ul class="flex-column justify-between">
+          <li>第{{ preData.lastExpect.cycleNum }}开奖号码</li>
+          <li
+            v-if="preData.lastExpect.openNum"
+            class="align-center chose-ball-list"
+          >
+            <p
+              class="chose-ball font16 center-center colorfff m-l-16"
+              v-for="(item, idx) in preData.lastExpect.openNum.split(',')"
+              :key="idx"
+            >
+              {{ item }}
+            </p>
           </li>
         </ul>
       </div>
-      <ul class="orders-list m-b-32">
-        <li class="font16 align-center justify-between">
-          投注列表
-          <p class="font14" @click="$router.push('/MyBallRecord')">
-            购票记录 <van-icon name="arrow" />
-          </p>
-        </li>
-        <li class="orders-cont m-t-32 p-x-24">
-          <p
-            v-for="(v, i) in tableList"
-            :key="i"
-            class="orders-item align-center p-b-24"
-          >
-            <span class="no-shrink m-r-8">
-              {{ v.model }} {{ v.total }}注
-              {{ divide(v.total * multiple * $betPrice, false) }}元
-            </span>
-            <span>
-              {{ v.text }}
-            </span>
-          </p>
-        </li>
-      </ul>
-      <ul class="bets-way">
-        <li class="justify-between align-center">
-          <p class="color999">倍数:</p>
-          <p><van-stepper v-model="multiple" /></p>
-        </li>
-        <!-- <li
+      <div class="main-wrap">
+        <div class="des-box">
+          <div class="left">{{ descTxt }}</div>
+          <div class="right font10 center-center" @click="randem">
+            <img class="d-img ramd m-r-12" src="@/assets/img/ramd.png" alt="" />
+            随机一注
+          </div>
+        </div>
+        <transition name="fade" mode="out-in">
+          <component
+            :curPre="curPre"
+            ref="$cont"
+            @total="total = $event"
+            :is="currentComponent"
+            :key="value"
+            v-bind="getComponentProps"
+          ></component>
+        </transition>
+        <div class="m-t-32">
+          <ul class="bets-desc colorfff font14 justify-around align-center">
+            <li class="clear-list list-btn center-center" @click="delALL">
+              <van-icon name="delete-o" class="m-r-16" />
+              清空列表
+            </li>
+            <li class="add-list list-btn center-center" @click="add">
+              <van-icon name="plus" class="m-r-16" />
+              添加至投注列表
+            </li>
+          </ul>
+        </div>
+        <ul class="orders-list m-b-32">
+          <li class="font16 align-center justify-between">
+            投注列表
+            <p class="font14" @click="$router.push('/MyBallRecord')">
+              购票记录 <van-icon name="arrow" />
+            </p>
+          </li>
+          <li class="orders-cont m-t-32 p-x-24">
+            <p
+              v-for="(v, i) in tableList"
+              :key="i"
+              class="orders-item align-center p-b-24"
+            >
+              <span class="no-shrink m-r-8">
+                {{ v.model }} {{ v.total }}注
+                {{ divide(v.total * multiple * $betPrice, false) }}元
+              </span>
+              <span>
+                {{ v.text }}
+              </span>
+            </p>
+          </li>
+        </ul>
+        <ul class="bets-way">
+          <li class="justify-between align-center">
+            <p class="color999">倍数:</p>
+            <p><van-stepper v-model="multiple" /></p>
+          </li>
+          <!-- <li
           class="justify-between align-center"
           @click="showSelect = !showSelect"
         >
           <p class="color999">投注方式:</p>
           <p>{{ value }} <van-icon name="arrow" /></p>
         </li> -->
-      </ul>
-    </div>
-    <BetOn
-      :id="id"
-      @delALL="delALL"
-      @delOne="delOne"
-      @buySuccess="buySuccess"
-      :tableList="tableList"
-      :detail="detail"
-      :milliseconds="milliseconds"
-      @openChase="openChase"
-      @openGroupBuy="openGroupBuy"
-      ref="$BetOn"
-    />
-    <tipsDialog @sure="clearData" ref="$finshDialog" />
-    <AppendChase
-      :id="id"
-      :tableList="tableList"
-      :detail="detail"
-      @buySuccess="buySuccess"
-      :milliseconds="milliseconds"
-      ref="$AppendChase"
-    />
-    <BuyTogether
-      :id="id"
-      @delALL="delALL"
-      @delOne="delOne"
-      @buySuccess="buySuccess"
-      :tableList="tableList"
-      :detail="detail"
-      :milliseconds="milliseconds"
-      ref="$BuyTogether"
-    />
-    <!-- 底部 BuyTogether -->
-    <div class="betting-box">
-      <div class="fixed">
-        <div class="center">
-          <div class="t1">{{ totalALL }}注</div>
-          <div class="t2">共{{ totalMoney }}元</div>
-        </div>
-        <div class="right" @click="openChase" style="background-color: #484848">
-          追号
-        </div>
-        <div class="right" @click="sure">投注</div>
+        </ul>
       </div>
-    </div>
-    <img
-      class="d-img together"
-      @click="openGroupBuy"
-      src="@/assets/img/together.png"
-      alt=""
-    />
+      <BetOn
+        :id="id"
+        @delALL="delALL"
+        @delOne="delOne"
+        @buySuccess="buySuccess"
+        :tableList="tableList"
+        :detail="detail"
+        :milliseconds="milliseconds"
+        @openChase="openChase"
+        @openGroupBuy="openGroupBuy"
+        ref="$BetOn"
+      />
+      <tipsDialog @sure="clearData" ref="$finshDialog" />
+      <AppendChase
+        :id="id"
+        :tableList="tableList"
+        :detail="detail"
+        @buySuccess="buySuccess"
+        :milliseconds="milliseconds"
+        ref="$AppendChase"
+      />
+      <BuyTogether
+        :id="id"
+        @delALL="delALL"
+        @delOne="delOne"
+        @buySuccess="buySuccess"
+        :tableList="tableList"
+        :detail="detail"
+        :milliseconds="milliseconds"
+        ref="$BuyTogether"
+      />
+      <!-- 底部 BuyTogether -->
+      <div class="betting-box">
+        <div class="fixed">
+          <div class="center">
+            <div class="t1">{{ totalALL }}注</div>
+            <div class="t2">共{{ totalMoney }}元</div>
+          </div>
+          <div
+            class="right"
+            @click="openChase"
+            style="background-color: #484848"
+          >
+            追号
+          </div>
+          <div class="right" @click="sure">投注</div>
+        </div>
+      </div>
+      <img
+        class="d-img together"
+        @click="openGroupBuy"
+        src="@/assets/img/together.png"
+        alt=""
+      />
+    </template>
   </div>
 </template>
 
@@ -260,14 +275,15 @@ export default {
       showMore: false,
       showSelect: false,
       showBeforeLottery: false,
-      curTab: +this.$route.query.type === 1 ? "三星" : "前三",
-      value: +this.$route.query.type === 1 ? "三星直选复式" : "前三直选复式",
+      curTab: "",
+      value: "",
       tableData: {},
       preData: {
         hot: [],
         losses: [],
         lastExpect: {},
       },
+      catTree: [],
       detail: {
         mulConfig: [],
         nextExpect: {},
@@ -504,31 +520,10 @@ export default {
       };
     },
     firstNavs() {
-      let arr = [];
-      for (let key in this.tabs) {
-        this.tabs[key].forEach((item) => {
-          if (!arr.includes(item.tip1)) {
-            arr.push(item.tip1);
-          }
-        });
-      }
-      return arr;
+      return this.catTree.map((item) => item.name);
     },
     secondNavs() {
-      let arr = [];
-      for (let key in this.tabs) {
-        this.tabs[key].forEach((item) => {
-          if (item.tip1 == this.curTab) {
-            arr = this.tabs[key];
-          }
-        });
-      }
-      arr.forEach((item) => {
-        item.list = item.list.filter(
-          (v) => !this.hideMulConfig.includes(v.txt)
-        );
-      });
-      return arr;
+      return this.catTree.find((item) => item.name === this.curTab)?.list || [];
     },
     hideMulConfig() {
       const arr = this.detail.mulConfig.filter((item) => +item.show === 0);
@@ -633,16 +628,16 @@ export default {
     async getDetail() {
       const [err, res] = await userApi.betsDetail({ id: this.id });
       if (err) return;
+      this.catTree = JSON.parse(res.data.mulConfig);
       res.data.mulConfig = JSON.parse(res.data.mulConfig);
+      console.log(this.catTree);
       //value
       if (!res.data.nextExpect) {
         res.data.nextExpect = {};
       }
       this.detail = res.data;
-      if (this.hideMulConfig.includes(this.value)) {
-        this.value = "";
-      }
-      this.curTab = +this.$route.query.type === 1 ? "三星" : "后三";
+
+      this.curTab = this.catTree[0]?.name;
       this.setValue();
     },
     initDetail() {
