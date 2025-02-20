@@ -22,6 +22,9 @@
       <div class="text">
         你可以将以上地址通过QQ、MSN、微博、邮件等⽅式发给您的好友
       </div>
+      <p class="m-t-48" style="color: #c33743">
+        通过个人推广邀请码的注册的会员可获得团队成员每笔充值的3%推广奖励
+      </p>
     </div>
   </div>
 </template>
