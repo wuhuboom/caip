@@ -154,6 +154,7 @@ export default {
         const message = JSON.stringify(query);
         state.ws.send(message);
       } else {
+        location.reload();
         console.error("WebSocket 未连接或已关闭");
       }
     },

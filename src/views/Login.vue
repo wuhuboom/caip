@@ -35,16 +35,16 @@
               v-model.trim="form.code"
               autocomplete="new-password"
               placeholder=" 验证码"
-              class="username m-b-32 icon-input"
+              class="username m-b-32 icon-input img-code-input"
              :rules="[{ required: true, message: '请输入验证码' }]"
             >
             <template #button>
               <img
-                class="d-img code-img"
-                @click="verifyCodeReq"
-                :src="codeData.img"
-                alt=""
-              />
+                  class="d-img"
+                  @click="verifyCodeReq"
+                  :src="codeData.img"
+                  alt=""
+                />
             </template>
             </van-field>
             <ul class="justify-between align-center m-b-32">
@@ -129,10 +129,6 @@ export default {
   min-height: 100vh;
   background-size: 100% auto;
   overflow: hidden;
-  .code-img {
-    height: 64px;
-    border-radius: 18px;
-  }
   .main-box {
     width: 678px;
     background: #fff;
@@ -239,5 +235,14 @@ export default {
 .down-app {
   width: 129px;
   height: 38px;
+}
+.img-code-input {
+  ::v-deep {
+    .van-field__button {
+      width: 234px;
+      border-radius: 18px;
+      overflow: hidden;
+    }
+  }
 }
 </style>
