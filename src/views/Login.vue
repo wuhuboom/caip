@@ -242,6 +242,7 @@ export default {
       width: 234px;
       border-radius: 18px;
       overflow: hidden;
+      padding-left: 0;
     }
   }
 }
