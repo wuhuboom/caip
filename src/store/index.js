@@ -177,6 +177,9 @@ export default new Vuex.Store({
       if (!state.config.area_code.length) return "";
       return state.config.area_code[0];
     },
+    catList(state) {
+      return state.cat;
+    },
   },
   mutations: {
     setShareData(state, data) {

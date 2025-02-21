@@ -22,6 +22,16 @@
             人工充值
           </li>
         </ul>
+        <div class="top-bets-bot align-center justify-between">
+          <div class="cat-list">
+            <div class="cat-txt align-center justify-between">
+              {{ detail.lotteryNameH5 }}
+              <van-icon :name="!showother ? 'arrow-down' : 'arrow-up'" />
+            </div>
+          </div>
+          <div></div>
+          <div></div>
+        </div>
         <div class="flex-1 cont y-container js-cont-room p-t-12">
           <infinite-loading
             direction="top"
@@ -201,6 +211,14 @@ export default {
       selectedIndex: 0,
       mentionPosition: -1, // 记录 `@` 位置
       doc: {},
+      showother: false,
+      showmenu: false,
+      detail: {
+        mulConfig: [],
+        nextExpect: {},
+      },
+      results: [],
+      id: null,
     };
   },
   directives: {
@@ -213,6 +231,16 @@ export default {
     popupMoney,
   },
   computed: {
+    ...mapGetters(["catList"]),
+    prize() {
+      return this.results[0] || {};
+    },
+    otherPrize() {
+      return this.results.slice(1);
+    },
+    curCat() {
+      return this.catList.find((v) => v.id === this.id);
+    },
     placeholder() {
       return this.disabled
         ? `充值${this.shareData.recharge}才能解锁聊天`
@@ -496,9 +524,48 @@ export default {
         }
       });
     },
+    async lotteryBetsOrder() {
+      const query = {
+        id: this.id,
+        pageNo: 1,
+        pageSize: 8,
+      };
+      const [err, res] = await userApi.lotteryHisExpect(query);
+      if (err) {
+        return;
+      }
+      res.data.results = res.data.results.map((v) => {
+        v.openArr = v.openNum.split(",");
+        return v;
+      });
+      this.results = res.data.results;
+    },
+    async getDetail() {
+      const [err, res] = await userApi.betsDetail({ id: this.id });
+      if (err) return;
+      res.data.mulConfig = JSON.parse(res.data.mulConfig);
+      //value
+      if (!res.data.nextExpect) {
+        res.data.nextExpect = {};
+      }
+      console.log(this.detail.id, res.data.id);
+      if (
+        this.detail.id !== res.data.id ||
+        this.detail.nextExpect.nextExpect !== res.data.nextExpect.nextExpect
+      ) {
+        this.detail = res.data;
+        this.lotteryBetsOrder();
+      }
+    },
   },
   created() {
     this.$store.dispatch("getSharaData");
+    this.id = +sessionStorage.getItem("lotteryId") || +this.catList[0].id;
+    this.getDetail();
+    //getDetail d定时检查
+    this.timer = setInterval(() => {
+      this.getDetail();
+    }, 6000);
   },
   mounted() {
     this.chat();
@@ -509,7 +576,7 @@ export default {
     this.initWebSocket();
   },
   beforeDestroy() {
-    // this.closeWebSocket();
+    this.timer && clearInterval(this.timer);
   },
 };
 </script>
@@ -527,18 +594,38 @@ export default {
   }
 }
 $height: 752px;
+$head: 57px;
 .rooms {
   width: 800px;
   height: $height;
   background: #f5f5f5;
   border-radius: 0px 0px 0px 0px;
+  position: relative;
+  .top-bets-bot {
+    position: absolute;
+    left: 0;
+    top: $head;
+    width: 100%;
+    height: 51px;
+    background: #6280ff;
+    .cat-list {
+      .cat-txt {
+        width: 123px;
+        height: 30px;
+        background-color: rgba(155, 174, 255, 0.65);
+        border-radius: 5px 5px 5px 5px;
+      }
+    }
+  }
   .head {
-    height: 57px;
+    height: $head;
     font-size: 20px;
     color: #000000;
     border-bottom: 1px solid #dedcdb;
+    position: relative;
   }
   .cont {
+    padding-top: $head !important;
     overflow-y: auto;
     // display: flex;
     // flex-direction: column-reverse;
