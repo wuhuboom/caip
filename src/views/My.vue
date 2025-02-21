@@ -45,15 +45,33 @@
         </div>
       </div>
     </div>
-    <div class="cz-box">
-      <div class="item center-center" @click="recharge">
-        <div class="name">充值</div>
-      </div>
-      <div class="item center-center" @click="withdraw">
-        <div class="name">提现</div>
-      </div>
+    <ul class="fct-box p-x-32 justify-between colorfff">
+      <li class="center-center" @click="recharge">充值</li>
+      <li class="center-center" @click="withdraw">提现</li>
+      <li class="center-center" @click="$tool.goPage('/invite-friends')">
+        <img class="d-img m-r-8" src="@/assets/img/mrf.png" alt="" />
+        邀请好友
+      </li>
+    </ul>
+    <div class="p-l-32 p-r-32 p-b-32">
+      <ul class="menus-list p-t-32 flex-wrap">
+        <li
+          class="center-center p-b-32"
+          v-for="(item, index) in navs"
+          :key="index"
+          @click="goPgae(item.path)"
+        >
+          <div class="flex-column center-center">
+            <p class="m-b-8">
+              <img class="d-img" :src="item.icon" alt="" />
+            </p>
+            <p>{{ item.name }}</p>
+          </div>
+        </li>
+      </ul>
     </div>
-    <div class="lists-box">
+
+    <!-- <div class="lists-box">
       <div
         class="item"
         @click="
@@ -130,7 +148,7 @@
           <van-icon name="arrow" class="arrow-icon" />
         </div>
       </div>
-      <!-- <div class="item" @click="$tool.goPage('/my-discount')">
+      <div class="item" @click="$tool.goPage('/my-discount')">
         <div class="left">
           <div class="l-icon i-3"></div>
           <div class="name">优惠活动</div>
@@ -138,7 +156,7 @@
         <div class="right">
           <van-icon name="arrow" class="arrow-icon" />
         </div>
-      </div> -->
+      </div>
       <div class="item" @click="$tool.goPage('/promotion-commission')">
         <div class="left">
           <div class="l-icon i-4"></div>
@@ -175,7 +193,7 @@
           <van-icon name="arrow" class="arrow-icon" />
         </div>
       </div>
-    </div>
+    </div> -->
     <tipsDialog ref="$bankDialog" @sure="goBank" />
     <AppBtmBar></AppBtmBar>
   </div>
@@ -189,6 +207,53 @@ export default {
   data() {
     return {
       DefaultAvatar,
+      navs: [
+        {
+          path: "/myBallRecord",
+          icon: require("@/assets/img/tets.png"),
+          name: "购票记录",
+        },
+        {
+          path: "/financial-details",
+          icon: require("@/assets/img/tets1.png"),
+          name: "资金明细",
+        },
+        {
+          path: "/FundDetail",
+          icon: require("@/assets/img/My/rediocn.png"),
+          name: "红包记录",
+        },
+        {
+          path: "/GiftRecord",
+          icon: require("@/assets/img/My/gift.png"),
+          name: "赠送记录",
+        },
+        {
+          path: "/promotion-commission",
+          icon: require("@/assets/img/My/m5.png"),
+          name: "我的团队",
+        },
+        {
+          path: "/downloadApp",
+          icon: require("@/assets/img/downapp.png"),
+          name: "下载APP",
+        },
+        {
+          path: "getServeData",
+          icon: require("@/assets/img/My/m4.png"),
+          name: "在线客服",
+        },
+        {
+          path: "/BalanceVault",
+          icon: require("@/assets/img/My/m10.png"),
+          name: "余额宝",
+        },
+        {
+          path: "/chat",
+          icon: require("@/assets/img/My/room.png"),
+          name: "聊天室",
+        },
+      ],
     };
   },
   computed: {
@@ -213,6 +278,12 @@ export default {
     },
   },
   methods: {
+    goPgae(path) {
+      if (path === "getServeData") {
+        return this.$store.dispatch("getServeData", 1);
+      }
+      this.$router.push(path);
+    },
     openTipsDialog() {
       this.$refs.$bankDialog.open(
         "您好，您还未绑定提款银行卡，确定现在进行绑定银行卡？"
@@ -467,6 +538,32 @@ export default {
         color: #ccc;
         font-size: 36px;
       }
+    }
+  }
+}
+.fct-box {
+  & > li {
+    width: 212px;
+    height: 68px;
+    background: linear-gradient(274deg, #ca404b 0%, #bf2935 100%);
+    box-shadow: 0px 6px 12px 2px rgba(0, 0, 0, 0.16);
+    border-radius: 12px 12px 12px 12px;
+  }
+  & > li:last-child {
+    background: #b78756;
+    img {
+      width: 35px;
+      height: 35px;
+    }
+  }
+}
+.menus-list {
+  background-color: #fff;
+  & > li {
+    width: 25%;
+    img {
+      width: 56px;
+      height: 56px;
     }
   }
 }

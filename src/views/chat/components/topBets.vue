@@ -2,6 +2,7 @@
   <van-popup
     class="chat-top-bets"
     v-model="show"
+    v-show="detail.id"
     position="top"
     :overlay="false"
   >
@@ -10,7 +11,7 @@
         v-if="head"
         class="top-bets-cont colorfff flex-column justify-around font13"
       >
-        <ul class="justify-between p-l-16 p-r-16">
+        <ul class="justify-between p-l-16 p-r-8">
           <li class="d-flex">
             <van-icon
               :name="!showmenu ? 'list-switch' : 'cross'"
@@ -29,19 +30,19 @@
             投注中
             <van-count-down :time="detail.nextExpect?.countdown * 1000">
               <template #default="timeData">
-                <div class="colorfff timeData align-center">
-                  <span class="block center-center">{{
-                    timeData.hours > 10 ? timeData.hours : `0${timeData.hours}`
+                <div class="colorfff timeData align-center m-l-16">
+                  <span class="block center-center m-r-16">{{
+                    timeData.hours >= 10 ? timeData.hours : `0${timeData.hours}`
                   }}</span>
-                  <span class="colon center-center">:</span>
-                  <span class="block center-center">{{
-                    timeData.minutes > 10
+
+                  <span class="block center-center m-r-16">{{
+                    timeData.minutes >= 10
                       ? timeData.minutes
                       : `0${timeData.minutes}`
                   }}</span>
-                  <span class="colon center-center">:</span>
+
                   <span class="block center-center">{{
-                    timeData.seconds > 10
+                    timeData.seconds >= 10
                       ? timeData.seconds
                       : `0${timeData.seconds}`
                   }}</span>
@@ -198,19 +199,31 @@ export default {
       if (!res.data.nextExpect) {
         res.data.nextExpect = {};
       }
-      this.detail = res.data;
+      if (
+        this.detail.id !== res.data.id ||
+        this.detail.nextExpect.nextExpect !== res.data.nextExpect.nextExpect
+      ) {
+        this.detail = res.data;
+        this.lotteryBetsOrder();
+      }
     },
     changeId(id) {
       this.id = id;
-      this.lotteryBetsOrder();
+
       this.getDetail();
       this.showmenu = false;
     },
   },
   created() {
     this.id = +this.catList[0].id;
-    this.lotteryBetsOrder();
     this.getDetail();
+    //getDetail d定时检查
+    this.timer = setInterval(() => {
+      this.getDetail();
+    }, 6000);
+  },
+  beforeDestroy() {
+    this.timer && clearInterval(this.timer);
   },
 };
 </script>
@@ -320,7 +333,14 @@ $tabwidth: 686px;
   //221px x 76px
   width: 221px;
   height: 76px;
-  background: url("@/assets/img/timeData.png") no-repeat;
-  background-size: 100% 100%;
+
+  .block {
+    background: url("@/assets/img/bets-num.png") no-repeat;
+    background-size: 100% 100%;
+    width: 61px;
+    height: 64px;
+    font-size: 48px;
+    color: #000000;
+  }
 }
 </style>
