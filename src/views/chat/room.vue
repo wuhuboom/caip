@@ -954,7 +954,7 @@ $head: 57px;
     width: 30.5px;
     height: 32px;
     font-size: 22px;
-    color: #000000;
+    color: #6280ff;
   }
 }
 .color-yellow {
