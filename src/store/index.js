@@ -178,7 +178,11 @@ export default new Vuex.Store({
       return state.config.area_code[0];
     },
     catList(state) {
-      return state.cat;
+      const arr = [];
+      state.cat.forEach((item) => {
+        arr.push(...item.list);
+      });
+      return arr;
     },
   },
   mutations: {
