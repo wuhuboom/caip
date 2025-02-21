@@ -5,8 +5,11 @@
     position="top"
     :overlay="false"
   >
-    <div>
-      <div class="top-bets-cont colorfff flex-column justify-around font13">
+    <div class="top-bets-bot">
+      <div
+        v-if="head"
+        class="top-bets-cont colorfff flex-column justify-around font13"
+      >
         <ul class="justify-between p-l-16 p-r-16">
           <li class="d-flex">
             <van-icon name="list-switch" class="m-r-16 m-t-4" :size="20" />
@@ -47,7 +50,18 @@
           </ul>
         </div>
       </div>
-      <p class="slides"></p>
+      <div>
+        <ul>
+          <li></li>
+          <li></li>
+          <li></li>
+        </ul>
+      </div>
+      <p
+        class="slides"
+        :class="{ slidesclose: !head }"
+        @click="head = !head"
+      ></p>
     </div>
   </van-popup>
 </template>
@@ -61,6 +75,7 @@ export default {
       show: true,
       id: null,
       results: [],
+      head: true,
     };
   },
   computed: {
@@ -103,11 +118,19 @@ export default {
 .chat-top-bets {
   z-index: 3 !important;
   padding-top: 90px;
+  overflow: visible;
+}
+.top-bets-bot {
+  position: relative;
+}
+$height: 246px;
+.box-p-t {
+  padding-top: $height;
 }
 .top-bets-cont {
   background: url("@/assets/img/betsbg.png") no-repeat center;
   background-size: 100% 100%;
-  height: 246px;
+  height: $height;
   .table-lists {
     width: 686px;
     height: 96px;
@@ -136,5 +159,19 @@ export default {
   .openbets4 {
     background: #dc6957;
   }
+}
+.slides {
+  width: 134px;
+  height: 40px;
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: url("@/assets/img/close-bet.png") no-repeat center;
+  background-size: 100% 100%;
+}
+.slidesclose {
+  background: url("@/assets/img/open-bet.png") no-repeat center;
+  background-size: 100% 100%;
 }
 </style>
