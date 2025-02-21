@@ -12,24 +12,63 @@
       >
         <ul class="justify-between p-l-16 p-r-16">
           <li class="d-flex">
-            <van-icon name="list-switch" class="m-r-16 m-t-4" :size="20" />
+            <van-icon
+              :name="!showmenu ? 'list-switch' : 'cross'"
+              @click="(showother = false), (showmenu = !showmenu)"
+              class="m-r-16 m-t-4"
+              :size="20"
+            />
             <div>
               <p class="font16 m-b-8">
-                <span>重庆时时彩</span>
+                <span> {{ detail.lotteryNameH5 }}</span>
               </p>
-              <p>20250220026期</p>
+              <p>{{ detail.nextExpect.nextExpect }}期</p>
             </div>
           </li>
           <li class="align-center">
             投注中
-            <span></span><span></span><span></span>
-            <p class="align-center color-yellow m-l-16">
+            <van-count-down :time="detail.nextExpect?.countdown * 1000">
+              <template #default="timeData">
+                <div class="colorfff timeData align-center">
+                  <span class="block center-center">{{
+                    timeData.hours > 10 ? timeData.hours : `0${timeData.hours}`
+                  }}</span>
+                  <span class="colon center-center">:</span>
+                  <span class="block center-center">{{
+                    timeData.minutes > 10
+                      ? timeData.minutes
+                      : `0${timeData.minutes}`
+                  }}</span>
+                  <span class="colon center-center">:</span>
+                  <span class="block center-center">{{
+                    timeData.seconds > 10
+                      ? timeData.seconds
+                      : `0${timeData.seconds}`
+                  }}</span>
+                </div>
+              </template>
+            </van-count-down>
+            <p
+              class="align-center color-yellow m-l-16"
+              @click="
+                $router.push({
+                  path: `/game/hall`,
+                  query: {
+                    id: curCat.id,
+                    type: curCat.lotteryType,
+                  },
+                })
+              "
+            >
               <span>去投注</span><van-icon class="m-l-16" name="arrow" />
             </p>
           </li>
         </ul>
         <div>
-          <ul class="table-lists align-center justify-around">
+          <ul
+            class="table-lists align-center justify-around"
+            @click="(showmenu = false), (showother = !showother)"
+          >
             <li>{{ prize.cycleNum }}期</li>
             <li class="center-center">
               <p
@@ -45,17 +84,44 @@
               </p>
             </li>
             <li>
-              <van-icon name="arrow-down" />
+              <van-icon :name="!showother ? 'arrow-down' : 'arrow-up'" />
             </li>
           </ul>
         </div>
       </div>
-      <div>
-        <ul>
-          <li></li>
-          <li></li>
-          <li></li>
+      <div v-if="showother">
+        <ul
+          class="align-center other-prize justify-around"
+          v-for="(v, i) in otherPrize"
+          :key="i"
+        >
+          <li class="center-center">{{ v.cycleNum }}期</li>
+          <li class="center-center colorfff">
+            <p
+              class="openbets center-center"
+              :class="[
+                'openbets' + i2,
+                { 'm-r-8': i2 != prize.openArr.length - 1 },
+              ]"
+              v-for="(v2, i2) in v.openArr"
+              :key="i2"
+            >
+              {{ v2 }}
+            </p>
+          </li>
+          <li style="opacity: 0"><van-icon name="arrow-down" /></li>
         </ul>
+      </div>
+      <div class="select-box" v-if="showmenu">
+        <div
+          class="select"
+          v-for="(item, index) in catList"
+          :key="index"
+          @click="changeId(item.id)"
+          :class="{ on: id === item.id }"
+        >
+          {{ item.lotteryNameH5 }}
+        </div>
       </div>
       <p
         class="slides"
@@ -76,6 +142,12 @@ export default {
       id: null,
       results: [],
       head: true,
+      showother: false,
+      showmenu: false,
+      detail: {
+        mulConfig: [],
+        nextExpect: {},
+      },
     };
   },
   computed: {
@@ -85,6 +157,17 @@ export default {
     },
     otherPrize() {
       return this.results.slice(1);
+    },
+    curCat() {
+      return this.catList.find((v) => v.id === this.id);
+    },
+  },
+  watch: {
+    head(val) {
+      if (!val) {
+        this.showother = false;
+        this.showmenu = false;
+      }
     },
   },
   methods: {
@@ -107,10 +190,27 @@ export default {
       });
       this.results = res.data.results;
     },
+    async getDetail() {
+      const [err, res] = await userApi.betsDetail({ id: this.id });
+      if (err) return;
+      res.data.mulConfig = JSON.parse(res.data.mulConfig);
+      //value
+      if (!res.data.nextExpect) {
+        res.data.nextExpect = {};
+      }
+      this.detail = res.data;
+    },
+    changeId(id) {
+      this.id = id;
+      this.lotteryBetsOrder();
+      this.getDetail();
+      this.showmenu = false;
+    },
   },
   created() {
     this.id = +this.catList[0].id;
     this.lotteryBetsOrder();
+    this.getDetail();
   },
 };
 </script>
@@ -124,6 +224,7 @@ export default {
   position: relative;
 }
 $height: 246px;
+$tabwidth: 686px;
 .box-p-t {
   padding-top: $height;
 }
@@ -132,7 +233,7 @@ $height: 246px;
   background-size: 100% 100%;
   height: $height;
   .table-lists {
-    width: 686px;
+    width: $tabwidth;
     height: 96px;
     background: #7284d8;
     border-radius: 12px 12px 12px 12px;
@@ -140,24 +241,6 @@ $height: 246px;
   }
   .color-yellow {
     color: #f6c343;
-  }
-  .openbets {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: #dcae3e;
-  }
-  .openbets1 {
-    background: #58b2e3;
-  }
-  .openbets2 {
-    background: #de9fe7;
-  }
-  .openbets3 {
-    background: #efb187;
-  }
-  .openbets4 {
-    background: #dc6957;
   }
 }
 .slides {
@@ -172,6 +255,72 @@ $height: 246px;
 }
 .slidesclose {
   background: url("@/assets/img/open-bet.png") no-repeat center;
+  background-size: 100% 100%;
+}
+.openbets {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #dcae3e;
+}
+.openbets1 {
+  background: #58b2e3;
+}
+.openbets2 {
+  background: #de9fe7;
+}
+.openbets3 {
+  background: #efb187;
+}
+.openbets4 {
+  background: #dc6957;
+}
+.other-prize {
+  width: $tabwidth;
+  margin: 0 auto;
+  height: 88px;
+  border-bottom: 1px solid #f5f6f7;
+}
+.select-box {
+  position: relative;
+  background: #fff;
+  padding: 40px 34px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 40px;
+  width: 100%;
+  .select {
+    width: 200px;
+    height: 68px;
+    text-align: center;
+    line-height: 68px;
+    border: 1px solid #999999;
+    border-radius: 14px;
+    color: #666666;
+    font-size: 28px;
+    overflow: hidden;
+    &.on {
+      color: #bf2935;
+      border: 1px solid #bf2935;
+      position: relative;
+      &::after {
+        content: "";
+        position: absolute;
+        background: url("@/assets/img/Welfare3D/dui.png") no-repeat;
+        background-size: 100% auto;
+        width: 36px;
+        height: 36px;
+        right: -1px;
+        bottom: -1px;
+      }
+    }
+  }
+}
+.timeData {
+  //221px x 76px
+  width: 221px;
+  height: 76px;
+  background: url("@/assets/img/timeData.png") no-repeat;
   background-size: 100% 100%;
 }
 </style>
