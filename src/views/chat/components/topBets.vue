@@ -209,13 +209,13 @@ export default {
     },
     changeId(id) {
       this.id = id;
-
+      sessionStorage.setItem("lotteryId", id);
       this.getDetail();
       this.showmenu = false;
     },
   },
   created() {
-    this.id = +this.catList[0].id;
+    this.id = +sessionStorage.getItem("lotteryId") || +this.catList[0].id;
     this.getDetail();
     //getDetail d定时检查
     this.timer = setInterval(() => {
