@@ -149,6 +149,9 @@ router.beforeEach(async (to, from, next) => {
     }
   }
   if (auth.getToken()) {
+    if (!store.getters.catList.length) {
+      await store.dispatch("playerLotteryList");
+    }
     if (to.path.includes("/login")) {
       Nprogress.done();
       next("/");
