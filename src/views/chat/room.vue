@@ -477,7 +477,7 @@ export default {
     async infiniteHandler($state) {
       // $state.loaded(); $state.complete();
       const pageNo = this.query.pageNo + 1;
-      if (this.query.totalPage && pageNo > this.query.totalPage) {
+      if (this.query.totalPage !== null && pageNo > this.query.totalPage) {
         $state.complete();
         return;
       }
