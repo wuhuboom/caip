@@ -981,6 +981,8 @@ export default {
   background-color: #fff;
   position: relative;
   z-index: 2;
+  max-height: 90%;
+  overflow-y: auto;
   .desc {
     font-size: 36px;
     color: #0b0909;
