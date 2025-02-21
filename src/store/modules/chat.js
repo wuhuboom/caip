@@ -1,6 +1,7 @@
 import app from "@/main";
 import auth from "@/plugins/auth";
 import { EventBus } from "@/plugins/bus";
+// eslint-disable-next-line no-unused-vars
 let trimrWs = null;
 export default {
   namespaced: true,
@@ -154,7 +155,9 @@ export default {
         const message = JSON.stringify(query);
         state.ws.send(message);
       } else {
-        location.reload();
+        if (state.query.totalPage !== null) {
+          location.reload();
+        }
         console.error("WebSocket 未连接或已关闭");
       }
     },
