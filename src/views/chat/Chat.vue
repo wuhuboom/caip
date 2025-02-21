@@ -8,6 +8,7 @@
         </p>
       </template>
     </AppTopBar>
+    <topBets />
     <div ref="chatBox" class="flex-1 chat-box js-cont-room">
       <infinite-loading
         direction="top"
@@ -113,6 +114,7 @@ import { mapState, mapActions, mapGetters } from "vuex";
 import roomMsg from "@/views/chat/components/roomMsg.vue";
 import { ObserveVisibility } from "vue-observe-visibility";
 import popupMoney from "@/views/chat/components/popupMoney.vue";
+import topBets from "@/views/chat/components/topBets.vue";
 export default {
   name: "chatRoom",
   data() {
@@ -143,6 +145,7 @@ export default {
     roomMsg,
     InfiniteLoading,
     popupMoney,
+    topBets,
   },
   computed: {
     placeholder() {
