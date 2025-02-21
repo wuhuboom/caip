@@ -156,7 +156,17 @@ export default {
         state.ws.send(message);
       } else {
         if (state.query.totalPage !== null) {
-          location.reload();
+          app.$dialog
+            .confirm({
+              message: "连接已断开，是否刷新页面？",
+              confirmButtonColor: "#3291FF",
+            })
+            .then(() => {
+              location.reload();
+            })
+            .catch(() => {
+              location.reload();
+            });
         }
         console.error("WebSocket 未连接或已关闭");
       }
