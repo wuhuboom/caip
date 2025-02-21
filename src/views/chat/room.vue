@@ -22,7 +22,10 @@
             人工充值
           </li>
         </ul>
-        <div class="top-bets-bot align-center justify-between p-l-16 p-r-18">
+        <div
+          v-if="detail.id"
+          class="top-bets-bot align-center justify-between p-l-16 p-r-18"
+        >
           <div
             class="cat-list"
             @mouseenter="handleMouseEnter"
@@ -100,15 +103,16 @@
             </div>
           </div>
           <div class="align-center">
+            <p class="m-r-4">{{ detail.nextExpect.nextExpect }}</p>
             投注中
             <van-count-down :time="detail.nextExpect?.countdown * 1000">
               <template #default="timeData">
-                <div class="colorfff timeData align-center m-l-16">
-                  <span class="block center-center m-r-16">{{
+                <div class="colorfff timeData align-center m-l-8">
+                  <span class="block center-center m-r-8">{{
                     timeData.hours >= 10 ? timeData.hours : `0${timeData.hours}`
                   }}</span>
 
-                  <span class="block center-center m-r-16">{{
+                  <span class="block center-center m-r-8">{{
                     timeData.minutes >= 10
                       ? timeData.minutes
                       : `0${timeData.minutes}`
@@ -123,7 +127,7 @@
               </template>
             </van-count-down>
             <p
-              class="align-center color-yellow m-l-16"
+              class="align-center color-yellow m-l-8 p-r-8"
               @click="
                 $router.push({
                   path: `/game/hall`,
@@ -134,7 +138,7 @@
                 })
               "
             >
-              <span>去投注</span><van-icon class="m-l-16" name="arrow" />
+              <span>去投注</span><van-icon class="m-l-4" name="arrow" />
             </p>
           </div>
         </div>
@@ -939,5 +943,21 @@ $head: 57px;
 }
 .b1s {
   border-bottom: 1px solid #f5f6f7;
+}
+.timeData {
+  width: 110.5px;
+  height: 38px;
+
+  .block {
+    background: url("@/assets/img/bets-num.png") no-repeat;
+    background-size: 100% 100%;
+    width: 30.5px;
+    height: 32px;
+    font-size: 22px;
+    color: #000000;
+  }
+}
+.color-yellow {
+  color: #f6c343;
 }
 </style>
