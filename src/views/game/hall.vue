@@ -1045,9 +1045,9 @@ export default {
       this.tableList.forEach((v) => {
         //dataStr += `${v.model} ${v.text} ${v.multiple}/`;
         if (!dataStr) {
-          dataStr = `${v.model} ${v.text} ${v.multiple} ${v.total}`;
+          dataStr = `${v.model} ${v.text} ${v.multiple} ${v.total} ${v.price}`;
         } else {
-          dataStr += `/${v.model} ${v.text} ${v.multiple} ${v.total}`;
+          dataStr += `/${v.model} ${v.text} ${v.multiple} ${v.total} ${v.price}`;
         }
       });
       if (this.isChase) {
@@ -1229,16 +1229,15 @@ export default {
     add() {
       const status = this.$refs.$cont.add();
       if (!status) return;
-      const prices = this.divide(
-        this.getPrice(this.value) * this.total * this.multiple,
-        false
-      );
+      const price = this.getPrice(this.value);
+      const totalMoney = this.divide(price * this.total * this.multiple, false);
       this.tableList.push({
         model: this.model,
         text: this.$refs.$cont.text,
         total: this.total,
         multiple: this.multiple,
-        totalMoney: prices,
+        price,
+        totalMoney,
       });
       this.$refs.$cont.clear();
     },
