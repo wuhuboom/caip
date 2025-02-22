@@ -280,4 +280,12 @@ export default {
     if (n < 3) return 0; // 至少需要3个数字
     return permutation(n, 3); // 计算排列数
   },
+  chose10(selection) {
+    if (!selection.length) {
+      return {
+        err: "从0-9中至少选一个号码。",
+      };
+    }
+    return selection.length;
+  },
 };

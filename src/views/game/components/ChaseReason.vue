@@ -85,7 +85,7 @@
               <span v-else>{{ item.name }}</span>
             </td>
             <td height="40">
-              {{ divide(tableTotal.total * $betPrice, false) }}元
+              {{ divide(tableTotal.total * vuexBetPrice, false) }}元
             </td>
             <td height="40">
               <CpInput
@@ -178,6 +178,9 @@ export default {
     },
   },
   computed: {
+    vuexBetPrice() {
+      return this.$store.state.vuexBetPrice;
+    },
     currP() {
       let p = (this.form.betCountCurr / this.tableTotal.totalMoney) * 100;
       return `${p.toFixed(2)}%`;

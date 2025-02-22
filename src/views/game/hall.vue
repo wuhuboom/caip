@@ -233,7 +233,8 @@
                   ></div>
                 </div>
                 <div class="cp-radio-text" style="color: rgb(239, 204, 82)">
-                  {{ doc.txt.replace(curNav, "") }}
+                  <!-- {{ doc.txt.replace(curNav, "") }} -->
+                  {{ doc.txt }}
                 </div>
               </div>
             </div>
@@ -397,7 +398,7 @@
                     {{ item.multiple }}倍
                   </td>
                   <td width="80px" height="30" style="text-align: center">
-                    ¥{{ item.multiple * $betPrice * item.total }}
+                    ¥{{ item.multiple * vuexBetPrice * item.total }}
                   </td>
                   <td
                     width="30"
@@ -526,6 +527,7 @@ import ball10 from "./components/ball10";
 import ball11 from "./components/ball11";
 import ball12 from "./components/ball12";
 import ball13 from "./components/ball13";
+import ball14 from "./components/ball14";
 const initData = () => {
   return {
     curTab: 0,
@@ -610,8 +612,12 @@ export default {
     ball11,
     ball12,
     ball13,
+    ball14,
   },
   computed: {
+    vuexBetPrice() {
+      return this.$store.state.vuexBetPrice;
+    },
     noticeDoc() {
       return this.$store.getters.noticeDoc;
     },
@@ -673,6 +679,7 @@ export default {
         case "前三组六复式":
         case "前三组六胆拖":
         case "前三直选组合":
+        case "三星独胆":
           return this.preId === 0 ? [zxzh1] : [zxzh1_hot];
 
         case "中三组三复式":
@@ -735,7 +742,7 @@ export default {
         0
       );
       const totalMoney = this.tableList.reduce(
-        (total, item) => total + item.total * item.multiple * this.$betPrice,
+        (total, item) => total + item.total * item.multiple * this.vuexBetPrice,
         0
       );
       return {
@@ -745,7 +752,7 @@ export default {
       };
     },
     totalMoney() {
-      return this.divide(this.total * this.multiple * this.$betPrice, false);
+      return this.divide(this.total * this.multiple * this.vuexBetPrice, false);
     },
     currentComponent() {
       switch (this.value) {
@@ -829,7 +836,8 @@ export default {
         case "中三直选组合":
         case "前三直选组合":
           return "ball11";
-
+        case "三星独胆":
+          return "ball14";
         // 默认情况
         default:
           return "ball1";
@@ -896,8 +904,18 @@ export default {
       if (!newAmount) return text;
       return text.replace(/\d+元/, newAmount + "元");
     },
+    lastTree() {
+      console.log(this.extractDeepList(this.catTree));
+      return this.extractDeepList(this.catTree);
+    },
   },
   watch: {
+    value(vl) {
+      const bet = this.lastTree.find((v) => v.txt === vl)?.bet;
+      if (bet) {
+        this.$store.commit("setBetPrice", bet);
+      }
+    },
     id(v) {
       this.setlotteryType(v);
     },
@@ -1138,6 +1156,22 @@ export default {
         this.value = value;
       });
     },
+    extractDeepList(data) {
+      const result = [];
+
+      const traverse = (arr) => {
+        arr.forEach((item) => {
+          if (item.list) {
+            traverse(item.list);
+          } else {
+            result.push(item);
+          }
+        });
+      };
+
+      traverse(data);
+      return result;
+    },
     async getPreData(s) {
       if (s !== "stop") {
         const [err, res] = await userApi.lotteryCurrExpect({ id: this.id });
@@ -1161,7 +1195,6 @@ export default {
       this.typeList.forEach((item, index) => {
         item.list.forEach((v, idx) => {
           if (index === 0 && idx === 0) {
-            console.log(v.txt, "-----");
             this.value = v.txt;
           }
         });

@@ -1,7 +1,7 @@
 <template>
   <div class="play_ball_container play-ball-bar-item" :class="className">
     <div class="play_balls">
-      <div class="play_ball_label no-shrink">
+      <div class="play_ball_label no-shrink" v-if="title">
         <div>{{ title }}</div>
         <i class="el-icon-caret-right"></i>
       </div>

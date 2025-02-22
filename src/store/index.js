@@ -10,6 +10,7 @@ Vue.use(Vuex);
 const lang = location.href.includes("zmkm") ? "zh" : "";
 export default new Vuex.Store({
   state: {
+    vuexBetPrice: 2,
     tabSimpleList: [
       { id: "", text: "全部" },
       { id: 1, text: "线上充值" },
@@ -186,6 +187,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    setBetPrice(state, price) {
+      state.vuexBetPrice = price;
+    },
     setShareData(state, data) {
       state.shareData = data;
     },
