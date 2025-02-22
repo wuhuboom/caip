@@ -398,7 +398,7 @@
                     {{ item.multiple }}倍
                   </td>
                   <td width="80px" height="30" style="text-align: center">
-                    ¥{{ item.multiple * getPrice(item.model) * item.total }}
+                    ¥{{ item.totalMoney }}
                   </td>
                   <td
                     width="30"
@@ -752,7 +752,10 @@ export default {
       };
     },
     totalMoney() {
-      return this.divide(this.total * this.multiple * this.vuexBetPrice, false);
+      return this.divide(
+        this.total * this.multiple * this.getPrice(this.value),
+        false
+      );
     },
     currentComponent() {
       switch (this.value) {
@@ -1230,7 +1233,7 @@ export default {
         text: this.$refs.$cont.text,
         total: this.total,
         multiple: this.multiple,
-        totalMoney: this.totalMoney,
+        totalMoney: this.getPrice(this.value) * this.total * this.multiple,
       });
       this.$refs.$cont.clear();
     },
