@@ -741,10 +741,11 @@ export default {
         (total, item) => total + item.total,
         0
       );
-      const totalMoney = this.tableList.reduce(
-        (total, item) => total + item.total * item.multiple * this.vuexBetPrice,
-        0
-      );
+      // this.tableList 里面已经有价格 totalMoney
+      let totalMoney = 0;
+      this.tableList.forEach((item) => {
+        totalMoney += item.totalMoney * 1;
+      });
       return {
         orders: this.tableList.length,
         total,
@@ -1228,12 +1229,16 @@ export default {
     add() {
       const status = this.$refs.$cont.add();
       if (!status) return;
+      const prices = this.divide(
+        this.getPrice(this.value) * this.total * this.multiple,
+        false
+      );
       this.tableList.push({
         model: this.model,
         text: this.$refs.$cont.text,
         total: this.total,
         multiple: this.multiple,
-        totalMoney: this.getPrice(this.value) * this.total * this.multiple,
+        totalMoney: prices,
       });
       this.$refs.$cont.clear();
     },

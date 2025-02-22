@@ -84,9 +84,7 @@
               >
               <span v-else>{{ item.name }}</span>
             </td>
-            <td height="40">
-              {{ divide(tableTotal.total * vuexBetPrice, false) }}元
-            </td>
+            <td height="40">{{ divide(tableTotal.totalMoney, false) }}元</td>
             <td height="40">
               <CpInput
                 class="line-input-num"
@@ -96,7 +94,7 @@
               />
               <span>倍</span>
             </td>
-            <td height="40">{{ tableTotal.total * 2 * item.multiplier }}元</td>
+            <td height="40">{{ tableTotal.totalMoney * item.multiplier }}元</td>
           </tr>
         </table>
       </div>
@@ -159,7 +157,7 @@ export default {
         const money = v
           .filter((item) => item.checked)
           .reduce((acc, cur) => {
-            return acc + this.tableTotal.total * 2 * cur.multiplier;
+            return acc + this.tableTotal.totalMoney * cur.multiplier;
           }, 0);
         this.$emit("change", {
           totalMoney: money,
