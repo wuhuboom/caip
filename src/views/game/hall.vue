@@ -398,7 +398,7 @@
                     {{ item.multiple }}倍
                   </td>
                   <td width="80px" height="30" style="text-align: center">
-                    ¥{{ item.multiple * vuexBetPrice * item.total }}
+                    ¥{{ item.multiple * getPrice(item.model) * item.total }}
                   </td>
                   <td
                     width="30"
@@ -905,17 +905,10 @@ export default {
       return text.replace(/\d+元/, newAmount + "元");
     },
     lastTree() {
-      console.log(this.extractDeepList(this.catTree));
       return this.extractDeepList(this.catTree);
     },
   },
   watch: {
-    value(vl) {
-      const bet = this.lastTree.find((v) => v.txt === vl)?.bet;
-      if (bet) {
-        this.$store.commit("setBetPrice", bet);
-      }
-    },
     id(v) {
       this.setlotteryType(v);
     },
@@ -929,6 +922,9 @@ export default {
     },
   },
   methods: {
+    getPrice(v) {
+      return this.lastTree.find((doc) => doc.txt === v)?.bet;
+    },
     setlotteryType(v) {
       // this.$ref.$cont?.clear();
       const type = this.catList.find((doc) => doc.id === v).lotteryType;
