@@ -46,7 +46,7 @@
       <div class="item" @click="$tool.goPage('/change-phone')">
         <div class="left">手机号码</div>
         <div class="right">
-          {{ user.phone.replace(/(\d{3})\d{4}(\d{4})/, "$1****$2") }}
+          {{ user.phone?.replace(/(\d{3})\d{4}(\d{4})/, "$1****$2") }}
           <!--user.phone 188****3221 -->
         </div>
       </div>
