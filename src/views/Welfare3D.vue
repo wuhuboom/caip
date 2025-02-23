@@ -163,8 +163,7 @@
               class="orders-item align-center p-b-24"
             >
               <span class="no-shrink m-r-8">
-                {{ v.model }} {{ v.total }}注
-                {{ divide(v.total * multiple * $betPrice, false) }}元
+                {{ v.model }} {{ v.total }}注 {{ v.totalMoney }}元
               </span>
               <span>
                 {{ v.text }}
@@ -614,13 +613,29 @@ export default {
       return this.tableList.reduce((pre, cur) => pre + cur.total, 0);
     },
     totalMoney() {
-      return this.tableList.reduce(
-        (pre, cur) => pre + cur.total * this.multiple * this.$betPrice,
-        0
-      );
+      return this.tableList.reduce((pre, cur) => pre + cur.totalMoney * 1, 0);
+    },
+    lastTree() {
+      return this.extractDeepList(this.catTree);
     },
   },
   methods: {
+    extractDeepList(data) {
+      const result = [];
+
+      const traverse = (arr) => {
+        arr.forEach((item) => {
+          if (item.list) {
+            traverse(item.list);
+          } else {
+            result.push(item);
+          }
+        });
+      };
+
+      traverse(data);
+      return result;
+    },
     setValue() {
       this.secondNavs.forEach((item, index) => {
         item.list.forEach((v, idx) => {
@@ -782,21 +797,24 @@ export default {
       this.buySuccess();
       this.$toast("投注成功");
     },
+    getPrice(v) {
+      return this.lastTree.find((doc) => doc.txt === v)?.bet;
+    },
     add() {
       const status = this.$refs.$cont.add();
       if (!status) {
-        // if (this.$refs.$BetOn.tableList?.length) {
-        //   this.$refs.$cont?.close();
-        //   this.$refs.$BetOn.open();
-        // }
         return;
       }
+      const price = this.getPrice(this.value);
+      const totalMoney = this.divide(price * this.total * this.multiple, false);
       this.tableList.push({
-        model: this.value,
+        model: this.model,
         text: this.$refs.$cont.text,
         total: this.total,
+        multiple: this.multiple,
+        price,
+        totalMoney,
       });
-      // this.$refs.$BetOn.open();
       this.$toast("添加成功");
       //body滑动底部
       this.$nextTick(() => {
