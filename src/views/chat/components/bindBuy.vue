@@ -15,7 +15,7 @@
       <dl class="justify-between p-l-8 p-r-8">
         <dd>
           <p class="rate align-center">
-            <span class="rate-num">{{ `${doc.data.bingos * 100}%` }}</span>
+            <span class="rate-num">{{ `${doc.data.bingos}%` }}</span>
           </p>
         </dd>
         <dd>
