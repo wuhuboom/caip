@@ -987,7 +987,7 @@ export default {
   },
   methods: {
     getPrice(v) {
-      return this.lastTree.find((doc) => doc.txt === v)?.bet;
+      return this.lastTree.find((doc) => doc.txt === v)?.bet || 2;
     },
     setlotteryType(v) {
       // this.$ref.$cont?.clear();
@@ -1024,9 +1024,8 @@ export default {
       this.$refs.$clearDialog.open("确定清空已投注内容？");
     },
     sendGourp() {
-      const num = +this.tableTotal.totalMoney || 0;
-      if (num < 2) {
-        this.$refs.$finshDialog.open("订单金额低于 2 元，不能发起合买");
+      if (this.tableTotal.total < 1) {
+        this.$refs.$finshDialog.open("订单注数低于 1 注，不能发起合买");
         return;
       }
       if (!this.$refs.$groupBuy) {
