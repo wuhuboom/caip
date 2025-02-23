@@ -530,6 +530,7 @@ import ball13 from "./components/ball13";
 import ball14 from "./components/ball14";
 import ball15 from "./components/ball15";
 import ball16 from "./components/ball16";
+import ball17 from "./components/ball17.vue";
 const initData = () => {
   return {
     curTab: 0,
@@ -617,6 +618,7 @@ export default {
     ball14,
     ball15,
     ball16,
+    ball17,
   },
   computed: {
     vuexBetPrice() {
@@ -678,6 +680,13 @@ export default {
           return this.preId === 0 ? losses[1] : hot[1];
         case "三星一码个位":
           return this.preId === 0 ? losses[2] : hot[2];
+        ////三星二码百十位  三星二码百个位 三星二码十个位
+        case "三星二码百十位":
+          return this.preId === 0 ? [losses[0], losses[1]] : [hot[0], hot[1]];
+        case "三星二码百个位":
+          return this.preId === 0 ? [losses[0], losses[2]] : [hot[0], hot[2]];
+        case "三星二码十个位":
+          return this.preId === 0 ? [losses[1], losses[2]] : [hot[1], hot[2]];
         case "三星组六复式":
         case "三星组六胆拖":
         case "三星组三复式":
@@ -859,6 +868,10 @@ export default {
         case "三星一码十位":
         case "三星一码个位":
           return "ball16";
+        case "三星二码百十位":
+        case "三星二码百个位":
+        case "三星二码十个位":
+          return "ball17";
         // 默认情况
         default:
           return "ball1";
@@ -898,6 +911,21 @@ export default {
       if (this.value === "三星一码个位") {
         return {
           titleText: ["个位"],
+        };
+      }
+      if (this.value === "三星二码百十位") {
+        return {
+          titleText: ["百位", "十位"],
+        };
+      }
+      if (this.value === "三星二码百个位") {
+        return {
+          titleText: ["百位", "个位"],
+        };
+      }
+      if (this.value === "三星二码十个位") {
+        return {
+          titleText: ["十位", "个位"],
         };
       }
       return {};
