@@ -84,17 +84,17 @@
               <template #default="timeData">
                 <div class="colorfff timeData align-center">
                   <span class="block center-center">{{
-                    timeData.hours > 10 ? timeData.hours : `0${timeData.hours}`
+                    timeData.hours >= 10 ? timeData.hours : `0${timeData.hours}`
                   }}</span>
                   <span class="colon center-center">:</span>
                   <span class="block center-center">{{
-                    timeData.minutes > 10
+                    timeData.minutes >= 10
                       ? timeData.minutes
                       : `0${timeData.minutes}`
                   }}</span>
                   <span class="colon center-center">:</span>
                   <span class="block center-center">{{
-                    timeData.seconds > 10
+                    timeData.seconds >= 10
                       ? timeData.seconds
                       : `0${timeData.seconds}`
                   }}</span>
