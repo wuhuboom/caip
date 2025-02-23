@@ -671,7 +671,7 @@ export default {
         // 三星直选复式
         case "三星直选复式":
           return this.preId === 0 ? losses : hot;
-
+        //'三星一码百位'  '三星一码十位' '三星一码个位'
         case "三星组六复式":
         case "三星组六胆拖":
         case "三星组三复式":
@@ -684,6 +684,10 @@ export default {
         case "三星独胆":
         case "三星双飞":
         case "三星对子":
+        case "三星一码百位":
+        case "三星一码十位":
+        case "三星一码个位":
+          console.log("this.preId", zxzh1);
           return this.preId === 0 ? [zxzh1] : [zxzh1_hot];
 
         case "中三组三复式":
@@ -846,6 +850,9 @@ export default {
           return "ball11";
         case "三星独胆":
         case "三星对子":
+        case "三星一码百位":
+        case "三星一码十位":
+        case "三星一码个位":
           return "ball14";
         case "三星双飞":
           return "ball15";
@@ -873,6 +880,22 @@ export default {
       if (this.value === "后三直选复式") {
         return {
           titleText: ["百位", "十位", "个位"],
+        };
+      }
+      //  //'三星一码百位'  '三星一码十位' '三星一码个位'
+      if (this.value === "三星一码百位") {
+        return {
+          titleText: ["百位"],
+        };
+      }
+      if (this.value === "三星一码十位") {
+        return {
+          titleText: ["十位"],
+        };
+      }
+      if (this.value === "三星一码个位") {
+        return {
+          titleText: ["个位"],
         };
       }
       return {};
