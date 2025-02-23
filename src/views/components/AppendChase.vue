@@ -43,16 +43,9 @@
           <div class="col">
             <input type="text" v-model="v.multiplier" class="input" />
           </div>
-          <div class="col num">
-            {{ divide(v.multiplier * bets.totalALL * 1 * $betPrice, false) }}元
-          </div>
+          <div class="col num">{{ divide(bets.totalMoney, false) }}元</div>
           <div class="col">
-            {{
-              divide(
-                v.multiplier * bets.totalALL * v.multiplier * $betPrice,
-                false
-              )
-            }}元
+            {{ divide(v.multiplier * bets.totalMoney, false) }}元
           </div>
         </div>
       </div>
@@ -123,13 +116,7 @@ export default {
     chaseMoney() {
       return this.list.reduce((pre, cur) => {
         if (cur.checked) {
-          return (
-            pre +
-            cur.multiplier *
-              this.bets.totalALL *
-              cur.multiplier *
-              this.$betPrice
-          );
+          return pre + cur.multiplier * this.bets.totalMoney;
         }
         return pre;
       }, 0);
@@ -189,18 +176,10 @@ export default {
         this.$toast("追号期数不能大于5期");
         return;
       }
-      let dataStr = "";
-      this.tableList.forEach((v) => {
-        if (!dataStr) {
-          dataStr = `${v.model} ${v.text} ${this.bets.multiple} ${v.total}`;
-        } else {
-          dataStr += `/${v.model} ${v.text} ${this.bets.multiple} ${v.total}`;
-        }
-      });
       const params = {
         lotteryId: this.id,
         ...this.dataForm(),
-        betCode: dataStr,
+        betCode: this.$util.getStrs(this.tableList),
         together: 0,
       };
       this.$toast.loading({ duration: 0, message: "投注中..." });

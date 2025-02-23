@@ -775,16 +775,7 @@ export default {
         this.$toast("请先选择投注");
         return;
       }
-      let dataStr = "";
-      this.tableList.forEach((v) => {
-        //dataStr += `${v.model} ${v.text} ${v.multiple}/`;
-        if (!dataStr) {
-          dataStr = `${v.model} ${v.text} ${this.multiple} ${v.total} ${v.price}`;
-        } else {
-          dataStr += `/${v.model} ${v.text} ${this.multiple} ${v.total} ${v.price}`;
-        }
-      });
-      await this.ajaxPay(dataStr);
+      await this.ajaxPay(this.$util.getStrs(this.tableList));
     },
     async ajaxPay(v) {
       this.$toast.loading({ duration: 0, message: "投注中..." });
@@ -808,7 +799,7 @@ export default {
       const price = this.getPrice(this.value);
       const totalMoney = this.divide(price * this.total * this.multiple, false);
       this.tableList.push({
-        model: this.model,
+        model: this.value,
         text: this.$refs.$cont.text,
         total: this.total,
         multiple: this.multiple,
