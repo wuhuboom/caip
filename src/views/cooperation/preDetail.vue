@@ -213,7 +213,7 @@
                       height="30"
                       style="text-align: center; color: rgb(255, 155, 0)"
                     >
-                      ¥{{ item.quantity * item.multiplier * $betPrice }}
+                      ¥{{ item.quantity * item.multiplier * item.price }}
                     </td>
                   </tr>
                 </table>
@@ -545,7 +545,9 @@ export default {
       if (err) return;
       res.data.clientMoney = "";
       res.data.sellCount = res.data.betTotal - res.data.betCountCurr;
-      res.data.betListArr = this.$util.parseFourStarInput(res.data.betCode);
+      res.data.betListArr = res.data.betCode
+        ? this.$util.parseFourStarInput(res.data.betCode)
+        : [];
       for (let key in res.data) {
         this.$set(this.detail, key, res.data[key]);
       }
