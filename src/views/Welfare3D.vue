@@ -44,7 +44,7 @@
                     class="select"
                     v-for="(v, i) in item.list"
                     :key="i"
-                    @click="value = v.txt"
+                    @click="(showSelect = false), (value = v.txt)"
                     :class="{ on: value === v.txt }"
                   >
                     {{ v.txt.replace(curTab, "") }}
