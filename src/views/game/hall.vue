@@ -233,8 +233,8 @@
                   ></div>
                 </div>
                 <div class="cp-radio-text" style="color: rgb(239, 204, 82)">
-                  <!-- {{ doc.txt.replace(curNav, "") }} -->
-                  {{ doc.txt }}
+                  {{ doc.txt.replace(curNav, "") }}
+                  <!-- {{ doc.txt }} -->
                 </div>
               </div>
             </div>
