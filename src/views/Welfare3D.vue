@@ -688,12 +688,13 @@ export default {
     async getPreData(s) {
       if (s !== "stop") {
         const [err, res] = await userApi.lotteryCurrExpect({ id: this.id });
-        if (err) return;
-        const { lastExpect } = res.data;
-        const cur = this.preData.lastExpect.cycleNum;
-        if (cur && lastExpect.cycleNum !== cur) {
-          this.preData = res.data;
-          await this.getDetail();
+        if (!err) {
+          const { lastExpect } = res.data;
+          const cur = this.preData.lastExpect.cycleNum;
+          if (cur && lastExpect.cycleNum !== cur) {
+            this.preData = res.data;
+            await this.getDetail();
+          }
         }
       }
 
