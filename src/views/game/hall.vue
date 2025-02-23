@@ -528,6 +528,7 @@ import ball11 from "./components/ball11";
 import ball12 from "./components/ball12";
 import ball13 from "./components/ball13";
 import ball14 from "./components/ball14";
+import ball15 from "./components/ball15";
 const initData = () => {
   return {
     curTab: 0,
@@ -613,6 +614,7 @@ export default {
     ball12,
     ball13,
     ball14,
+    ball15,
   },
   computed: {
     vuexBetPrice() {
@@ -842,6 +844,8 @@ export default {
           return "ball11";
         case "三星独胆":
           return "ball14";
+        case "三星双飞":
+          return "ball15";
         // 默认情况
         default:
           return "ball1";

@@ -288,4 +288,13 @@ export default {
     }
     return selection.length;
   },
+  chose11(selection) {
+    const n = selection.length;
+    if (n < 2) {
+      return {
+        err: "从0-9中至少选两个个号码。",
+      };
+    }
+    return (n * (n - 1)) / 2;
+  },
 };
