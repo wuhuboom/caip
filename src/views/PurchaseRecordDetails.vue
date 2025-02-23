@@ -503,6 +503,21 @@ export default {
         this.$set(this.detail, key, res.data[key]);
       }
     },
+    comfire(v) {
+      return new Promise((resolve) => {
+        this.$dialog
+          .confirm({
+            message: v,
+            confirmButtonColor: "#3291FF",
+          })
+          .then(() => {
+            resolve(1);
+          })
+          .catch(() => {
+            resolve(0);
+          });
+      });
+    },
     async shareToChatRoom() {
       if (this.detail.status !== 0) {
         this.$toast("合买已结束，无法分享");
@@ -512,6 +527,8 @@ export default {
         this.$toast(`充值${this.shareData.recharge}才能解锁聊天`);
         return;
       }
+      const status = await this.comfire("确定分享到聊天室吗？");
+      if (!status) return;
       this.$toast.loading({
         forbidClick: false, // 允许点击和滚动
         duration: 0, // 持续时间为 0 表示不会自动关闭
