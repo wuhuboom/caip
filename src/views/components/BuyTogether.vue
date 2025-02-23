@@ -335,7 +335,7 @@ export default {
     },
     async open(v) {
       if (this.tableList.length === 0) {
-        this.$toast.fail(`订单金额低于 ${this.$betPrice} 元，不能发起合买`);
+        this.$toast.fail(`请先选择投注`);
         return;
       }
       await this.getlotteryConf();
