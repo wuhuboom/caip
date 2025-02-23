@@ -297,4 +297,13 @@ export default {
     }
     return (n * (n - 1)) / 2;
   },
+  chose12(baiWei, shiWei) {
+    if (baiWei.length === 0 || shiWei.length === 0) {
+      return {
+        err: "每位至少选一个号码",
+      };
+    }
+    const totalBets = baiWei.length * shiWei.length;
+    return totalBets;
+  },
 };
