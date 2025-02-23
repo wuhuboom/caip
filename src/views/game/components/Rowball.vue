@@ -202,6 +202,21 @@ export default {
       this.nums = Array.from(selected);
       return this.nums;
     },
+    getTwoRandomElements(arr) {
+      if (arr.length < 2) throw new Error("数组长度不足2");
+
+      const copy = [...arr]; // 复制数组，避免修改原数组
+      const firstIndex = Math.floor(Math.random() * copy.length);
+      const firstElement = copy.splice(firstIndex, 1)[0]; // 删除并获取该元素
+      const secondIndex = Math.floor(Math.random() * copy.length);
+      const secondElement = copy[secondIndex]; // 直接获取第二个元素
+
+      return [firstElement, secondElement];
+    },
+    randemTow() {
+      this.nums = this.getTwoRandomElements(this.upList);
+      return this.nums;
+    },
     filterLeft(option) {
       // 根据不同的 right 选项筛选 left
       if (option === "全") {
