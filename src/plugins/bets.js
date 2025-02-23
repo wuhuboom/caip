@@ -261,7 +261,6 @@ export default {
     return betCount;
   },
   chose9(selection) {
-    //直选组合需要购买8个号码
     if (selection.length < 3 || selection.length > 8) {
       return {
         err: "从0-9中任意选择3个或3个以上号码，最多8个号码。",
@@ -280,5 +279,31 @@ export default {
     const n = selection.length; // 已选数字个数
     if (n < 3) return 0; // 至少需要3个数字
     return permutation(n, 3); // 计算排列数
+  },
+  chose10(selection) {
+    if (!selection.length) {
+      return {
+        err: "从0-9中至少选一个号码。",
+      };
+    }
+    return selection.length;
+  },
+  chose11(selection) {
+    const n = selection.length;
+    if (n < 2) {
+      return {
+        err: "从0-9中至少选两个个号码。",
+      };
+    }
+    return (n * (n - 1)) / 2;
+  },
+  chose12(baiWei, shiWei) {
+    if (baiWei.length === 0 || shiWei.length === 0) {
+      return {
+        err: "每位至少选一个号码",
+      };
+    }
+    const totalBets = baiWei.length * shiWei.length;
+    return totalBets;
   },
 };
