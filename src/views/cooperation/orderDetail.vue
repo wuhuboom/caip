@@ -650,6 +650,21 @@ export default {
         this.$set(this.detail, key, res.data[key]);
       }
     },
+    comfire() {
+      return new Promise((resolve) => {
+        this.$confirm("确定分享到聊天室吗？", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          customClass: "g-confirm-box",
+        })
+          .then(() => {
+            resolve(1);
+          })
+          .catch(() => {
+            resolve(0);
+          });
+      });
+    },
     async shareToChatRoom() {
       if (this.detail.status !== 0) {
         this.$message.error("合买已结束，无法分享");
@@ -659,6 +674,8 @@ export default {
         this.$message.error(`充值${this.shareData.recharge}才能解锁聊天`);
         return;
       }
+      const status = await this.comfire();
+      if (!status) return;
       this.$toast.loading({
         forbidClick: false, // 允许点击和滚动
         duration: 0, // 持续时间为 0 表示不会自动关闭
