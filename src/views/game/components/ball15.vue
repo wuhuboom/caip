@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     randem() {
-      this.$refs.$Rowball2.randem();
+      this.$refs.$Rowball2.randemTow();
     },
     clear() {
       this.nums = [];
