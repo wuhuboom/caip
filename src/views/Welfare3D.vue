@@ -789,7 +789,7 @@ export default {
       this.$toast("投注成功");
     },
     getPrice(v) {
-      return this.lastTree.find((doc) => doc.txt === v)?.bet;
+      return this.lastTree.find((doc) => doc.txt === v)?.bet || 2;
     },
     add() {
       const status = this.$refs.$cont.add();
