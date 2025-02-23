@@ -779,9 +779,9 @@ export default {
       this.tableList.forEach((v) => {
         //dataStr += `${v.model} ${v.text} ${v.multiple}/`;
         if (!dataStr) {
-          dataStr = `${v.model} ${v.text} ${this.multiple} ${v.total}`;
+          dataStr = `${v.model} ${v.text} ${this.multiple} ${v.total} ${v.price}`;
         } else {
-          dataStr += `/${v.model} ${v.text} ${this.multiple} ${v.total}`;
+          dataStr += `/${v.model} ${v.text} ${this.multiple} ${v.total} ${v.price}`;
         }
       });
       await this.ajaxPay(dataStr);

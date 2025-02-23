@@ -2,7 +2,12 @@
   <div class="xuan-box" :class="className">
     <div class="xuan-list flex-column">
       <div class="left justify-between">
-        <div class="item small">
+        <div
+          class="item small"
+          :style="{
+            opacity: title ? 1 : 0,
+          }"
+        >
           <div class="num-top operation-active center-center">{{ title }}</div>
         </div>
         <ul class="align-center operation">
