@@ -132,7 +132,7 @@
                   >
                   <span class="m-r-16">{{ item.multiplier }}倍</span>
                   <span class="active"
-                    >{{ item.quantity * item.multiplier * $betPrice }}元</span
+                    >{{ item.quantity * item.multiplier * item.price }}元</span
                   >
                 </p>
               </li>
@@ -421,43 +421,6 @@ export default {
       return (this.$store.state.btmStatus.find((doc) => doc.id === v) || {})
         .name;
     },
-    parseFourStarInput(input) {
-      // 按 '/' 分割多组记录
-      const records = input.split("/");
-
-      // 解析每组记录
-      const parsedData = records.map((record) => {
-        record = record.trim(); // 去掉首尾空格
-
-        // 按空格分割为名称和数据部分
-        const parts = record.split(" ");
-        if (parts.length < 3) {
-          throw new Error("输入格式错误，无法解析");
-        }
-
-        const name = parts[0]; // 名称部分
-        const positionsString = parts[1]; // 位置信息部分
-        const multiplier = parseInt(parts[2], 10); // 倍数
-        const quantity = parts.length > 3 ? parseInt(parts[3], 10) : 0; // 数量，默认 0
-
-        // 按 '|' 拆分每个位，并进一步按 ',' 拆分
-        const positions = positionsString.split("|").map(
-          (pos) => pos.split(",").map(Number) // 将每个位拆分为数字数组
-        );
-        //positions 里面每个数组再升序
-        positions.forEach((item) => {
-          item.sort((a, b) => a - b);
-        });
-        return {
-          name,
-          positions,
-          multiplier,
-          quantity,
-        };
-      });
-
-      return parsedData;
-    },
     async chat() {
       const [err, res] = await userApi.chat();
       if (err) return;
@@ -481,7 +444,7 @@ export default {
       if (err) return;
       res.data.clientMoney = "";
       res.data.sellCount = res.data.betTotal - res.data.betCountCurr;
-      res.data.betListArr = this.parseFourStarInput(res.data.betCode);
+      res.data.betListArr = this.$util.parseFourStarInput(res.data.betCode);
       //res.data.clientMoney = res.data.sellCount;
       for (let key in res.data) {
         this.$set(this.detail, key, res.data[key]);

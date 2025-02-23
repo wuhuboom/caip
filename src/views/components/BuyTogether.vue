@@ -279,17 +279,9 @@ export default {
       return obj;
     },
     async lotteryBets() {
-      let dataStr = "";
-      this.tableList.forEach((v) => {
-        if (!dataStr) {
-          dataStr = `${v.model} ${v.text} ${this.bets.multiple} ${v.total}`;
-        } else {
-          dataStr += `/${v.model} ${v.text} ${this.bets.multiple} ${v.total}`;
-        }
-      });
       const [err] = await userApi.lotteryBets({
         lotteryId: this.id,
-        betCode: dataStr,
+        betCode: this.$util.getStrs(this.tableList),
         ...this.dataForm(),
       });
       if (err) return;
