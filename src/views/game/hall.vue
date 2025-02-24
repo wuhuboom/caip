@@ -1161,15 +1161,52 @@ export default {
         showClose: true,
       });
     },
+    comfire(v) {
+      return new Promise((resolve) => {
+        this.$confirm(v, "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+          customClass: "g-confirm-box",
+        })
+          .then(() => {
+            resolve(1);
+          })
+          .catch(() => {
+            resolve(0);
+          });
+      });
+    },
+    async betsShare(id) {
+      this.$toast.loading({
+        forbidClick: false, // 允许点击和滚动
+        duration: 0, // 持续时间为 0 表示不会自动关闭
+      });
+      const [err] = await userApi.lotteryBetsShare({
+        id,
+      });
+      this.sleep(1000);
+      this.$toast.clear();
+      if (err) return;
+      this.$toast.success("分享成功");
+    },
+    async chat(id) {
+      const [err, res] = await userApi.chat();
+      if (err) return;
+      if (!res.data?.chatAble) return;
+      const status = await this.comfire("合买成功分享到聊天室吗？");
+      if (!status || !id) return;
+      this.betsShare(id);
+    },
     async lotteryBets(v) {
-      const [err] = await userApi.lotteryBets({
+      const [err, res] = await userApi.lotteryBets({
         lotteryId: this.id,
         betCode: v,
         ...this.$refs.$groupBuy.dataForm,
       });
       if (err) return;
       this.clearData();
-
+      this.chat(res.data?.id);
       this.$message({
         message: "合买成功",
         type: "success",
