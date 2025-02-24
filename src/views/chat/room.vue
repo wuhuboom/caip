@@ -142,7 +142,11 @@
             </p>
           </div>
         </div>
-        <div class="flex-1 cont y-container js-cont-room p-t-12">
+        <div
+          class="flex-1 cont y-container js-cont-room p-t-12"
+          @scroll="handleScroll"
+          ref="chatBox"
+        >
           <infinite-loading
             direction="top"
             @infinite="infiniteHandler"
@@ -164,19 +168,26 @@
           :class="{ 'btm-disabled': disabled }"
           v-loading="loadingShare"
         >
-          <div
-            class="unread-mention center-center"
-            @click="goBtm"
-            v-if="aites.length"
-          >
-            <van-badge
-              :data-badge="aites.length"
-              :content="aites.length"
-              max="99"
+          <!--  -->
+          <div class="unread-mention center-center flex-column">
+            <div class="center-center" @click="goBtm" v-if="aites.length">
+              <van-badge
+                :data-badge="aites.length"
+                :content="aites.length"
+                max="99"
+              >
+                <span class="at-symbol center-center">@</span>
+              </van-badge>
+            </div>
+            <div
+              v-if="showButton"
+              class="center-center m-t-16 at-symbol"
+              @click="scrollToBottom"
             >
-              <span class="at-symbol center-center">@</span>
-            </van-badge>
+              <van-icon name="arrow-down" />
+            </div>
           </div>
+
           <ul v-if="showUserList" class="user-list">
             <li
               class="align-center"
@@ -309,6 +320,7 @@ export default {
   name: "chatRoom",
   data() {
     return {
+      showButton: false,
       userPic,
       text: "",
       shareData: {
@@ -386,6 +398,22 @@ export default {
     },
   },
   methods: {
+    handleScroll() {
+      const scrollContainer = this.$refs.chatBox;
+      if (!scrollContainer) return;
+
+      const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
+
+      // 正确计算：用户滚动到接近底部（50px 以内）隐藏按钮
+      this.showButton = scrollTop + clientHeight < scrollHeight - 50;
+    },
+    scrollToBottom() {
+      const scrollContainer = this.$refs.chatBox;
+      if (!scrollContainer) return;
+
+      scrollContainer.scrollTop = scrollContainer.scrollHeight;
+      this.showButton = false; // 滚动到底部后隐藏按钮
+    },
     highlightedText(v) {
       console.log(v);
       return v.replace(
@@ -858,7 +886,7 @@ $head: 57px;
   background: #f1f1f1;
 }
 .unread-mention {
-  top: -40px;
+  bottom: 110%;
   right: 16px;
   position: absolute;
   display: flex;
