@@ -57,7 +57,7 @@
             </ul>
             <div slot="reference" :data-reference="doc.type">
               <component
-                v-if="[2, 4, 8, 13].includes(+doc.type)"
+                v-if="[2, 4, 8, 13, 14].includes(+doc.type)"
                 :is="currentComponent(+doc.type)"
                 :userPic="userPic"
                 :doc="doc"
@@ -88,6 +88,7 @@ import bindBuy from "@/views/chat/components/bindBuy.vue";
 import redImg from "@/views/chat/components/redImg.vue";
 import imgMsg from "@/views/chat/components/imgMsg.vue";
 import repalyMsg from "@/views/chat/components/repalyMsg.vue";
+import opensMsg from "@/views/chat/components/opensMsg.vue";
 export default {
   data() {
     return {
@@ -103,6 +104,7 @@ export default {
     redImg,
     imgMsg,
     repalyMsg,
+    opensMsg,
   },
   computed: {
     popoverDisabled() {
@@ -217,6 +219,9 @@ export default {
         case 13:
           //回复
           return "repalyMsg";
+        //开奖信息推送
+        case 14:
+          return "opensMsg";
         default:
           return "redImg";
       }
