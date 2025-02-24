@@ -278,8 +278,44 @@ export default {
 
       return obj;
     },
+    comfire(v) {
+      return new Promise((resolve) => {
+        this.$dialog
+          .confirm({
+            message: v,
+            confirmButtonColor: "#3291FF",
+          })
+          .then(() => {
+            resolve(1);
+          })
+          .catch(() => {
+            resolve(0);
+          });
+      });
+    },
+    async betsShare(id) {
+      this.$toast.loading({
+        forbidClick: false, // 允许点击和滚动
+        duration: 0, // 持续时间为 0 表示不会自动关闭
+      });
+      const [err] = await userApi.lotteryBetsShare({
+        id,
+      });
+      this.sleep(1000);
+      this.$toast.clear();
+      if (err) return;
+      this.$toast.success("分享成功");
+    },
+    async chat(id) {
+      const [err, res] = await userApi.chat();
+      if (err) return;
+      if (!res.data?.chatAble) return;
+      const status = await this.comfire("合买成功分享到聊天室吗？");
+      if (!status || !id) return;
+      this.betsShare(id);
+    },
     async lotteryBets() {
-      const [err] = await userApi.lotteryBets({
+      const [err, res] = await userApi.lotteryBets({
         lotteryId: this.id,
         betCode: this.$util.getStrs(this.tableList),
         ...this.dataForm(),
@@ -288,6 +324,7 @@ export default {
       this.close();
       this.$emit("buySuccess");
       this.$toast("合买成功");
+      this.chat(res.data?.id);
     },
     handelBetCountCurr(v) {
       let n = v.target.value.trim();

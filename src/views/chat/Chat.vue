@@ -9,7 +9,11 @@
       </template>
     </AppTopBar>
     <topBets />
-    <div ref="chatBox" class="flex-1 chat-box js-cont-room">
+    <div
+      ref="chatBox"
+      class="flex-1 chat-box js-cont-room"
+      @scroll="handleScroll"
+    >
       <infinite-loading
         direction="top"
         @infinite="infiniteHandler"
@@ -24,14 +28,19 @@
         ref="$roomMsg"
       />
     </div>
-    <div
-      v-if="aites.length"
-      class="unread-mention center-center"
-      @click="goBtm"
-    >
-      <van-badge :data-badge="aites.length" :content="aites.length" max="99">
-        <span class="at-symbol center-center">@</span>
-      </van-badge>
+    <div class="unread-mention center-center flex-column">
+      <div @click="goBtm" v-if="aites.length">
+        <van-badge :data-badge="aites.length" :content="aites.length" max="99">
+          <span class="at-symbol center-center">@</span>
+        </van-badge>
+      </div>
+      <div
+        class="center-center m-t-32 at-symbol"
+        v-if="showButton"
+        @click="scrollToBottom"
+      >
+        <van-icon name="arrow-down" />
+      </div>
     </div>
     <van-action-sheet
       :overlay="false"
@@ -119,6 +128,7 @@ export default {
   name: "chatRoom",
   data() {
     return {
+      showButton: false,
       filteredUsers: [],
       showUserList: false,
       selectedIndex: 0,
@@ -178,6 +188,22 @@ export default {
     },
   },
   methods: {
+    handleScroll() {
+      const scrollContainer = this.$refs.chatBox;
+      if (!scrollContainer) return;
+
+      const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
+
+      // 正确计算：用户滚动到接近底部（50px 以内）隐藏按钮
+      this.showButton = scrollTop + clientHeight < scrollHeight - 50;
+    },
+    scrollToBottom() {
+      const scrollContainer = this.$refs.chatBox;
+      if (!scrollContainer) return;
+
+      scrollContainer.scrollTop = scrollContainer.scrollHeight;
+      this.showButton = false; // 滚动到底部后隐藏按钮
+    },
     /** 选择用户 */
     selectUser(user = null) {
       if (!user) {
