@@ -699,6 +699,7 @@ export default {
         case "三星独胆":
         case "三星双飞":
         case "三星对子":
+        case "三星组选组三":
           return this.preId === 0 ? [zxzh1] : [zxzh1_hot];
 
         case "中三组三复式":
@@ -805,6 +806,7 @@ export default {
         case "后三组三复式":
         case "中三组三复式":
         case "前三组三复式":
+        case "三星组选组三":
           return "ball4";
 
         // 组三胆拖类型
