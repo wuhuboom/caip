@@ -533,6 +533,7 @@ import ball16 from "./components/ball16";
 import ball17 from "./components/ball17";
 import ball18 from "./components/ball18";
 import ball19 from "./components/ball19";
+import ball20 from "./components/ball20";
 const initData = () => {
   return {
     curTab: 0,
@@ -624,6 +625,7 @@ export default {
     ball17,
     ball18,
     ball19,
+    ball20,
   },
   computed: {
     vuexBetPrice() {
@@ -781,11 +783,15 @@ export default {
     totalMoney() {
       const betList =
         this.lastTree.find((doc) => doc.txt === this.value)?.betList || [];
-      if (["三星组选组三", "三星组选组三胆拖"].includes(this.value)) {
+      if (
+        ["三星组选组三", "三星组选组三胆拖", "三星组选组三自填"].includes(
+          this.value
+        )
+      ) {
         // 组三金额=list[号码个数-2].bet
         // 组六金额=list[号码个数-3].bet
         // 和值金额=list[号码].bet
-        console.log(betList);
+
         let cutNum = 0;
         if (this.value.includes("组三")) {
           cutNum = 2;
@@ -795,6 +801,7 @@ export default {
           cutNum = this.nums.length;
         }
         cutNum = this.nums.length - cutNum;
+        console.log(betList, cutNum);
         let docs = betList[cutNum] || {};
         return docs.bet * this.multiple || 0;
       }
@@ -849,7 +856,8 @@ export default {
         case "中三组三单式":
         case "前三组三单式":
           return "ball12";
-
+        case "三星组选组三自填":
+          return "ball20";
         // 组六复式类型
         case "三星组六复式":
         case "后三组六复式":
@@ -1016,6 +1024,7 @@ export default {
   },
   methods: {
     giveTotal(v, n) {
+      console.log(v, n, "v, n");
       this.total = v;
       this.nums = n || [];
     },

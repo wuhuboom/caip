@@ -54,7 +54,8 @@ export default {
           this.$emit("total", status.totalBets || 0);
           return;
         }
-        this.$emit("total", status);
+        //根据拖的个数计算金额用到
+        this.$emit("total", 1, this.shiWei);
       },
       deep: true,
     },
