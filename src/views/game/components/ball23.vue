@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="play_ball_bar_remark">
-      至少输入2个号码,每个以英文逗号","分隔，例如：1,2
+      至少输入3个号码,每个以英文逗号","分隔，例如：1,2,3
     </div>
     <textarea
       v-model.trim="nums"
@@ -44,8 +44,8 @@ export default {
       const values = this.nums.split(",").filter(Boolean);
 
       // 确保至少输入 2 个数字
-      if (values.length < 2) {
-        this.$refs.$tipsDialog.open("请至少选择 2 个号码");
+      if (values.length < 3) {
+        this.$refs.$tipsDialog.open("请至少选择 3 个号码");
         this.$emit("total", 0);
         return false;
       }

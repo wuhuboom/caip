@@ -534,6 +534,9 @@ import ball17 from "./components/ball17";
 import ball18 from "./components/ball18";
 import ball19 from "./components/ball19";
 import ball20 from "./components/ball20";
+import ball21 from "./components/ball21";
+import ball22 from "./components/ball22";
+import ball23 from "./components/ball23";
 const initData = () => {
   return {
     curTab: 0,
@@ -626,6 +629,9 @@ export default {
     ball18,
     ball19,
     ball20,
+    ball21,
+    ball22,
+    ball23,
   },
   computed: {
     vuexBetPrice() {
@@ -695,7 +701,9 @@ export default {
         case "三星二码十个位":
           return this.preId === 0 ? [losses[1], losses[2]] : [hot[1], hot[2]];
         case "三星组六复式":
+        case "三星组选组六":
         case "三星组六胆拖":
+        case "三星组选组六胆拖":
         case "三星组三复式":
         case "三星组三胆拖":
         case "前三组三复式":
@@ -784,16 +792,21 @@ export default {
       const betList =
         this.lastTree.find((doc) => doc.txt === this.value)?.betList || [];
       if (
-        ["三星组选组三", "三星组选组三胆拖", "三星组选组三自填"].includes(
-          this.value
-        )
+        [
+          "三星组选组三",
+          "三星组选组三胆拖",
+          "三星组选组三自填",
+          "三星组选组六",
+          "三星组选组六胆拖",
+          "三星组选组六自填",
+        ].includes(this.value)
       ) {
         // 组三金额=list[号码个数-2].bet
-        // 组六金额=list[号码个数-3].bet
+        // 组六金额=list[号码个至少输入2个号码,每个以英文逗号","分隔，例如：1,2,3数-3].bet
         // 和值金额=list[号码].bet
 
         let cutNum = 0;
-        if (this.value.includes("组三")) {
+        if (["组三", "胆拖"].find((v) => this.value.includes(v)) > -1) {
           cutNum = 2;
         } else if (this.value.includes("组六")) {
           cutNum = 3;
@@ -858,20 +871,24 @@ export default {
           return "ball12";
         case "三星组选组三自填":
           return "ball20";
+        case "三星组选组六自填":
+          return "ball23";
         // 组六复式类型
         case "三星组六复式":
         case "后三组六复式":
         case "中三组六复式":
         case "前三组六复式":
           return "ball6";
-
+        case "三星组选组六":
+          return "ball21";
         // 组六胆拖类型
         case "三星组六胆拖":
         case "后三组六胆拖":
         case "中三组六胆拖":
         case "前三组六胆拖":
           return "ball7";
-
+        case "三星组选组六胆拖":
+          return "ball22";
         // 组六单式类型
         case "三星组六单式":
         case "后三组六单式":
