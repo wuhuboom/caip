@@ -537,6 +537,7 @@ import ball20 from "./components/ball20";
 import ball21 from "./components/ball21";
 import ball22 from "./components/ball22";
 import ball23 from "./components/ball23";
+import ball24 from "./components/ball24";
 const initData = () => {
   return {
     curTab: 0,
@@ -632,6 +633,7 @@ export default {
     ball21,
     ball22,
     ball23,
+    ball24,
   },
   computed: {
     vuexBetPrice() {
@@ -789,6 +791,7 @@ export default {
       };
     },
     totalMoney() {
+      if (this.total == 0) return 0;
       const betList =
         this.lastTree.find((doc) => doc.txt === this.value)?.betList || [];
       if (
@@ -799,6 +802,7 @@ export default {
           "三星组选组六",
           "三星组选组六胆拖",
           "三星组选组六自填",
+          "三星和值",
         ].includes(this.value)
       ) {
         // 组三金额=list[号码个数-2].bet
@@ -901,7 +905,8 @@ export default {
         case "后三组选和值":
         case "三星组选和值":
           return "ball8";
-
+        case "三星和值":
+          return "ball24";
         // 四星类型
         case "四星直选复式":
           return "ball9";
