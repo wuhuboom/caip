@@ -602,6 +602,15 @@ export default {
       typeConfigList,
       curNav: null,
       cat: [],
+      theOne: [
+        "三星组选组三",
+        "三星组选组三胆拖",
+        "三星组选组三自填",
+        "三星组选组六",
+        "三星组选组六胆拖",
+        "三星组选组六自填",
+        "三星和值",
+      ],
     };
   },
   components: {
@@ -794,17 +803,7 @@ export default {
       if (this.total == 0) return 0;
       const betList =
         this.lastTree.find((doc) => doc.txt === this.value)?.betList || [];
-      if (
-        [
-          "三星组选组三",
-          "三星组选组三胆拖",
-          "三星组选组三自填",
-          "三星组选组六",
-          "三星组选组六胆拖",
-          "三星组选组六自填",
-          "三星和值",
-        ].includes(this.value)
-      ) {
+      if (this.theOne.includes(this.value)) {
         // 组三金额=list[号码个数-2].bet
         // 组六金额=list[号码个至少输入2个号码,每个以英文逗号","分隔，例如：1,2,3数-3].bet
         // 和值金额=list[号码].bet
@@ -1168,9 +1167,9 @@ export default {
       this.tableList.forEach((v) => {
         //dataStr += `${v.model} ${v.text} ${v.multiple}/`;
         if (!dataStr) {
-          dataStr = `${v.model} ${v.text} ${v.multiple} ${v.total} ${v.totalMoney}`;
+          dataStr = `${v.model} ${v.text} ${v.multiple} ${v.total} ${v.price}`;
         } else {
-          dataStr += `/${v.model} ${v.text} ${v.multiple} ${v.total} ${v.totalMoney}`;
+          dataStr += `/${v.model} ${v.text} ${v.multiple} ${v.total} ${v.price}`;
         }
       });
       if (this.isChase) {
@@ -1396,7 +1395,7 @@ export default {
         text: this.$refs.$cont.text,
         total: this.total,
         multiple: this.multiple,
-        price,
+        price: this.theOne.includes(this.value) ? this.totalMoney : price,
         totalMoney: this.totalMoney,
       });
       this.$refs.$cont.clear();
