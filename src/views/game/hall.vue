@@ -245,7 +245,7 @@
                 <component
                   :curPre="curPre"
                   ref="$cont"
-                  @total="total = $event"
+                  @total="giveTotal"
                   :is="currentComponent"
                   :key="value"
                   v-bind="getComponentProps"
@@ -530,7 +530,9 @@ import ball13 from "./components/ball13";
 import ball14 from "./components/ball14";
 import ball15 from "./components/ball15";
 import ball16 from "./components/ball16";
-import ball17 from "./components/ball17.vue";
+import ball17 from "./components/ball17";
+import ball18 from "./components/ball18";
+import ball19 from "./components/ball19";
 const initData = () => {
   return {
     curTab: 0,
@@ -558,6 +560,7 @@ const initData = () => {
     },
     tableList: [],
     catTree: [],
+    nums: [],
   };
 };
 export default {
@@ -619,6 +622,8 @@ export default {
     ball15,
     ball16,
     ball17,
+    ball18,
+    ball19,
   },
   computed: {
     vuexBetPrice() {
@@ -700,6 +705,7 @@ export default {
         case "三星双飞":
         case "三星对子":
         case "三星组选组三":
+        case "三星组选组三胆拖":
           return this.preId === 0 ? [zxzh1] : [zxzh1_hot];
 
         case "中三组三复式":
@@ -773,6 +779,25 @@ export default {
       };
     },
     totalMoney() {
+      const betList =
+        this.lastTree.find((doc) => doc.txt === this.value)?.betList || [];
+      if (["三星组选组三", "三星组选组三胆拖"].includes(this.value)) {
+        // 组三金额=list[号码个数-2].bet
+        // 组六金额=list[号码个数-3].bet
+        // 和值金额=list[号码].bet
+        console.log(betList);
+        let cutNum = 0;
+        if (this.value.includes("组三")) {
+          cutNum = 2;
+        } else if (this.value.includes("组六")) {
+          cutNum = 3;
+        } else if (this.value.includes("和值")) {
+          cutNum = this.nums.length;
+        }
+        cutNum = this.nums.length - cutNum;
+        let docs = betList[cutNum] || {};
+        return docs.bet * this.multiple || 0;
+      }
       return this.divide(
         this.total * this.multiple * this.getPrice(this.value),
         false
@@ -806,9 +831,11 @@ export default {
         case "后三组三复式":
         case "中三组三复式":
         case "前三组三复式":
-        case "三星组选组三":
           return "ball4";
-
+        case "三星组选组三":
+          return "ball18";
+        case "三星组选组三胆拖":
+          return "ball19";
         // 组三胆拖类型
         case "三星组三胆拖":
         case "后三组三胆拖":
@@ -988,6 +1015,10 @@ export default {
     },
   },
   methods: {
+    giveTotal(v, n) {
+      this.total = v;
+      this.nums = n || [];
+    },
     getPrice(v) {
       return this.lastTree.find((doc) => doc.txt === v)?.bet || 2;
     },
@@ -1106,9 +1137,9 @@ export default {
       this.tableList.forEach((v) => {
         //dataStr += `${v.model} ${v.text} ${v.multiple}/`;
         if (!dataStr) {
-          dataStr = `${v.model} ${v.text} ${v.multiple} ${v.total} ${v.price}`;
+          dataStr = `${v.model} ${v.text} ${v.multiple} ${v.total} ${v.totalMoney}`;
         } else {
-          dataStr += `/${v.model} ${v.text} ${v.multiple} ${v.total} ${v.price}`;
+          dataStr += `/${v.model} ${v.text} ${v.multiple} ${v.total} ${v.totalMoney}`;
         }
       });
       if (this.isChase) {
@@ -1256,7 +1287,6 @@ export default {
     },
     extractDeepList(data) {
       const result = [];
-
       const traverse = (arr) => {
         arr.forEach((item) => {
           if (item.list) {
@@ -1305,7 +1335,7 @@ export default {
       if (err) return;
       this.catTree = JSON.parse(res.data.mulConfig);
       res.data.mulConfig = JSON.parse(res.data.mulConfig);
-      console.log(res.data.mulConfig);
+      console.log("----", res.data.mulConfig);
       this.setlotteryType(this.id);
       if (!res.data.nextExpect) {
         res.data.nextExpect = {};
@@ -1329,14 +1359,14 @@ export default {
       const status = this.$refs.$cont.add();
       if (!status) return;
       const price = this.getPrice(this.value);
-      const totalMoney = this.divide(price * this.total * this.multiple, false);
+      //const totalMoney = this.divide(price * this.total * this.multiple, false);
       this.tableList.push({
         model: this.model,
         text: this.$refs.$cont.text,
         total: this.total,
         multiple: this.multiple,
         price,
-        totalMoney,
+        totalMoney: this.totalMoney,
       });
       this.$refs.$cont.clear();
     },

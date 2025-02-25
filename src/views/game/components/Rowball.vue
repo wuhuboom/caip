@@ -202,10 +202,11 @@ export default {
       this.nums = Array.from(selected);
       return this.nums;
     },
-    getTwoRandomElements(arr) {
-      if (arr.length < 2) throw new Error("数组长度不足2");
+    getTwoRandomElements(arr, exclude = []) {
+      const filteredArr = arr.filter((item) => !exclude.includes(item)); // 过滤掉 v 数组的元素
+      if (filteredArr.length < 2) throw new Error("可用数组长度不足2");
 
-      const copy = [...arr]; // 复制数组，避免修改原数组
+      const copy = [...filteredArr]; // 复制数组，避免修改原数组
       const firstIndex = Math.floor(Math.random() * copy.length);
       const firstElement = copy.splice(firstIndex, 1)[0]; // 删除并获取该元素
       const secondIndex = Math.floor(Math.random() * copy.length);
@@ -213,10 +214,12 @@ export default {
 
       return [firstElement, secondElement];
     },
-    randemTow() {
-      this.nums = this.getTwoRandomElements(this.upList);
+
+    randemTow(v = []) {
+      this.nums = this.getTwoRandomElements(this.upList, v);
       return this.nums;
     },
+
     filterLeft(option) {
       // 根据不同的 right 选项筛选 left
       if (option === "全") {
