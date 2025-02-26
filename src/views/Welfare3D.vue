@@ -233,6 +233,7 @@
           <div class="right" @click="sure">投注</div>
         </div>
       </div>
+
       <img
         class="d-img together"
         @click="openGroupBuy"

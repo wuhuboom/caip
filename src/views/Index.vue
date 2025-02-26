@@ -54,7 +54,7 @@
         </li>
       </ul>
     </div>
-    <div class="m-l-24 m-r-24 m-b-12 ottery-bts">
+    <div class="p-l-24 p-r-24 m-b-24 ottery-bts">
       <van-tabs v-model="active">
         <van-tab :title="p.lotteryName" v-for="(p, i) in cat" :key="i">
           <ul class="nav-ottery-bt flex-wrap font12">
@@ -85,23 +85,25 @@
         </van-tab>
       </van-tabs>
     </div>
-
-    <div class="ranking-box">
-      <div class="title text-ellipsis">最新排行</div>
-      <div class="lists-box">
-        <div class="lists" v-for="(v, i) in wins" :key="i">
-          <div class="left text-ellipsis">
-            <div class="name text-ellipsis">
-              <div class="icon"></div>
-              <div class="text-ellipsis">{{ v.playerName }}</div>
-            </div>
-            <!-- <div class="des text-ellipsis">购买福彩3D</div> -->
-          </div>
-          <div class="right text-ellipsis">
-            喜中<span class="num">{{ divide(v.money) }}</span
-            >元
-          </div>
-        </div>
+    <div class="m-l-24 m-r-24 prize-boxs">
+      <p class="p-b-32 p-t-32">
+        <img class="d-img" src="@/assets/img/prize-line.png" alt="" />
+      </p>
+      <div class="prize-bg">
+        <ul class="grid-table p-x-16">
+          <li>玩家</li>
+          <li>游戏</li>
+          <li>中奖金额</li>
+        </ul>
+        <ul
+          class="grid-table prize-li p-x-16 font12"
+          v-for="(v, i) in wins"
+          :key="i"
+        >
+          <li>{{ v.playerName }}</li>
+          <li>{{ random() }}</li>
+          <li>{{ divide(v.money) }}</li>
+        </ul>
       </div>
     </div>
 
@@ -157,6 +159,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import userApi from "@/api/user";
 import { NoticeBar } from "vant";
 import labaImg from "@/assets/img/Index/laba.png";
@@ -185,6 +188,7 @@ export default {
     NoticeBar,
   },
   computed: {
+    ...mapGetters(["catList"]),
     paySet() {
       return this.$store.state.paySet;
     },
@@ -218,6 +222,12 @@ export default {
     },
   },
   methods: {
+    random() {
+      //catList 随机一位
+      const len = this.slideCatList.length;
+      const index = Math.floor(Math.random() * len);
+      return this.slideCatList[index].lotteryName;
+    },
     withdraw() {
       if (!this.bankCard.id) {
         return this.openTipsDialog();
@@ -709,6 +719,23 @@ export default {
       width: 25%;
       padding-bottom: 40px;
     }
+  }
+}
+.prize-boxs {
+  background: #ffffff;
+  border-radius: 16px 16px 16px 16px;
+}
+.grid-table {
+  grid-template-columns: repeat(3, 1fr); /* 三列等宽 */
+  display: grid;
+  text-align: center;
+}
+.prize-bg {
+  background: #eeeeee;
+  border-radius: 16px 16px 16px 16px;
+  .prize-li {
+    background: linear-gradient(180deg, #ffffff 0%, #f5f5f5 100%);
+    border-radius: 8px 8px 8px 8px;
   }
 }
 </style>
