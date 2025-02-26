@@ -1,6 +1,6 @@
 <template>
   <div class="index-page c-page bg-grey">
-    <AppTopBar ref="topBar" topBarTitle="欢聚一堂">
+    <AppTopBar ref="topBar" topBarTitle="永旺彩票" :showLeft="false">
       <template #right>
         <p class="center-center colorfff serve m-r-24" @click="serve">
           <img class="d-img" src="@/assets/img/card.png" alt="" />
@@ -601,8 +601,6 @@ export default {
   padding-bottom: 120px + 30px;
 }
 .top-header {
-  background: url("@/assets/img/lo2.png") no-repeat;
-  background-size: 100% 100%;
   .lo1 {
     margin: 28px 0;
     width: 252px;
