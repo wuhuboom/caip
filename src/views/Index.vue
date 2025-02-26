@@ -13,7 +13,7 @@
         </van-swipe-item>
       </van-swipe>
     </div>
-    <div class="p-l-24 p-r-24">
+    <div class="p-l-24 p-r-24 font12">
       <NoticeBar
         class="notice-bar"
         background="#fff"
@@ -24,16 +24,29 @@
         {{ noticeDoc.content }}
       </NoticeBar>
     </div>
-    <div>
+    <div
+      class="nav-wrap font12 m-l-24 m-r-24 p-x-24 justify-between align-center"
+    >
       <ul>
-        <li></li>
-        <li></li>
+        <li class="m-b-8">{{ user.username }}</li>
+        <li class="align-center">
+          ￥
+          <p class="balance">{{ divide(user.balance) }}</p>
+          <van-icon name="replay" class="m-l-4" color="#E50012" />
+        </li>
       </ul>
-      <ul>
-        <li></li>
-        <li></li>
+      <ul class="my-nav flex-wrap">
+        <li class="flex-column center-center m-r-32">
+          <img class="d-img m-b-8" src="@/assets/img/icon-idx2.png" alt="" />
+          <p>存款</p>
+        </li>
+        <li class="flex-column center-center">
+          <img class="d-img m-b-8" src="@/assets/img/icon-idx1.png" alt="" />
+          <p>取款</p>
+        </li>
       </ul>
     </div>
+
     <div class="nav-wrap">
       <div class="my-cats m-t-28" v-for="(p, i) in cat" :key="i">
         <p class="font16 align-center m-b-24">{{ p.lotteryName }}</p>
@@ -183,6 +196,9 @@ export default {
     },
     cat() {
       return this.$store.state.cat;
+    },
+    user() {
+      return this.$store.state.user;
     },
   },
   methods: {
@@ -624,6 +640,20 @@ export default {
     margin: 28px 0;
     width: 252px;
     height: 74px;
+  }
+}
+.nav-wrap {
+  background-color: #fff;
+  border-radius: 8px 8px 8px 8px;
+  .balance {
+    color: #000;
+    font-weight: bold;
+  }
+}
+.my-nav {
+  img {
+    width: 60px;
+    height: 60px;
   }
 }
 </style>
