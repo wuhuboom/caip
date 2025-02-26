@@ -43,12 +43,7 @@
             >
           </div>
           <div class="t-2">
-            <div
-              class="item"
-              :class="{ on: i == 0 }"
-              v-for="(v2, i2) in v.openArr"
-              :key="i2"
-            >
+            <div class="item on" v-for="(v2, i2) in v.openArr" :key="i2">
               {{ v2 }}
             </div>
           </div>
