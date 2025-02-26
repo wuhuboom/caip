@@ -27,20 +27,28 @@
     <div
       class="nav-wrap font12 m-l-24 m-r-24 p-x-24 justify-between align-center"
     >
-      <ul>
+      <ul @click="$store.dispatch('getInfo')">
         <li class="m-b-8">{{ user.username }}</li>
         <li class="align-center">
           ￥
           <p class="balance">{{ divide(user.balance) }}</p>
-          <van-icon name="replay" class="m-l-4" color="#E50012" />
+          <van-icon
+            name="replay"
+            class="m-l-4"
+            style="font-weight: bold"
+            color="#E50012"
+          />
         </li>
       </ul>
       <ul class="my-nav flex-wrap">
-        <li class="flex-column center-center m-r-32">
+        <li
+          class="flex-column center-center m-r-32"
+          @click="$router.push('/recharge')"
+        >
           <img class="d-img m-b-8" src="@/assets/img/icon-idx2.png" alt="" />
           <p>存款</p>
         </li>
-        <li class="flex-column center-center">
+        <li class="flex-column center-center" @click="withdraw">
           <img class="d-img m-b-8" src="@/assets/img/icon-idx1.png" alt="" />
           <p>取款</p>
         </li>
@@ -181,6 +189,18 @@ export default {
     NoticeBar,
   },
   computed: {
+    paySet() {
+      return this.$store.state.paySet;
+    },
+    Cards() {
+      return this.$store.state.bankCard;
+    },
+    bankCard() {
+      return this.Cards.find((v) => +v.ctype === 2) || {};
+    },
+    usdtCard() {
+      return this.Cards.find((v) => +v.ctype === 3) || {};
+    },
     slideCatList() {
       return this.catList;
     },
@@ -202,6 +222,17 @@ export default {
     },
   },
   methods: {
+    withdraw() {
+      if (!this.bankCard.id) {
+        return this.openTipsDialog();
+      }
+      if (this.paySet !== 1) {
+        this.$toast.fail("请先设置支付密码");
+        return this.$router.push("/payPassword");
+      }
+      ///withdrawal
+      this.$router.push("/withdrawal");
+    },
     async homeDialog() {
       const [err, res] = await userApi.homeDialog();
       if (err) return;
@@ -287,7 +318,7 @@ export default {
   },
   created() {
     this.homeDialog();
-
+    this.$store.dispatch("getPaySet");
     this.showDliog();
     this.$store.dispatch("playerLotteryList");
     this.homeWinning();
