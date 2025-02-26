@@ -57,8 +57,9 @@
     <div class="m-l-24 m-r-24 m-b-12 ottery-bts">
       <van-tabs v-model="active">
         <van-tab :title="p.lotteryName" v-for="(p, i) in cat" :key="i">
-          <ul>
+          <ul class="nav-ottery-bt flex-wrap font12">
             <li
+              class="flex-column center-center"
               v-for="(item, idx) in p.list"
               :key="idx"
               @click="
@@ -71,7 +72,7 @@
                 })
               "
             >
-              <p>
+              <p class="m-b-12">
                 <img
                   class="d-img icons"
                   :src="`${item.icoUrls || nav5Icon}`"
@@ -83,42 +84,6 @@
           </ul>
         </van-tab>
       </van-tabs>
-    </div>
-
-    <div class="nav-wrap">
-      <div class="my-cats m-t-28" v-for="(p, i) in cat" :key="i">
-        <p class="font16 align-center m-b-24">{{ p.lotteryName }}</p>
-        <ul class="hall flex-wrap">
-          <li
-            class="m-b-24"
-            v-for="(item, idx) in p.list"
-            :key="idx"
-            @click="
-              $router.push({
-                path: `/game/hall`,
-                query: {
-                  id: item.id,
-                  type: item.lotteryType,
-                },
-              })
-            "
-          >
-            <ul class="conts align-center">
-              <li>
-                <img
-                  class="d-img icons"
-                  :src="`${item.icoUrls || nav5Icon}`"
-                  alt=""
-                />
-              </li>
-              <li class="art font12">
-                <p class="lotteryNameH5 font14">{{ item.lotteryNameH5 }}</p>
-                <p>{{ `全天${item.totalExpect}期` }}</p>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
     </div>
 
     <div class="ranking-box">
@@ -721,5 +686,29 @@ export default {
 .ottery-bts {
   border-radius: 8px 8px 8px 8px;
   overflow: hidden;
+  background-color: #fff;
+  ::v-deep {
+    .van-tabs__wrap {
+      border-bottom: 2px solid #ebebeb;
+    }
+    .van-tab--active {
+      color: #bf2935;
+    }
+    .van-tabs__line {
+      background-color: #bf2935;
+    }
+  }
+  img {
+    width: 110px;
+    height: 110px;
+  }
+  .nav-ottery-bt {
+    padding-top: 40px;
+
+    & > li {
+      width: 25%;
+      padding-bottom: 40px;
+    }
+  }
 }
 </style>
