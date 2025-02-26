@@ -1,9 +1,14 @@
 <template>
   <div class="index-page c-page bg-grey">
+    <AppTopBar ref="topBar" topBarTitle="欢聚一堂">
+      <template #right>
+        <p class="center-center colorfff serve m-r-24" @click="serve">
+          <img class="d-img" src="@/assets/img/card.png" alt="" />
+          人工充值
+        </p>
+      </template>
+    </AppTopBar>
     <div class="top-header">
-      <p class="center-center">
-        <img class="d-img lo1" src="@/assets/img/lo1.png" alt="" />
-      </p>
       <van-swipe class="swipe-box" :autoplay="3000" indicator-color="white">
         <van-swipe-item v-for="(p, i) in slider" :key="i">
           <p
