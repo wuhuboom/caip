@@ -233,13 +233,16 @@
           <div class="right" @click="sure">投注</div>
         </div>
       </div>
-
-      <img
-        class="d-img together"
-        @click="openGroupBuy"
-        src="@/assets/img/together.png"
-        alt=""
-      />
+      <div class="together">
+        <div class="group-btn">
+          <img
+            class="d-img"
+            @click="openGroupBuy"
+            src="@/assets/img/together.png"
+            alt=""
+          />
+        </div>
+      </div>
     </template>
   </div>
 </template>
@@ -1217,6 +1220,10 @@ export default {
   bottom: 118px;
   width: 100px;
   height: 100px;
+  .group-btn {
+    width: 100px;
+    height: 100px;
+  }
 }
 .c-page {
   padding-bottom: 118px+ 96px;
