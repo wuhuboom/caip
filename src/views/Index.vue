@@ -1,14 +1,8 @@
 <template>
   <div class="index-page c-page bg-grey">
     <AppTopBar ref="topBar" topBarTitle="永旺彩票" :showLeft="false">
-      <template #right>
-        <p class="center-center colorfff serve m-r-24" @click="serve">
-          <img class="d-img" src="@/assets/img/card.png" alt="" />
-          人工充值
-        </p>
-      </template>
     </AppTopBar>
-    <div class="top-header">
+    <div class="top-header p-t-16 p-b-32">
       <van-swipe class="swipe-box" :autoplay="3000" indicator-color="white">
         <van-swipe-item v-for="(p, i) in slider" :key="i">
           <p
@@ -19,15 +13,27 @@
         </van-swipe-item>
       </van-swipe>
     </div>
-    <NoticeBar
-      class="notice-bar"
-      background="#FFE5E5"
-      color="#333333"
-      :left-icon="labaImg"
-      @click="$router.push('/notice')"
-    >
-      {{ noticeDoc.content }}
-    </NoticeBar>
+    <div class="p-l-24 p-r-24">
+      <NoticeBar
+        class="notice-bar"
+        background="#fff"
+        color="#333333"
+        :left-icon="labaImg"
+        @click="$router.push('/notice')"
+      >
+        {{ noticeDoc.content }}
+      </NoticeBar>
+    </div>
+    <div>
+      <ul>
+        <li></li>
+        <li></li>
+      </ul>
+      <ul>
+        <li></li>
+        <li></li>
+      </ul>
+    </div>
     <div class="nav-wrap">
       <div class="my-cats m-t-28" v-for="(p, i) in cat" :key="i">
         <p class="font16 align-center m-b-24">{{ p.lotteryName }}</p>
@@ -298,7 +304,7 @@ export default {
   .item {
     display: block;
     width: 694px;
-    height: 272px;
+    height: 292px;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
@@ -356,6 +362,19 @@ export default {
         font-size: 20px;
         margin-top: 10px;
       }
+    }
+  }
+}
+::v-deep {
+  .van-notice-bar__left-icon {
+    width: 40px;
+    height: 40px;
+    min-width: none;
+    margin-right: 16px;
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
     }
   }
 }
