@@ -25,7 +25,7 @@
       </NoticeBar>
     </div>
     <div
-      class="nav-wrap font12 m-l-24 m-r-24 p-x-24 justify-between align-center"
+      class="nav-wrap font12 m-l-24 m-r-24 m-b-12 p-x-24 justify-between align-center"
     >
       <ul @click="$store.dispatch('getInfo')">
         <li class="m-b-8">{{ user.username }}</li>
@@ -53,6 +53,36 @@
           <p>取款</p>
         </li>
       </ul>
+    </div>
+    <div class="m-l-24 m-r-24 m-b-12 ottery-bts">
+      <van-tabs v-model="active">
+        <van-tab :title="p.lotteryName" v-for="(p, i) in cat" :key="i">
+          <ul>
+            <li
+              v-for="(item, idx) in p.list"
+              :key="idx"
+              @click="
+                $router.push({
+                  path: `/game/hall`,
+                  query: {
+                    id: item.id,
+                    type: item.lotteryType,
+                  },
+                })
+              "
+            >
+              <p>
+                <img
+                  class="d-img icons"
+                  :src="`${item.icoUrls || nav5Icon}`"
+                  alt=""
+                />
+              </p>
+              <p>{{ item.lotteryNameH5 }}</p>
+            </li>
+          </ul>
+        </van-tab>
+      </van-tabs>
     </div>
 
     <div class="nav-wrap">
@@ -171,6 +201,7 @@ export default {
   name: "AppHome",
   data() {
     return {
+      active: 0,
       nav5Icon,
       labaImg,
       wins: [],
@@ -686,5 +717,9 @@ export default {
     width: 60px;
     height: 60px;
   }
+}
+.ottery-bts {
+  border-radius: 8px 8px 8px 8px;
+  overflow: hidden;
 }
 </style>

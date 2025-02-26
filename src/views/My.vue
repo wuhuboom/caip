@@ -207,6 +207,7 @@ export default {
   data() {
     return {
       DefaultAvatar,
+
       navs: [
         {
           path: "/myBallRecord",
