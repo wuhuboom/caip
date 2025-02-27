@@ -227,6 +227,10 @@
         </div>
       </div>
       <div class="together">
+        <ul class="room-enter">
+          <li><img class="d-img" src="@/assets/img/rooml1.png" alt="" /></li>
+          <li><img class="d-img" src="@/assets/img/rooml2.png" alt="" /></li>
+        </ul>
         <div class="group-btn">
           <img
             class="d-img"
@@ -1221,11 +1225,13 @@ export default {
   position: fixed;
   right: 32px;
   bottom: 220px;
-  width: 100px;
-  height: 100px;
   .group-btn {
     width: 100px;
     height: 100px;
+  }
+  .room-enter {
+    width: 130px;
+    height: 130px;
   }
 }
 .c-page {
