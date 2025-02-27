@@ -171,19 +171,6 @@
             </p>
           </li>
         </ul>
-        <ul class="bets-way">
-          <li class="justify-between align-center">
-            <p class="color999">倍数:</p>
-            <p><van-stepper v-model="multiple" /></p>
-          </li>
-          <!-- <li
-          class="justify-between align-center"
-          @click="showSelect = !showSelect"
-        >
-          <p class="color999">投注方式:</p>
-          <p>{{ value }} <van-icon name="arrow" /></p>
-        </li> -->
-        </ul>
       </div>
       <BetOn
         :id="id"
@@ -219,18 +206,24 @@
       <!-- 底部 BuyTogether -->
       <div class="betting-box">
         <div class="fixed">
-          <div class="center">
-            <div class="t1">{{ totalALL }}注</div>
-            <div class="t2">共{{ totalMoney }}元</div>
+          <ul class="fixed-up align-center justify-between colorfff">
+            <li>倍数:</li>
+            <li><van-stepper v-model="multiple" /></li>
+          </ul>
+          <div class="align-center flex-1 fixed-btm">
+            <div class="center total-all">
+              <div class="t1">{{ totalALL }}注</div>
+              <div class="t2">共{{ totalMoney }}元</div>
+            </div>
+            <div
+              class="right"
+              @click="openChase"
+              style="background-color: #484848"
+            >
+              追号
+            </div>
+            <div class="right" @click="sure">投注</div>
           </div>
-          <div
-            class="right"
-            @click="openChase"
-            style="background-color: #484848"
-          >
-            追号
-          </div>
-          <div class="right" @click="sure">投注</div>
         </div>
       </div>
       <div class="together">
@@ -1077,10 +1070,20 @@ export default {
     left: 0;
     bottom: 0;
     width: 100%;
-    display: flex;
-    height: 98px;
-    align-items: center;
     background: #fff;
+  }
+  .fixed-btm {
+    height: 98px;
+  }
+  .fixed-up {
+    background-color: #000;
+    height: 90px;
+    padding: 0 38px;
+  }
+  .total-all {
+    text-align: left;
+    padding-left: 38px;
+    justify-content: flex-start !important;
   }
   .left {
     text-align: center;
@@ -1216,8 +1219,8 @@ export default {
 }
 .together {
   position: fixed;
-  right: 0;
-  bottom: 118px;
+  right: 32px;
+  bottom: 220px;
   width: 100px;
   height: 100px;
   .group-btn {
@@ -1226,7 +1229,7 @@ export default {
   }
 }
 .c-page {
-  padding-bottom: 118px+ 96px;
+  padding-bottom: 260px;
 }
 .title-desc {
   padding-left: 16px;
