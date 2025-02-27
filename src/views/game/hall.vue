@@ -233,7 +233,8 @@
                   ></div>
                 </div>
                 <div class="cp-radio-text" style="color: rgb(239, 204, 82)">
-                  {{ doc.txt.replace(curNav, "") }}
+                  <!-- {{ doc.txt.replace(curNav, "") }} -->
+                  {{ replaceCat(item.name, doc.txt) }}
                   <!-- {{ doc.txt }} -->
                 </div>
               </div>
@@ -508,21 +509,12 @@
 </template>
 
 <script>
-import InfoMain from "@/components/InfoMain";
 import userApi from "@/api/user";
-import GroupBuy from "@/views/game/components/GroupBuy.vue";
-import ChaseReason from "@/views/game/components/ChaseReason.vue";
+import InfoMain from "@/components/InfoMain";
 import typeConfigList from "@/plugins/typeConfigList";
-import prePrize from "./components/prePirze";
+import ChaseReason from "@/views/game/components/ChaseReason.vue";
+import GroupBuy from "@/views/game/components/GroupBuy.vue";
 import ball1 from "./components/ball1";
-import ball2 from "./components/ball2";
-import ball3 from "./components/ball3";
-import ball4 from "./components/ball4";
-import ball5 from "./components/ball5";
-import ball6 from "./components/ball6";
-import ball7 from "./components/ball7";
-import ball8 from "./components/ball8";
-import ball9 from "./components/ball9";
 import ball10 from "./components/ball10";
 import ball11 from "./components/ball11";
 import ball12 from "./components/ball12";
@@ -533,11 +525,20 @@ import ball16 from "./components/ball16";
 import ball17 from "./components/ball17";
 import ball18 from "./components/ball18";
 import ball19 from "./components/ball19";
+import ball2 from "./components/ball2";
 import ball20 from "./components/ball20";
 import ball21 from "./components/ball21";
 import ball22 from "./components/ball22";
 import ball23 from "./components/ball23";
 import ball24 from "./components/ball24";
+import ball3 from "./components/ball3";
+import ball4 from "./components/ball4";
+import ball5 from "./components/ball5";
+import ball6 from "./components/ball6";
+import ball7 from "./components/ball7";
+import ball8 from "./components/ball8";
+import ball9 from "./components/ball9";
+import prePrize from "./components/prePirze";
 const initData = () => {
   return {
     curTab: 0,
@@ -772,7 +773,6 @@ export default {
           return [];
       }
     },
-
     catList() {
       let list = [];
       this.cat.forEach((v) => {
@@ -1044,6 +1044,13 @@ export default {
     },
   },
   methods: {
+    replaceCat(name, txt) {
+      if (!txt) return "";
+      if (name === "三星组选") {
+        txt.replace(name, "");
+      }
+      return txt.replace(this.curNav, "");
+    },
     giveTotal(v, n) {
       console.log(v, n, "v, n");
       this.total = v;
