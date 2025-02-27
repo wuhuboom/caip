@@ -226,10 +226,19 @@
           </div>
         </div>
       </div>
-      <div class="together">
-        <ul class="room-enter">
-          <li><img class="d-img" src="@/assets/img/rooml1.png" alt="" /></li>
-          <li><img class="d-img" src="@/assets/img/rooml2.png" alt="" /></li>
+      <div class="together flex-column center-center">
+        <ul class="room-enter flex-column center-center m-b-32" v-if="showRoom">
+          <li @click="$router.push('/chat')" class="m-b-16">
+            <img class="d-img" src="@/assets/img/rooml1.png" alt="" />
+          </li>
+          <li>
+            <img
+              @click="showRoom = !showRoom"
+              class="d-img"
+              src="@/assets/img/rooml2.png"
+              alt=""
+            />
+          </li>
         </ul>
         <div class="group-btn">
           <img
@@ -272,6 +281,7 @@ export default {
   name: "Welfare3D",
   data() {
     return {
+      showRoom: true,
       milliseconds: 0,
       total: 0,
       preId: 0,
@@ -1230,12 +1240,18 @@ export default {
     height: 100px;
   }
   .room-enter {
-    width: 130px;
-    height: 130px;
+    li:first-child {
+      width: 100px;
+      height: 100px;
+    }
+    li:last-child {
+      width: 40px;
+      height: 40px;
+    }
   }
 }
 .c-page {
-  padding-bottom: 260px;
+  padding-bottom: 460px;
 }
 .title-desc {
   padding-left: 16px;
