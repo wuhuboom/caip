@@ -280,7 +280,7 @@
               <div>
                 <span class="ssc-panel-drop-label">水倍转换：</span>
                 <span style="color: rgb(255, 255, 255)">{{
-                  choseValue.value
+                  choseValue.value || docsListValue
                 }}</span>
               </div>
               <div class="common_layout_center_h ssc-panel-mode-container">
@@ -579,6 +579,7 @@ export default {
   data() {
     return {
       ...initData(),
+      docsListValue: "",
       tabs: [
         {
           name: "当前奖期",
@@ -801,6 +802,8 @@ export default {
       };
     },
     totalMoney() {
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      this.docsListValue = "";
       if (this.total == 0) return 0;
       const betList =
         this.lastTree.find((doc) => doc.txt === this.value)?.betList || [];
@@ -810,6 +813,10 @@ export default {
         // 组六金额=list[号码个至少输入2个号码,每个以英文逗号","分隔，例如：1,2,3数-3].bet
         // 和值金额=list[号码].bet
         if (["三星和值", "三星跨度"].includes(this.value)) {
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+          this.docsListValue = this.nums.reduce((total, num) => {
+            return total + betList[num].value * 1;
+          }, 0);
           //list[号码].bet 相加
           return this.nums.reduce((total, num) => {
             return total + betList[num].bet * this.multiple;
@@ -824,8 +831,9 @@ export default {
           cutNum = this.nums.length;
         }
         cutNum = this.nums.length - cutNum;
-        console.log(betList, cutNum);
         let docs = betList[cutNum] || {};
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.docsListValue = docs.value;
         return docs.bet * this.multiple || 0;
       }
       return this.divide(
