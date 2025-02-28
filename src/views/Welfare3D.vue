@@ -747,14 +747,14 @@ export default {
       this.$refs.$AppendChase.open({
         multiple: this.multiple, //倍数
         totalALL: this.totalALL, //多数注数
-        totalMoney: this.totalMoney, //总金额
+        totalMoney: this.btmMoney, //总金额
       });
     },
     openGroupBuy() {
       this.$refs.$BuyTogether.open({
         multiple: this.multiple, //倍数
         totalALL: this.totalALL, //多数注数
-        totalMoney: this.totalMoney, //总金额
+        totalMoney: this.btmMoney, //总金额
       });
     },
     pageDell() {
