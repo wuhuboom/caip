@@ -131,7 +131,7 @@
           <component
             :curPre="curPre"
             ref="$cont"
-            @total="total = $event"
+            @total="giveTotal"
             :is="currentComponent"
             :key="value"
             v-bind="getComponentProps"
@@ -213,7 +213,7 @@
           <div class="align-center flex-1 fixed-btm">
             <div class="center total-all">
               <div class="t1">{{ totalALL }}注</div>
-              <div class="t2">共{{ totalMoney }}元</div>
+              <div class="t2">共{{ btmMoney }}元</div>
             </div>
             <div
               class="right"
@@ -312,6 +312,7 @@ export default {
       },
       tableList: [],
       multiple: 1,
+      nums: [],
     };
   },
   components: {
@@ -351,6 +352,120 @@ export default {
     },
   },
   computed: {
+    theOne() {
+      return this.$store.state.theOne;
+    },
+    currentComponent() {
+      switch (this.value) {
+        // 复式类型
+        case "三星直选复式":
+        case "后三直选复式":
+        case "中三直选复式":
+        case "前三直选复式":
+          return "ball1";
+
+        // 单式类型
+        case "三星直选单式":
+        case "后三直选单式":
+        case "中三直选单式":
+        case "前三直选单式":
+          return "ball2";
+
+        // 和值类型
+        case "三星直选和值":
+        case "后三直选和值":
+        case "中三直选和值":
+        case "前三直选和值":
+          return "ball3";
+
+        // 组三复式类型
+        case "三星组三复式":
+        case "后三组三复式":
+        case "中三组三复式":
+        case "前三组三复式":
+          return "ball4";
+        case "三星组选组三":
+          return "ball18";
+        case "三星跨度":
+          return "ball25";
+        case "三星组选组三胆拖":
+          return "ball19";
+        // 组三胆拖类型
+        case "三星组三胆拖":
+        case "后三组三胆拖":
+        case "中三组三胆拖":
+        case "前三组三胆拖":
+          return "ball5";
+
+        // 组三单式类型
+        case "三星组三单式":
+        case "后三组三单式":
+        case "中三组三单式":
+        case "前三组三单式":
+          return "ball12";
+        case "三星组选组三自填":
+          return "ball20";
+        case "三星组选组六自填":
+          return "ball23";
+        // 组六复式类型
+        case "三星组六复式":
+        case "后三组六复式":
+        case "中三组六复式":
+        case "前三组六复式":
+          return "ball6";
+        case "三星组选组六":
+          return "ball21";
+        // 组六胆拖类型
+        case "三星组六胆拖":
+        case "后三组六胆拖":
+        case "中三组六胆拖":
+        case "前三组六胆拖":
+          return "ball7";
+        case "三星组选组六胆拖":
+          return "ball22";
+        // 组六单式类型
+        case "三星组六单式":
+        case "后三组六单式":
+        case "中三组六单式":
+        case "前三组六单式":
+          return "ball13";
+
+        // 组选和值类型
+        case "中三组选和值":
+        case "后三组选和值":
+        case "三星组选和值":
+          return "ball8";
+        case "三星和值":
+          return "ball24";
+        // 四星类型
+        case "四星直选复式":
+          return "ball9";
+        case "四星直选单式":
+          return "ball10";
+
+        // 直选组合类型
+        case "后三直选组合":
+        case "中三直选组合":
+        case "前三直选组合":
+          return "ball11";
+        case "三星独胆":
+        case "三星对子":
+          return "ball14";
+        case "三星双飞":
+          return "ball15";
+        case "三星一码百位":
+        case "三星一码十位":
+        case "三星一码个位":
+          return "ball16";
+        case "三星二码百十位":
+        case "三星二码百个位":
+        case "三星二码十个位":
+          return "ball17";
+        // 默认情况
+        default:
+          return "ball1";
+      }
+    },
     getComponentProps() {
       if (this.value.includes("直选和值")) {
         return {
@@ -437,7 +552,9 @@ export default {
         case "三星二码十个位":
           return this.preId === 0 ? [losses[1], losses[2]] : [hot[1], hot[2]];
         case "三星组六复式":
+        case "三星组选组六":
         case "三星组六胆拖":
+        case "三星组选组六胆拖":
         case "三星组三复式":
         case "三星组三胆拖":
         case "前三组三复式":
@@ -448,6 +565,8 @@ export default {
         case "三星独胆":
         case "三星双飞":
         case "三星对子":
+        case "三星组选组三":
+        case "三星组选组三胆拖":
           return this.preId === 0 ? [zxzh1] : [zxzh1_hot];
 
         case "中三组三复式":
@@ -491,106 +610,6 @@ export default {
         // 默认情况
         default:
           return [];
-      }
-    },
-    currentComponent() {
-      switch (this.value) {
-        // 复式类型
-        case "三星直选复式":
-        case "后三直选复式":
-        case "中三直选复式":
-        case "前三直选复式":
-          return "ball1";
-
-        // 单式类型
-        case "三星直选单式":
-        case "后三直选单式":
-        case "中三直选单式":
-        case "前三直选单式":
-          return "ball2";
-
-        // 和值类型
-        case "三星直选和值":
-        case "后三直选和值":
-        case "中三直选和值":
-        case "前三直选和值":
-          return "ball3";
-
-        // 组三复式类型
-        case "三星组三复式":
-        case "后三组三复式":
-        case "中三组三复式":
-        case "前三组三复式":
-          return "ball4";
-
-        // 组三胆拖类型
-        case "三星组三胆拖":
-        case "后三组三胆拖":
-        case "中三组三胆拖":
-        case "前三组三胆拖":
-          return "ball5";
-
-        // 组三单式类型
-        case "三星组三单式":
-        case "后三组三单式":
-        case "中三组三单式":
-        case "前三组三单式":
-          return "ball12";
-
-        // 组六复式类型
-        case "三星组六复式":
-        case "后三组六复式":
-        case "中三组六复式":
-        case "前三组六复式":
-          return "ball6";
-
-        // 组六胆拖类型
-        case "三星组六胆拖":
-        case "后三组六胆拖":
-        case "中三组六胆拖":
-        case "前三组六胆拖":
-          return "ball7";
-
-        // 组六单式类型
-        case "三星组六单式":
-        case "后三组六单式":
-        case "中三组六单式":
-        case "前三组六单式":
-          return "ball13";
-
-        // 组选和值类型
-        case "中三组选和值":
-        case "后三组选和值":
-        case "三星组选和值":
-          return "ball8";
-
-        // 四星类型
-        case "四星直选复式":
-          return "ball9";
-        case "四星直选单式":
-          return "ball10";
-
-        // 直选组合类型
-        case "后三直选组合":
-        case "中三直选组合":
-        case "前三直选组合":
-          return "ball11";
-        case "三星独胆":
-        case "三星对子":
-          return "ball14";
-        case "三星双飞":
-          return "ball15";
-        case "三星一码百位":
-        case "三星一码十位":
-        case "三星一码个位":
-          return "ball16";
-        case "三星二码百十位":
-        case "三星二码百个位":
-        case "三星二码十个位":
-          return "ball17";
-        // 默认情况
-        default:
-          return "ball1";
       }
     },
     id() {
@@ -639,14 +658,48 @@ export default {
     totalALL() {
       return this.tableList.reduce((pre, cur) => pre + cur.total, 0);
     },
-    totalMoney() {
+    btmMoney() {
       return this.tableList.reduce((pre, cur) => pre + cur.totalMoney * 1, 0);
+    },
+    totalMoney() {
+      if (this.total == 0) return 0;
+      const betList =
+        this.lastTree.find((doc) => doc.txt === this.value)?.betList || [];
+
+      if (this.theOne.includes(this.value)) {
+        // 组三金额=list[号码个数-2].bet
+        // 组六金额=list[号码个至少输入2个号码,每个以英文逗号","分隔，例如：1,2,3数-3].bet
+        // 和值金额=list[号码].bet
+        if (this.value == "三星和值") {
+          //list[号码].bet 相加
+          return this.nums.reduce((total, num) => {
+            return total + betList[num].bet * this.multiple;
+          }, 0);
+        }
+        let cutNum = 0;
+        if (["组三", "胆拖"].find((v) => this.value.includes(v)) > -1) {
+          cutNum = 2;
+        } else if (this.value.includes("组六")) {
+          cutNum = 3;
+        } else if (this.value.includes("和值")) {
+          cutNum = this.nums.length;
+        }
+        cutNum = this.nums.length - cutNum;
+        console.log(betList, cutNum);
+        let docs = betList[cutNum] || {};
+        return docs.bet * this.multiple || 0;
+      }
+      return this.total * this.multiple * this.getPrice(this.value);
     },
     lastTree() {
       return this.extractDeepList(this.catTree);
     },
   },
   methods: {
+    giveTotal(v, n) {
+      this.total = v;
+      this.nums = n || [];
+    },
     extractDeepList(data) {
       const result = [];
 
@@ -825,14 +878,13 @@ export default {
         return;
       }
       const price = this.getPrice(this.value);
-      const totalMoney = this.divide(price * this.total * this.multiple, false);
       this.tableList.push({
         model: this.value,
         text: this.$refs.$cont.text,
         total: this.total,
         multiple: this.multiple,
-        price,
-        totalMoney,
+        price: this.theOne.includes(this.value) ? this.totalMoney : price,
+        totalMoney: this.totalMoney,
       });
       this.$toast("添加成功");
       //body滑动底部
