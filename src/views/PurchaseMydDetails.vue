@@ -131,9 +131,7 @@
                     注</span
                   >
                   <span class="m-r-16">{{ item.multiplier }}倍</span>
-                  <span class="active"
-                    >{{ item.quantity * item.multiplier * item.price }}元</span
-                  >
+                  <span class="active">{{ countPrice(item) }}元</span>
                 </p>
               </li>
               <li class="x-auto">
@@ -249,6 +247,9 @@ export default {
   },
   computed: {
     ...mapGetters(["catList"]),
+    theOne() {
+      return this.$store.state.theOne;
+    },
     user() {
       return this.$store.state.user;
     },
@@ -271,6 +272,12 @@ export default {
     },
   },
   methods: {
+    countPrice(item) {
+      if (this.theOne.includes(item.name)) {
+        return item.price;
+      }
+      return item.quantity * item.multiplier * item.price;
+    },
     getOpenStatus(v) {
       const item = this.$store.state.openStatus.find((d) => d.id === v);
       return item ? item.name : "";
