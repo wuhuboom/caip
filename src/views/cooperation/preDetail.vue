@@ -213,7 +213,7 @@
                       height="30"
                       style="text-align: center; color: rgb(255, 155, 0)"
                     >
-                      ¥{{ item.quantity * item.multiplier * item.price }}
+                      ¥{{ countPrice(item) }}
                     </td>
                   </tr>
                 </table>
@@ -333,6 +333,9 @@ export default {
     };
   },
   computed: {
+    theOne() {
+      return this.$store.state.theOne;
+    },
     user() {
       return this.$store.state.user;
     },
@@ -363,6 +366,12 @@ export default {
     },
   },
   methods: {
+    countPrice(item) {
+      if (this.theOne.includes(item.name)) {
+        return item.price;
+      }
+      return item.quantity * item.multiplier * item.price;
+    },
     onCopySuccess() {
       this.$message.success("复制链接成功");
     },
