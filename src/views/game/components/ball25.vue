@@ -36,8 +36,7 @@ export default {
   },
   computed: {
     left() {
-      let arr = Array.from({ length: 9 }, (v, k) => ({ up: k + 1 }));
-      return arr;
+      return Array.from({ length: 10 }, (v, k) => ({ up: k }));
     },
     text() {
       return `${this.nums}`;
