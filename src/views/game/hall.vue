@@ -1051,7 +1051,7 @@ export default {
     replaceCat(name, txt) {
       if (!txt) return "";
       if (name === "三星组选") {
-        txt.replace(name, "");
+        return txt.replace(name, "").replace(this.curNav, "");
       }
       return txt.replace(this.curNav, "");
     },
