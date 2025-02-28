@@ -255,16 +255,10 @@
 
 <script>
 import userApi from "@/api/user";
+import tipsDialog from "@/components/tipsDialog.vue";
 import typeConfigList from "@/plugins/typeConfigList";
+import AppendChase from "./components/AppendChase";
 import ball1 from "./components/ball1";
-import ball2 from "./components/ball2";
-import ball3 from "./components/ball3";
-import ball4 from "./components/ball4";
-import ball5 from "./components/ball5";
-import ball6 from "./components/ball6";
-import ball7 from "./components/ball7";
-import ball8 from "./components/ball8";
-import ball9 from "./components/ball9";
 import ball10 from "./components/ball10";
 import ball11 from "./components/ball11";
 import ball12 from "./components/ball12";
@@ -272,10 +266,24 @@ import ball13 from "./components/ball13";
 import ball14 from "./components/ball14";
 import ball15 from "./components/ball15";
 import ball16 from "./components/ball16";
-import ball17 from "./components/ball17.vue";
+import ball17 from "./components/ball17";
+import ball18 from "./components/ball18";
+import ball19 from "./components/ball19";
+import ball2 from "./components/ball2";
+import ball20 from "./components/ball20";
+import ball21 from "./components/ball21";
+import ball22 from "./components/ball22";
+import ball23 from "./components/ball23";
+import ball24 from "./components/ball24";
+import ball25 from "./components/ball25";
+import ball3 from "./components/ball3";
+import ball4 from "./components/ball4";
+import ball5 from "./components/ball5";
+import ball6 from "./components/ball6";
+import ball7 from "./components/ball7";
+import ball8 from "./components/ball8";
+import ball9 from "./components/ball9";
 import BetOn from "./components/BetOn";
-import AppendChase from "./components/AppendChase";
-import tipsDialog from "@/components/tipsDialog.vue";
 import BuyTogether from "./components/BuyTogether";
 export default {
   name: "Welfare3D",
@@ -328,6 +336,14 @@ export default {
     ball15,
     ball16,
     ball17,
+    ball18,
+    ball19,
+    ball20,
+    ball21,
+    ball22,
+    ball23,
+    ball24,
+    ball25,
   },
   watch: {
     curTab() {

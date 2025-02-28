@@ -306,4 +306,31 @@ export default {
     const totalBets = baiWei.length * shiWei.length;
     return totalBets;
   },
+  chose13(selection) {
+    if (selection.length < 2) {
+      return {
+        err: "至少选两个号码。",
+      };
+    }
+    return selection.length;
+  },
+  chose14(danMa, tuoMa) {
+    if (!(danMa.length && tuoMa.length >= 2)) {
+      return {
+        err: "胆至少选一个，拖至少选两个",
+      };
+    }
+    // 计算注数：拖码个数 * 2
+    const totalBets = tuoMa.length * 2;
+
+    return totalBets;
+  },
+  chose15(selection) {
+    if (!selection.length) {
+      return {
+        err: "至少选1个号码。",
+      };
+    }
+    return selection.length;
+  },
 };

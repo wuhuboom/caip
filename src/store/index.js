@@ -1,15 +1,25 @@
 /* eslint-disable no-unused-vars */
-import Vue from "vue";
-import Vuex from "vuex";
 import userApi from "@/api/user";
+import app from "@/main";
 import auth from "@/plugins/auth";
 import util from "@/plugins/util";
-import app from "@/main";
+import Vue from "vue";
+import Vuex from "vuex";
 import chat from "./modules/chat";
 Vue.use(Vuex);
 const lang = location.href.includes("zmkm") ? "zh" : "";
 export default new Vuex.Store({
   state: {
+    theOne: [
+      "三星组选组三",
+      "三星组选组三胆拖",
+      "三星组选组三自填",
+      "三星组选组六",
+      "三星组选组六胆拖",
+      "三星组选组六自填",
+      "三星和值",
+      "三星跨度",
+    ],
     tabSimpleList: [
       { id: "", text: "全部" },
       { id: 1, text: "线上充值" },
