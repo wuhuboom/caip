@@ -42,6 +42,7 @@
                 <div class="select-box">
                   <div
                     class="select"
+                    :data-name="v.txt"
                     v-for="(v, i) in item.list"
                     :key="i"
                     @click="(showSelect = false), (value = v.txt)"
@@ -567,6 +568,7 @@ export default {
         case "三星对子":
         case "三星组选组三":
         case "三星组选组三胆拖":
+        case "三星跨度":
           return this.preId === 0 ? [zxzh1] : [zxzh1_hot];
 
         case "中三组三复式":
@@ -665,12 +667,12 @@ export default {
       if (this.total == 0) return 0;
       const betList =
         this.lastTree.find((doc) => doc.txt === this.value)?.betList || [];
-
+      console.log(betList);
       if (this.theOne.includes(this.value)) {
         // 组三金额=list[号码个数-2].bet
         // 组六金额=list[号码个至少输入2个号码,每个以英文逗号","分隔，例如：1,2,3数-3].bet
         // 和值金额=list[号码].bet
-        if (this.value == "三星和值") {
+        if (["三星和值", "三星跨度"].includes(this.value)) {
           //list[号码].bet 相加
           return this.nums.reduce((total, num) => {
             return total + betList[num].bet * this.multiple;
@@ -694,6 +696,9 @@ export default {
     lastTree() {
       return this.extractDeepList(this.catTree);
     },
+    curNav() {
+      return this.curTab;
+    },
   },
   methods: {
     giveTotal(v, n) {
@@ -703,7 +708,7 @@ export default {
     replaceCat(name, txt) {
       if (!txt) return "";
       if (name === "三星组选") {
-        return txt.replace(name, "").replace(this.curTab, "");
+        return txt.replace(name, "").replace(this.curNav, "");
       }
       return txt.replace(this.curNav, "");
     },

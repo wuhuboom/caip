@@ -2,20 +2,18 @@
   <div>
     <Rowball
       ref="$Rowball2"
-      title="组三"
+      title="跨度"
       :left="left"
       @filterLeft="nums = $event"
-      :count="2"
-      :curPre="curPre[0] || []"
     />
     <tipsDialog ref="$tipsDialog" />
   </div>
 </template>
 
 <script>
-import Rowball from "./Rowball.vue";
-import bets from "@/plugins/bets";
 import tipsDialog from "@/components/tipsDialog";
+import bets from "@/plugins/bets";
+import Rowball from "./Rowball.vue";
 export default {
   name: "InfoMain",
   data() {
@@ -23,28 +21,23 @@ export default {
       nums: [],
     };
   },
-  props: {
-    curPre: {
-      type: Array,
-      default: () => [],
-    },
-  },
   watch: {
     nums: {
       handler() {
-        const status = bets.chose13(this.nums);
+        const status = bets.chose15(this.nums);
         if (typeof status !== "number") {
-          this.$emit("total", status.totalBets || 0, this.nums);
+          this.$emit("total", 0);
           return;
         }
-        this.$emit("total", 1, this.nums);
+        this.$emit("total", this.nums.length, this.nums);
       },
       deep: true,
     },
   },
   computed: {
     left() {
-      return Array.from({ length: 10 }, (v, k) => ({ up: k }));
+      let arr = Array.from({ length: 9 }, (v, k) => ({ up: k + 1 }));
+      return arr;
     },
     text() {
       return `${this.nums}`;
@@ -56,14 +49,14 @@ export default {
   },
   methods: {
     randem() {
-      this.$refs.$Rowball2.randemTow();
+      this.$refs.$Rowball2.randem();
     },
     clear() {
       this.nums = [];
       this.$refs.$Rowball2.clear();
     },
     add() {
-      const status = bets.chose13(this.nums);
+      const status = bets.chose15(this.nums);
       console.log(status);
       if (typeof status !== "number") {
         this.$refs.$tipsDialog.open(status.err);
