@@ -7,7 +7,7 @@
           <p class="m-r-24">待转出总金额</p>
           <div class="active can-out font12">
             ￥{{ data.canOut }}
-            <p class="tips colorfff els">年利率{{ config.rate }}%</p>
+            <p class="tips colorfff els">日利率{{ config.rate }}%</p>
           </div>
         </li>
         <li class="align-center colorfff">
