@@ -232,7 +232,11 @@
                     :class="{ 'cp-radio-inner-active': doc.txt == value }"
                   ></div>
                 </div>
-                <div class="cp-radio-text" style="color: rgb(239, 204, 82)">
+                <div
+                  class="cp-radio-text"
+                  style="color: rgb(239, 204, 82)"
+                  :data-name="doc.txt"
+                >
                   <!-- {{ doc.txt.replace(curNav, "") }} -->
                   {{ replaceCat(item.name, doc.txt) }}
                   <!-- {{ doc.txt }} -->
@@ -803,11 +807,17 @@ export default {
       if (this.total == 0) return 0;
       const betList =
         this.lastTree.find((doc) => doc.txt === this.value)?.betList || [];
+
       if (this.theOne.includes(this.value)) {
         // 组三金额=list[号码个数-2].bet
         // 组六金额=list[号码个至少输入2个号码,每个以英文逗号","分隔，例如：1,2,3数-3].bet
         // 和值金额=list[号码].bet
-
+        if (this.value == "三星和值") {
+          //list[号码].bet 相加
+          return this.nums.reduce((total, num) => {
+            return total + betList[num].bet * this.multiple;
+          }, 0);
+        }
         let cutNum = 0;
         if (["组三", "胆拖"].find((v) => this.value.includes(v)) > -1) {
           cutNum = 2;
@@ -1174,9 +1184,9 @@ export default {
       this.tableList.forEach((v) => {
         //dataStr += `${v.model} ${v.text} ${v.multiple}/`;
         if (!dataStr) {
-          dataStr = `${v.model} ${v.text} ${v.multiple} ${v.total} ${v.price}`;
+          dataStr = `${v.model} ${v.text} ${v.multiple} ${v.total} ${v.totalMoney}`;
         } else {
-          dataStr += `/${v.model} ${v.text} ${v.multiple} ${v.total} ${v.price}`;
+          dataStr += `/${v.model} ${v.text} ${v.multiple} ${v.total} ${v.totalMoney}`;
         }
       });
       if (this.isChase) {

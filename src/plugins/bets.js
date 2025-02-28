@@ -325,4 +325,12 @@ export default {
 
     return totalBets;
   },
+  chose15(selection) {
+    if (!selection.length) {
+      return {
+        err: "至少选1个号码。",
+      };
+    }
+    return selection.length;
+  },
 };

@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import Rowball from "./Rowball.vue";
-import bets from "@/plugins/bets";
 import tipsDialog from "@/components/tipsDialog";
+import bets from "@/plugins/bets";
+import Rowball from "./Rowball.vue";
 export default {
   name: "InfoMain",
   data() {
@@ -24,12 +24,12 @@ export default {
   watch: {
     nums: {
       handler() {
-        const status = bets.chose7(this.nums);
+        const status = bets.chose15(this.nums);
         if (typeof status !== "number") {
           this.$emit("total", 0);
           return;
         }
-        this.$emit("total", 1, this.nums);
+        this.$emit("total", this.nums.length, this.nums);
       },
       deep: true,
     },
@@ -56,7 +56,7 @@ export default {
       this.$refs.$Rowball2.clear();
     },
     add() {
-      const status = bets.chose7(this.nums);
+      const status = bets.chose15(this.nums);
       console.log(status);
       if (typeof status !== "number") {
         this.$refs.$tipsDialog.open(status.err);
