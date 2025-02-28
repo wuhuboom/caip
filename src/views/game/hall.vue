@@ -607,15 +607,6 @@ export default {
       typeConfigList,
       curNav: null,
       cat: [],
-      theOne: [
-        "三星组选组三",
-        "三星组选组三胆拖",
-        "三星组选组三自填",
-        "三星组选组六",
-        "三星组选组六胆拖",
-        "三星组选组六自填",
-        "三星和值",
-      ],
     };
   },
   components: {
@@ -650,6 +641,9 @@ export default {
     ball24,
   },
   computed: {
+    theOne() {
+      return this.$store.state.theOne;
+    },
     vuexBetPrice() {
       return this.$store.state.vuexBetPrice;
     },
@@ -1184,9 +1178,9 @@ export default {
       this.tableList.forEach((v) => {
         //dataStr += `${v.model} ${v.text} ${v.multiple}/`;
         if (!dataStr) {
-          dataStr = `${v.model} ${v.text} ${v.multiple} ${v.total} ${v.totalMoney}`;
+          dataStr = `${v.model} ${v.text} ${v.multiple} ${v.total} ${v.price}`;
         } else {
-          dataStr += `/${v.model} ${v.text} ${v.multiple} ${v.total} ${v.totalMoney}`;
+          dataStr += `/${v.model} ${v.text} ${v.multiple} ${v.total} ${v.price}`;
         }
       });
       if (this.isChase) {

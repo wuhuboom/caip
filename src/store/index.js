@@ -10,6 +10,15 @@ Vue.use(Vuex);
 const lang = location.href.includes("zmkm") ? "zh" : "";
 export default new Vuex.Store({
   state: {
+    theOne: [
+      "三星组选组三",
+      "三星组选组三胆拖",
+      "三星组选组三自填",
+      "三星组选组六",
+      "三星组选组六胆拖",
+      "三星组选组六自填",
+      "三星和值",
+    ],
     vuexBetPrice: 2,
     tabSimpleList: [
       { id: "", text: "全部" },
