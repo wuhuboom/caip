@@ -47,7 +47,7 @@
                     @click="(showSelect = false), (value = v.txt)"
                     :class="{ on: value === v.txt }"
                   >
-                    {{ v.txt.replace(curTab, "") }}
+                    {{ replaceCat(item.name, v.txt) }}
                   </div>
                 </div>
               </div>
@@ -699,6 +699,13 @@ export default {
     giveTotal(v, n) {
       this.total = v;
       this.nums = n || [];
+    },
+    replaceCat(name, txt) {
+      if (!txt) return "";
+      if (name === "三星组选") {
+        return txt.replace(name, "").replace(this.curTab, "");
+      }
+      return txt.replace(this.curNav, "");
     },
     extractDeepList(data) {
       const result = [];
