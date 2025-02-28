@@ -679,7 +679,7 @@ export default {
           }, 0);
         }
         let cutNum = 0;
-        if (["组三", "胆拖"].find((v) => this.value.includes(v)) > -1) {
+        if (["组三", "胆拖"].find((v) => this.value.includes(v))) {
           cutNum = 2;
         } else if (this.value.includes("组六")) {
           cutNum = 3;
