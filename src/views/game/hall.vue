@@ -535,6 +535,7 @@ import ball21 from "./components/ball21";
 import ball22 from "./components/ball22";
 import ball23 from "./components/ball23";
 import ball24 from "./components/ball24";
+import ball25 from "./components/ball25";
 import ball3 from "./components/ball3";
 import ball4 from "./components/ball4";
 import ball5 from "./components/ball5";
@@ -639,6 +640,7 @@ export default {
     ball22,
     ball23,
     ball24,
+    ball25,
   },
   computed: {
     theOne() {
@@ -861,6 +863,8 @@ export default {
           return "ball4";
         case "三星组选组三":
           return "ball18";
+        case "三星跨度":
+          return "ball25";
         case "三星组选组三胆拖":
           return "ball19";
         // 组三胆拖类型
