@@ -334,9 +334,9 @@ export default {
     return selection.length;
   },
   chose16(selection) {
-    if (selection.length < 3) {
+    if (selection.length < 4) {
       return {
-        err: "至少选3个号码。",
+        err: "至少选4个号码。",
       };
     }
     return selection.length;
