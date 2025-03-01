@@ -2,7 +2,7 @@
   <div>
     <Rowball
       ref="$Rowball2"
-      title="和值"
+      :title="titleText[0] || '和值'"
       :left="left"
       @filterLeft="nums = $event"
     />
@@ -20,6 +20,12 @@ export default {
     return {
       nums: [],
     };
+  },
+  props: {
+    titleText: {
+      type: Array,
+      default: () => [],
+    },
   },
   watch: {
     nums: {

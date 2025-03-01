@@ -261,6 +261,14 @@
           <div>
             <div class="ssc-panel-radios">
               <div
+                v-show="
+                  ![
+                    '三星大小单双',
+                    '三星特码',
+                    '三星波色龙虎和',
+                    '三星豹子顺子对子',
+                  ].includes(value)
+                "
                 class="cp-radio-main"
                 v-for="(item, idx) in preList"
                 :key="idx"
@@ -1024,6 +1032,11 @@ export default {
       if (this.value === "三星二码十个位") {
         return {
           titleText: ["十位", "个位"],
+        };
+      }
+      if (this.value === "三星特码") {
+        return {
+          titleText: ["特码"],
         };
       }
       return {
