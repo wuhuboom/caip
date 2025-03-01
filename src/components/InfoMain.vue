@@ -113,9 +113,9 @@
 </template>
 
 <script>
-import bindCard from "@/views/game/components/bindCard.vue";
 import RechargeDialog from "@/views/components/RechargeDialog.vue";
 import withdrawdialog from "@/views/components/withdrawdialog.vue";
+import bindCard from "@/views/game/components/bindCard.vue";
 import bindPassWrod from "@/views/game/components/bindPassWrod.vue";
 export default {
   name: "InfoMain",
@@ -174,13 +174,14 @@ export default {
       );
     },
     rechange() {
-      if (this.bankCard.id) {
-        this.$refs.$RechargeDialog.open();
-        return;
-      }
-      this.$refs.$tiphDialog.open(
-        "您好，您还未绑定提款银行卡，确定现在进行绑定银行卡？"
-      );
+      // if (this.bankCard.id) {
+      //   this.$refs.$RechargeDialog.open();
+      //   return;
+      // }
+      // this.$refs.$tiphDialog.open(
+      //   "您好，您还未绑定提款银行卡，确定现在进行绑定银行卡？"
+      // );
+      this.$refs.$RechargeDialog.open();
     },
     sure() {
       this.$refs.bindCard.show = true;

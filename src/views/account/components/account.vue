@@ -249,13 +249,13 @@
 </template>
 
 <script>
-import DefaultAvatar from "@/assets/img/DefaultAvatar.jpg";
-import bindCard from "@/views/game/components/bindCard.vue";
-import bindUsdt from "@/views/game/components/bindUsdt.vue";
-import bindPassWrod from "@/views/game/components/bindPassWrod.vue";
 import userApi from "@/api/user";
+import DefaultAvatar from "@/assets/img/DefaultAvatar.jpg";
 import RechargeDialog from "@/views/components/RechargeDialog.vue";
 import withdrawdialog from "@/views/components/withdrawdialog.vue";
+import bindCard from "@/views/game/components/bindCard.vue";
+import bindPassWrod from "@/views/game/components/bindPassWrod.vue";
+import bindUsdt from "@/views/game/components/bindUsdt.vue";
 //"dayUse":今日消费 "dayBingo":今日中奖 “dayGet”：今日平台赠送"weekBingo":本周中奖 "monthBingo":本月中然 "weekGet":本周平台赠送 "monthGet":木月平台赠送
 export default {
   name: "AccountCenter",
@@ -353,9 +353,9 @@ export default {
       this.$refs.$tipDialog.open(v);
     },
     recharge() {
-      if (!this.bankCard.id) {
-        return this.openTipsDialog();
-      }
+      // if (!this.bankCard.id) {
+      //   return this.openTipsDialog();
+      // }
       this.$refs.$RechargeDialog.open();
     },
     withdraw() {
