@@ -19,6 +19,10 @@ export default new Vuex.Store({
       "三星组选组六自填",
       "三星和值",
       "三星跨度",
+      "三星大小单双",
+      "三星特码",
+      "三星波色龙虎和",
+      "三星豹子顺子对子",
     ],
     vuexBetPrice: 2,
     tabSimpleList: [

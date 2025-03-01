@@ -536,6 +536,7 @@ import ball22 from "./components/ball22";
 import ball23 from "./components/ball23";
 import ball24 from "./components/ball24";
 import ball25 from "./components/ball25";
+import ball26 from "./components/ball26";
 import ball3 from "./components/ball3";
 import ball4 from "./components/ball4";
 import ball5 from "./components/ball5";
@@ -642,6 +643,7 @@ export default {
     ball23,
     ball24,
     ball25,
+    ball26,
   },
   computed: {
     theOne() {
@@ -822,6 +824,22 @@ export default {
             return total + betList[num].bet * this.multiple;
           }, 0);
         }
+        if (
+          ["三星大小单双", "三星波色龙虎和", "三星豹子顺子对子"].includes(
+            this.value
+          )
+        ) {
+          const reduceNum = this.nums.reduce((total, num) => {
+            const betItem = betList.find((item) => item.txt === num);
+            return total + betItem?.value * 1;
+          }, 0);
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+          this.docsListValue = this.divide(reduceNum, false);
+          return this.nums.reduce((total, num) => {
+            const betItem = betList.find((item) => item.txt === num);
+            return total + (betItem?.bet || 0) * this.multiple;
+          }, 0);
+        }
         let cutNum = 0;
         if (["组三", "胆拖"].find((v) => this.value.includes(v))) {
           cutNum = 2;
@@ -922,6 +940,7 @@ export default {
         case "三星组选和值":
           return "ball8";
         case "三星和值":
+        case "三星特码":
           return "ball24";
         // 四星类型
         case "四星直选复式":
@@ -947,6 +966,10 @@ export default {
         case "三星二码百个位":
         case "三星二码十个位":
           return "ball17";
+        case "三星大小单双":
+        case "三星波色龙虎和":
+        case "三星豹子顺子对子":
+          return "ball26";
         // 默认情况
         default:
           return "ball1";
@@ -1003,7 +1026,9 @@ export default {
           titleText: ["十位", "个位"],
         };
       }
-      return {};
+      return {
+        betListDocs: this.betListDocs,
+      };
     },
     fullTxt() {
       const list = [];
@@ -1045,6 +1070,9 @@ export default {
     },
     lastTree() {
       return this.extractDeepList(this.catTree);
+    },
+    betListDocs() {
+      return this.lastTree.find((doc) => doc.txt === this.value)?.betList || [];
     },
   },
   watch: {
@@ -1389,7 +1417,7 @@ export default {
       if (err) return;
       this.catTree = JSON.parse(res.data.mulConfig);
       res.data.mulConfig = JSON.parse(res.data.mulConfig);
-      console.log("----", res.data.mulConfig);
+      console.log("----", this.extractDeepList(this.catTree));
       this.setlotteryType(this.id);
       if (!res.data.nextExpect) {
         res.data.nextExpect = {};
