@@ -9,15 +9,15 @@
     <div class="top-bets-bot">
       <div
         v-if="head"
-        class="top-bets-cont colorfff flex-column justify-around font13"
+        class="top-bets-cont colorfff flex-column justify-around font13 p-b-16"
       >
-        <ul class="justify-between p-l-16 p-r-8">
+        <ul class="justify-between p-l-8 p-r-8 p-t-12 p-b-12">
           <li class="d-flex">
-            <van-icon
-              :name="!showmenu ? 'list-switch' : 'cross'"
+            <img
               @click="(showother = false), (showmenu = !showmenu)"
-              class="m-r-16 m-t-4"
-              :size="20"
+              class="m-r-16 m-t-4 chengmenu d-img"
+              src="@/assets/img/chengmenu.png"
+              alt=""
             />
             <div>
               <p class="font16 m-b-8">
@@ -134,8 +134,8 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import userApi from "@/api/user";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -244,10 +244,9 @@ $tabwidth: 686px;
 .top-bets-cont {
   background: url("@/assets/img/betsbg.png") no-repeat center;
   background-size: 100% 100%;
-  height: $height;
   .table-lists {
     width: $tabwidth;
-    height: 96px;
+    height: 66px;
     background: #7284d8;
     border-radius: 12px 12px 12px 12px;
     margin: 0 auto;
@@ -337,10 +336,14 @@ $tabwidth: 686px;
   .block {
     background: url("@/assets/img/bets-num.png") no-repeat;
     background-size: 100% 100%;
-    width: 61px;
-    height: 64px;
-    font-size: 48px;
+    width: 52px;
+    height: 52px;
+    font-size: 40px;
     color: #000000;
   }
+}
+.chengmenu {
+  width: 50px;
+  height: 50px;
 }
 </style>
