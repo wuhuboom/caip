@@ -44,8 +44,8 @@ export default {
       const values = this.nums.split(",").filter(Boolean);
 
       // 确保至少输入 2 个数字
-      if (values.length < 3) {
-        this.$refs.$tipsDialog.open("请至少选择 3 个号码");
+      if (values.length < 4) {
+        this.$refs.$tipsDialog.open("请至少选择 4 个号码");
         this.$emit("total", 0);
         return false;
       }

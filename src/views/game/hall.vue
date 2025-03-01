@@ -826,7 +826,7 @@ export default {
         if (["组三", "胆拖"].find((v) => this.value.includes(v))) {
           cutNum = 2;
         } else if (this.value.includes("组六")) {
-          cutNum = 3;
+          cutNum = 4;
         } else if (this.value.includes("和值")) {
           cutNum = this.nums.length;
         }
