@@ -200,8 +200,8 @@
 </template>
 
 <script>
-import DefaultAvatar from "@/assets/img/DefaultAvatar.jpg";
 import userApi from "@/api/user";
+import DefaultAvatar from "@/assets/img/DefaultAvatar.jpg";
 export default {
   name: "AppMy",
   data() {
@@ -294,9 +294,6 @@ export default {
       this.$router.push("/bindCard");
     },
     async recharge() {
-      if (!this.bankCard.id) {
-        return this.openTipsDialog();
-      }
       this.$toast.loading({
         duration: 0,
         forbidClick: true,
