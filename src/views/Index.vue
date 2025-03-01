@@ -241,9 +241,27 @@ export default {
       const index = Math.floor(Math.random() * len);
       return this.slideCatList[index].lotteryName;
     },
+    comfire(v) {
+      return new Promise((resolve) => {
+        this.$dialog
+          .confirm({
+            message: v,
+            confirmButtonColor: "#3291FF",
+          })
+          .then(() => {
+            this.$router.push("/bindCard");
+            resolve(1);
+          })
+          .catch(() => {
+            resolve(0);
+          });
+      });
+    },
     withdraw() {
       if (!this.bankCard.id) {
-        return this.openTipsDialog();
+        return this.comfire(
+          "您好，您还未绑定提款银行卡，确定现在进行绑定银行卡？"
+        );
       }
       if (this.paySet !== 1) {
         this.$toast.fail("请先设置支付密码");
