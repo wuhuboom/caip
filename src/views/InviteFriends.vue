@@ -7,7 +7,8 @@
         <div class="left">{{ `${myLink}` }}</div>
         <div
           class="right center-center"
-          @click="copy(`官网地址:${sites}\n邀请码:${myLink}`)"
+          v-clipboard:copy="copy(`官网地址:${sites}\n邀请码:${myLink}`)"
+          v-clipboard:success="onCopySuccess"
         >
           复制邀请码
         </div>
@@ -15,7 +16,11 @@
       <div class="title">官网地址</div>
       <div class="l-box">
         <div class="left">{{ `${sites}` }}</div>
-        <div class="right center-center" @click="copy(`${sites}`)">
+        <div
+          class="right center-center"
+          v-clipboard:copy="copy(`${sites}`)"
+          v-clipboard:success="onCopySuccess"
+        >
           复制地址
         </div>
       </div>
@@ -30,7 +35,6 @@
 </template>
 
 <script>
-import { Toast } from "vant";
 import userApi from "@/api/user";
 export default {
   name: "InviteFriends",
@@ -59,9 +63,10 @@ export default {
       this.headData = res.data;
     },
     copy(v) {
-      navigator.clipboard.writeText(v).then(() => {
-        Toast("复制成功");
-      });
+      return v;
+    },
+    onCopySuccess() {
+      this.$toast("复制成功");
     },
   },
   created() {
