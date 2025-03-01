@@ -95,15 +95,28 @@
           <li>游戏</li>
           <li>中奖金额</li>
         </ul>
-        <ul
-          class="grid-table prize-li p-x-16 font12"
-          v-for="(v, i) in wins"
-          :key="i"
-        >
-          <li>{{ v.playerName }}</li>
-          <li>{{ random() }}</li>
-          <li>{{ divide(v.money) }}</li>
-        </ul>
+        <div class="grid-auto">
+          <div class="scroll-list">
+            <ul
+              class="grid-table prize-li p-x-16 font12"
+              v-for="(v, i) in wins"
+              :key="i"
+            >
+              <li>{{ v.playerName }}</li>
+              <li>{{ random() }}</li>
+              <li>{{ divide(v.money) }}</li>
+            </ul>
+            <ul
+              class="grid-table prize-li p-x-16 font12"
+              v-for="(v, i) in wins"
+              :key="i"
+            >
+              <li>{{ v.playerName }}</li>
+              <li>{{ random() }}</li>
+              <li>{{ divide(v.money) }}</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -159,12 +172,12 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import userApi from "@/api/user";
-import { NoticeBar } from "vant";
 import labaImg from "@/assets/img/Index/laba.png";
 import nav5Icon from "@/assets/img/Index/nav5.png";
 import auth from "@/plugins/auth";
+import { NoticeBar } from "vant";
+import { mapGetters } from "vuex";
 export default {
   name: "AppHome",
   data() {
@@ -736,6 +749,22 @@ export default {
   .prize-li {
     background: linear-gradient(180deg, #ffffff 0%, #f5f5f5 100%);
     border-radius: 8px 8px 8px 8px;
+  }
+}
+.grid-auto {
+  height: 446px;
+  overflow: hidden;
+  .scroll-list {
+    animation: scrollUp 10s linear infinite;
+  }
+
+  @keyframes scrollUp {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-50%);
+    }
   }
 }
 </style>
