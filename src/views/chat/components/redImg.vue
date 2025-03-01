@@ -87,11 +87,10 @@
 
 <script>
 // eslint-disable-next-line no-unused-vars
-import userApi from "@/api/user";
-import { EventBus } from "@/plugins/bus";
-import { mapState, mapActions } from "vuex";
 import red1 from "@/assets/img/red1.png";
 import red2 from "@/assets/img/red2.png";
+import { EventBus } from "@/plugins/bus";
+import { mapActions, mapState } from "vuex";
 export default {
   name: "RedImg",
   data() {
@@ -204,7 +203,7 @@ export default {
         this.showFinish = false;
       }
     },
-    open() {
+    async open() {
       if (this.shareData.gainRed === 0) {
         this.$toast(`充值${this.shareData.gainRecharge}才能参与抢红包`);
         this.getMoneyRecord();
@@ -224,17 +223,19 @@ export default {
       this.showRecord = false;
     },
     //发送消息:{"type":6,"data":"{\"id\":2}"}
-    getPacket() {
+    async getPacket() {
+      this.showOpen = false;
       this.$toast.loading({
         message: "领取中...",
+        forbidClick: true,
         duration: 3000, // 设置 3 秒后关闭
       });
+      await this.sleep(1000);
       this.sendMessage({
         type: 6,
         msgId: this.doc.id,
         data: JSON.stringify({ id: this.doc.data?.id }),
       });
-      this.showOpen = false;
     },
   },
   created() {
