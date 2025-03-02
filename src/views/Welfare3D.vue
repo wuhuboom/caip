@@ -277,6 +277,7 @@ import ball22 from "./components/ball22";
 import ball23 from "./components/ball23";
 import ball24 from "./components/ball24";
 import ball25 from "./components/ball25";
+import ball26 from "./components/ball26";
 import ball3 from "./components/ball3";
 import ball4 from "./components/ball4";
 import ball5 from "./components/ball5";
@@ -346,6 +347,7 @@ export default {
     ball23,
     ball24,
     ball25,
+    ball26,
   },
   watch: {
     curTab() {
@@ -437,6 +439,7 @@ export default {
         case "三星组选和值":
           return "ball8";
         case "三星和值":
+        case "三星特码":
           return "ball24";
         // 四星类型
         case "四星直选复式":
@@ -462,6 +465,10 @@ export default {
         case "三星二码百个位":
         case "三星二码十个位":
           return "ball17";
+        case "三星大小单双":
+        case "三星波色龙虎和":
+        case "三星豹子顺子对子":
+          return "ball26";
         // 默认情况
         default:
           return "ball1";
@@ -518,7 +525,14 @@ export default {
           titleText: ["十位", "个位"],
         };
       }
-      return {};
+      if (this.value === "三星特码") {
+        return {
+          titleText: ["特码"],
+        };
+      }
+      return {
+        betListDocs: this.betListDocs,
+      };
     },
     curPre() {
       const {
@@ -664,41 +678,69 @@ export default {
       return this.tableList.reduce((pre, cur) => pre + cur.totalMoney * 1, 0);
     },
     totalMoney() {
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      this.docsListValue = "";
       if (this.total == 0) return 0;
       const betList =
         this.lastTree.find((doc) => doc.txt === this.value)?.betList || [];
-      console.log(betList);
+
       if (this.theOne.includes(this.value)) {
         // 组三金额=list[号码个数-2].bet
         // 组六金额=list[号码个至少输入2个号码,每个以英文逗号","分隔，例如：1,2,3数-3].bet
         // 和值金额=list[号码].bet
         if (["三星和值", "三星跨度"].includes(this.value)) {
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+          this.docsListValue = this.nums.reduce((total, num) => {
+            return total + betList[num].value * 1;
+          }, 0);
           //list[号码].bet 相加
           return this.nums.reduce((total, num) => {
             return total + betList[num].bet * this.multiple;
+          }, 0);
+        }
+        if (
+          ["三星大小单双", "三星波色龙虎和", "三星豹子顺子对子"].includes(
+            this.value
+          )
+        ) {
+          const reduceNum = this.nums.reduce((total, num) => {
+            const betItem = betList.find((item) => item.txt === num);
+            return total + betItem?.value * 1;
+          }, 0);
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+          this.docsListValue = this.divide(reduceNum, false);
+          return this.nums.reduce((total, num) => {
+            const betItem = betList.find((item) => item.txt === num);
+            return total + (betItem?.bet || 0) * this.multiple;
           }, 0);
         }
         let cutNum = 0;
         if (["组三", "胆拖"].find((v) => this.value.includes(v))) {
           cutNum = 2;
         } else if (this.value.includes("组六")) {
-          //三星组选组六   三星组选组六自填
           cutNum = 4;
         } else if (this.value.includes("和值")) {
           cutNum = this.nums.length;
         }
         cutNum = this.nums.length - cutNum;
-        console.log(betList, cutNum);
         let docs = betList[cutNum] || {};
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.docsListValue = docs.value;
         return docs.bet * this.multiple || 0;
       }
-      return this.total * this.multiple * this.getPrice(this.value);
+      return this.divide(
+        this.total * this.multiple * this.getPrice(this.value),
+        false
+      );
+    },
+    curNav() {
+      return this.curTab;
     },
     lastTree() {
       return this.extractDeepList(this.catTree);
     },
-    curNav() {
-      return this.curTab;
+    betListDocs() {
+      return this.lastTree.find((doc) => doc.txt === this.value)?.betList || [];
     },
   },
   methods: {

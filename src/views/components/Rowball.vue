@@ -2,15 +2,10 @@
   <div class="xuan-box" :class="className">
     <div class="xuan-list flex-column">
       <div class="left justify-between">
-        <div
-          class="item small"
-          :style="{
-            opacity: title ? 1 : 0,
-          }"
-        >
+        <div class="item small" v-show="title">
           <div class="num-top operation-active center-center">{{ title }}</div>
         </div>
-        <ul class="align-center operation">
+        <ul class="align-center operation" v-if="showRight">
           <li
             v-for="(item, idx) in right"
             :class="{ 'operation-active': item == type }"
@@ -41,50 +36,6 @@
       </div>
     </div>
   </div>
-  <!-- <div class="play_ball_container play-ball-bar-item" :class="className">
-    <div class="play_balls">
-      <div class="play_ball_label no-shrink">
-        <div>{{ title }}</div>
-        <i class="el-icon-caret-right"></i>
-      </div>
-      <div class="play_ball_items">
-        <div class="play_ball_numbers play_ball_numbers_last">
-          <div v-for="(item, index) in left" :key="index" @click="addNum(item)">
-            <div
-              class="play_ball"
-              :class="{ play_ball_active: nums.includes(item.up) }"
-            >
-              {{ item.up }}
-            </div>
-            <svg width="32" height="10" xmlns="http://www.w3.org/2000/svg">
-              <text
-                text-anchor="middle"
-                dominant-baseline="middle"
-                x="50%"
-                y="50%"
-                fill="#C4AB84"
-                class="cp-text"
-                style="font-size: 10px"
-              >
-                {{ curPre[index] }}
-              </text>
-            </svg>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="play_ball_operations" v-if="showRight">
-      <div
-        class="play_ball_operation"
-        v-for="(item, idx) in right"
-        :class="{ 'play_ball_operation-active': item == type }"
-        @click="filterLeft(item)"
-        :key="idx"
-      >
-        {{ item }}
-      </div>
-    </div>
-  </div> -->
 </template>
 
 <script>
