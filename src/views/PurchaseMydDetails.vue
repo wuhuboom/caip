@@ -145,6 +145,7 @@
                       class="prize-num center-center color-fff"
                       v-for="(v, i) in doc"
                       :key="i"
+                      :class="{ font11: isNaN(+v) }"
                     >
                       {{ v }}
                     </p>

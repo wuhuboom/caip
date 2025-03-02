@@ -688,7 +688,7 @@ export default {
         // 组三金额=list[号码个数-2].bet
         // 组六金额=list[号码个至少输入2个号码,每个以英文逗号","分隔，例如：1,2,3数-3].bet
         // 和值金额=list[号码].bet
-        if (["三星和值", "三星跨度"].includes(this.value)) {
+        if (["三星和值", "三星跨度", "三星特码"].includes(this.value)) {
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.docsListValue = this.nums.reduce((total, num) => {
             return total + betList[num].value * 1;
