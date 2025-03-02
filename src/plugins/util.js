@@ -20,11 +20,11 @@ export default {
       const price = parts.length > 4 ? parseFloat(parts[4]) : 2; // 价格，默认 2
 
       // 按 '|' 拆分每个位，并进一步按 ',' 拆分
-      const positions = positionsString.split("|").map(
-        (pos) => pos.split(",").map(Number) // 将每个位拆分为数字数组
-      );
-
-      // positions 里面每个数组再升序
+      const positions = positionsString
+        .split("|")
+        .map((pos) =>
+          pos.split(",").map((value) => (isNaN(value) ? value : Number(value)))
+        );
       positions.forEach((item) => {
         item.sort((a, b) => a - b);
       });
