@@ -128,8 +128,15 @@
             <van-icon name="info" class="tips-icon" />
             温馨提示
           </div>
-          <div class="li">1.每天提现限制3次</div>
-          <div class="li">2.提现时间早上10点到晚上10点</div>
+          <div class="li m-b-16">
+            1.确保填写的收款账户信息（如银行账户、支付平台账号）准确无误，以免影响资金到账
+          </div>
+          <div class="li m-b-16">
+            2.提款一般会在30分钟之内到账,若有延迟请联系在线客服查询.
+          </div>
+          <div class="li m-b-16">
+            3.每天提现限制3次,提现时间早上10点到晚上10点.
+          </div>
         </div>
       </div>
     </template>
