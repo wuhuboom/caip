@@ -178,7 +178,11 @@
                         :key="idx"
                       >
                         <div v-for="(v, i) in doc" :key="i">
-                          <div class="o-select-ball o-ball-bg">{{ v }}</div>
+                          <div
+                            class="o-select-ball o-ball-bg art-o-select-ball"
+                          >
+                            {{ v }}
+                          </div>
                         </div>
                         <div v-if="idx < item.positions.length - 1">
                           <div
