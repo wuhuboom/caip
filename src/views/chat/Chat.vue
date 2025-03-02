@@ -19,6 +19,7 @@
         @infinite="infiniteHandler"
       ></infinite-loading>
       <roomMsg
+        @pressAite="pressAite"
         :data-msg-id="v.id"
         :disabled="disabled"
         v-observe-visibility="visibilityChanged(v, i)"
@@ -103,9 +104,10 @@
             class="input"
             ref="inputRef"
             :placeholder="placeholder"
-            @input="onInput"
             v-model="text"
+            @input="onInput"
           />
+          <!-- @input="onInput" -->
         </div>
         <div class="btn center-center" @click="send">发送</div>
       </div>
@@ -115,15 +117,15 @@
 </template>
 
 <script>
-import dataFace from "@/plugins/dataFace.json";
 import userApi from "@/api/user";
 import userPic from "@/assets/img/user-room.png";
-import InfiniteLoading from "vue-infinite-loading";
-import { mapState, mapActions, mapGetters } from "vuex";
-import roomMsg from "@/views/chat/components/roomMsg.vue";
-import { ObserveVisibility } from "vue-observe-visibility";
+import dataFace from "@/plugins/dataFace.json";
 import popupMoney from "@/views/chat/components/popupMoney.vue";
+import roomMsg from "@/views/chat/components/roomMsg.vue";
 import topBets from "@/views/chat/components/topBets.vue";
+import InfiniteLoading from "vue-infinite-loading";
+import { ObserveVisibility } from "vue-observe-visibility";
+import { mapActions, mapGetters, mapState } from "vuex";
 export default {
   name: "chatRoom",
   data() {
@@ -220,6 +222,16 @@ export default {
     getCursorPosition() {
       const textarea = this.$refs.inputRef;
       return textarea ? textarea.selectionStart : -1;
+    },
+    pressAite(v) {
+      //this.text 空就直接替换，不空就判断是否有，在后面加空格 拼接
+      if (this.text.trim() === "") {
+        this.text = `${v} `;
+      } else {
+        this.text = `${this.text}@${v} `;
+      }
+      //输入框处于焦点
+      this.$refs.inputRef.focus();
     },
     onInput() {
       const value = this.text;

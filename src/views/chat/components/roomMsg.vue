@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div class="center-center time-box p-t-24 p-b-24">
-      <p class="time">{{ $dayjsTime(doc.time) }}</p>
-    </div>
     <div v-if="doc.status == 1">
       <p class="center-center m-t-12 m-b-12 font14 color999">
         {{ isMe ? "你撤回了一条消息" : `${doc.user}撤回了一条消息` }}
@@ -16,6 +13,7 @@
     >
       <div class="room-msg p-l-24 p-l-24 d-flex m-b-12">
         <img
+          v-long-press="() => pressAite(`@${doc.user}`)"
           class="d-img user-pic"
           :class="[isMe ? 'm-l-12 m-r-24' : ' m-r-12']"
           :src="
@@ -29,6 +27,9 @@
         <ul class="flex-column">
           <li class="name align-center m-b-8">
             <span class="m-r-8 color333">{{ doc.user }}</span>
+            <div class="center-center time-box p-t-24 p-b-24">
+              <p class="time">{{ $dayjsTime(doc.time) }}</p>
+            </div>
           </li>
           <li
             class="msg-txt-box d-flex"
@@ -61,10 +62,10 @@
 <script>
 import userPic from "@/assets/img/user-room.png";
 import bindBuy from "@/views/chat/components/bindBuy.vue";
-import redImg from "@/views/chat/components/redImg.vue";
 import imgMsg from "@/views/chat/components/imgMsg.vue";
-import repalyMsg from "@/views/chat/components/repalyMsg.vue";
 import opensMsg from "@/views/chat/components/opensMsg.vue";
+import redImg from "@/views/chat/components/redImg.vue";
+import repalyMsg from "@/views/chat/components/repalyMsg.vue";
 import { mapActions } from "vuex";
 export default {
   data() {
@@ -129,6 +130,11 @@ export default {
       "sendMessage",
       "fetchHistory",
     ]),
+    pressAite(v) {
+      if (this.isMe) return;
+      console.log("pressAite", this.isMe);
+      this.$emit("pressAite", v);
+    },
     highlightedText(v) {
       return v.replace(
         /@(\w+)/g,
