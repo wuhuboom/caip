@@ -173,7 +173,7 @@
                       "
                     >
                       <div
-                        class="align-center"
+                        class="align-center x-container"
                         v-for="(doc, idx) in item.positions"
                         :key="idx"
                       >

@@ -31,7 +31,7 @@ export default new Vuex.Store({
       { id: 2, text: "提现" },
       { id: 3, text: "投注" },
       { id: 4, text: "投注盈利" },
-      { id: 5, text: "下级盈利返利" },
+      //{ id: 5, text: "下级盈利返利" },
       { id: 6, text: "纠正资金" },
       { id: 7, text: "撤消投注" },
       { id: 8, text: "人工减款" },
