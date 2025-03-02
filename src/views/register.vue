@@ -147,6 +147,11 @@ export default {
       this.codeData = res.data;
     },
     async login() {
+      //用户名 密码不能相同
+      if (this.form.username === this.form.password) {
+        this.$toast.fail("用户名和密码不能相同");
+        return;
+      }
       this.$toast.loading({ duration: 0 });
       const [err] = await userApi.register(this.form);
       if (err) {
