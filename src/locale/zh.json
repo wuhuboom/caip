@@ -1591,5 +1591,6 @@
   "backapi.buyBetsError": "下注数超过限制",
   "backapi.waitingCheck": "您的卡号正在审核中",
   "backapi.cardDisabled": "您的卡号审核未通过",
-  "backapi.betToLimit": "合买下注频率太快"
+  "backapi.betToLimit": "合买下注频率太快",
+  "sendImgLimit": "发送图片太频繁"
 }
