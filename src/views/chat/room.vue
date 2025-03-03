@@ -310,12 +310,12 @@
 <script>
 import userApi from "@/api/user";
 import userPic from "@/assets/img/user-room.png";
+import popupMoney from "@/views/chat/components/popupMoney.vue";
+import roomMsg from "@/views/chat/components/roomMsg.vue";
 import EmojiPicker from "vue-emoji-picker";
 import InfiniteLoading from "vue-infinite-loading";
-import { mapState, mapActions, mapGetters } from "vuex";
-import roomMsg from "@/views/chat/components/roomMsg.vue";
 import { ObserveVisibility } from "vue-observe-visibility";
-import popupMoney from "@/views/chat/components/popupMoney.vue";
+import { mapActions, mapGetters, mapState } from "vuex";
 export default {
   name: "chatRoom",
   data() {
@@ -364,12 +364,17 @@ export default {
       return this.catList.find((v) => v.id === this.id);
     },
     placeholder() {
+      if (+this.shareData.chatStatusSys === 0) {
+        return "全体禁言中.";
+      }
       return this.disabled
         ? `充值${this.shareData.recharge}才能解锁聊天`
         : "请输入聊天内容";
     },
     disabled() {
-      return this.shareData.chatAble === 0;
+      return (
+        +this.shareData.chatStatusSys === 0 || this.shareData.chatAble === 0
+      );
     },
     serveData() {
       return this.$store.state.serveData?.serviceAddr;
