@@ -145,6 +145,7 @@ export default {
       shareData: {
         chatAble: 1, // 是否可聊天
         // recharge 3000
+        //chatStatusSys 加了这个， 0关闭 1开启
       },
       loadingShare: false,
       doc: {},
@@ -161,12 +162,17 @@ export default {
   },
   computed: {
     placeholder() {
+      if (+this.shareData.chatStatusSys === 0) {
+        return "全体禁言中.";
+      }
       return this.disabled
         ? `充值${this.shareData.recharge}才能解锁聊天`
         : "请输入聊天内容";
     },
     disabled() {
-      return this.shareData.chatAble === 0;
+      return (
+        +this.shareData.chatStatusSys === 0 || this.shareData.chatAble === 0
+      );
     },
     serveData() {
       return this.$store.state.serveData?.serviceAddr;
