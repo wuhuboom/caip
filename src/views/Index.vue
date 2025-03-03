@@ -41,10 +41,7 @@
         </li>
       </ul>
       <ul class="my-nav flex-wrap">
-        <li
-          class="flex-column center-center m-r-32"
-          @click="$router.push('/recharge')"
-        >
+        <li class="flex-column center-center m-r-32" @click="recharge">
           <img class="d-img m-b-8" src="@/assets/img/icon-idx2.png" alt="" />
           <p>存款</p>
         </li>
@@ -235,6 +232,17 @@ export default {
     },
   },
   methods: {
+    async recharge() {
+      const [err, res] = await userApi.recharge();
+      if (err) return;
+      if (res.data?.length) {
+        this.$router.push("/recharge");
+        return;
+      }
+      const status = await this.comfire("请联系客服");
+      if (!status) return;
+      this.$store.dispatch("getServeData", 1);
+    },
     random() {
       //catList 随机一位
       const len = this.slideCatList.length;
@@ -249,7 +257,6 @@ export default {
             confirmButtonColor: "#3291FF",
           })
           .then(() => {
-            this.$router.push("/bindCard");
             resolve(1);
           })
           .catch(() => {
@@ -259,9 +266,12 @@ export default {
     },
     withdraw() {
       if (!this.bankCard.id) {
-        return this.comfire(
+        const status = this.comfire(
           "您好，您还未绑定提款银行卡，确定现在进行绑定银行卡？"
         );
+        if (!status) return;
+        this.$router.push("/bindCard");
+        return;
       }
       if (this.paySet !== 1) {
         this.$toast.fail("请先设置支付密码");
