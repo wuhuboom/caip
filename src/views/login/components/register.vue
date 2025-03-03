@@ -174,6 +174,11 @@ export default {
       });
     },
     async confirm() {
+      //用户名和密码不能一样
+      if (this.ruleForm.username === this.ruleForm.password) {
+        this.$message.error("用户名和密码不能一样");
+        return;
+      }
       if (this.loading) return;
       this.loading = true;
       const [err] = await userApi.register(this.ruleForm);
