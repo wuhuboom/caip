@@ -11,30 +11,39 @@
       <li
         v-for="(item, index) in rechargeList"
         :key="index"
-        :class="{ on: chooseRecType.name === item.name }"
+        :class="{ on: catName === item.name }"
         @click="chose(item.list[0])"
         class="center-center"
       >
         <div class="flex-column center-center up-cont">
           <p class="pic p-x-16">
-            <img :src="item.img" class="d-img" />
-            <img
-              v-if="chooseRecType.name === item.name"
-              class="rit-re d-img"
-              src="@/assets/img/rit-re.png"
-              alt=""
-            />
+            <img :src="item.img || dMoney" class="d-img" />
+            <img class="rit-re d-img" src="@/assets/img/rit-re.png" alt="" />
           </p>
           <p class="p-t-16 p-b-16">{{ item.name }}</p>
         </div>
       </li>
     </ul>
-    <div class="item-box p-t-24 p-b-24">
+    <div class="p-x-16 m-t-24 font14 pay-btm-cont">
+      <p class="m-b-24 font16">选择通道</p>
+      <ul class="pay-list">
+        <li
+          class="m-b-16 p-x-24"
+          v-for="(item, index) in payList"
+          :key="index"
+          @click="chose(item)"
+          :class="{ on: chooseRecType.id === item.id }"
+        >
+          {{ showTxt(item) }}
+        </li>
+      </ul>
+    </div>
+    <!-- <div class="item-box p-t-24 p-b-24">
       <div class="left">账户余额</div>
       <div class="right on">{{ divide(user.balance) }}元</div>
-    </div>
-    <div class="cz-box">
-      <div class="item-box align-center">
+    </div> -->
+    <div class="cz-box p-l-16 p-r-16">
+      <div class="item-box align-center font16">
         <div class="left">充值金额</div>
         <div class="right">
           <van-field
@@ -42,48 +51,28 @@
             type="number"
             placeholder="请输入充值金额"
           >
-            <template #button> 元 </template>
+            <template #button> {{ chooseRecType.currencySymbol }} </template>
           </van-field>
         </div>
       </div>
-      <div class="num-box">
-        <div
-          class="num"
-          @click="amount = item"
-          :class="{ on: amount === item }"
-          v-for="(item, i) in quickAmountList"
-          :key="i"
+    </div>
+    <ul class="p-l-16 p-r-16 m-t-16 font12">
+      <li class="align-center m-b-" v-if="minMax">
+        单笔充值金额最低<span class="red-color"
+          >{{ minMax[0] }}{{ chooseRecType.currencySymbol }},</span
         >
-          {{ item }}元
-        </div>
+        最高<span class="red-color"
+          >{{ minMax[1] }}{{ chooseRecType.currencySymbol }}</span
+        >
+      </li>
+      <li class="red-color">(手续费:0.00)</li>
+    </ul>
+    <div class="bottom-box">
+      <div class="btn-box">
+        <div class="btn center-center" @click="onSubmit">立即充值</div>
       </div>
     </div>
-    <div class="fs-box">
-      <div
-        class="item"
-        @click="chose(item)"
-        v-for="(item, index) in rechargeList"
-        :key="index"
-        :class="{ on: chooseRecType.id === item.id }"
-      >
-        <div class="left">
-          <!-- <div class="zf-icon yinhang"></div> -->
-          <div class="name">
-            {{ item.name }}
-            <!-- <span class="on">(2%手续费)</span> -->
-          </div>
-        </div>
-        <div class="right">
-          <van-icon
-            name="checked"
-            v-if="chooseRecType.id === item.id"
-            class="check-icon"
-          />
-          <van-icon v-else name="circle" class="check-icon" />
-        </div>
-      </div>
-    </div>
-    <div class="ts-box">
+    <div class="ts-box p-l-16 p-r-16">
       <div class="content-box">
         <div class="tips">
           <van-icon name="info" class="tips-icon" />
@@ -100,22 +89,19 @@
         </div>
       </div>
     </div>
-    <div class="bottom-box">
-      <div class="height"></div>
-      <div class="btn-box">
-        <div class="btn center-center" @click="onSubmit">立即充值</div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 import userApi from "@/api/user";
+import dMoney from "@/assets/img/d-money.png";
 export default {
   name: "AppRecharge",
   data() {
     return {
+      dMoney,
       amount: "",
+      catName: "",
       rechargeList: [],
       chooseRecType: {},
     };
@@ -134,11 +120,24 @@ export default {
       if (!this.chooseRecType.minMax) return "";
       return this.chooseRecType.minMax.split("-").map((v) => +v);
     },
+    payList() {
+      return (
+        this.rechargeList.find((item) => item.name === this.catName)?.list || []
+      );
+    },
   },
   methods: {
+    showTxt(item) {
+      if (item.minMax) {
+        const arr = item.minMax.split("-");
+        return `${item.name}(${arr[0]}${item.currencySymbol}-${arr[1]}${item.currencySymbol})`;
+      }
+      return item.name;
+    },
     chose(item) {
       this.amount = "";
       if (!item) return;
+      this.catName = item.catName;
       for (let k in item) {
         this.$set(this.chooseRecType, k, item[k]);
       }
@@ -151,16 +150,12 @@ export default {
     async recharge() {
       const [err, res] = await userApi.recharge();
       if (err) return;
-      res.data.push({
-        name: "银行卡",
-        id: 0,
-        list: [
-          {
-            name: "银行卡",
-          },
-        ],
-      });
       this.rechargeList = res.data.filter((item) => item?.list?.length);
+      this.rechargeList.forEach((item) => {
+        item.list.forEach((v) => {
+          v.catName = item.name;
+        });
+      });
       if (!this.rechargeList.length) return;
       this.chose(this.rechargeList[0].list[0]);
     },
@@ -206,7 +201,6 @@ export default {
 .item-box {
   display: flex;
   background: #fff;
-  padding: 0 28px;
   .left {
     flex: 1;
   }
@@ -223,6 +217,7 @@ export default {
 .cz-box {
   margin-top: 20px;
   background: #fff;
+  border-bottom: 1px solid #e5e5e5;
   .num-box {
     border-top: 1px solid #e5e5e5;
     padding-bottom: 26px;
@@ -311,7 +306,7 @@ export default {
   }
 }
 .ts-box {
-  padding: 32px 28px;
+  padding: 32px 0;
   .content-box {
     background: #f3f3f3;
     border-radius: 10px 10px 10px 10px;
@@ -335,17 +330,13 @@ export default {
   }
 }
 .bottom-box {
-  .height {
-    height: 152px;
-  }
+  margin-top: 38px;
   .btn-box {
     padding: 32px 28px;
     background: #f9f9f9;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
     .btn {
+      margin: 0 auto;
+      width: 360px;
       height: 88px;
       border-radius: 126px 126px 126px 126px;
       background: #bf2935;
@@ -376,5 +367,22 @@ export default {
       }
     }
   }
+}
+.pay-list {
+  & > li {
+    background: #f2f2f2;
+    border-radius: 8px 8px 8px 8px;
+    &.on {
+      border: 2px solid #bf2834;
+      background-color: transparent;
+      color: #bf2834;
+    }
+  }
+}
+.red-color {
+  color: #e50012;
+}
+.pay-btm-cont {
+  background-color: #fff;
 }
 </style>
