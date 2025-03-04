@@ -8,14 +8,62 @@
       </template>
     </AppTopBar>
 
-    <!-- 提现 未绑定 -->
-    <template v-if="0">
-      <div class="ye-box">
-        可提现余额
-        <div class="on">1000.00元</div>
+    <!-- 提现 已绑定 -->
+
+    <div class="yh-box">
+      <div class="gh-box" @click="resData(bankCard)" v-if="bankCard.id">
+        <div class="left">
+          <div class="yuan">
+            <img class="d-img" src="@/assets/img/Recharge/yinhang.png" alt="" />
+          </div>
+          <div class="info">
+            <div class="i-1">{{ bankCard.bankName }}</div>
+            <div class="i-2">
+              **** **** ****{{ bankCard.cardNumber.slice(-4) }}
+            </div>
+          </div>
+        </div>
+        <div class="right">
+          <van-icon
+            name="checked"
+            v-if="form.id === bankCard.id"
+            class="check-icon"
+            :size="24"
+          />
+          <van-icon v-else name="circle" :size="24" class="check-icon" />
+        </div>
       </div>
+      <div class="gh-box" v-if="usdtCard.id" @click="resData(usdtCard)">
+        <div class="left">
+          <div class="yuan">
+            <img class="d-img" src="@/assets/img/Recharge/usdt.png" alt="" />
+          </div>
+          <div class="info">
+            <div class="i-1">{{ usdtCard.bankName }}</div>
+            <div class="i-2">
+              **** **** ****{{ usdtCard.cardNumber.slice(-4) }}
+            </div>
+          </div>
+        </div>
+        <div class="right">
+          <van-icon
+            name="checked"
+            v-if="form.id === usdtCard.id"
+            class="check-icon"
+            :size="24"
+          />
+          <van-icon :size="24" v-else name="circle" class="check-icon" />
+        </div>
+      </div>
+    </div>
+    <!-- 提现 未绑定 -->
+    <template>
       <div class="bd-box">
-        <div class="lists">
+        <div
+          class="lists"
+          v-if="!bankCard.id"
+          @click="$router.push('/edtMyCard')"
+        >
           <div class="left">
             <van-icon name="plus" class="plus-icon" />
             <div class="name">绑定银行卡</div>
@@ -24,7 +72,20 @@
             <van-icon name="arrow" class="arrow-icon" />
           </div>
         </div>
-        <div class="lists">
+        <div
+          class="lists"
+          v-if="!usdtCard.id"
+          @click="$router.push('/bindUsdt')"
+        >
+          <div class="left">
+            <van-icon name="plus" class="plus-icon" />
+            <div class="name">绑定USDT</div>
+          </div>
+          <div class="right">
+            <van-icon name="arrow" class="arrow-icon" />
+          </div>
+        </div>
+        <!-- <div class="lists">
           <div class="left">
             <van-icon name="plus" class="plus-icon" />
             <div class="name">绑定微信</div>
@@ -41,105 +102,51 @@
           <div class="right">
             <van-icon name="arrow" class="arrow-icon" />
           </div>
-        </div>
+        </div> -->
       </div>
     </template>
-
-    <!-- 提现 已绑定 -->
-    <template>
-      <div class="yh-box">
-        <div class="gh-box" @click="resData(bankCard)" v-if="bankCard.id">
-          <div class="left">
-            <div class="yuan">
-              <img
-                class="d-img"
-                src="@/assets/img/Recharge/yinhang.png"
-                alt=""
-              />
-            </div>
-            <div class="info">
-              <div class="i-1">{{ bankCard.bankName }}</div>
-              <div class="i-2">
-                **** **** ****{{ bankCard.cardNumber.slice(-4) }}
-              </div>
-            </div>
-          </div>
-          <div class="right">
-            <van-icon
-              name="checked"
-              v-if="form.id === bankCard.id"
-              class="check-icon"
-              :size="24"
-            />
-            <van-icon v-else name="circle" :size="24" class="check-icon" />
-          </div>
+    <div class="tx-box">
+      <div class="item">
+        可提现余额
+        <div class="on">{{ divide(user.balance) }}元</div>
+      </div>
+      <div class="item">
+        提现金额
+        <input
+          type="text"
+          class="input"
+          placeholder="请输入提款金额"
+          v-model.trim="form.money"
+        />
+      </div>
+      <div class="item">
+        支付密码
+        <input
+          type="text"
+          class="input"
+          placeholder="请输入支付密码"
+          v-model.trim="form.payPwd"
+        />
+      </div>
+    </div>
+    <div class="btn-box center-center" @click="ajaxBindCard">确定</div>
+    <div class="ts-box">
+      <div class="content-box">
+        <div class="tips">
+          <van-icon name="info" class="tips-icon" />
+          温馨提示
         </div>
-        <div class="gh-box" v-if="usdtCard.id" @click="resData(usdtCard)">
-          <div class="left">
-            <div class="yuan">
-              <img class="d-img" src="@/assets/img/Recharge/usdt.png" alt="" />
-            </div>
-            <div class="info">
-              <div class="i-1">{{ usdtCard.bankName }}</div>
-              <div class="i-2">
-                **** **** ****{{ usdtCard.cardNumber.slice(-4) }}
-              </div>
-            </div>
-          </div>
-          <div class="right">
-            <van-icon
-              name="checked"
-              v-if="form.id === usdtCard.id"
-              class="check-icon"
-              :size="24"
-            />
-            <van-icon :size="24" v-else name="circle" class="check-icon" />
-          </div>
+        <div class="li m-b-16">
+          1.确保填写的收款账户信息（如银行账户、支付平台账号）准确无误，以免影响资金到账
+        </div>
+        <div class="li m-b-16">
+          2.提款一般会在30分钟之内到账,若有延迟请联系在线客服查询.
+        </div>
+        <div class="li m-b-16">
+          3.每天提现限制3次,提现时间早上10点到晚上10点.
         </div>
       </div>
-      <div class="tx-box">
-        <div class="item">
-          可提现余额
-          <div class="on">{{ divide(user.balance) }}元</div>
-        </div>
-        <div class="item">
-          提现金额
-          <input
-            type="text"
-            class="input"
-            placeholder="请输入提款金额"
-            v-model.trim="form.money"
-          />
-        </div>
-        <div class="item">
-          支付密码
-          <input
-            type="text"
-            class="input"
-            placeholder="请输入支付密码"
-            v-model.trim="form.payPwd"
-          />
-        </div>
-      </div>
-      <div class="btn-box center-center" @click="ajaxBindCard">确定</div>
-      <div class="ts-box">
-        <div class="content-box">
-          <div class="tips">
-            <van-icon name="info" class="tips-icon" />
-            温馨提示
-          </div>
-          <div class="li m-b-16">
-            1.确保填写的收款账户信息（如银行账户、支付平台账号）准确无误，以免影响资金到账
-          </div>
-          <div class="li m-b-16">
-            2.提款一般会在30分钟之内到账,若有延迟请联系在线客服查询.
-          </div>
-          <div class="li m-b-16">
-            3.每天提现限制3次,提现时间早上10点到晚上10点.
-          </div>
-        </div>
-      </div>
-    </template>
+    </div>
   </div>
 </template>
 
