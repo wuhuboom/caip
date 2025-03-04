@@ -7,6 +7,28 @@
         </div>
       </template>
     </AppTopBar>
+    <ul class="recharge-up-list p-t-32 flex-wrap">
+      <li
+        v-for="(item, index) in rechargeList"
+        :key="index"
+        :class="{ on: chooseRecType.name === item.name }"
+        @click="chose(item.list[0])"
+        class="center-center"
+      >
+        <div class="flex-column center-center up-cont">
+          <p class="pic p-x-16">
+            <img :src="item.img" class="d-img" />
+            <img
+              v-if="chooseRecType.name === item.name"
+              class="rit-re d-img"
+              src="@/assets/img/rit-re.png"
+              alt=""
+            />
+          </p>
+          <p class="p-t-16 p-b-16">{{ item.name }}</p>
+        </div>
+      </li>
+    </ul>
     <div class="item-box p-t-24 p-b-24">
       <div class="left">账户余额</div>
       <div class="right on">{{ divide(user.balance) }}元</div>
@@ -129,11 +151,18 @@ export default {
     async recharge() {
       const [err, res] = await userApi.recharge();
       if (err) return;
-      this.rechargeList = res.data;
-      // this.rechargeList = res.data.filter((item) => +item.type !== 3);
-      // this.usdtPay = res.data.find((item) => +item.type === 3) || {};
+      res.data.push({
+        name: "银行卡",
+        id: 0,
+        list: [
+          {
+            name: "银行卡",
+          },
+        ],
+      });
+      this.rechargeList = res.data.filter((item) => item?.list?.length);
       if (!this.rechargeList.length) return;
-      this.chose(this.rechargeList[0]);
+      this.chose(this.rechargeList[0].list[0]);
     },
     async onSubmit() {
       if (!this.amount) {
@@ -322,6 +351,29 @@ export default {
       background: #bf2935;
       font-size: 32px;
       color: #ffffff;
+    }
+  }
+}
+.recharge-up-list {
+  & > li {
+    width: 20%;
+    .pic {
+      width: 100px;
+      height: 100px;
+      position: relative;
+    }
+    .rit-re {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 32px;
+      height: 32px;
+    }
+    &.on {
+      .pic {
+        border-radius: 8px 8px 8px 8px;
+        border: 2px solid #bf2834;
+      }
     }
   }
 }
