@@ -30,8 +30,8 @@
       <ul @click="$store.dispatch('getInfo')">
         <li class="m-b-8">{{ user.username }}</li>
         <li class="align-center">
-          <template>
-            ￥
+          ￥
+          <div v-if="show" class="m-r-16 align-center">
             <p class="balance">{{ divide(user.balance) }}</p>
             <van-icon
               name="replay"
@@ -39,7 +39,14 @@
               style="font-weight: bold"
               color="#E50012"
             />
-          </template>
+          </div>
+          <i
+            class="icon iconfont font18 my-show"
+            @click.stop="show = !show"
+            :class="[
+              show ? 'icon-yanjing_xianshi_o' : 'icon-yanjing_yincang_o',
+            ]"
+          ></i>
         </li>
       </ul>
       <ul class="my-nav flex-wrap">
@@ -181,6 +188,7 @@ export default {
   name: "AppHome",
   data() {
     return {
+      show: false,
       active: 0,
       nav5Icon,
       labaImg,
@@ -797,5 +805,8 @@ export default {
       transform: translateY(-50%);
     }
   }
+}
+.my-show {
+  font-size: 40px;
 }
 </style>
