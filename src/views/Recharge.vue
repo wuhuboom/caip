@@ -17,8 +17,13 @@
       >
         <div class="flex-column center-center up-cont">
           <p class="pic p-x-16">
-            <img :src="item.img || dMoney" class="d-img" />
-            <img class="rit-re d-img" src="@/assets/img/rit-re.png" alt="" />
+            <img :src="findIcon(+item.ctype) || dMoney" class="d-img" />
+            <img
+              v-if="catName === item.name"
+              class="rit-re d-img"
+              src="@/assets/img/rit-re.png"
+              alt=""
+            />
           </p>
           <p class="p-t-16 p-b-16">{{ item.name }}</p>
         </div>
@@ -103,6 +108,58 @@ export default {
       catName: "",
       rechargeList: [],
       chooseRecType: {},
+      icons: [
+        {
+          ctype: 0,
+          icon: require("@/assets/img/bank/ctype0.png"),
+          name: "支付宝",
+        },
+        {
+          ctype: 1,
+          icon: require("@/assets/img/bank/ctype1.png"),
+          name: "微信",
+        },
+        {
+          ctype: 2,
+          icon: require("@/assets/img/bank/ctype2.png"),
+          name: "银行卡",
+        },
+        {
+          ctype: 3,
+          icon: require("@/assets/img/bank/ctype3.png"),
+          name: "USDT",
+        },
+        {
+          ctype: 4,
+          icon: require("@/assets/img/bank/ctype4.png"),
+          name: "数字货币",
+        },
+        {
+          ctype: 5,
+          icon: require("@/assets/img/bank/ctype5.png"),
+          name: "快捷支付",
+        },
+        {
+          ctype: 6,
+          icon: require("@/assets/img/bank/ctype6.png"),
+          name: "数字人民币",
+        },
+        {
+          ctype: 7,
+          icon: require("@/assets/img/bank/ctype7.png"),
+          name: "QQ钱包",
+        },
+        {
+          ctype: 8,
+          icon: require("@/assets/img/bank/ctype8.png"),
+          name: "云闪付",
+        },
+        {
+          ctype: 9,
+          icon: require("@/assets/img/bank/ctype9.png"),
+          name: "银联钱包",
+        },
+      ],
     };
   },
   computed: {
@@ -126,6 +183,9 @@ export default {
     },
   },
   methods: {
+    findIcon(ctype) {
+      return this.icons.find((v) => v.ctype === ctype)?.icon;
+    },
     showTxt(item) {
       if (item.minMax) {
         const arr = item.minMax.split("-");
@@ -158,6 +218,21 @@ export default {
       if (!this.rechargeList.length) return;
       this.chose(this.rechargeList[0].list[0]);
     },
+    comfire(v) {
+      return new Promise((resolve) => {
+        this.$dialog
+          .confirm({
+            message: v,
+            confirmButtonColor: "#3291FF",
+          })
+          .then(() => {
+            resolve(1);
+          })
+          .catch(() => {
+            resolve(0);
+          });
+      });
+    },
     async onSubmit() {
       if (!this.amount) {
         this.$toast("请输入金额");
@@ -175,6 +250,14 @@ export default {
         money: this.amount * 1,
       });
       if (err) {
+        if (
+          Array.isArray(err?.data) &&
+          err.data[0].msgKey === "rechargeUrlError"
+        ) {
+          const status = await this.comfire("联系客服");
+          if (!status) return;
+          this.$store.dispatch("getServeData", 1);
+        }
         return;
       }
       this.$toast.clear();

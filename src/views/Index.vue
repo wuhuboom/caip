@@ -30,14 +30,16 @@
       <ul @click="$store.dispatch('getInfo')">
         <li class="m-b-8">{{ user.username }}</li>
         <li class="align-center">
-          ￥
-          <p class="balance">{{ divide(user.balance) }}</p>
-          <van-icon
-            name="replay"
-            class="m-l-4"
-            style="font-weight: bold"
-            color="#E50012"
-          />
+          <template>
+            ￥
+            <p class="balance">{{ divide(user.balance) }}</p>
+            <van-icon
+              name="replay"
+              class="m-l-4"
+              style="font-weight: bold"
+              color="#E50012"
+            />
+          </template>
         </li>
       </ul>
       <ul class="my-nav flex-wrap">
