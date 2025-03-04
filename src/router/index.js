@@ -1,10 +1,10 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
 import auth from "@/plugins/auth";
-//import app from "@/main";
-Vue.use(VueRouter);
 import store from "@/store";
 import Nprogress from "nprogress";
+import Vue from "vue";
+import VueRouter from "vue-router";
+//import app from "@/main";
+Vue.use(VueRouter);
 //import AppTopBar from "@/components/global/AppTopBar";
 // import AppBtmBar from "@/components/global/AppBtmBar";
 import app from "@/main";
@@ -70,6 +70,20 @@ const routes = [
     name: "BindUsdt",
     components: {
       default: () => import("@/views/bindUsdt.vue"),
+    },
+  },
+  {
+    path: "/bindWebchat",
+    name: "BindWebchat",
+    components: {
+      default: () => import("@/views/bindWebchat.vue"),
+    },
+  },
+  {
+    path: "/bindAlipay",
+    name: "BindAlipay",
+    components: {
+      default: () => import("@/views/bindAlipay.vue"),
     },
   },
   {

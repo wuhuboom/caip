@@ -1,43 +1,38 @@
 <template>
   <div class="c-page bg-grey">
     <AppTopBar
-      :topBarTitle="usdtCard.id ? '修改USDT-TRC20' : '绑定USDT-TRC20'"
+      :topBarTitle="usdtCard.id ? '修改支付宝账号' : '绑定支付宝账号'"
     ></AppTopBar>
     <van-form @submit="confirm">
       <div class="forms-input-wrap">
         <div class="input-box flex-wrap">
           <van-field
-            v-model.trim="form.cardNumber"
+            v-model.trim="form.cardName"
             class="input"
             type="text"
-            placeholder="请输入USDT-TRC20地址"
+            placeholder="请输入姓名"
             :rules="[
               {
                 required: true,
-                message: 'USDT-TRC20不能为空',
-              },
-              {
-                pattern: /^T[a-zA-Z1-9]{10,}$/,
-                message: '请输入有效的 TRC20 地址',
+                message: '姓名不能为空',
               },
             ]"
           />
         </div>
-        <!-- <div class="input-box flex-wrap">
+        <div class="input-box flex-wrap">
           <van-field
-            v-model.trim="form.identity"
+            v-model.trim="form.cardNumber"
             class="input"
             type="text"
-            placeholder="请输入身份证"
+            placeholder="请输入支付宝账号"
             :rules="[
-              { required: true, message: '身份证不能为空' },
               {
-                validator: idCardValidator,
-                message: '请输入有效的身份证号',
+                required: true,
+                message: '支付宝账号不能为空',
               },
             ]"
           />
-        </div> -->
+        </div>
         <div class="input-box flex-wrap">
           <van-field
             v-model.trim="form.payPwd"
@@ -68,11 +63,12 @@ export default {
   data() {
     return {
       form: {
-        ctype: 3,
+        ctype: 0,
         identity: "",
         cardNumber: "",
-        bankName: "TRC20",
+        bankName: "支付宝",
         payPwd: "",
+        cardName: "",
       },
     };
   },
@@ -85,7 +81,7 @@ export default {
       return doc;
     },
     usdtCard() {
-      return this.Cards.find((v) => +v.ctype === 3) || {};
+      return this.Cards.find((v) => +v.ctype === 0) || {};
     },
   },
   methods: {

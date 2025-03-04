@@ -43,6 +43,18 @@
           <van-icon name="arrow" class="arrow-icon" />
         </div>
       </div>
+      <div class="item" @click="bindAlipay">
+        <div class="left">我的支付宝账号</div>
+        <div class="right">
+          <van-icon name="arrow" class="arrow-icon" />
+        </div>
+      </div>
+      <div class="item" @click="bindWebchat">
+        <div class="left">我的微信账号</div>
+        <div class="right">
+          <van-icon name="arrow" class="arrow-icon" />
+        </div>
+      </div>
       <div class="item" @click="$tool.goPage('/change-phone')">
         <div class="left">手机号码</div>
         <div class="right">
@@ -62,8 +74,8 @@
 </template>
 
 <script>
-import DefaultAvatar from "@/assets/img/DefaultAvatar.jpg";
 import userApi from "@/api/user";
+import DefaultAvatar from "@/assets/img/DefaultAvatar.jpg";
 export default {
   name: "UserCenter",
   data() {
@@ -101,6 +113,20 @@ export default {
         return this.$router.push("/payPassword");
       }
       this.$router.push("/bindUsdt");
+    },
+    bindAlipay() {
+      if (this.paySet !== 1) {
+        this.$toast.fail("请先设置支付密码");
+        return this.$router.push("/payPassword");
+      }
+      this.$router.push("/bindAlipay");
+    },
+    bindWebchat() {
+      if (this.paySet !== 1) {
+        this.$toast.fail("请先设置支付密码");
+        return this.$router.push("/payPassword");
+      }
+      this.$router.push("/bindWebchat");
     },
   },
   async created() {

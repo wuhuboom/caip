@@ -31,15 +31,18 @@
         <li class="m-b-8">{{ user.username }}</li>
         <li class="align-center">
           ￥
-          <div v-if="show" class="m-r-16 align-center">
-            <p class="balance">{{ divide(user.balance) }}</p>
-            <van-icon
-              name="replay"
-              class="m-l-4"
-              style="font-weight: bold"
-              color="#E50012"
-            />
-          </div>
+          <template v-if="show"
+            ><div class="m-r-16 align-center">
+              <p class="balance">{{ divide(user.balance) }}</p>
+              <van-icon
+                name="replay"
+                class="m-l-4"
+                style="font-weight: bold"
+                color="#E50012"
+              />
+            </div>
+          </template>
+          <template v-else> ****** </template>
           <i
             class="icon iconfont font18 my-show"
             @click.stop="show = !show"

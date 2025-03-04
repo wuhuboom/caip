@@ -69,7 +69,6 @@
           >{{ minMax[1] }}{{ chooseRecType.currencySymbol }}</span
         >
       </li>
-      <li class="red-color">(手续费:0.00)</li>
     </ul>
     <div class="bottom-box">
       <div class="btn-box">
@@ -254,6 +253,7 @@ export default {
           Array.isArray(err?.data) &&
           err.data[0].msgKey === "rechargeUrlError"
         ) {
+          this.$toast.clear();
           const status = await this.comfire("联系客服");
           if (!status) return;
           this.$store.dispatch("getServeData", 1);

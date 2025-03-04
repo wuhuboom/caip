@@ -1,49 +1,16 @@
 <template>
   <div class="c-page bg-grey">
     <AppTopBar
-      :topBarTitle="usdtCard.id ? '修改USDT-TRC20' : '绑定USDT-TRC20'"
+      :topBarTitle="usdtCard.id ? '修改微信账号' : '绑定微信账号'"
     ></AppTopBar>
     <van-form @submit="confirm">
       <div class="forms-input-wrap">
         <div class="input-box flex-wrap">
           <van-field
-            v-model.trim="form.cardNumber"
-            class="input"
-            type="text"
-            placeholder="请输入USDT-TRC20地址"
-            :rules="[
-              {
-                required: true,
-                message: 'USDT-TRC20不能为空',
-              },
-              {
-                pattern: /^T[a-zA-Z1-9]{10,}$/,
-                message: '请输入有效的 TRC20 地址',
-              },
-            ]"
-          />
-        </div>
-        <!-- <div class="input-box flex-wrap">
-          <van-field
-            v-model.trim="form.identity"
-            class="input"
-            type="text"
-            placeholder="请输入身份证"
-            :rules="[
-              { required: true, message: '身份证不能为空' },
-              {
-                validator: idCardValidator,
-                message: '请输入有效的身份证号',
-              },
-            ]"
-          />
-        </div> -->
-        <div class="input-box flex-wrap">
-          <van-field
             v-model.trim="form.payPwd"
             class="input"
             type="password"
-            placeholder="支付密码"
+            placeholder="输入支付密码"
             :rules="[
               { required: true, message: $t('backapi.passwordIsEmpty') },
               {
@@ -53,7 +20,12 @@
             ]"
           />
         </div>
+        <div class="input-box flex-column">
+          <p class="input-title p-t-16 p-b-16">上传微信收款码</p>
+          <van-uploader v-model="fileList" :after-read="afterRead" />
+        </div>
       </div>
+
       <van-button class="forms-submit-btn center-center" native-type="submit"
         >确定</van-button
       >
@@ -68,11 +40,12 @@ export default {
   data() {
     return {
       form: {
-        ctype: 3,
+        ctype: 1,
         identity: "",
         cardNumber: "",
-        bankName: "TRC20",
+        bankName: "微信",
         payPwd: "",
+        fileList: [],
       },
     };
   },
@@ -85,10 +58,34 @@ export default {
       return doc;
     },
     usdtCard() {
-      return this.Cards.find((v) => +v.ctype === 3) || {};
+      return this.Cards.find((v) => +v.ctype === 1) || {};
     },
   },
   methods: {
+    async afterRead({ file }) {
+      //type "image/jpeg"
+      if (file.type.indexOf("image/") === -1) {
+        this.$toast("请上传图片");
+        return;
+      }
+      //限制图片大小10M
+      if (file.size > 1024 * 1024 * 10) {
+        this.$toast("图片大小不能超过10M");
+        return;
+      }
+      this.$toast.loading({
+        duration: 0,
+        forbidClick: true,
+      });
+      const [err, res] = await userApi.uploadImg({ file });
+      if (err) return;
+      this.$toast.clear();
+      console.log(res);
+      // this.sendMessage({
+      //   data: res.data,
+      //   type: 3,
+      // });
+    },
     bankCardValidator(value) {
       const bankCardPattern = /^\d{16,19}$/;
       return bankCardPattern.test(value);
