@@ -44,14 +44,13 @@
     </div> -->
     <div class="cz-box p-l-16 p-r-16">
       <div class="item-box align-center font16">
-        <div class="left">充值金额</div>
-        <div class="right">
+        <div class="left">充值金额:</div>
+        <div class="right flex-1">
           <van-field
             v-model.trim="amount"
             type="number"
             placeholder="请输入充值金额"
           >
-            <template #button> {{ chooseRecType.currencySymbol }} </template>
           </van-field>
         </div>
       </div>
@@ -202,15 +201,14 @@ export default {
   display: flex;
   background: #fff;
   .left {
-    flex: 1;
   }
   .on {
     color: #bf2935;
   }
   .right {
-    text-align: right;
+    text-align: left;
     ::v-deep input {
-      text-align: right;
+      text-align: left;
     }
   }
 }
