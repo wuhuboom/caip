@@ -149,7 +149,7 @@ export default {
     async recharge() {
       const [err, res] = await userApi.recharge();
       if (err) return;
-      this.rechargeList = res.data.filter((item) => item?.list?.length);
+      this.rechargeList = res.data?.filter((item) => item?.list?.length);
       this.rechargeList.forEach((item) => {
         item.list.forEach((v) => {
           v.catName = item.name;

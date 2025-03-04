@@ -235,6 +235,7 @@ export default {
     async recharge() {
       const [err, res] = await userApi.recharge();
       if (err) return;
+      res.data = res.data?.filter((item) => item?.list?.length);
       if (res.data?.length) {
         this.$router.push("/recharge");
         return;

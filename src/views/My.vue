@@ -301,6 +301,7 @@ export default {
       const [err, res] = await userApi.recharge();
       if (err) return;
       this.$toast.clear();
+      res.data = res.data?.filter((item) => item?.list?.length);
       if (!res.data || !res.data.length) {
         this.$dialog
           .confirm({
