@@ -22,7 +22,7 @@
         </div>
         <div class="input-box flex-column">
           <p class="input-title p-t-16 p-b-16">上传微信收款码</p>
-          <van-uploader v-model="fileList" :after-read="afterRead" />
+          <van-uploader v-model="fileList" :max-count="1" />
         </div>
       </div>
 
@@ -39,13 +39,13 @@ export default {
   name: "bindCard",
   data() {
     return {
+      fileList: [],
       form: {
         ctype: 1,
         identity: "",
         cardNumber: "",
         bankName: "微信",
         payPwd: "",
-        fileList: [],
       },
     };
   },
@@ -58,34 +58,21 @@ export default {
       return doc;
     },
     usdtCard() {
-      return this.Cards.find((v) => +v.ctype === 1) || {};
+      const doc = this.Cards.find((v) => +v.ctype === 1) || {};
+      if (doc.payQr) {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.fileList = [
+          {
+            url: doc.payQr.includes("http")
+              ? doc.payQr
+              : `${this.$baseURL}/${doc.payQr}`,
+          },
+        ];
+      }
+      return doc;
     },
   },
   methods: {
-    async afterRead({ file }) {
-      //type "image/jpeg"
-      if (file.type.indexOf("image/") === -1) {
-        this.$toast("请上传图片");
-        return;
-      }
-      //限制图片大小10M
-      if (file.size > 1024 * 1024 * 10) {
-        this.$toast("图片大小不能超过10M");
-        return;
-      }
-      this.$toast.loading({
-        duration: 0,
-        forbidClick: true,
-      });
-      const [err, res] = await userApi.uploadImg({ file });
-      if (err) return;
-      this.$toast.clear();
-      console.log(res);
-      // this.sendMessage({
-      //   data: res.data,
-      //   type: 3,
-      // });
-    },
     bankCardValidator(value) {
       const bankCardPattern = /^\d{16,19}$/;
       return bankCardPattern.test(value);
@@ -96,12 +83,19 @@ export default {
       return idCardPattern.test(value);
     },
     async confirm() {
-      this.$toast.loading({ duration: 0 });
-      const keys = this.usdtCard.id ? "bindBankCardEditReq" : "bindBankCard";
-      const [err] = await userApi[`${keys}`]({
+      if (!this.fileList.length) {
+        return this.$toast.fail("请上传微信收款码");
+      }
+      const query = {
         ...this.form,
         cardNumberTwice: this.form.cardNumber,
-      });
+      };
+      if (this.fileList[0].file) {
+        query.file = this.fileList[0].file;
+      }
+      this.$toast.loading({ duration: 0 });
+      const keys = this.usdtCard.id ? "bindBankCardEditReq" : "bindBankCard";
+      const [err] = await userApi[`${keys}`](query);
 
       if (err) return;
       this.$toast.success("绑定成功");

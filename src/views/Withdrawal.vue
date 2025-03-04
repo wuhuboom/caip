@@ -11,10 +11,19 @@
     <!-- 提现 已绑定 -->
 
     <div class="yh-box">
-      <div class="gh-box" @click="resData(bankCard)" v-if="bankCard.id">
+      <div
+        class="gh-box"
+        v-for="bankCard in Cards"
+        :key="bankCard.id"
+        @click="resData(bankCard)"
+      >
         <div class="left">
           <div class="yuan">
-            <img class="d-img" src="@/assets/img/Recharge/yinhang.png" alt="" />
+            <img
+              class="d-img"
+              :src="iconList.find((v) => v.ctype == bankCard.ctype)?.icon"
+              alt=""
+            />
           </div>
           <div class="info">
             <div class="i-1">{{ bankCard.bankName }}</div>
@@ -31,28 +40,6 @@
             :size="24"
           />
           <van-icon v-else name="circle" :size="24" class="check-icon" />
-        </div>
-      </div>
-      <div class="gh-box" v-if="usdtCard.id" @click="resData(usdtCard)">
-        <div class="left">
-          <div class="yuan">
-            <img class="d-img" src="@/assets/img/Recharge/usdt.png" alt="" />
-          </div>
-          <div class="info">
-            <div class="i-1">{{ usdtCard.bankName }}</div>
-            <div class="i-2">
-              **** **** ****{{ usdtCard.cardNumber.slice(-4) }}
-            </div>
-          </div>
-        </div>
-        <div class="right">
-          <van-icon
-            name="checked"
-            v-if="form.id === usdtCard.id"
-            class="check-icon"
-            :size="24"
-          />
-          <van-icon :size="24" v-else name="circle" class="check-icon" />
         </div>
       </div>
     </div>
@@ -85,7 +72,11 @@
             <van-icon name="arrow" class="arrow-icon" />
           </div>
         </div>
-        <!-- <div class="lists">
+        <div
+          class="lists"
+          v-if="!wechatCard.id"
+          @click="$router.push('/bindWebchat')"
+        >
           <div class="left">
             <van-icon name="plus" class="plus-icon" />
             <div class="name">绑定微信</div>
@@ -94,7 +85,11 @@
             <van-icon name="arrow" class="arrow-icon" />
           </div>
         </div>
-        <div class="lists">
+        <div
+          class="lists"
+          v-if="!alipayCard.id"
+          @click="$router.push('/bindAlipay')"
+        >
           <div class="left">
             <van-icon name="plus" class="plus-icon" />
             <div class="name">绑定支付宝</div>
@@ -102,7 +97,7 @@
           <div class="right">
             <van-icon name="arrow" class="arrow-icon" />
           </div>
-        </div> -->
+        </div>
       </div>
     </template>
     <div class="tx-box">
@@ -167,6 +162,29 @@ export default {
   data() {
     return {
       form: initForm(),
+      //0支付宝 1微信 2银行卡 3USDT
+      iconList: [
+        {
+          icon: require("@/assets/img/bank/ctype0.png"),
+          name: "支付宝",
+          ctype: 0,
+        },
+        {
+          icon: require("@/assets/img/bank/ctype1.png"),
+          name: "微信",
+          ctype: 1,
+        },
+        {
+          icon: require("@/assets/img/Recharge/yinhang.png"),
+          name: "银行卡",
+          ctype: 2,
+        },
+        {
+          icon: require("@/assets/img/Recharge/usdt.png"),
+          name: "USDT地址",
+          ctype: 3,
+        },
+      ],
     };
   },
   computed: {
@@ -178,7 +196,10 @@ export default {
       ];
     },
     bankTxt() {
-      return this.ctype === 2 ? "银行卡" : "USDT地址";
+      //0支付宝 1微信 2银行卡 3USDT
+      const arr = ["支付宝", "微信", "银行卡", "USDT地址"];
+      //return this.ctype === 2 ? "银行卡" : "USDT地址";
+      return arr[this.form.ctype];
     },
     user() {
       return this.$store.state.user;
@@ -192,6 +213,14 @@ export default {
     },
     usdtCard() {
       return this.Cards.find((v) => +v.ctype === 3) || {};
+    },
+    //支付宝
+    alipayCard() {
+      return this.Cards.find((v) => +v.ctype === 0) || {};
+    },
+    //微信
+    wechatCard() {
+      return this.Cards.find((v) => +v.ctype === 1) || {};
     },
   },
   methods: {
@@ -238,11 +267,12 @@ export default {
     this.$toast.loading({ duration: 0 });
     await this.$store.dispatch("getBankCard");
     this.$toast.clear();
-    if (this.bankCard.id) {
-      this.resData(this.bankCard);
-    } else if (this.usdtCard.id) {
-      this.resData(this.usdtCard);
-    }
+    this.resData(this.Cards[0]);
+    // if (this.bankCard.id) {
+    //   this.resData(this.bankCard);
+    // } else if (this.usdtCard.id) {
+    //   this.resData(this.usdtCard);
+    // }
   },
 };
 </script>
