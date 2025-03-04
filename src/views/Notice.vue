@@ -21,7 +21,7 @@
               />
             </div>
           </div>
-          <div class="content" v-if="item.open">
+          <div class="content" v-if="item.open" style="white-space: pre-line">
             {{ item.content }}
           </div>
         </div>
