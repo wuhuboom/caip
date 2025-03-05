@@ -1,6 +1,6 @@
-import axios from "axios";
 import app from "@/main";
 import to from "await-to-js";
+import axios from "axios";
 const baseURL =
   process.env.NODE_ENV === "production"
     ? window.BASEPATH
@@ -76,7 +76,11 @@ instance.interceptors.response.use(
         } else {
           let title = "";
           if (data && data.length > 0) {
+            const backkey = "backapi." + data[0].msgKey;
             title = data[0].msg || app.$t("backapi." + data[0].msgKey);
+            if ("backapi.rechargeUrlError" === backkey) {
+              title = "";
+            }
           }
           title = title || msg;
           if (title) {

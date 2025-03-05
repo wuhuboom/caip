@@ -186,6 +186,14 @@ export default {
       });
       this.loading = false;
       if (err) {
+        if (
+          Array.isArray(err?.data) &&
+          err.data[0].msgKey === "rechargeUrlError"
+        ) {
+          const status = await this.comfire();
+          if (!status) return;
+          this.$store.dispatch("getServeData", 1);
+        }
         return;
       }
       if (res.data.UrlAddress) {
@@ -207,9 +215,9 @@ export default {
       }
       //this.amount = this.chooseRecType.def;
     },
-    comfire() {
+    comfire(v = "请联系人工客服") {
       return new Promise((resolve) => {
-        this.$confirm("请联系人工客服", "提示", {
+        this.$confirm(v, "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
@@ -239,8 +247,22 @@ export default {
         }, 0);
         return;
       }
-      this.rechargeList = res.data.filter((item) => +item.type !== 3);
-      this.usdtPay = res.data.find((item) => +item.type === 3) || {};
+      const list = [];
+      res.data.forEach((v) => {
+        if (v.list) {
+          const arr = v.list.map((item) => {
+            return {
+              ...item,
+              name: item.name.includes(v.name)
+                ? item.name
+                : `${v.name}-${item.name}`,
+            };
+          });
+          list.push(...arr);
+        }
+      });
+      this.rechargeList = list.filter((item) => +item.type !== 3);
+      this.usdtPay = list.find((item) => +item.type === 3) || {};
       if (!this.rechargeList.length) return;
       this.chose(this.rechargeList[0]);
     },
