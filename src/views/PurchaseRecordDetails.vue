@@ -527,6 +527,10 @@ export default {
       });
     },
     async shareToChatRoom() {
+      if (+this.shareData.shareDisabled === 0) {
+        this.$toast.fail(`分享已禁用`);
+        return;
+      }
       if (this.detail.status !== 0) {
         this.$toast("合买已结束，无法分享");
         return;

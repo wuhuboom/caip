@@ -309,7 +309,7 @@ export default {
     async chat(id) {
       const [err, res] = await userApi.chat();
       if (err) return;
-      if (!res.data?.chatAble) return;
+      if (!res.data?.chatAble || res.data?.shareDisabled === 0) return;
       const status = await this.comfire("合买成功分享到聊天室吗？");
       if (!status || !id) return;
       this.betsShare(id);
