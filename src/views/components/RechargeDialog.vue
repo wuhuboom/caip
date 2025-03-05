@@ -40,7 +40,7 @@
               <li v-if="minMax">
                 金额区间:
                 <span
-                  >{{ minMax[0] }}{{ chooseRecType.currencySymbol }},{{
+                  >{{ minMax[0] }}{{ chooseRecType.currencySymbol }}-{{
                     minMax[1]
                   }}{{ chooseRecType.currencySymbol }}</span
                 >
