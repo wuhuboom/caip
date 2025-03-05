@@ -100,7 +100,7 @@
 import userApi from "@/api/user";
 const initForm = () => {
   return {
-    ctype: 2,
+    ctype: 0,
     cardName: "",
     identity: "",
     cardNumber: "",
