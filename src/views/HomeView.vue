@@ -370,7 +370,7 @@
           width="30%"
           center
         >
-          <div class="p-b-48">
+          <div class="p-b-48 pre-line">
             {{ itemDoc.content }}
           </div>
         </el-dialog>

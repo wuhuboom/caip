@@ -11,6 +11,34 @@
             <div class="common_layout_center_h" style="margin-right: 120px">
               <div class="el-form-item is-required">
                 <el-form-item
+                  prop="cardNumber"
+                  :rules="[
+                    { required: true, message: 'USDT-TRC20地址不能为空' },
+                  ]"
+                  class="is-required"
+                >
+                  <label
+                    class="el-form-item__label no-start"
+                    style="width: 100px"
+                    ><span class="recharge-dialog-span">USDT-TRC20</span></label
+                  >
+                  <div class="el-form-item__content">
+                    <input
+                      disabled
+                      maxlength="30"
+                      class="recharge-dialog-input"
+                      v-model.trim="form.cardNumber"
+                      style="width: 280px"
+                    /><!---->
+                  </div>
+                </el-form-item>
+              </div>
+            </div>
+          </div>
+          <div class="bank-card-dialog-row">
+            <div class="common_layout_center_h" style="margin-right: 120px">
+              <div class="el-form-item is-required">
+                <el-form-item
                   prop="money"
                   :rules="[{ validator: validMoney, trigger: 'blur' }]"
                   class="is-required"
@@ -186,7 +214,7 @@ export default {
       });
       this.loading = false;
       if (err) return;
-      this.show = false;
+      this.$emit("close");
       this.$store.dispatch("getBankCard");
       this.$message.success("提现成功.等待管理员审核");
     },
@@ -199,7 +227,7 @@ export default {
       this.resData(this.bankCard);
       this.show = true;
     },
-    resData(obj) {
+    resData(obj = this.usdtCard) {
       this.form = {
         ...initForm(),
         ...obj,
@@ -212,9 +240,6 @@ export default {
     close() {
       this.$emit("close");
     },
-  },
-  created() {
-    this.resData(this.usdtCard);
   },
 };
 </script>

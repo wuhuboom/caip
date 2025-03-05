@@ -30,7 +30,7 @@
           </div>
         </div>
       </div>
-      <component :is="currentComponent" @close="close"></component>
+      <component ref="$cont" :is="currentComponent" @close="close"></component>
     </div>
   </div>
 </template>
@@ -123,7 +123,9 @@ export default {
       }
       this.curType = id;
       //curType = item.id
-      this.resData(id === 0 ? this.bankCard : this.usdtCard);
+      this.$nextTick(() => {
+        this.$refs.$cont.resData();
+      });
     },
     validMoney(rule, value, callback) {
       //金额为正整数
@@ -186,8 +188,11 @@ export default {
       });
       await this.$store.dispatch("getBankCard");
       this.$toast.clear();
-      this.resData(this.bankCard);
       this.show = true;
+      this.curType = 2;
+      this.$nextTick(() => {
+        this.$refs.$cont.resData();
+      });
     },
     resData(obj) {
       this.form = {

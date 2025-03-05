@@ -334,7 +334,7 @@ export default {
       });
       this.loading = false;
       if (err) return;
-      this.show = false;
+      this.$emit("close");
       this.$store.dispatch("getBankCard");
       this.$message.success("提现成功.等待管理员审核");
     },
@@ -347,7 +347,7 @@ export default {
       this.resData(this.bankCard);
       this.show = true;
     },
-    resData(obj) {
+    resData(obj = this.bankCard) {
       this.form = {
         ...initForm(),
         ...obj,
@@ -360,9 +360,6 @@ export default {
     close() {
       this.$emit("close");
     },
-  },
-  created() {
-    this.resData(this.usdtCard);
   },
 };
 </script>
