@@ -117,7 +117,7 @@
       <div class="item">
         支付密码
         <input
-          type="text"
+          type="password"
           class="input"
           placeholder="请输入支付密码"
           v-model.trim="form.payPwd"
