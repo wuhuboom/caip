@@ -320,24 +320,66 @@ export default {
       }
       this.$router.push("/recharge");
     },
-    comfire() {
-      this.$dialog
-        .confirm({
-          message: "请联系人工客服",
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          className: "confirm-no-tile-dialog",
-        })
-        .then(() => {
-          this.$store.dispatch("getServeData", 1);
-        })
-        .catch(() => {
-          // on cancel
-        });
+    comfire2() {
+      return new Promise((resolve) => {
+        this.$dialog
+          .confirm({
+            message: "请联系人工客服",
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            className: "confirm-no-tile-dialog",
+          })
+          .then(() => {
+            resolve(1);
+          })
+          .catch(() => {
+            resolve(0);
+          });
+      });
+    },
+    comfire(v = "请联系在线客服", bt = "确定") {
+      return new Promise((resolve) => {
+        this.$dialog
+          .alert({
+            message: v,
+            className: "online-serve-dialog",
+            theme: "round-button",
+            closeOnClickOverlay: true, // 允许点击背景关闭
+            confirmButtonText: bt,
+          })
+          .then(() => {
+            resolve(1);
+          })
+          .catch(() => {
+            resolve(0);
+          });
+      });
+    },
+    comfire3(v) {
+      return new Promise((resolve) => {
+        this.$dialog
+          .confirm({
+            message: v,
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            className: "confirm-no-tile-dialog",
+          })
+          .then(() => {
+            resolve(1);
+          })
+          .catch(() => {
+            resolve(0);
+          });
+      });
     },
     withdraw() {
       if (!this.bankCard.id) {
-        return this.openTipsDialog();
+        const status = this.comfire3(
+          "您好，您还未绑定提款银行卡，确定现在进行绑定银行卡？"
+        );
+        if (!status) return;
+        this.$router.push("/bindCard");
+        return;
       }
       if (this.paySet !== 1) {
         this.$toast.fail("请先设置支付密码");

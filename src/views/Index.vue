@@ -253,7 +253,7 @@ export default {
         this.$router.push("/recharge");
         return;
       }
-      const status = await this.comfire("请联系客服");
+      const status = await this.comfire("请联系在线客服", "在线客服");
       if (!status) return;
       this.$store.dispatch("getServeData", 1);
     },
@@ -263,12 +263,31 @@ export default {
       const index = Math.floor(Math.random() * len);
       return this.slideCatList[index].lotteryName;
     },
-    comfire(v) {
+    comfire(v = "请联系在线客服", bt = "确定") {
+      return new Promise((resolve) => {
+        this.$dialog
+          .alert({
+            message: v,
+            className: "online-serve-dialog",
+            theme: "round-button",
+            closeOnClickOverlay: true, // 允许点击背景关闭
+            confirmButtonText: bt,
+          })
+          .then(() => {
+            resolve(1);
+          })
+          .catch(() => {
+            resolve(0);
+          });
+      });
+    },
+    comfire2(v) {
       return new Promise((resolve) => {
         this.$dialog
           .confirm({
             message: v,
-            confirmButtonColor: "#3291FF",
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
             className: "confirm-no-tile-dialog",
           })
           .then(() => {
@@ -279,12 +298,9 @@ export default {
           });
       });
     },
-    withdraw() {
+    async withdraw() {
       if (!this.bankCard.id) {
-        const status = this.comfire(
-          "您好，您还未绑定提款银行卡，确定现在进行绑定银行卡？"
-        );
-        if (!status) return;
+        this.comfire2("您好，您还未绑定提款银行卡，确定现在进行绑定银行卡？");
         this.$router.push("/bindCard");
         return;
       }

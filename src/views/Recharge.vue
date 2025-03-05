@@ -217,13 +217,15 @@ export default {
       if (!this.rechargeList.length) return;
       this.chose(this.rechargeList[0].list[0]);
     },
-    comfire(v) {
+    comfire(v = "请联系在线客服") {
       return new Promise((resolve) => {
         this.$dialog
-          .confirm({
+          .alert({
             message: v,
-            confirmButtonColor: "#3291FF",
-            className: "confirm-no-tile-dialog",
+            className: "online-serve-dialog",
+            theme: "round-button",
+            closeOnClickOverlay: true, // 允许点击背景关闭
+            confirmButtonText: "在线客服",
           })
           .then(() => {
             resolve(1);
@@ -255,7 +257,7 @@ export default {
           err.data[0].msgKey === "rechargeUrlError"
         ) {
           this.$toast.clear();
-          const status = await this.comfire("联系客服");
+          const status = await this.comfire();
           if (!status) return;
           this.$store.dispatch("getServeData", 1);
         }
