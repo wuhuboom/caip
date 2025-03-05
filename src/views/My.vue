@@ -308,6 +308,7 @@ export default {
             message: "请联系人工客服",
             confirmButtonText: "确定",
             cancelButtonText: "取消",
+            className: "confirm-no-tile-dialog",
           })
           .then(() => {
             this.$store.dispatch("getServeData", 1);

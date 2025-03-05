@@ -160,6 +160,7 @@ export default {
             .confirm({
               message: "连接已断开，是否刷新页面？",
               confirmButtonColor: "#3291FF",
+              className: "confirm-no-tile-dialog",
             })
             .then(() => {
               location.reload();

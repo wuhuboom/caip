@@ -37,6 +37,7 @@ export default {
         message: "真实姓名和身份证号码绑定后不可更改。虚假身份证信息将无法提款",
         confirmButtonText: "绑定",
         cancelButtonText: "取消",
+        className: "confirm-no-tile-dialog",
       })
         .then(() => {
           // on confirm

@@ -316,6 +316,7 @@ export default {
           .confirm({
             message: v,
             confirmButtonColor: "#3291FF",
+            className: "confirm-no-tile-dialog",
           })
           .then(() => {
             resolve(1);
