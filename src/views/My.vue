@@ -319,6 +319,21 @@ export default {
       }
       this.$router.push("/recharge");
     },
+    comfire() {
+      this.$dialog
+        .confirm({
+          message: "请联系人工客服",
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          className: "confirm-no-tile-dialog",
+        })
+        .then(() => {
+          this.$store.dispatch("getServeData", 1);
+        })
+        .catch(() => {
+          // on cancel
+        });
+    },
     withdraw() {
       if (!this.bankCard.id) {
         return this.openTipsDialog();
@@ -332,7 +347,12 @@ export default {
     },
   },
   async created() {
-    this.$store.dispatch("getPaySet");
+    this.$toast.loading({
+      duration: 0,
+      forbidClick: true,
+    });
+    await this.$store.dispatch("getPaySet");
+    this.$toast.clear();
     this.$store.dispatch("getBankCard");
     await this.$store.dispatch("getInfo");
   },

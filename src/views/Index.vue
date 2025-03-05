@@ -55,11 +55,11 @@
       <ul class="my-nav flex-wrap">
         <li class="flex-column center-center m-r-32" @click="recharge">
           <img class="d-img m-b-8" src="@/assets/img/icon-idx2.png" alt="" />
-          <p>存款</p>
+          <p>充值</p>
         </li>
         <li class="flex-column center-center" @click="withdraw">
           <img class="d-img m-b-8" src="@/assets/img/icon-idx1.png" alt="" />
-          <p>取款</p>
+          <p>提现</p>
         </li>
       </ul>
     </div>

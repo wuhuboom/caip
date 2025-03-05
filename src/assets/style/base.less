@@ -580,3 +580,32 @@
 .underline {
   text-decoration: underline;
 }
+
+.confirm-custom-commome {
+  width: 560px;
+  height: 322px;
+  background: #FFFFFF;
+  border-radius: 6px 6px 6px 6px;
+
+  [class*="van-hairline"]::after {
+    border-color: #E5E5E5;
+  }
+
+  .van-dialog__confirm,
+  .van-dialog__confirm:active {
+    color: #3291FF
+  }
+}
+
+.confirm-custom-dialog {
+  .confirm-custom-commome;
+}
+
+.confirm-no-tile-dialog {
+  .confirm-custom-commome;
+
+  .van-dialog__message {
+    font-size: 36px;
+    color: #333333;
+  }
+}
