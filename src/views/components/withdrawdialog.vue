@@ -1,43 +1,54 @@
 <template>
-  <div v-if="show" style="z-index: 999">
-    <div class="cp-popup-mask"></div>
-    <div class="cp-popup-main" style="width: 900px; height: 520px; z-index: 9">
-      <div class="cp-popup-title">
-        <div class="cp-popup-title-content">
-          <div style="color: rgb(230, 162, 60)">提现申请</div>
-          <i class="el-icon-close" @click="close" style="cursor: pointer"></i>
+  <div>
+    <div v-if="show" style="z-index: 999">
+      <div class="cp-popup-mask"></div>
+      <div
+        class="cp-popup-main"
+        style="width: 900px; height: 520px; z-index: 9"
+      >
+        <div class="cp-popup-title">
+          <div class="cp-popup-title-content">
+            <div style="color: rgb(230, 162, 60)">提现申请</div>
+            <i class="el-icon-close" @click="close" style="cursor: pointer"></i>
+          </div>
         </div>
-      </div>
-      <div class="bank-card-dialog-row m-b-16" style="margin-top: 30px">
-        <div class="align-center">
-          <label class="el-form-item__label no-start" style="width: 100px">
-            <span class="recharge-dialog-span"> 提现方式</span>
-          </label>
+        <div class="bank-card-dialog-row m-b-16" style="margin-top: 30px">
           <div class="align-center">
-            <div
-              class="cp-button-main m-t-0 m-b-0 m-r-16"
-              v-for="(item, index) in typelist"
-              :class="
-                curType === item.id
-                  ? 'cp-popup-button'
-                  : 'cp-popup-button-cancel'
-              "
-              :key="index"
-              @click="changType(item.id)"
-            >
-              {{ item.name }}
+            <label class="el-form-item__label no-start" style="width: 100px">
+              <span class="recharge-dialog-span"> 提现方式</span>
+            </label>
+            <div class="align-center">
+              <div
+                class="cp-button-main m-t-0 m-b-0 m-r-16"
+                v-for="(item, index) in typelist"
+                :class="
+                  curType === item.id
+                    ? 'cp-popup-button'
+                    : 'cp-popup-button-cancel'
+                "
+                :key="index"
+                @click="changType(item.id)"
+              >
+                {{ item.name }}
+              </div>
             </div>
           </div>
         </div>
+        <component
+          ref="$cont"
+          :is="currentComponent"
+          @close="close"
+        ></component>
       </div>
-      <component ref="$cont" :is="currentComponent" @close="close"></component>
     </div>
+    <addUsdt ref="addUsdt" />
   </div>
 </template>
 <script>
 import userApi from "@/api/user";
 import bindBank from "@/views/components/bindBank.vue";
 import bindUsdt from "@/views/components/bindUsdt.vue";
+import addUsdt from "@/views/game/components/bindUsdt.vue";
 // usdtId: this.typeValue,
 // type: this.chooseRecType.type,
 // money: +this.amount,
@@ -74,6 +85,7 @@ export default {
   components: {
     bindBank,
     bindUsdt,
+    addUsdt,
   },
   computed: {
     currentComponent() {
@@ -114,10 +126,20 @@ export default {
     usdtCard() {
       return this.Cards.find((v) => +v.ctype === 3) || {};
     },
+    //支付宝
+    alipayCard() {
+      return this.Cards.find((v) => +v.ctype === 0) || {};
+    },
+    //微信
+    wechatCard() {
+      return this.Cards.find((v) => +v.ctype === 1) || {};
+    },
   },
   methods: {
     changType(id) {
-      if (!this.usdtCard.id && id === 1) {
+      if (!this.usdtCard.id && id === 3) {
+        this.close();
+        this.$refs.addUsdt.open();
         this.$message.error("请先绑定USDT地址");
         return;
       }

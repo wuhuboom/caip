@@ -109,6 +109,7 @@
     <bindPassWrod ref="$bindPassWrod" />
     <RechargeDialog ref="$RechargeDialog" />
     <withdrawdialog ref="$withdrawdialog" />
+    <bindUsdt ref="$bindUsdt" />
   </div>
 </template>
 
@@ -117,6 +118,7 @@ import RechargeDialog from "@/views/components/RechargeDialog.vue";
 import withdrawdialog from "@/views/components/withdrawdialog.vue";
 import bindCard from "@/views/game/components/bindCard.vue";
 import bindPassWrod from "@/views/game/components/bindPassWrod.vue";
+import bindUsdt from "@/views/game/components/bindUsdt.vue";
 export default {
   name: "InfoMain",
   data() {
@@ -135,6 +137,7 @@ export default {
     RechargeDialog,
     withdrawdialog,
     bindPassWrod,
+    bindUsdt,
   },
   computed: {
     paySet() {
@@ -160,6 +163,27 @@ export default {
     },
   },
   methods: {
+    bindPay(v) {
+      alert(v);
+      console.log(v, "--");
+      //v 0支付宝 1微信 2银行卡 3USDT
+      switch (v) {
+        case 0:
+          this.$refs.$bindAlipay.show = true;
+          break;
+        case 1:
+          this.$refs.$bindWechat.show = true;
+          break;
+        case 2:
+          this.$refs.bindCard.show = true;
+          break;
+        case 3:
+          this.$refs.$bindUsdt.open();
+          break;
+        default:
+          break;
+      }
+    },
     windth() {
       if (this.bankCard.id) {
         if (this.paySet !== 1) {

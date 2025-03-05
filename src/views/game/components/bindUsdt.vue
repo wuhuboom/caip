@@ -53,28 +53,8 @@
                     class="recharge-dialog-input"
                     style="width: 400px"
                     autocomplete="new-password"
+                    type="password"
                     v-model.trim="form.payPwd"
-                  /><!---->
-                </div>
-              </el-form-item>
-              <el-form-item
-                prop="identity"
-                :rules="[
-                  { required: true, message: '身份证不能为空' },
-                  { validator: idCardValidator, trigger: 'blur' },
-                ]"
-                class="is-required"
-              >
-                <label class="el-form-item__label" style="width: 200px">
-                  <span class="recharge-dialog-span">身份证：</span>
-                </label>
-                <div class="el-form-item__content">
-                  <input
-                    maxlength="30"
-                    class="recharge-dialog-input"
-                    style="width: 400px"
-                    autocomplete="new-password"
-                    v-model.trim="form.identity"
                   /><!---->
                 </div>
               </el-form-item>
@@ -156,6 +136,7 @@ export default {
       if (err) return;
       this.show = false;
       this.$store.dispatch("getBankCard");
+      this.$message.success("操作成功");
     },
     open() {
       this.form = initForm();

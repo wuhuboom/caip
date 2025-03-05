@@ -319,6 +319,14 @@ export default {
     usdtCard() {
       return this.Cards.find((v) => +v.ctype === 3) || {};
     },
+    //支付宝
+    alipayCard() {
+      return this.Cards.find((v) => +v.ctype === 0) || {};
+    },
+    //微信
+    wechatCard() {
+      return this.Cards.find((v) => +v.ctype === 1) || {};
+    },
   },
   methods: {
     changType(id) {
