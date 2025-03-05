@@ -4,49 +4,52 @@
     title="充值"
     :visible.sync="show"
     append-to-body
-    width="510px"
+    width="565px"
   >
     <div class="contDialog">
-      <ul class="center-center nav font14">
+      <ul class="flex-wrap cat-list font14">
         <li
-          class="flex-1 center-center"
-          :class="{ active: +item.id === id }"
-          v-for="item in navs"
-          :key="item.id"
-          @click="changeId(item.id)"
+          class="align-center m-r-16 m-b-16"
+          :class="{ active: item.name === catName }"
+          v-for="(item, index) in rechargeList"
+          :key="index"
+          @click="chose(item.list[0])"
         >
+          <img :src="findIcon(+item.ctype) || dMoney" class="d-img" />
           {{ item.name }}
         </li>
       </ul>
-      <div v-if="id === 0">
+      <div>
         <div class="align-center">
           <div class="nav-left m-t-12">
             <p class="nav-left-tip center-center">通道列表</p>
             <ul>
               <li
                 class="p-x-8 center-center"
-                v-for="item in rechargeList"
+                v-for="item in payList"
                 :key="item.id"
                 :class="{ active: +item.id === +chooseRecType.id }"
                 @click="chose(item)"
               >
-                {{ item.name }}
+                {{ showTxt(item) }}
               </li>
             </ul>
           </div>
           <div class="flex-1 rit center-center">
             <ul>
-              <li v-if="chooseRecType.minMax">
+              <li v-if="minMax">
                 金额区间:
-                <span>{{
-                  `${chooseRecType.minMax ? chooseRecType.minMax : ""}`
-                }}</span>
+                <span
+                  >{{ minMax[0] }}{{ chooseRecType.currencySymbol }},{{
+                    minMax[1]
+                  }}{{ chooseRecType.currencySymbol }}</span
+                >
               </li>
               <li class="center-center m-t-20 m-b-16 m-r-16">
                 充值金额:
                 <el-input
                   class="enter-money m-l-12"
-                  v-model.trim="money"
+                  v-model.trim="amount"
                   @blur="changeMoney"
                 ></el-input>
               </li>
@@ -67,75 +70,23 @@
           </li>
         </ul>
       </div>
-      <div v-else>
-        <ul class="p-t-24">
-          <li class="m-b-16">币种: tcr20-usdt</li>
-          <li class="align-start m-b-16">
-            充值数量(usdt):
-            <div>
-              <div class="align-center">
-                <el-input
-                  class="enter-money m-l-12 no-grow"
-                  v-model.trim="money"
-                  @blur="changeMoney"
-                ></el-input>
-                <span class="m-l-12">U</span>
-              </div>
-              <div class="m-t-8 font12" v-if="uMinMax">
-                <p class="m-b-4">
-                  单笔充值限额:最低{{ uMinMax[0] }}个，最高{{ uMinMax[1] }}个
-                </p>
-                <p>每天充值限额:15000个</p>
-              </div>
-            </div>
-          </li>
-          <li class="m-b-16">
-            实时汇率:<span class="m-l-12 yellow">1U={{ usdtPay.rate }}元</span>
-          </li>
-          <li class="m-b-16">
-            预计到账:<span class="m-l-12">{{ total }}元</span>
-          </li>
-          <li class="m-b-16 center-center">
-            <p class="next center-center" @click="onSubmit">下一步</p>
-          </li>
-          <li class="font12">
-            <p class="m-b-8">
-              1、请确认转U过程中U数量一致并且币种相同，否则无法自动到账
-            </p>
-            <p class="m-b-8">
-              2、请在有效期时间内完成转币，超过转账时间请勿转账。
-            </p>
-            <p class="m-b-8">
-              3、若您首次使用USDT充值，请查看U充值教程或联系在线客服。
-            </p>
-          </li>
-        </ul>
-      </div>
     </div>
   </el-dialog>
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
 import userApi from "@/api/user";
+import dMoney from "@/assets/img/d-money.png";
 export default {
+  name: "AppRecharge",
   data() {
     return {
       show: false,
-      navs: [
-        {
-          name: "在线充值",
-          id: 0,
-        },
-        {
-          name: "USDT快充",
-          id: 1,
-        },
-      ],
-      id: 0,
+      dMoney,
+      amount: "",
+      catName: "",
       rechargeList: [],
       chooseRecType: {},
-      money: "",
       rechargeInstructions: [
         "请使用手机银行APP进行充值。",
         "每次充值都需要进入充值通道获取相应的银行卡号和充值金额，切勿直接转账。",
@@ -144,87 +95,132 @@ export default {
         "转账金额必须与充值所获取的金额一致，切勿转入错误金额。",
         "转账成功30分钟如还未到账，请联系客服提供相关证明，如48小时内未反应，客服将不再受理。如未按照以上规定导致充值未到账的会员，后果将由本人承担。",
       ],
-      loading: false,
-      usdtPay: {},
+      icons: [
+        {
+          ctype: 0,
+          icon: require("@/assets/img/bank/ctype0.png"),
+          name: "支付宝",
+        },
+        {
+          ctype: 1,
+          icon: require("@/assets/img/bank/ctype1.png"),
+          name: "微信",
+        },
+        {
+          ctype: 2,
+          icon: require("@/assets/img/bank/ctype2.png"),
+          name: "银行卡",
+        },
+        {
+          ctype: 3,
+          icon: require("@/assets/img/bank/ctype3.png"),
+          name: "USDT",
+        },
+        {
+          ctype: 4,
+          icon: require("@/assets/img/bank/ctype4.png"),
+          name: "数字货币",
+        },
+        {
+          ctype: 5,
+          icon: require("@/assets/img/bank/ctype5.png"),
+          name: "快捷支付",
+        },
+        {
+          ctype: 6,
+          icon: require("@/assets/img/bank/ctype6.png"),
+          name: "数字人民币",
+        },
+        {
+          ctype: 7,
+          icon: require("@/assets/img/bank/ctype7.png"),
+          name: "QQ钱包",
+        },
+        {
+          ctype: 8,
+          icon: require("@/assets/img/bank/ctype8.png"),
+          name: "云闪付",
+        },
+        {
+          ctype: 9,
+          icon: require("@/assets/img/bank/ctype9.png"),
+          name: "银联钱包",
+        },
+      ],
     };
   },
   computed: {
-    minMax() {
-      if (this.id === 1) {
-        return this.uMinMax;
+    user() {
+      return this.$store.state.user;
+    },
+    quickAmountList() {
+      if (this.chooseRecType.fast) {
+        return this.chooseRecType.fast.split("-");
       }
+      return [];
+    },
+    minMax() {
       if (!this.chooseRecType.minMax) return "";
       return this.chooseRecType.minMax.split("-").map((v) => +v);
     },
-    uMinMax() {
-      if (!this.usdtPay.minMax) return "";
-      return this.usdtPay.minMax.split("-").map((v) => +v);
-    },
-    total() {
-      if (this.money) {
-        return (this.money * this.usdtPay.rate).toFixed(2);
-      }
-      return "";
+    payList() {
+      return (
+        this.rechargeList.find((item) => item.name === this.catName)?.list || []
+      );
     },
   },
   methods: {
-    async onSubmit() {
-      if (!this.money) {
-        this.$message.error("请输入金额");
-        return;
-      }
-      if (this.minMax.length) {
-        if (this.money < this.minMax[0] || this.money > this.minMax[1]) {
-          this.$message.error(`金额在${this.minMax[0]}-${this.minMax[1]}之间`);
-          return;
-        }
-      }
-      this.loading = true;
-      const [err, res] = await userApi.rechargeOrder({
-        payId: this.id === 0 ? this.chooseRecType.id : this.usdtPay.id,
-        money: +this.money,
-      });
-      this.loading = false;
-      if (err) {
-        if (
-          Array.isArray(err?.data) &&
-          err.data[0].msgKey === "rechargeUrlError"
-        ) {
-          const status = await this.comfire();
-          if (!status) return;
-          this.$store.dispatch("getServeData", 1);
-        }
-        return;
-      }
-      if (res.data.UrlAddress) {
-        window.location.href = res.data.UrlAddress;
-      }
-    },
     changeMoney() {
-      this.money = this.money.replace(/[^\d]/g, "");
-      if (this.money) {
-        this.money = parseInt(this.money);
+      this.amount = this.amount.replace(/[^\d]/g, "");
+      if (this.amount) {
+        this.amount = parseInt(this.amount);
         return;
       }
-      this.money = "";
+      this.amount = "";
+    },
+    findIcon(ctype) {
+      return this.icons.find((v) => v.ctype === ctype)?.icon;
+    },
+    showTxt(item) {
+      if (item.minMax) {
+        const arr = item.minMax.split("-");
+        return `${item.name}(${arr[0]}${item.currencySymbol}-${arr[1]}${item.currencySymbol})`;
+      }
+      return item.name;
     },
     chose(item) {
+      this.amount = "";
       if (!item) return;
+      this.catName = item.catName;
       for (let k in item) {
         this.$set(this.chooseRecType, k, item[k]);
       }
-      //this.amount = this.chooseRecType.def;
+      if (this.quickAmountList.length) {
+        this.amount = this.quickAmountList[0];
+      } else if (this.minMax.length) {
+        this.amount = this.minMax[0];
+      }
     },
-    comfire(v = "请联系人工客服") {
+    async recharge() {
+      const [err, res] = await userApi.recharge();
+      if (err) return;
+      this.rechargeList = res.data?.filter((item) => item?.list?.length);
+      this.rechargeList.forEach((item) => {
+        item.list.forEach((v) => {
+          v.catName = item.name;
+        });
+      });
+      if (!this.rechargeList.length) return;
+      this.chose(this.rechargeList[0].list[0]);
+    },
+    comfire(v = "请联系客服") {
       return new Promise((resolve) => {
         this.$confirm(v, "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning",
           customClass: "g-confirm-box",
         })
           .then(() => {
-            this.$store.dispatch("getServeData", 1);
             resolve(1);
           })
           .catch(() => {
@@ -232,53 +228,47 @@ export default {
           });
       });
     },
-    async recharge() {
-      this.$toast.loading({
-        duration: 0,
-        forbidClick: true,
-      });
-      const [err, res] = await userApi.recharge();
-      if (err) return;
-      this.$toast.clear();
-      if (!res.data || !res.data.length) {
-        this.comfire();
-        setTimeout(() => {
-          this.show = false;
-        }, 0);
+    async onSubmit() {
+      if (!this.amount) {
+        this.$message.error("请输入金额");
         return;
       }
-      const list = [];
-      res.data.forEach((v) => {
-        if (v.list) {
-          const arr = v.list.map((item) => {
-            return {
-              ...item,
-              name: item.name.includes(v.name)
-                ? item.name
-                : `${v.name}-${item.name}`,
-            };
-          });
-          list.push(...arr);
+      if (this.minMax.length) {
+        if (this.amount < this.minMax[0] || this.amount > this.minMax[1]) {
+          this.$message.error(`金额在${this.minMax[0]}-${this.minMax[1]}之间`);
+          return;
         }
+      }
+      this.$toast.loading({ duration: 0 });
+      const [err, res] = await userApi.rechargeOrder({
+        payId: this.chooseRecType.id,
+        money: this.amount * 1,
       });
-      this.rechargeList = list.filter((item) => +item.type !== 3);
-      this.usdtPay = list.find((item) => +item.type === 3) || {};
-      if (!this.rechargeList.length) return;
-      this.chose(this.rechargeList[0]);
-    },
-    changeId(id) {
-      if (+id === 1 && !this.usdtPay.id) {
-        this.$message.error("暂未开放");
+      if (err) {
+        this.$toast.clear();
+        if (
+          Array.isArray(err?.data) &&
+          err.data[0].msgKey === "rechargeUrlError"
+        ) {
+          this.$toast.clear();
+          const status = await this.comfire();
+          if (!status) return;
+          this.$store.dispatch("getServeData", 1);
+        }
         return;
       }
-      this.money = "";
-      this.id = id;
+      this.$toast.clear();
+      if (res.data.UrlAddress) {
+        window.location.href = res.data.UrlAddress;
+      }
     },
-    async open(id = 0) {
+    async open() {
       await this.recharge();
       this.show = true;
-      this.id = id;
     },
+  },
+  created() {
+    this.$store.dispatch("getInfo");
   },
 };
 </script>
@@ -370,6 +360,25 @@ export default {
     }
   }
 }
-.nav-left {
+.cat-list {
+  & > li {
+    width: 119px;
+    height: 37px;
+    background: #32160b;
+    border-radius: 0px 0px 0px 0px;
+    border: 1px solid #bf855d;
+    //每行的第四个不需要右间距
+    img {
+      width: 23px;
+      height: 23px;
+      margin: 0 12px;
+    }
+    &:nth-child(4n) {
+      margin-right: 0 !important;
+    }
+    &.active {
+      background: #8c2e2f;
+    }
+  }
 }
 </style>

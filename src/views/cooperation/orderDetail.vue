@@ -679,6 +679,10 @@ export default {
       });
     },
     async shareToChatRoom() {
+      if (+this.detail.shareDisabled === 0) {
+        this.$message.error("分享已禁用");
+        return;
+      }
       if (this.detail.status !== 0) {
         this.$message.error("合买已结束，无法分享");
         return;
