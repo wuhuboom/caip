@@ -1,62 +1,103 @@
 <template>
   <div>
-    <div v-if="show" style="z-index: 999">
-      <div class="cp-popup-mask"></div>
-      <div
-        class="cp-popup-main"
-        style="width: 900px; height: 520px; z-index: 9"
-      >
-        <div class="cp-popup-title">
-          <div class="cp-popup-title-content">
-            <div style="color: rgb(230, 162, 60)">提现申请</div>
-            <i class="el-icon-close" @click="close" style="cursor: pointer"></i>
-          </div>
-        </div>
-        <div class="bank-card-dialog-row m-b-16" style="margin-top: 30px">
-          <div class="align-center">
-            <label class="el-form-item__label no-start" style="width: 100px">
-              <span class="recharge-dialog-span"> 提现方式</span>
-            </label>
-            <div class="align-center">
-              <div
-                class="cp-button-main m-t-0 m-b-0 m-r-16"
-                v-for="(item, index) in typelist"
-                :class="
-                  curType === item.id
-                    ? 'cp-popup-button'
-                    : 'cp-popup-button-cancel'
-                "
-                :key="index"
-                @click="changType(item.id)"
-              >
-                {{ item.name }}
+    <div class="cp-popup-body" style="width: 900px">
+      <div class="cp-popup-body-content">
+        <el-form
+          :model="form"
+          ref="numberValidateForm"
+          class="el-form el-form--label-right el-form--inline"
+        >
+          <div class="bank-card-dialog-row">
+            <div class="common_layout_center_h" style="margin-right: 120px">
+              <div class="el-form-item is-required">
+                <el-form-item
+                  prop="cardNumber"
+                  :rules="[{ required: true, message: '支付宝账号不能为空' }]"
+                  class="is-required"
+                >
+                  <label
+                    class="el-form-item__label no-start"
+                    style="width: 100px"
+                    ><span class="recharge-dialog-span">支付宝账号</span></label
+                  >
+                  <div class="el-form-item__content">
+                    <input
+                      disabled
+                      maxlength="30"
+                      class="recharge-dialog-input"
+                      v-model.trim="form.cardNumber"
+                      style="width: 280px"
+                    /><!---->
+                  </div>
+                </el-form-item>
               </div>
             </div>
           </div>
-        </div>
-        <component
-          ref="$cont"
-          :is="currentComponent"
-          @close="close"
-        ></component>
+          <div class="bank-card-dialog-row">
+            <div class="common_layout_center_h" style="margin-right: 120px">
+              <div class="el-form-item is-required">
+                <el-form-item
+                  prop="money"
+                  :rules="[{ validator: validMoney, trigger: 'blur' }]"
+                  class="is-required"
+                >
+                  <label class="el-form-item__label" style="width: 100px"
+                    ><span class="recharge-dialog-span">提现金额</span></label
+                  >
+                  <div class="el-form-item__content">
+                    <input
+                      maxlength="30"
+                      class="recharge-dialog-input"
+                      v-model.trim="form.money"
+                    /><!---->
+                  </div>
+                </el-form-item>
+              </div>
+            </div>
+            <div class="common_layout_center_h">
+              <el-form-item
+                prop="payPwd"
+                :rules="[{ required: true, message: '请输入支付密码' }]"
+                class="is-required"
+              >
+                <label class="el-form-item__label" style="width: 100px"
+                  ><span class="recharge-dialog-span">支付密码</span></label
+                >
+                <div class="el-form-item__content">
+                  <input
+                    maxlength="30"
+                    type="password"
+                    class="recharge-dialog-input"
+                    v-model.trim="form.payPwd"
+                  /><!---->
+                </div>
+              </el-form-item>
+            </div>
+          </div>
+        </el-form>
+        <p>每日只可以提现三次,提现手续费为0.</p>
       </div>
     </div>
-    <addUsdt ref="addUsdt" />
-    <addAlipay ref="addAlipay" />
+    <div class="center-center">
+      <div
+        class="cp-button-main cp-popup-button"
+        @click="submitForm('numberValidateForm')"
+        v-loading="loading"
+        style="margin-right: 50px"
+      >
+        <!---->
+        确定
+      </div>
+      <div class="cp-button-main cp-popup-button-cancel" @click="close">
+        <!---->
+        取消
+      </div>
+    </div>
   </div>
 </template>
+
 <script>
 import userApi from "@/api/user";
-import addAlipay from "@/views/components/addAlipay.vue";
-import bindAlipay from "@/views/components/bindAlipay.vue";
-import bindBank from "@/views/components/bindBank.vue";
-import bindUsdt from "@/views/components/bindUsdt.vue";
-import addUsdt from "@/views/game/components/bindUsdt.vue";
-// usdtId: this.typeValue,
-// type: this.chooseRecType.type,
-// money: +this.amount,
-// payPwd: this.form.password,
-// code: this.form.vercode,
 const initForm = () => {
   return {
     ctype: 2,
@@ -85,29 +126,7 @@ export default {
       //statusCheck 0待审核1通过2拒绝
     };
   },
-  components: {
-    bindBank,
-    bindUsdt,
-    addUsdt,
-    addAlipay,
-    bindAlipay,
-  },
   computed: {
-    currentComponent() {
-      //return this.curType === 2 ? "bindBank" : "bindUsdt";
-      switch (this.curType) {
-        case 0:
-          return "bindAlipay";
-        case 1:
-          return "bindWechat";
-        case 2:
-          return "bindBank";
-        case 3:
-          return "bindUsdt";
-        default:
-          return "bindBank";
-      }
-    },
     statusCheck() {
       return [
         { name: `您的${this.bankTxt}还在审核中,清审核通过再提现`, id: 0 },
@@ -142,23 +161,13 @@ export default {
   },
   methods: {
     changType(id) {
-      if (!this.usdtCard.id && id === 3) {
-        this.close();
-        this.$refs.addUsdt.open();
+      if (!this.usdtCard.id && id === 1) {
         this.$message.error("请先绑定USDT地址");
-        return;
-      }
-      if (!this.alipayCard.id && id === 0) {
-        this.$refs.addAlipay.open();
-        this.close();
-        this.$message.error("请先绑定支付宝");
         return;
       }
       this.curType = id;
       //curType = item.id
-      this.$nextTick(() => {
-        this.$refs.$cont.resData();
-      });
+      this.resData(id === 0 ? this.bankCard : this.usdtCard);
     },
     validMoney(rule, value, callback) {
       //金额为正整数
@@ -211,7 +220,7 @@ export default {
       });
       this.loading = false;
       if (err) return;
-      this.show = false;
+      this.$emit("close");
       this.$store.dispatch("getBankCard");
       this.$message.success("提现成功.等待管理员审核");
     },
@@ -221,13 +230,10 @@ export default {
       });
       await this.$store.dispatch("getBankCard");
       this.$toast.clear();
+      this.resData(this.bankCard);
       this.show = true;
-      this.curType = 2;
-      this.$nextTick(() => {
-        this.$refs.$cont.resData();
-      });
     },
-    resData(obj) {
+    resData(obj = this.alipayCard) {
       this.form = {
         ...initForm(),
         ...obj,
@@ -238,30 +244,9 @@ export default {
       };
     },
     close() {
-      this.show = false;
+      this.$emit("close");
     },
   },
 };
 </script>
-<style lang="scss" scoped>
-.recharge-dialog-input {
-  text-align: left;
-  padding-left: 4px;
-}
-.el-form-item__label::before {
-  content: "*";
-  color: rgb(245, 108, 108);
-  margin-right: 4px;
-  margin-left: 4px;
-}
-.no-start {
-  &:before {
-    display: none;
-  }
-}
-::v-deep {
-  .el-form-item__error {
-    left: 100px;
-  }
-}
-</style>
+<style scoped lang="scss"></style>
