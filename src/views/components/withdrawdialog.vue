@@ -143,6 +143,11 @@ export default {
         this.$message.error("请先绑定USDT地址");
         return;
       }
+      if (!this.alipayCard.id && id === 0) {
+        this.$refs.addAlipaY.open();
+        this.$message.error("请先绑定支付宝");
+        return;
+      }
       this.curType = id;
       //curType = item.id
       this.$nextTick(() => {
