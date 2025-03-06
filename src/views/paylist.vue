@@ -41,7 +41,7 @@
       <div class="bd-box">
         <div
           class="lists"
-          v-if="!bankCard.id"
+          v-if="!bankCard.id && typeList.includes(2)"
           @click="$router.push('/edtMyCard')"
         >
           <div class="left">
@@ -54,7 +54,7 @@
         </div>
         <div
           class="lists"
-          v-if="!usdtCard.id"
+          v-if="!usdtCard.id && typeList.includes(3)"
           @click="$router.push('/bindUsdt')"
         >
           <div class="left">
@@ -67,7 +67,7 @@
         </div>
         <div
           class="lists"
-          v-if="!wechatCard.id"
+          v-if="!wechatCard.id && typeList.includes(1)"
           @click="$router.push('/bindWebchat')"
         >
           <div class="left">
@@ -80,7 +80,7 @@
         </div>
         <div
           class="lists"
-          v-if="!alipayCard.id"
+          v-if="!alipayCard.id && typeList.includes(0)"
           @click="$router.push('/bindAlipay')"
         >
           <div class="left">
@@ -155,8 +155,11 @@ export default {
     user() {
       return this.$store.state.user;
     },
+    typeList() {
+      return this.$store.state.bankCard.map((v) => v.ctype);
+    },
     Cards() {
-      return this.$store.state.bankCard;
+      return this.$store.state.bankCard.filter((v) => v.createdAt);
     },
     bankCard() {
       const doc = this.Cards.find((v) => +v.ctype === 2) || {};
