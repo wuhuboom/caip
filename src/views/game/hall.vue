@@ -1228,6 +1228,15 @@ export default {
       if (this.tableList.length === 0) return;
       this.openDiag();
     },
+    async lazyGetUser() {
+      this.$toast.loading({
+        duration: 0,
+        forbidClick: true,
+      });
+      await this.sleep(1.5);
+      await this.$store.dispatch("getInfo");
+      this.$toast.clear();
+    },
     async sure() {
       if (this.loading) return;
       let dataStr = "";
@@ -1266,6 +1275,7 @@ export default {
         duration: 2000,
         showClose: true,
       });
+      this.lazyGetUser();
     },
     async lotteryBetsRes(v) {
       const params = {
@@ -1290,6 +1300,7 @@ export default {
         duration: 2000,
         showClose: true,
       });
+      this.lazyGetUser();
     },
     comfire(v) {
       return new Promise((resolve) => {
@@ -1343,6 +1354,7 @@ export default {
         duration: 2000,
         showClose: true,
       });
+      this.lazyGetUser();
     },
     multipleInupt(v) {
       console.log(v);
