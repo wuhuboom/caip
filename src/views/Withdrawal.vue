@@ -222,6 +222,10 @@ export default {
     wechatCard() {
       return this.Cards.find((v) => +v.ctype === 1) || {};
     },
+    minMax() {
+      if (!this.form.minMax) return "";
+      return this.form.minMax.split("-").map((v) => +v);
+    },
   },
   methods: {
     resData(obj) {
@@ -256,12 +260,21 @@ export default {
         ...this.form,
       });
       if (err) return;
-      this.$toast.clear();
-      this.$store.dispatch("getBankCard");
+      await this.lazyGetUser();
       this.$toast.success("提现成功.等待管理员审核");
       this.$router.back();
     },
+    async lazyGetUser() {
+      this.$toast.loading({
+        duration: 0,
+        forbidClick: true,
+      });
+      await this.sleep(1500);
+      await this.$store.dispatch("getInfo");
+      this.$toast.clear();
+    },
   },
+
   async created() {
     this.$store.dispatch("getInfo");
     this.$toast.loading({ duration: 0 });

@@ -373,7 +373,7 @@ export default {
       });
     },
     async withdraw() {
-      if (!this.bankCard.id) {
+      if (!this.Cards.length) {
         const status = await this.comfire3(
           "您好，您还未绑定提款方式，确定现在进行绑定？"
         );

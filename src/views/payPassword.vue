@@ -78,12 +78,22 @@ export default {
     async getCode() {
       await userApi.phoneCode();
     },
+    async lazyGetUser() {
+      this.$toast.loading({
+        duration: 0,
+        forbidClick: true,
+      });
+      await this.sleep(1500);
+      await this.$store.dispatch("getInfo");
+      this.$toast.clear();
+    },
     async confirm() {
       if (this.loading) return;
       this.loading = true;
       const [err] = await userApi.editPwdPay(this.form);
       this.loading = false;
       if (err) return;
+      await this.lazyGetUser();
       this.$toast.success("支付密码设置成功");
       this.$router.back();
     },
