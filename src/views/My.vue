@@ -372,13 +372,13 @@ export default {
           });
       });
     },
-    withdraw() {
+    async withdraw() {
       if (!this.bankCard.id) {
-        const status = this.comfire3(
-          "您好，您还未绑定提款银行卡，确定现在进行绑定银行卡？"
+        const status = await this.comfire3(
+          "您好，您还未绑定提款方式，确定现在进行绑定？"
         );
         if (!status) return;
-        this.$router.push("/bindCard");
+        this.$router.push("/paylist");
         return;
       }
       if (this.paySet !== 1) {
@@ -394,9 +394,11 @@ export default {
       duration: 0,
       forbidClick: true,
     });
-    await this.$store.dispatch("getPaySet");
+    await Promise.all([
+      this.$store.dispatch("getPaySet"),
+      this.$store.dispatch("getBankCard"),
+    ]);
     this.$toast.clear();
-    this.$store.dispatch("getBankCard");
     await this.$store.dispatch("getInfo");
   },
 };

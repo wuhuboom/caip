@@ -276,6 +276,13 @@ const routes = [
     },
   },
   {
+    path: "/paylist",
+    name: "AppPaylist",
+    components: {
+      default: () => import("@/views/paylist.vue"),
+    },
+  },
+  {
     path: "/bank-card",
     name: "BankCard",
     components: {

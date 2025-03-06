@@ -58,8 +58,13 @@
           <p>充值</p>
         </li>
         <li class="flex-column center-center" @click="withdraw">
-          <img class="d-img m-b-8" src="@/assets/img/icon-idx1.png" alt="" />
-          <p>提现</p>
+          <template v-if="loaded"
+            ><img class="d-img m-b-8" src="@/assets/img/icon-idx1.png" alt="" />
+            <p>提现</p></template
+          >
+          <template v-else>
+            <van-loading color="#1989fa" />
+          </template>
         </li>
       </ul>
     </div>
@@ -191,7 +196,8 @@ export default {
   name: "AppHome",
   data() {
     return {
-      show: false,
+      loaded: false,
+      show: +sessionStorage.getItem("storageShow") ? true : false,
       active: 0,
       nav5Icon,
       labaImg,
@@ -299,9 +305,12 @@ export default {
       });
     },
     async withdraw() {
-      if (!this.bankCard.id) {
-        this.comfire2("您好，您还未绑定提款银行卡，确定现在进行绑定银行卡？");
-        this.$router.push("/bindCard");
+      if (!this.Cards.length) {
+        const status = await this.comfire2(
+          "您好，您还未绑定提款方式，确定现在进行绑定？"
+        );
+        if (!status) return;
+        this.$router.push("/paylist");
         return;
       }
       if (this.paySet !== 1) {
@@ -394,14 +403,26 @@ export default {
       }
     },
   },
-  created() {
+  async created() {
     this.homeDialog();
-    this.$store.dispatch("getPaySet");
     this.showDliog();
     this.$store.dispatch("playerLotteryList");
     this.homeWinning();
     this.sliderSlide();
     this.getVersion();
+    this.$store.dispatch("getInfo");
+    await Promise.all([
+      this.$store.dispatch("getPaySet"),
+      this.$store.dispatch("getBankCard"),
+    ]);
+    this.loaded = true;
+  },
+  beforeDestroy() {
+    if (this.show) {
+      sessionStorage.setItem("storageShow", 1);
+    } else {
+      sessionStorage.removeItem("storageShow", 0);
+    }
   },
 };
 </script>
