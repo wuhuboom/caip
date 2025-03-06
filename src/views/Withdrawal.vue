@@ -48,7 +48,7 @@
       <div class="bd-box">
         <div
           class="lists"
-          v-if="!bankCard.id"
+          v-if="!bankCard.id && typeList.includes(2)"
           @click="$router.push('/edtMyCard')"
         >
           <div class="left">
@@ -61,7 +61,7 @@
         </div>
         <div
           class="lists"
-          v-if="!usdtCard.id"
+          v-if="!usdtCard.id && typeList.includes(3)"
           @click="$router.push('/bindUsdt')"
         >
           <div class="left">
@@ -74,7 +74,7 @@
         </div>
         <div
           class="lists"
-          v-if="!wechatCard.id"
+          v-if="!wechatCard.id && typeList.includes(1)"
           @click="$router.push('/bindWebchat')"
         >
           <div class="left">
@@ -87,7 +87,7 @@
         </div>
         <div
           class="lists"
-          v-if="!alipayCard.id"
+          v-if="!alipayCard.id && typeList.includes(0)"
           @click="$router.push('/bindAlipay')"
         >
           <div class="left">
@@ -104,6 +104,10 @@
       <div class="item">
         可提现余额
         <div class="on">{{ divide(user.balance) }}元</div>
+      </div>
+      <div class="item">
+        可提现金额范围
+        <div class="on">{{ minMax }}元</div>
       </div>
       <div class="item">
         提现金额
@@ -204,8 +208,11 @@ export default {
     user() {
       return this.$store.state.user;
     },
+    typeList() {
+      return this.$store.state.bankCard.map((v) => v.ctype);
+    },
     Cards() {
-      return this.$store.state.bankCard;
+      return this.$store.state.bankCard.filter((v) => v.createdAt);
     },
     bankCard() {
       const doc = this.Cards.find((v) => +v.ctype === 2) || {};
@@ -223,8 +230,21 @@ export default {
       return this.Cards.find((v) => +v.ctype === 1) || {};
     },
     minMax() {
-      if (!this.form.minMax) return "";
-      return this.form.minMax.split("-").map((v) => +v);
+      // if (this.form.min) return "";
+      // return this.form.minMax.split("-").map((v) => +v);
+      //min max 金额 拼接 不一定纯在、
+      if (!this.form) return "";
+      let min = "";
+      for (let key in this.form) {
+        if (["min", "max"].includes(key)) {
+          if (!min) {
+            min = `${this.form[key]}-`;
+          } else {
+            min += this.form[key];
+          }
+        }
+      }
+      return min;
     },
   },
   methods: {
