@@ -944,6 +944,7 @@ $head: 57px;
   width: 100%;
   height: 51px;
   background: #6280ff;
+  z-index: 9;
   .cat-list {
     position: relative;
     .cat-txt {
