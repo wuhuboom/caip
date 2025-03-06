@@ -302,6 +302,12 @@ export default {
     user() {
       return this.$store.state.user;
     },
+    typeList() {
+      return this.$store.state.bankCard.map((v) => v.ctype);
+    },
+    banksAll() {
+      return this.$store.state.bankCard.filter((v) => v.createdAt);
+    },
   },
   methods: {
     sleep(time) {
@@ -349,7 +355,7 @@ export default {
       }
       this.$refs.$bindUsdt.open();
     },
-    openTipsDialog(v = "您好，您还未绑定提款银行卡，确定现在进行绑定银行卡？") {
+    openTipsDialog(v = "您好，您还未绑定提款方式，确定现在进行绑定？") {
       this.$refs.$tipDialog.open(v);
     },
     recharge() {
@@ -359,7 +365,7 @@ export default {
       this.$refs.$RechargeDialog.open();
     },
     withdraw() {
-      if (!this.bankCard.id) {
+      if (!this.banksAll.length) {
         return this.openTipsDialog();
       }
       if (this.paySet !== 1) {

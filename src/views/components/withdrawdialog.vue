@@ -78,7 +78,7 @@ export default {
       show: false,
       form: initForm(),
       cart: {},
-      typelist: [
+      typeArr: [
         { name: "银行卡提现", id: 2 },
         { name: "usdt提现", id: 3 },
         { name: "支付宝", id: 0 },
@@ -98,6 +98,12 @@ export default {
     addWechat,
   },
   computed: {
+    typelist() {
+      return this.typeArr.filter((v) => this.ctypes.includes(v.id));
+    },
+    ctypes() {
+      return this.$store.state.bankCard.map((v) => v.ctype);
+    },
     currentComponent() {
       //return this.curType === 2 ? "bindBank" : "bindUsdt";
       switch (this.curType) {

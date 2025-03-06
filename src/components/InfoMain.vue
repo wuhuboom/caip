@@ -143,8 +143,11 @@ export default {
     paySet() {
       return this.$store.state.paySet;
     },
+    typeList() {
+      return this.$store.state.bankCard.map((v) => v.ctype);
+    },
     Cards() {
-      return this.$store.state.bankCard;
+      return this.$store.state.bankCard.filter((v) => v.createdAt);
     },
     bankCard() {
       return this.Cards.find((v) => +v.ctype === 2) || {};
@@ -185,17 +188,18 @@ export default {
       }
     },
     windth() {
-      if (this.bankCard.id) {
-        if (this.paySet !== 1) {
-          this.$message.error("请先设置支付密码");
-          return this.$refs.$bindPassWrod.open(1);
-        }
-        this.$refs.$withdrawdialog.open();
+      if (this.paySet !== 1) {
+        this.$message.error("请先设置支付密码");
+        return this.$refs.$bindPassWrod.open(1);
+      }
+      if (!this.Cards.length) {
+        this.$refs.$tiphDialog.open(
+          "您好，您还未绑定提款方式，确定现在进行绑定？"
+        );
         return;
       }
-      this.$refs.$tiphDialog.open(
-        "您好，您还未绑定提款银行卡，确定现在进行绑定银行卡？"
-      );
+
+      this.$refs.$withdrawdialog.open();
     },
     rechange() {
       // if (this.bankCard.id) {
