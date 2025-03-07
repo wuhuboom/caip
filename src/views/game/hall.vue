@@ -545,6 +545,7 @@ import ball23 from "./components/ball23";
 import ball24 from "./components/ball24";
 import ball25 from "./components/ball25";
 import ball26 from "./components/ball26";
+import ball27 from "./components/ball27";
 import ball3 from "./components/ball3";
 import ball4 from "./components/ball4";
 import ball5 from "./components/ball5";
@@ -652,6 +653,7 @@ export default {
     ball24,
     ball25,
     ball26,
+    ball27,
   },
   computed: {
     theOne() {
@@ -819,10 +821,52 @@ export default {
         this.lastTree.find((doc) => doc.txt === this.value)?.betList || [];
 
       if (this.theOne.includes(this.value)) {
+        if (["三星组选组选自填"].includes(this.value)) {
+          const group3 = []; // 组三（有两个相同数字）
+          const group6 = []; // 组六（三个数字都不同）
+
+          this.nums.forEach((num) => {
+            const digits = num.split("").sort(); // 分割为数组并排序
+            const uniqueDigits = new Set(digits); // 转 Set 统计不同数字
+
+            if (uniqueDigits.size === 2) {
+              group3.push(num); // 组三
+            } else if (uniqueDigits.size === 3) {
+              group6.push(num); // 组六
+            }
+          });
+
+          console.log("组三:", group3, "组六:", group6);
+
+          // 获取 price3 和 price6
+          let price3Obj = betList.find((item) => item.txt === "组三");
+          let price6Obj = betList.find((item) => item.txt === "组六");
+
+          let price3 = price3Obj ? price3Obj.bet : 0;
+          let price6 = price6Obj ? price6Obj.bet : 0;
+          let value3 = price3Obj ? price3Obj.value : 0;
+          let value6 = price6Obj ? price6Obj.value : 0;
+          // 计算总金额
+          let totalAmount = group3.length * price3 + group6.length * price6;
+
+          // 计算 docsListValue
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+          this.docsListValue = this.divide(
+            group3.length * value3 + group6.length * value6,
+            false
+          );
+
+          return totalAmount;
+        }
+
         // 组三金额=list[号码个数-2].bet
         // 组六金额=list[号码个至少输入2个号码,每个以英文逗号","分隔，例如：1,2,3数-3].bet
         // 和值金额=list[号码].bet
-        if (["三星和值", "三星跨度", "三星特码"].includes(this.value)) {
+        if (
+          ["三星和值", "三星跨度", "三星特码", "三星组选组选自填"].includes(
+            this.value
+          )
+        ) {
           const reduceNum = this.nums.reduce((total, num) => {
             return total + betList[num].value * 1;
           }, 0);
@@ -884,7 +928,8 @@ export default {
         case "中三直选单式":
         case "前三直选单式":
           return "ball2";
-
+        case "三星组选组选自填":
+          return "ball27";
         // 和值类型
         case "三星直选和值":
         case "后三直选和值":
