@@ -105,7 +105,15 @@
         <div class="login-content-right">
           <div>
             <div>
-              <img src="@/static/logo.png" alt="辰龙" class="logo" />
+              <img
+                class="logo"
+                :src="
+                  production
+                    ? `/static/icon.png?t=${Date.now()}`
+                    : require('@/static/logo.png')
+                "
+                alt=""
+              />
             </div>
           </div>
           <div style="width: 260px">
@@ -162,12 +170,12 @@
   </div>
 </template>
 <script>
-import QrcodeVue from "qrcode.vue";
-import agreenContent from "./agreen-content.vue";
-import register from "./components/register.vue";
-import forget from "./components/forget.vue";
 import userApi from "@/api/user";
 import auth from "@/plugins/auth";
+import QrcodeVue from "qrcode.vue";
+import agreenContent from "./agreen-content.vue";
+import forget from "./components/forget.vue";
+import register from "./components/register.vue";
 const initForm = () => ({
   username: "",
   password: "",
@@ -191,6 +199,9 @@ export default {
     dev() {
       console.log(this.$store.state.devApp);
       return this.$store.state.devApp;
+    },
+    production() {
+      return process.env.NODE_ENV === "production";
     },
   },
   components: {
