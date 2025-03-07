@@ -9,7 +9,7 @@
     <!-- 登录 -->
     <div class="main-box">
       <div class="logo-box center-center">
-        <img class="d-img" :src="production ? '/static/icon.png' : require('@/assets/img/logo.png')" alt="">
+        <img class="d-img" :src="production ? `/static/icon.png?t=${Date.now()}` : require('@/assets/img/logo.png')" alt="">
       </div>
         <van-form class="full100 ntf-form" @submit="login">
             <van-field
