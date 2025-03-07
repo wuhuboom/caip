@@ -1,6 +1,10 @@
 <template>
   <div class="index-page c-page bg-grey">
-    <AppTopBar ref="topBar" topBarTitle="永旺彩票" :showLeft="false">
+    <AppTopBar
+      ref="topBar"
+      :topBarTitle="$store.state.logoTxt"
+      :showLeft="false"
+    >
     </AppTopBar>
     <div class="top-header p-t-16 p-b-32">
       <van-swipe class="swipe-box" :autoplay="3000" indicator-color="white">

@@ -10,6 +10,11 @@ Vue.use(Vuex);
 const lang = location.href.includes("zmkm") ? "zh" : "";
 export default new Vuex.Store({
   state: {
+    logoTxt: window.logoTxt || "彩票",
+    logoIcon:
+      process.env.NODE_ENV === "production"
+        ? `/static/icon.png?t=${Date.now()}`
+        : require("@/assets/img/logo.png"),
     theOne: [
       "三星组选组三",
       "三星组选组三胆拖",

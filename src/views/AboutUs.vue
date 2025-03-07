@@ -2,8 +2,11 @@
   <div class="c-page bg-grey">
     <AppTopBar topBarTitle="关于我们"></AppTopBar>
     <div class="logo-box center-center">
-      <div class="logo"></div>
-      <div class="name">永旺</div>
+      <div
+        class="logo"
+        :style="{ backgroundImage: `url(${$store.state.logoIcon})` }"
+      ></div>
+      <div class="name">{{ $store.state.logoTxt }}</div>
     </div>
     <div class="des-box">
       <div class="text-1">我们只做最诚信 最放心 最专业的购彩平台</div>
@@ -30,7 +33,7 @@ export default {
   .logo {
     width: 160px;
     height: 160px;
-    background: url("@/assets/img/logo.png") no-repeat;
+    background: no-repeat;
     background-size: 100% auto;
   }
   .name {
