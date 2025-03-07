@@ -2,7 +2,10 @@
   <div class="c-page bg-grey">
     <AppTopBar topBarTitle="下载"></AppTopBar>
     <div class="logo-box center-center">
-      <div class="logo"></div>
+      <div
+        class="logo"
+        :style="{ backgroundImage: `url(${$store.state.logoIcon})` }"
+      ></div>
     </div>
     <div class="des-box">
       <div class="text-1">我们只做最诚信 最放心 最专业的购彩平台</div>
