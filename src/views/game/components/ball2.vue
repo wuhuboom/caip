@@ -22,23 +22,14 @@ export default {
 
   computed: {
     text() {
-      const arr = this.nums.split(/[,\s]+/).filter(Boolean);
-      let str = "";
-      arr.forEach((item, index) => {
-        if (index === arr.length - 1) {
-          str += `${item.split("")}`;
-        } else {
-          str += `${item.split("")}|`;
-        }
-      });
-      return str;
+      return this.validateInput();
     },
   },
   components: {
     tipsDialog,
   },
   methods: {
-    validateInput() {
+    validateInput2() {
       if (this.nums.endsWith(",")) {
         this.nums = this.nums.slice(0, -1);
       }
@@ -71,6 +62,17 @@ export default {
       }
       this.$emit("total", values.length);
       return true;
+    },
+    validateInput() {
+      const text = this.nums;
+      const matches = text.match(/\b\d{3}\b/g);
+      if (!matches) {
+        this.$refs.$tipsDialog.open("选择号码错误，请重新确认号码");
+        this.$emit("total", 0);
+        return false;
+      }
+      this.$emit("total", matches.length);
+      return `${matches}`;
     },
     clear() {
       this.nums = "";
