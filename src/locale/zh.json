@@ -1592,5 +1592,6 @@
   "backapi.waitingCheck": "您的卡号正在审核中",
   "backapi.cardDisabled": "您的卡号审核未通过",
   "backapi.betToLimit": "合买下注频率太快",
-  "backapi.sendImgLimit": "发送图片太频繁"
+  "backapi.sendImgLimit": "发送图片太频繁",
+  "backapi.qqExsit": "QQ号已存在"
 }
