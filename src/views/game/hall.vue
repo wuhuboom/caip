@@ -847,7 +847,8 @@ export default {
           let value3 = price3Obj ? price3Obj.value : 0;
           let value6 = price6Obj ? price6Obj.value : 0;
           // 计算总金额
-          let totalAmount = group3.length * price3 + group6.length * price6;
+          let totalAmount =
+            (group3.length * price3 + group6.length * price6) * this.multiple;
 
           // 计算 docsListValue
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
