@@ -9,7 +9,7 @@
     <!-- 登录 -->
     <div class="main-box">
       <div class="logo-box center-center">
-        <img class="d-img" src="@/assets/img/logo.png" alt="">
+        <img class="d-img" :src="production ? '/static/icon.png' : require('@/assets/img/logo.png')" alt="">
       </div>
         <van-form class="full100 ntf-form" @submit="login">
             <van-field
@@ -72,8 +72,8 @@
 </template>
 
 <script>
-import Notice from "@/components/Notice";
 import userApi from "@/api/user";
+import Notice from "@/components/Notice";
 const initForm = () => ({
   username: "",
   password: "",
@@ -93,6 +93,11 @@ export default {
     };
   },
   components: { Notice },
+  computed: {
+    production() {
+      return process.env.NODE_ENV === "production";
+    },
+  },
   methods: {
     async verifyCodeReq() {
       const [err, res] = await userApi.verifyCodeReq();
