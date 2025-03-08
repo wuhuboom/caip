@@ -2,6 +2,7 @@
 import userApi from "@/api/user";
 import app from "@/main";
 import auth from "@/plugins/auth";
+import typeBets from "@/plugins/typeBets";
 import util from "@/plugins/util";
 import Vue from "vue";
 import Vuex from "vuex";
@@ -20,11 +21,7 @@ export default new Vuex.Store({
       "三星和值",
       "三星跨度",
       "三星组选组选自填",
-      //加拿大28
-      "三星大小单双",
-      "三星特码",
-      "三星波色龙虎和",
-      "三星豹子顺子对子",
+      ...typeBets.bets28,
     ],
     vuexBetPrice: 2,
     tabSimpleList: [
