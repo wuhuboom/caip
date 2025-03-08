@@ -7,23 +7,28 @@
     <meta name="viewport"
         content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>永旺 官网</title>
-    <link rel="shortcut icon" href="style/images/logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="static/logo.png" type="image/x-icon">
     <script>
         document.write(
-          "<s" +
+            "<s" +
             "cript type='text/javascript' src='static/config.js?" +
             Date.now() +
             "'></scr" +
             "ipt>"
         );
-      </script>
-      <script async src="https://www.googletagmanager.com/gtag/js?id=" + window.trackingId></script>
-      <script>
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=" + window.trackingId></script>
+    <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', window.trackingId);  // Use the variable here
-      </script>
+    </script>
+    <script>
+        if (window.logoTxt) {
+            document.title = window.logoTxt;
+        }
+    </script>
     <style type="text/css">
         * {
             margin: 0;
@@ -194,25 +199,32 @@
             display: flex;
             flex-direction: column;
         }
+
         @media screen and (max-width: 768px) {
-            .logo,.lines{
+
+            .logo,
+            .lines {
                 width: 100% !important;
                 border-radius: 0 !important;
             }
-            .lines{
+
+            .lines {
                 padding: 12px !important;
                 padding-bottom: 73px;
             }
-            .logo img{
+
+            .logo img {
                 width: 100px !important;
             }
-            .row-center{
-                margin-top: 0  !important;
+
+            .row-center {
+                margin-top: 0 !important;
             }
         }
-        .js-lines .row-start{
-                margin-top: 24px;
-            }
+
+        .js-lines .row-start {
+            margin-top: 24px;
+        }
     </style>
 
 </head>
@@ -221,7 +233,7 @@
     <div class="container" style="background: url('style/images/img/bg.png') no-repeat; background-size: 100% 100%;">
         <div class="row-center" style="margin-top:50px; ">
             <div class="logo">
-                <img style=" width: 200px;" src="style/images/logo.png" alt="辰龙" />
+                <img class="js-logo" style=" width: 200px;" src="static/logo.png" alt="辰龙" />
             </div>
         </div>
         <div class="row-center">
@@ -232,7 +244,7 @@
                 <div class="js-lines">
 
                 </div>
-                
+
             </div>
         </div>
         <footer class="row-center">
@@ -243,17 +255,17 @@
         </footer>
     </div>
     <script>
-        var  isMobile=function() {
+        var isMobile = function () {
             var userAgent = navigator.userAgent.toLowerCase();
             return /android|iphone|ipad|ipod|windows phone|blackberry|opera mini|iemobile|mobile/i.test(
                 userAgent
             );
         }
-        var html='' 
-        var list=isMobile() ? window.H5 : window.PC
-        const $dome=document.querySelector('.js-lines')
-        list.forEach(function(v){
-          html+=`
+        var html = ''
+        var list = isMobile() ? window.H5 : window.PC
+        const $dome = document.querySelector('.js-lines')
+        list.forEach(function (v) {
+            html += `
               <div class="row-start" style="flex:1;">
                     <div class="line-item-left" style="padding:5px;">
                         <div class="xianlu">
@@ -277,7 +289,7 @@
                 </div>
           `
         })
-        $dome.innerHTML=html
+        $dome.innerHTML = html
     </script>
 </body>
 
