@@ -98,22 +98,44 @@
           </div>
           <div
             class="lottery-result-balls"
-            v-if="preData.lastExpect.openNum"
+            v-if="preData.lastExpect?.openNum"
             style="color: #000"
           >
             <div class="lottery-result-ball">
-              <div
-                class="number-ball-main"
-                v-for="(item, idx) in preData.lastExpect.openNum.split(',')"
-                :key="idx"
-                :style="{
-                  backgroundImage: `url(
+              <template v-for="(item, idx) in openNumArr">
+                <div
+                  :key="idx"
+                  class="number-ball-main"
+                  :style="{
+                    backgroundImage: `url(
                     /static/gameHall/color_ball_${idx}.png
                   )`,
-                }"
-              >
-                {{ item }}
-              </div>
+                  }"
+                >
+                  {{ item }}
+                </div>
+                <div
+                  :key="`v${idx}`"
+                  v-if="isbets28"
+                  :style="{
+                    color: '#C77C32',
+                  }"
+                >
+                  {{ idx !== openNumArr.length - 1 ? "+" : "=" }}
+                </div>
+              </template>
+              <template v-if="isbets28">
+                <div
+                  class="number-ball-main"
+                  :style="{
+                    backgroundImage: `url(
+                    /static/gameHall/color_ball_4.png
+                  )`,
+                  }"
+                >
+                  {{ openNumAdd }}
+                </div>
+              </template>
             </div>
           </div>
         </div>
@@ -523,6 +545,7 @@
 <script>
 import userApi from "@/api/user";
 import InfoMain from "@/components/InfoMain";
+import typeBets from "@/plugins/typeBets";
 import typeConfigList from "@/plugins/typeConfigList";
 import ChaseReason from "@/views/game/components/ChaseReason.vue";
 import GroupBuy from "@/views/game/components/GroupBuy.vue";
@@ -556,6 +579,7 @@ import ball9 from "./components/ball9";
 import prePrize from "./components/prePirze";
 const initData = () => {
   return {
+    typeBets,
     curTab: 0,
     preId: 0,
     preData: {
@@ -656,6 +680,18 @@ export default {
     ball27,
   },
   computed: {
+    isbets28() {
+      return this.typeBets.bets28.includes(this.value);
+    },
+    openNumArr() {
+      return this.preData.lastExpect.openNum?.split(",") || [];
+    },
+    openNumAdd() {
+      return this.preData.lastExpect.openNum
+        ?.split(",")
+        .map(Number) // 转换为数字
+        .reduce((acc, num) => acc + num, 0);
+    },
     theOne() {
       return this.$store.state.theOne;
     },
