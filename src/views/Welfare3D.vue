@@ -375,7 +375,7 @@ export default {
         case "中三直选单式":
         case "前三直选单式":
           return "ball2";
-        case "三星组选组选自填":
+        case "三星组选组选":
           return "ball27";
         // 和值类型
         case "三星直选和值":
@@ -688,7 +688,7 @@ export default {
         this.lastTree.find((doc) => doc.txt === this.value)?.betList || [];
 
       if (this.theOne.includes(this.value)) {
-        if (["三星组选组选自填"].includes(this.value)) {
+        if (["三星组选组选"].includes(this.value)) {
           const group3 = []; // 组三（有两个相同数字）
           const group6 = []; // 组六（三个数字都不同）
 
@@ -731,7 +731,7 @@ export default {
         // 组六金额=list[号码个至少输入2个号码,每个以英文逗号","分隔，例如：1,2,3数-3].bet
         // 和值金额=list[号码].bet
         if (
-          ["三星和值", "三星跨度", "三星特码", "三星组选组选自填"].includes(
+          ["三星和值", "三星跨度", "三星特码", "三星组选组选"].includes(
             this.value
           )
         ) {

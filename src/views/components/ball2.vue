@@ -72,7 +72,7 @@ export default {
         return false;
       }
       this.$emit("total", matches.length);
-      return `${matches}`;
+      return matches.map((str) => str.split("").join(",")).join("|");
     },
     clear() {
       this.nums = "";

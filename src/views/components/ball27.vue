@@ -57,7 +57,7 @@ export default {
         return false;
       }
       this.$emit("total", allArr.length, allArr);
-      return `${allArr}`;
+      return `${allArr.map((str) => str.split("").join(",")).join("|")}`;
     },
     clear() {
       this.nums = "";
