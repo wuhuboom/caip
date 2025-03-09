@@ -6,17 +6,16 @@
   </div>
 </template>
 <script>
-import auth from "@/plugins/auth";
 export default {
   data() {
     return {};
   },
   created() {
-    setInterval(() => {
-      if (auth.getToken()) {
-        this.$store.dispatch("getInfo");
-      }
-    }, 3000);
+    // setInterval(() => {
+    //   if (auth.getToken()) {
+    //     this.$store.dispatch("getInfo");
+    //   }
+    // }, 3000);
   },
 };
 </script>
