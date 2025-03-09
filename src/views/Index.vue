@@ -414,7 +414,6 @@ export default {
     this.homeWinning();
     this.sliderSlide();
     this.getVersion();
-    this.$store.dispatch("getInfo");
     await Promise.all([
       this.$store.dispatch("getPaySet"),
       this.$store.dispatch("getBankCard"),
