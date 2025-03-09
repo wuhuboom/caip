@@ -545,6 +545,7 @@
 <script>
 import userApi from "@/api/user";
 import InfoMain from "@/components/InfoMain";
+import auth from "@/plugins/auth";
 import typeBets from "@/plugins/typeBets";
 import typeConfigList from "@/plugins/typeConfigList";
 import ChaseReason from "@/views/game/components/ChaseReason.vue";
@@ -1176,6 +1177,9 @@ export default {
     id(v) {
       this.setlotteryType(v);
     },
+    value() {
+      this.viewHistory();
+    },
     multiple(v) {
       //范围1 -999
       if (v < 1) {
@@ -1532,8 +1536,11 @@ export default {
         res.data.nextExpect = {};
       }
       this.detail = res.data;
-      this.curNav = this.catTree[0]?.name;
-      this.setValue();
+      const curDoc = this.setHistory();
+      if (!curDoc) {
+        this.curNav = this.catTree[0]?.name;
+        this.setValue();
+      }
     },
     initDetail() {
       // this.getDetail();
@@ -1566,6 +1573,54 @@ export default {
       if (this.tableList.length === 0) {
         this.clearData();
       }
+    },
+    setHistory() {
+      const storedData = auth.getToken("curDoc");
+      if (!storedData) return null;
+
+      const arr = JSON.parse(storedData) || [];
+      const curDoc = arr.find((v) => v.id === this.id);
+      if (!curDoc) return null;
+
+      const { curNav, value } = curDoc;
+
+      const isHava = this.catTree.some(
+        (v) =>
+          v.name === curNav &&
+          v.list?.some((doc) => doc.list?.some((item) => item.txt === value))
+      );
+
+      if (isHava) {
+        this.curNav = curNav;
+        this.value = value;
+        return curDoc;
+      }
+
+      return null;
+    },
+
+    viewHistory() {
+      if (!this.value) return;
+      const arr = auth.getToken("curDoc")
+        ? JSON.parse(auth.getToken("curDoc"))
+        : [];
+      const curDoc = {
+        id: this.id,
+        curNav: this.curNav,
+        value: this.value,
+      };
+      // arr 根据id 查找，没有就插入以后就修改
+      const index = arr.findIndex((v) => v.id === this.id);
+      if (index === -1) {
+        arr.push(curDoc);
+      } else {
+        arr[index] = curDoc;
+      }
+      //arr 保留最新20条
+      if (arr.length > 20) {
+        arr.shift();
+      }
+      auth.setToken(JSON.stringify(arr), "curDoc");
     },
   },
   async created() {
