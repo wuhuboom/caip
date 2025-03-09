@@ -268,7 +268,7 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch("getInfo");
+    // this.$store.dispatch("getInfo");
   },
 };
 </script>

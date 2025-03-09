@@ -218,7 +218,6 @@ export default {
   created() {
     this.$store.dispatch("getBankCard");
     this.$store.dispatch("getPaySet");
-    this.$store.dispatch("getInfo");
   },
 };
 </script>

@@ -34,17 +34,17 @@
 <script>
 import Account from "./components/account.vue";
 import Balance from "./components/Balance.vue";
-import GameRecord from "./components/GameRecord.vue";
-import RechargeRecord from "./components/RechargeRecord.vue";
-import WithdrawRecord from "./components/WithdrawRecord.vue";
-import GiftRecord from "./components/GiftRecord.vue";
-import RedPacketRecord from "./components/RedPacketRecord.vue";
-import LuckyDraw from "./components/LuckyDraw.vue";
-import FundDetail from "./components/FundDetail.vue";
-import SiteMessage from "./components/SiteMessage.vue";
-import Notice from "./components/Notice.vue";
-import MemberManage from "./components/MemberManage.vue";
 import fruteGame from "./components/fruteGame.vue";
+import FundDetail from "./components/FundDetail.vue";
+import GameRecord from "./components/GameRecord.vue";
+import GiftRecord from "./components/GiftRecord.vue";
+import LuckyDraw from "./components/LuckyDraw.vue";
+import MemberManage from "./components/MemberManage.vue";
+import Notice from "./components/Notice.vue";
+import RechargeRecord from "./components/RechargeRecord.vue";
+import RedPacketRecord from "./components/RedPacketRecord.vue";
+import SiteMessage from "./components/SiteMessage.vue";
+import WithdrawRecord from "./components/WithdrawRecord.vue";
 import team from "./team/index.vue";
 export default {
   name: "AccountCenter",
@@ -145,7 +145,7 @@ export default {
     },
   },
   async created() {
-    await this.$store.dispatch("getInfo");
+    // await this.$store.dispatch("getInfo");
     this.$store.dispatch("getPaySet");
     this.$store.dispatch("getBankCard");
     let docCat = this.$store.state.cat.find((v) => v.list.length);
