@@ -7,7 +7,7 @@
 </template>
 <script>
 import i18n from "@/locale";
-
+import auth from "@/plugins/auth";
 export default {
   name: "App",
   data() {
@@ -63,6 +63,11 @@ export default {
         text: "其他",
       },
     ]);
+    setInterval(() => {
+      if (auth.getToken()) {
+        this.$store.dispatch("getInfo");
+      }
+    }, 3000);
   },
 };
 </script>
