@@ -367,7 +367,7 @@
   "backapi.alreadyExtracted": "已领取返利",
   "backapi.orderCatUnbet": "无法取消订单。比赛正在进行中",
   "backapi.orderNotFound": "订单不存在",
-  "backapi.bankCardExists": "银行卡数量超过次数 - 最多可以有1张银行卡",
+  "backapi.bankCardExists": " 此收款方式已经被绑定.",
   "backapi.cardNumberTwiceDiff": "两张银行卡号不匹配",
   "backapi.payPwdError": "安全密码错误",
   "backapi.bindCardFailed": "绑定银行卡失败",

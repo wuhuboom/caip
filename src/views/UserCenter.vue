@@ -89,7 +89,7 @@ export default {
       return this.$store.state.paySet;
     },
     Cards() {
-      return this.$store.state.bankCard;
+      return this.$store.state.bankCard.filter((v) => v.createdAt);
     },
     bankCard() {
       return this.Cards.find((v) => +v.ctype === 2) || {};
