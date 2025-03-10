@@ -31,7 +31,7 @@
                   class="select"
                   v-for="(item, index) in firstNavs"
                   :key="index"
-                  @click="curTab = item"
+                  @click="changeNav(item)"
                   :class="{ on: curTab === item }"
                 >
                   {{ item }}
@@ -257,6 +257,7 @@
 <script>
 import userApi from "@/api/user";
 import tipsDialog from "@/components/tipsDialog.vue";
+import auth from "@/plugins/auth";
 import typeConfigList from "@/plugins/typeConfigList";
 import AppendChase from "./components/AppendChase";
 import ball1 from "./components/ball1";
@@ -352,8 +353,14 @@ export default {
     ball27,
   },
   watch: {
-    curTab() {
-      this.setValue();
+    // curTab() {
+    //   this.setValue();
+    // },
+    value: {
+      handler() {
+        this.viewHistory();
+      },
+      immediate: false, // 不在初始化时执行
     },
   },
   computed: {
@@ -792,6 +799,10 @@ export default {
     },
   },
   methods: {
+    changeNav(v) {
+      this.curTab = v;
+      this.setValue();
+    },
     giveTotal(v, n) {
       this.total = v;
       this.nums = n || [];
@@ -823,7 +834,6 @@ export default {
       this.secondNavs.forEach((item, index) => {
         item.list.forEach((v, idx) => {
           if (index === 0 && idx === 0) {
-            console.log(v.txt, "-----");
             this.value = v.txt;
           }
         });
@@ -888,6 +898,54 @@ export default {
       if (err) return;
       this.preData = res.data;
     },
+    setHistory() {
+      const storedData = auth.getToken("curDoc");
+      if (!storedData) return null;
+
+      const arr = JSON.parse(storedData) || [];
+      const curDoc = arr.find((v) => v.id === this.id);
+      if (!curDoc) return null;
+
+      const { curNav, value } = curDoc;
+
+      const isHava = this.catTree.some(
+        (v) =>
+          v.name === curNav &&
+          v.list?.some((doc) => doc.list?.some((item) => item.txt === value))
+      );
+
+      if (isHava) {
+        this.curTab = curNav;
+        this.value = value;
+        return curDoc;
+      }
+
+      return null;
+    },
+
+    viewHistory() {
+      if (!this.value) return;
+      const arr = auth.getToken("curDoc")
+        ? JSON.parse(auth.getToken("curDoc"))
+        : [];
+      const curDoc = {
+        id: this.id,
+        curNav: this.curTab,
+        value: this.value,
+      };
+      // arr 根据id 查找，没有就插入以后就修改
+      const index = arr.findIndex((v) => v.id === this.id);
+      if (index === -1) {
+        arr.push(curDoc);
+      } else {
+        arr[index] = curDoc;
+      }
+      //arr 保留最新20条
+      if (arr.length > 20) {
+        arr.shift();
+      }
+      auth.setToken(JSON.stringify(arr), "curDoc");
+    },
     async getDetail() {
       const [err, res] = await userApi.betsDetail({ id: this.id });
       if (err) return;
@@ -899,9 +957,11 @@ export default {
         res.data.nextExpect = {};
       }
       this.detail = res.data;
-
-      this.curTab = this.catTree[0]?.name;
-      this.setValue();
+      const curDoc = this.setHistory();
+      if (!curDoc) {
+        this.curTab = this.catTree[0]?.name;
+        this.setValue();
+      }
     },
     initDetail() {
       // this.getDetail();
