@@ -49,7 +49,7 @@
         <div
           class="lists"
           v-if="!bankCard.id && typeList.includes(2)"
-          @click="$router.push('/edtMyCard')"
+          @click="goBank"
         >
           <div class="left">
             <van-icon name="plus" class="plus-icon" />
@@ -248,6 +248,9 @@ export default {
     },
   },
   methods: {
+    goBank() {
+      this.$router.push("/bindCard");
+    },
     resData(obj) {
       this.form = {
         ...initForm(),

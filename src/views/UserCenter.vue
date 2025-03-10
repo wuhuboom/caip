@@ -30,6 +30,7 @@
       </div> -->
       <div
         class="item"
+        v-if="typeList.includes(2)"
         @click="$tool.goPage(bankCard.id ? '/edtMyCard' : '/bindCard')"
       >
         <div class="left">我的银行卡</div>
@@ -37,7 +38,7 @@
           <van-icon name="arrow" class="arrow-icon" />
         </div>
       </div>
-      <div class="item" @click="bindUsdt">
+      <div class="item" @click="bindUsdt" v-if="typeList.includes(3)">
         <div class="left">我的USDT</div>
         <div class="right">
           <van-icon name="arrow" class="arrow-icon" />
@@ -87,6 +88,9 @@ export default {
     },
     paySet() {
       return this.$store.state.paySet;
+    },
+    typeList() {
+      return this.$store.state.bankCard.map((v) => v.ctype);
     },
     Cards() {
       return this.$store.state.bankCard.filter((v) => v.createdAt);
