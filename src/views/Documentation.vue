@@ -36,7 +36,7 @@
         finished-text="没有更多了"
         @load="lotteryBetsOrder"
       >
-        <!-- <div
+        <div
           class="justify-between results-list-docs p-x-24 m-b-16"
           v-for="(item, i) in results"
           :key="i"
@@ -47,7 +47,7 @@
             })
           "
         >
-          <div class="flex-column center-center">
+          <div class="flex-column center-center no-shrink circle-pro">
             <div class="m-b-16">
               {{ item.lotteryName }}
             </div>
@@ -62,8 +62,18 @@
               color="#ff3b55"
             />
           </div>
-          <div></div>
-        </div> -->
+          <div class="flex-1">
+            <ul>
+              <li class="justify-between p-b-16 m-t-16">
+                <p class="playerName">
+                  {{ item.playerName?.replace(/^(.{2}).*/, "$1***") }}
+                </p>
+                <p class="detail-txt">详情</p>
+              </li>
+              <li></li>
+            </ul>
+          </div>
+        </div>
         <div
           class="dashen-box m-b-24"
           v-for="(item, i) in results"
@@ -286,5 +296,16 @@ export default {
 }
 .results-list-docs {
   background-color: #fff;
+  .circle-pro {
+    width: 162px;
+    overflow: hidden;
+  }
+  .playerName {
+    color: #343434;
+  }
+  .detail-txt {
+    color: #fa6400;
+    text-decoration: underline;
+  }
 }
 </style>
