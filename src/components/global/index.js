@@ -1,44 +1,45 @@
 // 全局组件
-import AppTopBar from "@/components/global/AppTopBar";
 import AppBtmBar from "@/components/global/AppBtmBar";
-import Countdown from "@choujiaojiao/vue2-countdown";
-import tipsDialog from "@/components/tipsDialog";
+import AppTopBar from "@/components/global/AppTopBar";
 import BtmActionSheet from "@/components/global/BtmActionSheet";
 import SelectActionSheet from "@/components/global/SelectActionSheet";
+import tipsDialog from "@/components/tipsDialog";
+import Countdown from "@choujiaojiao/vue2-countdown";
 import {
-  Form,
-  Field,
-  Button,
-  radio,
-  RadioGroup,
-  picker,
   ActionSheet,
-  Icon,
-  Toast,
-  Swipe,
-  SwipeItem,
-  Lazyload,
-  Image,
-  List,
-  Dialog,
-  Loading,
   Badge,
-  Progress,
+  Button,
+  Checkbox,
+  Dialog,
+  DropdownItem,
+  DropdownMenu,
+  Field,
+  Form,
   Grid,
   GridItem,
-  DropdownMenu,
-  DropdownItem,
-  uploader,
-  Checkbox,
-  Sticky,
+  Icon,
+  Image,
+  Lazyload,
+  List,
+  Loading,
   Popup,
+  Progress,
+  RadioGroup,
   Step,
-  Steps,
-  countDown,
-  tabs,
-  tab,
-  popover,
   Stepper,
+  Steps,
+  Sticky,
+  Swipe,
+  SwipeItem,
+  Toast,
+  circle,
+  countDown,
+  picker,
+  popover,
+  radio,
+  tab,
+  tabs,
+  uploader,
 } from "vant";
 export default {
   install(Vue) {
@@ -81,5 +82,6 @@ export default {
     Vue.use(Steps);
     Vue.use(countDown);
     Vue.use(Stepper);
+    Vue.use(circle);
   },
 };

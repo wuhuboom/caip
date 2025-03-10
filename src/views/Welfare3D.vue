@@ -152,7 +152,13 @@
         </div>
         <ul class="orders-list m-b-32">
           <li class="font16 align-center justify-between">
-            投注列表
+            <ul class="align-center">
+              <li>投注列表</li>
+              <!-- <li class="font12 align-center">
+                <div class="t1">{{ totalALL }}注</div>
+                <div class="t2">共{{ btmMoney }}元</div>
+              </li> -->
+            </ul>
             <p class="font14" @click="$router.push('/MyBallRecord')">
               购票记录 <van-icon name="arrow" />
             </p>
@@ -213,8 +219,8 @@
           </ul>
           <div class="align-center flex-1 fixed-btm">
             <div class="center total-all">
-              <div class="t1">{{ totalALL }}注</div>
-              <div class="t2">共{{ btmMoney }}元</div>
+              <div class="t1">{{ total }}注</div>
+              <div class="t2">共{{ totalMoney }}元</div>
             </div>
             <div
               class="right"
@@ -356,11 +362,8 @@ export default {
     // curTab() {
     //   this.setValue();
     // },
-    value: {
-      handler() {
-        this.viewHistory();
-      },
-      immediate: false, // 不在初始化时执行
+    value() {
+      this.viewHistory();
     },
   },
   computed: {

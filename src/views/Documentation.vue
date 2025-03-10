@@ -36,6 +36,34 @@
         finished-text="没有更多了"
         @load="lotteryBetsOrder"
       >
+        <!-- <div
+          class="justify-between results-list-docs p-x-24 m-b-16"
+          v-for="(item, i) in results"
+          :key="i"
+          @click="
+            $router.push({
+              path: '/purchase-record-details',
+              query: { id: item.id },
+            })
+          "
+        >
+          <div class="flex-column center-center">
+            <div class="m-b-16">
+              {{ item.lotteryName }}
+            </div>
+            <van-circle
+              v-model="currentRate"
+              :rate="60"
+              :speed="100"
+              :stroke-width="60"
+              :text="text"
+              :size="46"
+              layer-color="#f6b426"
+              color="#ff3b55"
+            />
+          </div>
+          <div></div>
+        </div> -->
         <div
           class="dashen-box m-b-24"
           v-for="(item, i) in results"
@@ -89,14 +117,9 @@
 </template>
 
 <script>
-import { Circle as MyCircle } from "vant";
 import userApi from "@/api/user";
 export default {
   name: "AppDocumentation",
-  components: {
-    // eslint-disable-next-line vue/no-unused-components
-    MyCircle,
-  },
   data() {
     return {
       loading: false,
@@ -114,9 +137,13 @@ export default {
         totalCount: 0,
         results: [],
       },
+      currentRate: 80,
     };
   },
   computed: {
+    text() {
+      return this.currentRate.toFixed(0) + "%";
+    },
     results() {
       return this.tableData.results;
     },
@@ -256,5 +283,8 @@ export default {
     height: 68px;
     background: #f6fafb;
   }
+}
+.results-list-docs {
+  background-color: #fff;
 }
 </style>
