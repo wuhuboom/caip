@@ -44,13 +44,13 @@
           <van-icon name="arrow" class="arrow-icon" />
         </div>
       </div>
-      <div class="item" @click="bindAlipay">
+      <div class="item" @click="bindAlipay" v-if="typeList.includes(0)">
         <div class="left">我的支付宝账号</div>
         <div class="right">
           <van-icon name="arrow" class="arrow-icon" />
         </div>
       </div>
-      <div class="item" @click="bindWebchat">
+      <div class="item" @click="bindWebchat" v-if="typeList.includes(1)">
         <div class="left">我的微信账号</div>
         <div class="right">
           <van-icon name="arrow" class="arrow-icon" />
