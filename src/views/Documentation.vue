@@ -37,7 +37,7 @@
         @load="lotteryBetsOrder"
       >
         <div
-          class="justify-between results-list-docs p-x-24 m-b-16"
+          class="justify-between results-list-docs p-t-24 p-r-24 p-b-24 m-b-16"
           v-for="(item, i) in results"
           :key="i"
           @click="
@@ -48,7 +48,7 @@
           "
         >
           <div class="flex-column center-center no-shrink circle-pro">
-            <div class="m-b-16">{{ item.lotteryName }}</div>
+            <div class="m-b-16 blod font13">{{ item.lotteryName }}</div>
             <van-circle
               :rate="item.p"
               :stroke-width="60"
@@ -63,25 +63,37 @@
           <div class="flex-1 font12">
             <ul>
               <li class="justify-between p-b-16 m-b-16 name-line">
-                <p class="playerName">
+                <p class="playerName align-center">
+                  <img
+                    class="d-img my-pic"
+                    src="@/assets/img/icons-ue.png"
+                    alt=""
+                  />
                   {{ item.playerName?.replace(/^(.{2}).*/, "$1***") }}
                 </p>
                 <p class="detail-txt">详情</p>
               </li>
               <li>
                 <div class="justify-between">
-                  <div class="flex-column center-center">
-                    <p class="m-b-8">总金额</p>
+                  <div class="flex-column">
+                    <p class="m-b-8 color999">总金额</p>
                     <p class="blod">{{ divide(item.money) }}元</p>
                   </div>
                   <div class="flex-column center-center">
-                    <p class="m-b-8">每份</p>
-                    <p class="blod">1元</p>
+                    <p class="m-b-8 color999">剩余</p>
+                    <p class="blod">{{ item.sellCount }}元</p>
                   </div>
-                  <div class="flex-column center-center">
-                    <p class="m-b-8">剩余</p>
-                    <p class="blod">{{ item.sellCount }}份</p>
-                  </div>
+                  <template v-if="item.sellCount && +item.status === 0">
+                    <div class="flex-column center-center">
+                      <p class="buy-btn center-center">跟一单</p>
+                    </div>
+                  </template>
+                  <template v-else>
+                    <div class="flex-column">
+                      <p class="m-b-8 color999">状态</p>
+                      <p class="blod">{{ btmStatus(item.status) }}</p>
+                    </div>
+                  </template>
                 </div>
               </li>
             </ul>
@@ -204,6 +216,10 @@ export default {
     },
   },
   methods: {
+    btmStatus(v) {
+      return (this.$store.state.btmStatus.find((doc) => +doc.id === +v) || {})
+        .name;
+    },
     getStatus(v) {
       return (this.$store.state.status.find((doc) => doc.id === v) || {}).name;
     },
@@ -318,11 +334,23 @@ export default {
     color: #343434;
   }
   .detail-txt {
-    color: #fa6400;
+    color: #999;
     text-decoration: underline;
   }
   .name-line {
     border-bottom: 2px solid #e0e1e0;
+  }
+  .my-pic {
+    width: 36px;
+    height: 36px;
+    margin: 0 12px;
+  }
+  .buy-btn {
+    color: #fff;
+    width: 94px;
+    height: 44px;
+    background: #bf2935;
+    border-radius: 10px 10px 10px 10px;
   }
 }
 </style>
