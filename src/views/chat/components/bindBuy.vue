@@ -1,34 +1,62 @@
 <template>
-  <div class="order-detail m-t-4" @click.stop="goDetail">
-    <p class="align-center">
-      <img class="d-img m-r-4 ord" src="@/assets/img/ord.png" alt="" />
-      #{{ doc.data.lottery }}
-    </p>
-    <div class="detail m-l-8 m-t-8 flex-column">
-      <dl class="oder-desc d-flex justify-between p-l-8 p-r-8">
-        <dd class="align-center">
-          <img class="d-img m-r-4 fire" src="@/assets/img/fire.png" alt="" />
-          {{ doc.data.user }}#发起合买
-        </dd>
-        <dd class="money">￥{{ divide(doc.data.money) }}</dd>
-      </dl>
-      <dl class="justify-between p-l-8 p-r-8">
-        <dd>
-          <p class="rate align-center">
-            <span class="rate-num">{{ `${doc.data.bingos}%` }}</span>
+  <div class="my-group-buy" @click="goDetail">
+    <p class="my-title center-center">{{ doc.data.lottery }}全天计划</p>
+    <div class="conts font12">
+      <p class="lottery font13 align-center">{{ doc.data.lottery }}</p>
+      <ul class="list-txt expect">
+        <li class="d-flex">
+          <p>期号:</p>
+          <p>{{ doc.data.expect }}</p>
+        </li>
+      </ul>
+      <ul
+        class="bet-code list-txt"
+        v-for="(item, index) in betCode"
+        :key="index"
+      >
+        <li class="d-flex">
+          <p>投注玩法:</p>
+          <p>{{ item.name }}</p>
+        </li>
+        <li class="d-flex">
+          <p>投注内容:</p>
+          <p>
+            {{ item.positions?.map((subArr) => subArr.join(", ")).join("|") }}
           </p>
-        </dd>
-        <dd>
-          <p class="now-btn center-center">立即跟</p>
-        </dd>
-      </dl>
+        </li>
+        <li class="d-flex">
+          <p>投注金额:</p>
+          <p>{{ item.price }}元</p>
+        </li>
+        <li class="d-flex">
+          <p>总命中率:</p>
+          <p>{{ `${doc.data.bingos}%` }}</p>
+        </li>
+      </ul>
+      <ul
+        class="btm-status"
+        v-for="(item, index) in doc.data.expects"
+        :key="`${index}-index`"
+      >
+        <li class="justify-between">
+          <p>{{ item.expect }}期</p>
+          <p
+            :class="{
+              'color-green': item.status === 3,
+              'color-red': item.status === 2,
+            }"
+          >
+            {{ btmStatus(item.status) }}
+          </p>
+        </li>
+      </ul>
+      <p class="user-list">{{ doc.data.user }}</p>
+      <p class="btns-bet center-center">我要跟投</p>
     </div>
   </div>
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
-import userApi from "@/api/user";
 export default {
   name: "PopupMoney",
   data() {
@@ -40,7 +68,23 @@ export default {
       default: () => {},
     },
   },
+  computed: {
+    theOne() {
+      return this.$store.state.theOne;
+    },
+    betCode() {
+      if (this.doc.data.betCode) {
+        console.log(this.$util.parseFourStarInput(this.doc.data.betCode));
+        return this.$util.parseFourStarInput(this.doc.data.betCode);
+      }
+      return [];
+    },
+  },
   methods: {
+    btmStatus(v) {
+      return (this.$store.state.btmStatus.find((doc) => +doc.id === +v) || {})
+        .name;
+    },
     goDetail() {
       //window.open(`#/order/detail/${this.doc.data.id}`);
       this.$router.push(`/order/detail/${this.doc.data.id}`);
@@ -49,57 +93,63 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.order-detail {
+.my-group-buy {
   cursor: pointer;
-  min-width: 250px;
-  height: 120px;
-  background: #ffffff;
-  border-radius: 5px 5px 5px 5px;
-  border: 1px solid #f0f0f0;
-  padding: 14px 10px 14px;
-  .ord {
-    width: 18px;
-    height: 18px;
-  }
-  .fire {
-    width: 17px;
-    height: 17px;
-  }
-  .detail {
+  width: 244px;
+  border-radius: 8px 8px;
+  overflow: hidden;
+  .my-title {
+    height: 29px;
+    background: #e7474c;
     color: #fff;
-    height: 70px;
-    background: #00a752;
-    border-radius: 5px 5px 5px 5px;
-
-    justify-content: space-around;
   }
-  .oder-desc {
-    align-items: flex-end;
-    font-size: 14px;
+  .list-txt {
+    color: #505050;
   }
-  .money {
-    font-size: 18px;
+  .conts {
+    padding: 0 12px 12px;
+    font-size: 12px;
+    background-color: #fff;
   }
-  .rate {
-    background: url("@/assets/img/rates.png") no-repeat center center;
-    background-size: 100% 100%;
-    width: 54px;
-    height: 12px;
-    font-size: 8px;
-    color: #bf2935;
-    padding-bottom: 2px;
-    .rate-num {
-      min-width: 28px;
-      text-align: center;
+  .expect {
+    margin-bottom: 4px;
+    & > li {
+      p:first-child {
+        margin-right: 12px;
+      }
     }
   }
-  .now-btn {
-    color: #03bf5f;
-    width: 54px;
-    height: 18px;
-    background: #ffffff;
-    border-radius: 5px 5px 5px 5px;
-    font-size: 10px;
+  .lottery {
+    font-size: 13px;
+    height: 30px;
+    color: #000;
+  }
+  .bet-code {
+    & > li {
+      margin-bottom: 4px;
+      p:first-child {
+        margin-right: 8px;
+      }
+    }
+  }
+  .btm-status {
+    padding: 12px;
+    background-color: #eff8ff;
+  }
+  .color-green {
+    color: #02b500;
+  }
+  .color-red {
+    color: #e7474c;
+  }
+  .user-list {
+    padding: 12px 0;
+  }
+  .btns-bet {
+    height: 31px;
+    background: #e7474c;
+    border-radius: 8px 8px 8px 8px;
+    color: #fff;
   }
 }
 </style>
