@@ -21,14 +21,20 @@ export default {
     }
     // 计算总注数
     const totalBets = baiWei.length * shiWei.length * geWei.length;
-    //您好，为了防止恶意套取充值赠送，每个位置最多购买8个号码
     if (baiWei.length > 8 || shiWei.length > 8 || geWei.length > 8) {
       return {
         err: err2,
         totalBets: totalBets,
       };
     }
-
+    const lengths = [baiWei.length, shiWei.length, geWei.length];
+    const count8 = lengths.filter((len) => len === 8).length;
+    if (count8 >= 3) {
+      return {
+        err: "三个位置不能同时选择8个号码，至少有一个位置少于8个号码",
+        totalBets: totalBets,
+      };
+    }
     return totalBets;
   },
   //三星直选：直选和值
