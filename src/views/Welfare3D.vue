@@ -133,6 +133,7 @@
             :curPre="curPre"
             ref="$cont"
             @total="giveTotal"
+            @changemultiple="changemultiple"
             :is="currentComponent"
             :key="value"
             v-bind="getComponentProps"
@@ -803,6 +804,11 @@ export default {
     },
   },
   methods: {
+    changemultiple(v) {
+      console.log(v, "v---");
+      if (!["三星直选单式", "三星组选组选"].includes(this.value)) return;
+      this.multiple = v;
+    },
     changeNav(v) {
       this.curTab = v;
       this.setValue();

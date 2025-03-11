@@ -28,6 +28,13 @@ export default {
     tipsDialog,
   },
   methods: {
+    changemultiple() {
+      const match = this.nums.match(/各(\d+)元/);
+      const multiple = match ? match[1] : null;
+      if (multiple) {
+        this.$emit("changemultiple", multiple);
+      }
+    },
     validateInput() {
       const text = this.nums;
       const matches = text.match(/\b\d{3}\b/g);
@@ -57,6 +64,7 @@ export default {
         return false;
       }
       this.$emit("total", allArr.length, allArr);
+      this.changemultiple();
       return `${allArr.map((str) => str.split("").join(",")).join("|")}`;
     },
     clear() {
