@@ -859,7 +859,6 @@ export default {
         this.lastTree.find((doc) => doc.txt === this.value)?.betList || [];
       if (this.theOne.includes(this.value)) {
         if (["三星组选组选"].includes(this.value)) {
-          console.log("组三:", "组六:");
           const group3 = []; // 组三（有两个相同数字）
           const group6 = []; // 组六（三个数字都不同）
 
