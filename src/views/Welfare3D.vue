@@ -363,6 +363,7 @@ export default {
     //   this.setValue();
     // },
     value() {
+      this.total = 0;
       this.viewHistory();
     },
   },

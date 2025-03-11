@@ -89,7 +89,7 @@
                     </div>
                   </template>
                   <template v-else>
-                    <div class="flex-column">
+                    <div class="flex-column" style="text-align: right">
                       <p class="m-b-8 color999">状态</p>
                       <p class="blod">{{ btmStatus(item.status) }}</p>
                     </div>
