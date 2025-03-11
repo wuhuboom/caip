@@ -857,9 +857,9 @@ export default {
       if (this.total == 0) return 0;
       const betList =
         this.lastTree.find((doc) => doc.txt === this.value)?.betList || [];
-
       if (this.theOne.includes(this.value)) {
         if (["三星组选组选"].includes(this.value)) {
+          console.log("组三:", "组六:");
           const group3 = []; // 组三（有两个相同数字）
           const group6 = []; // 组六（三个数字都不同）
 
@@ -873,9 +873,6 @@ export default {
               group6.push(num); // 组六
             }
           });
-
-          console.log("组三:", group3, "组六:", group6);
-
           // 获取 price3 和 price6
           let price3Obj = betList.find((item) => item.txt === "组三");
           let price6Obj = betList.find((item) => item.txt === "组六");
@@ -884,6 +881,7 @@ export default {
           let price6 = price6Obj ? price6Obj.bet : 0;
           let value3 = price3Obj ? price3Obj.value : 0;
           let value6 = price6Obj ? price6Obj.value : 0;
+          console.log("price3:", price3, "price6:", price6);
           // 计算总金额
           let totalAmount =
             (group3.length * price3 + group6.length * price6) * this.multiple;

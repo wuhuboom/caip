@@ -20,7 +20,7 @@ export default new Vuex.Store({
       "三星组选组六自填",
       "三星和值",
       "三星跨度",
-      "三星组选组选自填",
+      "三星组选组选",
       ...typeBets.bets28,
     ],
     vuexBetPrice: 2,
