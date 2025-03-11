@@ -19,7 +19,7 @@
           <p>{{ item.name }}</p>
         </li>
         <li class="d-flex">
-          <p>投注内容:</p>
+          <p class="no-shrink">投注内容:</p>
           <p>
             {{ item.positions?.map((subArr) => subArr.join(", ")).join("|") }}
           </p>
