@@ -271,6 +271,7 @@
               <transition name="fade" mode="out-in">
                 <component
                   :curPre="curPre"
+                  @changemultiple="changemultiple"
                   ref="$cont"
                   @total="giveTotal"
                   :is="currentComponent"
@@ -1190,6 +1191,11 @@ export default {
     },
   },
   methods: {
+    changemultiple(v) {
+      console.log(v, "v---");
+      if (!["三星直选单式", "三星组选组选"].includes(this.value)) return;
+      this.multiple = v;
+    },
     replaceCat(name, txt) {
       if (!txt) return "";
       if (name === "三星组选") {
