@@ -40,6 +40,7 @@
               :is="currentComponent(+doc.type)"
               :userPic="userPic"
               :doc="doc"
+              @openBetPop="openBetPop"
               ref="$component"
             ></component>
             <template v-else>
@@ -130,6 +131,9 @@ export default {
       "sendMessage",
       "fetchHistory",
     ]),
+    openBetPop(v) {
+      this.$emit("openBetPop", v);
+    },
     pressAite(v) {
       if (this.isMe) return;
       console.log("pressAite", this.isMe);

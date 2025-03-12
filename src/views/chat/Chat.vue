@@ -20,6 +20,7 @@
       ></infinite-loading>
       <roomMsg
         @pressAite="pressAite"
+        @openBetPop="openBetPop"
         :data-msg-id="v.id"
         :disabled="disabled"
         v-observe-visibility="visibilityChanged(v, i)"
@@ -113,6 +114,7 @@
       </div>
     </div>
     <popupMoney ref="$popupMoney" />
+    <bindBetPop ref="$bindBetPop" />
   </div>
 </template>
 
@@ -120,6 +122,7 @@
 import userApi from "@/api/user";
 import userPic from "@/assets/img/user-room.png";
 import dataFace from "@/plugins/dataFace.json";
+import bindBetPop from "@/views/chat/components/bindBetPop.vue";
 import popupMoney from "@/views/chat/components/popupMoney.vue";
 import roomMsg from "@/views/chat/components/roomMsg.vue";
 import topBets from "@/views/chat/components/topBets.vue";
@@ -159,6 +162,7 @@ export default {
     InfiniteLoading,
     popupMoney,
     topBets,
+    bindBetPop,
   },
   computed: {
     placeholder() {
@@ -196,6 +200,10 @@ export default {
     },
   },
   methods: {
+    // eslint-disable-next-line no-unused-vars
+    openBetPop(v) {
+      //this.$refs.$bindBetPop.open(v);
+    },
     handleScroll() {
       const scrollContainer = this.$refs.chatBox;
       if (!scrollContainer) return;

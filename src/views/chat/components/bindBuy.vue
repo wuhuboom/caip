@@ -1,57 +1,59 @@
 <template>
-  <div class="my-group-buy" @click="goDetail">
-    <p class="my-title center-center">{{ doc.data.lottery }}全天计划</p>
-    <div class="conts font12">
-      <p class="lottery font13 align-center">{{ doc.data.lottery }}</p>
-      <ul class="list-txt expect">
-        <li class="d-flex">
-          <p>期号:</p>
-          <p>{{ doc.data.expect }}</p>
-        </li>
-      </ul>
-      <ul
-        class="bet-code list-txt"
-        v-for="(item, index) in betCode"
-        :key="index"
-      >
-        <li class="d-flex">
-          <p>投注玩法:</p>
-          <p>{{ item.name }}</p>
-        </li>
-        <li class="d-flex">
-          <p class="no-shrink">投注内容:</p>
-          <p>
-            {{ item.positions?.map((subArr) => subArr.join(", ")).join("|") }}
-          </p>
-        </li>
-        <li class="d-flex">
-          <p>投注金额:</p>
-          <p>{{ item.price }}元</p>
-        </li>
-        <li class="d-flex">
-          <p>总命中率:</p>
-          <p>{{ `${doc.data.bingos}%` }}</p>
-        </li>
-      </ul>
-      <ul
-        class="btm-status"
-        v-for="(item, index) in doc.data.expects"
-        :key="`${index}-index`"
-      >
-        <li class="justify-between">
-          <p>{{ item.expect }}期</p>
-          <p
-            :class="{
-              'color-green': item.status === 3,
-              'color-red': item.status === 2,
-            }"
-          >
-            {{ btmStatus(item.status) }}
-          </p>
-        </li>
-      </ul>
-      <p class="user-list">{{ doc.data.user }}</p>
-      <p class="btns-bet center-center">我要跟投</p>
+  <div>
+    <div class="my-group-buy" @click="goDetail">
+      <p class="my-title center-center">{{ doc.data.lottery }}全天计划</p>
+      <div class="conts font12">
+        <p class="lottery font13 align-center">{{ doc.data.lottery }}</p>
+        <ul class="list-txt expect">
+          <li class="d-flex">
+            <p>期号:</p>
+            <p>{{ doc.data.expect }}</p>
+          </li>
+        </ul>
+        <ul
+          class="bet-code list-txt"
+          v-for="(item, index) in betCode"
+          :key="index"
+        >
+          <li class="d-flex">
+            <p>投注玩法:</p>
+            <p>{{ item.name }}</p>
+          </li>
+          <li class="d-flex">
+            <p class="no-shrink">投注内容:</p>
+            <p>
+              {{ item.positions?.map((subArr) => subArr.join(", ")).join("|") }}
+            </p>
+          </li>
+          <li class="d-flex">
+            <p>投注金额:</p>
+            <p>{{ item.price }}元</p>
+          </li>
+          <li class="d-flex">
+            <p>总命中率:</p>
+            <p>{{ `${doc.data.bingos}%` }}</p>
+          </li>
+        </ul>
+        <ul
+          class="btm-status"
+          v-for="(item, index) in doc.data.expects"
+          :key="`${index}-index`"
+        >
+          <li class="justify-between">
+            <p>{{ item.expect }}期</p>
+            <p
+              :class="{
+                'color-green': item.status === 3,
+                'color-red': item.status === 2,
+              }"
+            >
+              {{ btmStatus(item.status) }}
+            </p>
+          </li>
+        </ul>
+        <p class="user-list">{{ doc.data.user }}</p>
+        <p class="btns-bet center-center">我要跟投</p>
+      </div>
     </div>
   </div>
 </template>
@@ -60,7 +62,9 @@
 export default {
   name: "PopupMoney",
   data() {
-    return {};
+    return {
+      show: true,
+    };
   },
   props: {
     doc: {
@@ -74,7 +78,6 @@ export default {
     },
     betCode() {
       if (this.doc.data.betCode) {
-        console.log(this.$util.parseFourStarInput(this.doc.data.betCode));
         return this.$util.parseFourStarInput(this.doc.data.betCode);
       }
       return [];
@@ -86,6 +89,7 @@ export default {
         .name;
     },
     goDetail() {
+      //this.$emit("openBetPop", this.doc.data.id);
       this.$router.push(`/purchase-record-details?id=${this.doc.data.id}`);
     },
   },
@@ -150,5 +154,9 @@ export default {
     border-radius: 16px 16px 16px 16px;
     color: #fff;
   }
+}
+.bind-bet-pop {
+  border-radius: 24px 24px 0px 0px;
+  height: 126px;
 }
 </style>
