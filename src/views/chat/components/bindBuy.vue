@@ -89,8 +89,8 @@ export default {
         .name;
     },
     goDetail() {
-      this.$emit("openBetPop", this.doc.data.id);
-      //this.$router.push(`/purchase-record-details?id=${this.doc.data.id}`);
+      //this.$emit("openBetPop", this.doc.data.id);
+      this.$router.push(`/purchase-record-details?id=${this.doc.data.id}`);
     },
   },
 };

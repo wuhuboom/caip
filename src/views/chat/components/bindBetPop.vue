@@ -1,9 +1,11 @@
 <template>
   <van-popup class="bind-bet-pop" v-model="show" position="bottom">
-    <ul>
-      <li>账户余额: 289</li>
-      <li>跟投计划</li>
-      <li></li>
+    <ul class="title-bets center-center p-l-24 p-r-24 justify-between">
+      <li class="font12">
+        <span class="color999">账户余额:</span> {{ divide(user.balance) }}
+      </li>
+      <li class="font16">跟投计划</li>
+      <li @click="show = false"><van-icon name="cross" :size="16" /></li>
     </ul>
   </van-popup>
 </template>
@@ -307,6 +309,9 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+.bind-bet-pop {
+  border-radius: 24px 24px 0px 0px;
+}
 .repaly-txt {
   background: #ffffff;
   border-radius: 10px 10px 10px 10px;
@@ -314,5 +319,21 @@ export default {
 }
 .replays {
   background-color: #f5f5f5;
+}
+.title-bets {
+  height: 126px;
+  position: relative;
+  & > li:nth-child(1) {
+    position: absolute;
+    left: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  & > li:nth-child(3) {
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 }
 </style>

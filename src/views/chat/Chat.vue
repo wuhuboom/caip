@@ -200,10 +200,9 @@ export default {
     },
   },
   methods: {
-    // eslint-disable-next-line no-unused-vars
-    openBetPop(v) {
-      //this.$refs.$bindBetPop.open(v);
-    },
+    // openBetPop(v) {
+    //   this.$refs.$bindBetPop.open(v);
+    // },
     handleScroll() {
       const scrollContainer = this.$refs.chatBox;
       if (!scrollContainer) return;
