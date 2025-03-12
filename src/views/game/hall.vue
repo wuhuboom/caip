@@ -892,7 +892,7 @@ export default {
             false
           );
 
-          return totalAmount;
+          return this.divide(totalAmount, false);
         }
 
         // 组三金额=list[号码个数-2].bet
@@ -1179,11 +1179,9 @@ export default {
       this.viewHistory();
     },
     multiple(v) {
-      //范围1 -999
+      //范围1 - 无穷大
       if (v < 1) {
         this.multiple = 1;
-      } else if (v > 999) {
-        this.multiple = 999;
       }
     },
   },
