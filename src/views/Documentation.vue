@@ -255,7 +255,9 @@ export default {
         return;
       }
       res.data.results.forEach((v) => {
-        const curMoney = v.betCountCurr / 100;
+        v.betCountCurr = v.betCountCurr / 100;
+        v.betTotal = v.betTotal / 100;
+        const curMoney = v.betCountCurr;
         const fix = (curMoney / v.betTotal).toFixed(2);
         v.p = parseInt(fix * 100);
         v.clientMoney = "";
