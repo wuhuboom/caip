@@ -447,7 +447,7 @@ export default {
       });
       if (err) return;
       res.data.clientMoney = "";
-      res.data.sellCount = res.data.betTotal - res.data.betCountCurr;
+      res.data.sellCount = res.data.betTotal - res.data.betCountCurr / 100;
       res.data.betListArr = this.$util.parseFourStarInput(res.data.betCode);
       //res.data.clientMoney = res.data.sellCount;
       for (let key in res.data) {
