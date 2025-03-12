@@ -655,7 +655,9 @@ export default {
       });
       if (err) return;
       res.data.clientMoney = "";
-      res.data.sellCount = res.data.betTotal - res.data.betCountCurr / 100;
+      res.data.betTotal = res.data.betTotal / 100;
+      res.data.betCountCurr = res.data.betCountCurr / 100;
+      res.data.sellCount = res.data.betTotal - res.data.betCountCurr;
       res.data.betListArr = res.data.betCode
         ? this.$util.parseFourStarInput(res.data.betCode)
         : [];
