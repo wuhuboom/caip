@@ -1,12 +1,114 @@
 <template>
   <van-popup class="bind-bet-pop" v-model="show" position="bottom">
-    <ul class="title-bets center-center p-l-24 p-r-24 justify-between">
-      <li class="font12">
-        <span class="color999">账户余额:</span> {{ divide(user.balance) }}
-      </li>
-      <li class="font16">跟投计划</li>
-      <li @click="show = false"><van-icon name="cross" :size="16" /></li>
-    </ul>
+    <div class="font12">
+      <ul class="title-bets center-center p-l-24 p-r-24">
+        <li class="font12">
+          <span class="color999">账户余额:</span> {{ divide(user.balance) }}
+        </li>
+        <li class="font16">跟投计划</li>
+        <li @click="show = false"><van-icon name="cross" :size="16" /></li>
+      </ul>
+      <div class="p-l-24 p-r-24">
+        <ul class="detail-msg">
+          <li>
+            <div class="justify-between p-b-24 color999">
+              <div class="align-center">
+                <img
+                  v-if="isCna"
+                  class="d-img beting m-r-16"
+                  src="@/assets/img/beting-sign.png"
+                  alt=""
+                />
+                <p>{{ detail.expect }}期</p>
+              </div>
+              <div v-if="detail.lottery?.nextExpect.countdown">
+                <div>距离截止时间</div>
+                <div>
+                  <van-count-down
+                    @finish="openFish"
+                    :time="detail.lottery?.nextExpect.countdown * 1000"
+                  >
+                    <template #default="timeData">
+                      <div class="timeData d-flex">
+                        <span class="block center-center">{{
+                          timeData.hours >= 10
+                            ? timeData.hours
+                            : `0${timeData.hours}`
+                        }}</span>
+                        <span class="colon center-center">:</span>
+                        <span class="block center-center">{{
+                          timeData.minutes >= 10
+                            ? timeData.minutes
+                            : `0${timeData.minutes}`
+                        }}</span>
+                        <span class="colon center-center">:</span>
+                        <span class="block center-center">{{
+                          timeData.seconds >= 10
+                            ? timeData.seconds
+                            : `0${timeData.seconds}`
+                        }}</span>
+                      </div>
+                    </template>
+                  </van-count-down>
+                </div>
+              </div>
+            </div>
+            <p class="p-b-24 font14">{{ detail.lottery?.lotteryName }}</p>
+            <p
+              class="p-b-24 align-center"
+              v-for="(item, index) in betCode"
+              :key="index"
+            >
+              <span class="no-shrink m-r-16">{{ item.name }}</span>
+              <span class="x-auto flex-1" style="white-space: nowrap">
+                {{
+                  item.positions?.map((subArr) => subArr.join(", ")).join("|")
+                }}</span
+              >
+            </p>
+          </li>
+        </ul>
+        <ul class="justify-between stepper align-center p-x-8 m-t-24">
+          <li class="color">购买金额</li>
+          <li>
+            <van-stepper
+              v-model="detail.clientMoney"
+              min="1"
+              :max="detail.sellCount"
+            />
+          </li>
+        </ul>
+      </div>
+      <ul class="center-center money-list">
+        <li class="center-center m-r-32">
+          共<span class="m-l-4 m-r-4 reds">{{ quantity }}</span
+          >注
+        </li>
+        <li class="center-center">
+          总金额<span class="m-l-4 m-r-4 reds">¥{{ divide(detail.money) }}</span
+          >元
+        </li>
+      </ul>
+      <ul class="p-x-32 justify-around buy-btm font14">
+        <li class="flex-column center-center" @click="buyPlayer('all')">
+          <p>剩余:{{ detail.sellCount }}元</p>
+          <p>全包</p>
+        </li>
+        <li
+          @click="buyPlayer(detail.clientMoney)"
+          class="center-center"
+          :class="{
+            ends: !isCna,
+          }"
+        >
+          {{ !isCna ? "已结束" : "直接下注" }}
+        </li>
+      </ul>
+    </div>
+    <tipsDialog ref="$tipsDialog" />
+    <tipsDialog ref="$buyDialog" @sure="mySure" />
+    <tipsDialog ref="$canAllDialog" @sure="ALLSure" />
+    <tipsDialog ref="$canOneDialog" @sure="OneSure" />
   </van-popup>
 </template>
 
@@ -29,6 +131,18 @@ export default {
   },
   computed: {
     ...mapGetters(["catList"]),
+    betCode() {
+      if (this.detail.betCode) {
+        return this.$util.parseFourStarInput(this.detail.betCode);
+      }
+      return [];
+    },
+    quantity() {
+      // 遍历 betCode。quantity;
+      return this.betCode.reduce((acc, cur) => {
+        return acc + cur.quantity;
+      }, 0);
+    },
     user() {
       return this.$store.state.user;
     },
@@ -52,8 +166,14 @@ export default {
     isMe() {
       return +this.user.id === +this.detail?.playerId;
     },
+    isCna() {
+      return this.detail.sellCount && +this.detail.status === 0;
+    },
   },
   methods: {
+    async openFish() {
+      await Promise.all([this.getDetail(), this.chat()]);
+    },
     async open(v) {
       this.id = v;
       this.$toast.loading({
@@ -193,6 +313,10 @@ export default {
       item.clientMoney = value;
     },
     buyPlayer(price) {
+      if (!this.isCna) {
+        this.$toast("合买已结束");
+        return;
+      }
       if (price === "all") {
         this.detail.clientMoney = this.detail.sellCount;
         this.$refs.$buyDialog.open(
@@ -228,6 +352,10 @@ export default {
       this.shareData = res.data;
     },
     async mySure() {
+      this.$toast.loading({
+        forbidClick: true,
+        duration: 0,
+      });
       const [err] = await userApi.lotteryBetsJoin({
         betId: this.detail.id,
         betCount: this.detail.clientMoney,
@@ -235,15 +363,18 @@ export default {
       if (err) return;
       this.detail.clientMoney = "";
       this.$toast.success("购买成功");
-      this.getDetail();
+
+      this.show = false;
     },
     async getDetail() {
       const [err, res] = await userApi.betsOrderDetail({
         id: this.id,
       });
       if (err) return;
-      res.data.clientMoney = "";
-      res.data.sellCount = res.data.betTotal - res.data.betCountCurr / 100;
+      res.data.clientMoney = 1;
+      res.data.betCountCurr = res.data.betCountCurr / 100;
+      res.data.betTotal = res.data.betTotal / 100;
+      res.data.sellCount = res.data.betTotal - res.data.betCountCurr;
       res.data.betListArr = res.data.betCode
         ? this.$util.parseFourStarInput(res.data.betCode)
         : [];
@@ -294,16 +425,6 @@ export default {
       this.$toast.clear();
       if (err) return;
       this.$toast.success("分享成功");
-      // this.$confirm("分享成功，是否查看聊天室消息?", {
-      //   confirmButtonText: "确定",
-      //   cancelButtonText: "取消",
-      //   type: "success",
-      //   customClass: "g-confirm-box",
-      // })
-      //   .then(() => {
-      //     this.$router.push("/chat/room");
-      //   })
-      //   .catch(() => {});
     },
   },
 };
@@ -321,8 +442,11 @@ export default {
   background-color: #f5f5f5;
 }
 .title-bets {
+  width: 100%;
   height: 126px;
+  border-bottom: 2px solid #e5e5e5;
   position: relative;
+  margin-bottom: 36px;
   & > li:nth-child(1) {
     position: absolute;
     left: 24px;
@@ -334,6 +458,42 @@ export default {
     right: 24px;
     top: 50%;
     transform: translateY(-50%);
+  }
+}
+.beting {
+  width: 94px;
+  height: 32px;
+}
+.timeData {
+  justify-content: flex-end;
+}
+.detail-msg {
+  border-bottom: 2px dashed #e5e5e5;
+}
+.stepper {
+  background: #fafafa;
+  margin-bottom: 300px;
+}
+.money-list {
+  height: 68px;
+  background: #ffe0e2;
+  .reds {
+    color: #e50012;
+  }
+}
+.buy-btm {
+  color: #fff;
+  & > li {
+    width: 298px;
+    height: 90px;
+    background: #5d7aff;
+    border-radius: 12px 12px 12px 12px;
+  }
+  & > li:last-child {
+    background: #bf2935;
+  }
+  & > li.ends {
+    background: #999999;
   }
 }
 </style>
