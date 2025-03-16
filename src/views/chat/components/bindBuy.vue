@@ -4,36 +4,45 @@
       <p class="my-title center-center">{{ doc.data.lottery }}全天计划</p>
       <div class="conts font12">
         <p class="lottery font13 align-center">{{ doc.data.lottery }}</p>
-        <ul class="list-txt expect">
+        <ul class="list-txt expect expect-color">
           <li class="d-flex">
             <p>期号:</p>
             <p>{{ doc.data.expect }}</p>
           </li>
         </ul>
-        <ul
-          class="bet-code list-txt"
-          v-for="(item, index) in betCode"
-          :key="index"
-        >
-          <li class="d-flex">
-            <p>投注玩法:</p>
-            <p>{{ item.name }}</p>
-          </li>
-          <li class="d-flex">
-            <p class="no-shrink">投注内容:</p>
-            <p>
-              {{ item.positions?.map((subArr) => subArr.join(", ")).join("|") }}
-            </p>
-          </li>
-          <li class="d-flex">
-            <p>投注金额:</p>
-            <p>{{ item.price }}元</p>
-          </li>
-          <li class="d-flex">
-            <p>总命中率:</p>
-            <p>{{ `${doc.data.bingos}%` }}</p>
-          </li>
-        </ul>
+        <p class="center-center" v-if="!detail.id"><van-loading /></p>
+        <template v-else>
+          <ul
+            class="bet-code list-txt expect-color"
+            v-for="(item, index) in betCode"
+            :key="index"
+          >
+            <li class="d-flex">
+              <p>投注玩法:</p>
+              <p class="x-auto no-wrap">{{ item.name }}</p>
+            </li>
+            <li class="d-flex">
+              <p class="no-shrink">投注内容:</p>
+              <p class="x-auto no-wrap">
+                {{
+                  !detail.betCode
+                    ? getVisibility(detail.visibility)
+                    : item.positions
+                        ?.map((subArr) => subArr.join(", "))
+                        .join("|")
+                }}
+              </p>
+            </li>
+            <li class="d-flex">
+              <p>投注金额:</p>
+              <p class="x-auto no-wrap">{{ item.price }}元</p>
+            </li>
+            <li class="d-flex">
+              <p>总命中率:</p>
+              <p class="x-auto no-wrap">{{ `${doc.data.bingos}%` }}</p>
+            </li>
+          </ul>
+        </template>
         <ul
           class="btm-status"
           v-for="(item, index) in doc.data.expects"
@@ -59,11 +68,13 @@
 </template>
 
 <script>
+import userApi from "@/api/user";
 export default {
   name: "PopupMoney",
   data() {
     return {
       show: true,
+      detail: {},
     };
   },
   props: {
@@ -82,8 +93,45 @@ export default {
       }
       return [];
     },
+    user() {
+      return this.$store.state.user;
+    },
   },
   methods: {
+    showContent(v) {
+      //visibility 0公开 1仅对跟单者公开 2截止后公开 3永久保密
+      if (v === 0) {
+        return true;
+      }
+      if (v === 1) {
+        return this.detail.joins.some((v) => v.playerId === this.user.id);
+      }
+      if (v === 2) {
+        return +this.detail.status === 4;
+      }
+      return false;
+    },
+    getVisibility(v) {
+      const docs = [
+        {
+          name: "公开",
+          status: 0,
+        },
+        {
+          name: "仅对跟单者公开",
+          status: 1,
+        },
+        {
+          name: "截止后公开",
+          status: 2,
+        },
+        {
+          name: "永久保密",
+          status: 3,
+        },
+      ];
+      return (docs.find((doc) => doc.status === v) || {}).name;
+    },
     btmStatus(v) {
       return (this.$store.state.btmStatus.find((doc) => +doc.id === +v) || {})
         .name;
@@ -91,6 +139,13 @@ export default {
     goDetail() {
       this.$emit("openBetPop", this.doc.data.id);
       //this.$router.push(`/purchase-record-details?id=${this.doc.data.id}`);
+    },
+    async visib() {
+      const [err, res] = await userApi.betsOrderDetail({
+        id: this.doc.data.id,
+      });
+      if (err) return;
+      this.detail = res.data;
     },
   },
 };
@@ -113,12 +168,20 @@ export default {
     padding: 0 24px 24px;
     font-size: 24px;
     background-color: #fff;
+    background: url("@/assets/img/room.png") no-repeat 378px 16px;
+    background-size: 80px 80px;
   }
   .expect {
     margin-bottom: 8px;
+  }
+  .expect-color {
     & > li {
       p:first-child {
         margin-right: 24px;
+        color: #505050;
+      }
+      p:last-child {
+        color: #b78756;
       }
     }
   }

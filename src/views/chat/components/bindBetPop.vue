@@ -68,22 +68,28 @@
             </p>
           </li>
         </ul>
-        <ul class="justify-between stepper align-center p-x-8 m-t-24">
-          <li class="color">购买金额</li>
-          <li>
-            <van-stepper
+        <ul class="justify-between stepper align-center m-t-24">
+          <li class="flex-1">
+            <van-field
+              v-model="detail.clientMoney"
+              type="number"
+              placeholder="请输入金额"
+            />
+            <!-- <van-stepper
               v-model="detail.clientMoney"
               min="1"
               :max="detail.sellCount"
-            />
+              :show-plus="false"
+              :show-minus="false"
+            /> -->
           </li>
         </ul>
       </div>
       <ul class="center-center money-list">
-        <li class="center-center m-r-32">
+        <!-- <li class="center-center m-r-32">
           共<span class="m-l-4 m-r-4 reds">{{ quantity }}</span
           >注
-        </li>
+        </li> -->
         <li class="center-center">
           总金额<span class="m-l-4 m-r-4 reds">¥{{ divide(detail.money) }}</span
           >元
@@ -132,6 +138,7 @@ export default {
   computed: {
     ...mapGetters(["catList"]),
     betCode() {
+      console.log(this.detail);
       if (this.detail.betCode) {
         return this.$util.parseFourStarInput(this.detail.betCode);
       }
@@ -139,6 +146,7 @@ export default {
     },
     quantity() {
       // 遍历 betCode。quantity;
+      console.log(this.betCode);
       return this.betCode.reduce((acc, cur) => {
         return acc + cur.quantity;
       }, 0);
@@ -317,6 +325,10 @@ export default {
         this.$toast("合买已结束");
         return;
       }
+      if (!price) {
+        this.$refs.$tipsDialog.open("请输入购买金额");
+        return;
+      }
       if (price === "all") {
         this.detail.clientMoney = this.detail.sellCount;
         this.$refs.$buyDialog.open(
@@ -324,10 +336,7 @@ export default {
         );
         return;
       }
-      if (!price) {
-        this.$refs.$tipsDialog.open("请输入购买金额");
-        return;
-      }
+
       if (price > this.detail.sellCount) {
         this.$refs.$tipsDialog.open("购买金额不能大于剩余金额");
         return;
@@ -371,7 +380,7 @@ export default {
         id: this.id,
       });
       if (err) return;
-      res.data.clientMoney = 1;
+      res.data.clientMoney = "";
       res.data.betCountCurr = res.data.betCountCurr / 100;
       res.data.betTotal = res.data.betTotal / 100;
       res.data.sellCount = res.data.betTotal - res.data.betCountCurr;
@@ -466,14 +475,20 @@ export default {
 }
 .timeData {
   justify-content: flex-end;
+  color: #ff4d3e;
 }
 .detail-msg {
   border-bottom: 2px dashed #e5e5e5;
 }
 .stepper {
-  background: #fafafa;
   margin-bottom: 300px;
+  ::v-deep {
+    .van-cell {
+      background-color: #fafafa;
+    }
+  }
 }
+
 .money-list {
   height: 68px;
   background: #ffe0e2;
