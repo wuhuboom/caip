@@ -1,6 +1,7 @@
-import axios from "axios";
 import app from "@/main";
 import to from "await-to-js";
+import axios from "axios";
+import auth from "./auth";
 const baseURL =
   process.env.NODE_ENV === "production"
     ? window.BASEPATH
@@ -39,6 +40,23 @@ instance.interceptors.response.use(
   (res) => {
     let result = res.data || {};
     let { code, msg, data } = result;
+    if ([886, 188].includes(code)) {
+      if (code === 188) {
+        msg = msg || "系统维护中，请稍后再试";
+        auth.setToken(msg, "repair-msg");
+      }
+      app.$store.commit("setRepair", {
+        code: 886,
+        msg: auth.getToken("repair-msg"),
+      });
+      return Promise.reject(result);
+    }
+    if (app.$store.state.repair.code !== 200) {
+      app.$store.commit("setRepair", {
+        code: 200,
+        msg: "",
+      });
+    }
     if ([500].includes(code)) {
       msg = app.$t("system.fail");
     }

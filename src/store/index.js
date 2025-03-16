@@ -10,6 +10,10 @@ Vue.use(Vuex);
 const lang = location.href.includes("zmkm") ? "zh" : "";
 export default new Vuex.Store({
   state: {
+    repair: {
+      code: 200,
+      msg: auth.getToken("repair") || "",
+    },
     logoTxt: window.logoTxt || "彩票",
     logoIcon:
       process.env.NODE_ENV === "production"
@@ -207,6 +211,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    setRepair(state, data) {
+      state.repair = data;
+    },
     setShareData(state, data) {
       state.shareData = data;
     },

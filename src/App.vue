@@ -3,9 +3,11 @@
     <router-view name="AppTopBar"></router-view>
     <router-view :key="$router.currentRoute.fullPath" />
     <router-view name="AppBtmBar"></router-view>
+    <RepairDilog />
   </div>
 </template>
 <script>
+import RepairDilog from "@/components/RepairDilog";
 import i18n from "@/locale";
 import auth from "@/plugins/auth";
 export default {
@@ -17,6 +19,9 @@ export default {
     $route() {
       //
     },
+  },
+  components: {
+    RepairDilog,
   },
   computed: {
     user() {
