@@ -47,7 +47,7 @@ instance.interceptors.response.use(
       }
       app.$store.commit("setRepair", {
         code: 886,
-        msg: auth.getToken("repair-msg"),
+        msg: auth.getToken("repair-msg") || msg,
       });
       return Promise.reject(result);
     }
