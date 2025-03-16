@@ -133,6 +133,7 @@ export default {
       this.$router.push(`/order/detail/${this.doc.data.id}`);
     },
     async visib() {
+      if (this.detail.id) return;
       const [err, res] = await userApi.betsOrderDetail({
         id: this.doc.data.id,
       });
