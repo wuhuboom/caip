@@ -1,6 +1,13 @@
 import request from "@/plugins/request";
 export default {
-  ///home/upload_img
+  //invest/pre
+  investPre(data) {
+    return request({
+      url: "/invest/pre",
+      method: "post",
+      data,
+    });
+  },
   uploadImg(data) {
     return request({
       url: "/home/upload_img",
