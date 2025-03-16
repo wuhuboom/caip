@@ -141,6 +141,7 @@ export default {
       //this.$router.push(`/purchase-record-details?id=${this.doc.data.id}`);
     },
     async visib() {
+      if (this.detail.id) return;
       const [err, res] = await userApi.betsOrderDetail({
         id: this.doc.data.id,
       });
@@ -167,8 +168,7 @@ export default {
   .conts {
     padding: 0 24px 24px;
     font-size: 24px;
-    background-color: #fff;
-    background: url("@/assets/img/room.png") no-repeat 378px 16px;
+    background: url("@/assets/img/room.png") no-repeat 378px 16px #fff;
     background-size: 80px 80px;
   }
   .expect {
