@@ -7,6 +7,7 @@
   </div>
 </template>
 <script>
+import userApi from "@/api/user";
 import RepairDilog from "@/components/RepairDilog";
 import i18n from "@/locale";
 import auth from "@/plugins/auth";
@@ -71,6 +72,8 @@ export default {
     setInterval(() => {
       if (auth.getToken()) {
         this.$store.dispatch("getInfo");
+      } else {
+        userApi.versionReq();
       }
     }, 3000);
   },
