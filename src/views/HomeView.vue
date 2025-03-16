@@ -380,10 +380,10 @@
 </template>
 
 <script>
-import QrcodeVue from "qrcode.vue";
 import userApi from "@/api/user";
 import InfoMain from "@/components/InfoMain";
 import auth from "@/plugins/auth";
+import QrcodeVue from "qrcode.vue";
 export default {
   name: "HomePage",
   data() {
@@ -458,15 +458,13 @@ export default {
       const dialogs = auth.getToken("dialogs")
         ? JSON.parse(auth.getToken("dialogs"))
         : [];
-      console.log(dialogs, this.itemDoc);
-      if (!dialogs.includes(this.itemDoc.id)) {
+      if (!dialogs.includes(this.itemDoc.id) && this.itemDoc.id) {
         this.show = true;
         dialogs.push(this.itemDoc.id);
         //dialogs 取最后10个
         if (dialogs.length > 10) {
           dialogs.shift();
         }
-        console.log(dialogs, this.itemDoc.id);
         auth.setToken(JSON.stringify(dialogs), "dialogs");
       }
     },

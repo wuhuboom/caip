@@ -11,6 +11,10 @@ Vue.use(Vuex);
 const lang = location.href.includes("zmkm") ? "zh" : "";
 export default new Vuex.Store({
   state: {
+    repair: {
+      code: 200,
+      msg: auth.getToken("repair") || "",
+    },
     theOne: [
       "三星组选组三",
       "三星组选组三胆拖",
@@ -200,6 +204,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    setRepair(state, data) {
+      state.repair = data;
+    },
     setBetPrice(state, price) {
       state.vuexBetPrice = price;
     },

@@ -3,13 +3,18 @@
     <router-view name="AppTopBar"></router-view>
     <router-view :key="$router.currentRoute.fullPath" />
     <router-view name="AppBtmBar"></router-view>
+    <RepairDilog />
   </div>
 </template>
 <script>
+import RepairDilog from "@/components/RepairDilog";
 import auth from "@/plugins/auth";
 export default {
   data() {
     return {};
+  },
+  components: {
+    RepairDilog,
   },
   created() {
     setInterval(() => {
