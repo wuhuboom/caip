@@ -3,14 +3,14 @@
     <p class="my-title center-center">{{ doc.data.lottery }}全天计划</p>
     <div class="conts font12">
       <p class="lottery font13 align-center">{{ doc.data.lottery }}</p>
-      <ul class="list-txt expect">
+      <ul class="list-txt expect expect-color">
         <li class="d-flex">
           <p>期号:</p>
           <p>{{ doc.data.expect }}</p>
         </li>
       </ul>
       <ul
-        class="bet-code list-txt"
+        class="bet-code list-txt expect-color"
         v-for="(item, index) in betCode"
         :key="index"
       >
@@ -20,8 +20,12 @@
         </li>
         <li class="d-flex">
           <p>投注内容:</p>
-          <p>
-            {{ item.positions?.map((subArr) => subArr.join(", ")).join("|") }}
+          <p class="x-auto no-wrap">
+            {{
+              !detail.betCode
+                ? getVisibility(detail.visibility)
+                : item.positions?.map((subArr) => subArr.join(", ")).join("|")
+            }}
           </p>
         </li>
         <li class="d-flex">
@@ -57,10 +61,14 @@
 </template>
 
 <script>
+import userApi from "@/api/user";
 export default {
   name: "PopupMoney",
   data() {
-    return {};
+    return {
+      show: true,
+      detail: {},
+    };
   },
   props: {
     doc: {
@@ -74,20 +82,62 @@ export default {
     },
     betCode() {
       if (this.doc.data.betCode) {
-        console.log(this.$util.parseFourStarInput(this.doc.data.betCode));
         return this.$util.parseFourStarInput(this.doc.data.betCode);
       }
       return [];
     },
+    user() {
+      return this.$store.state.user;
+    },
   },
   methods: {
+    showContent(v) {
+      //visibility 0公开 1仅对跟单者公开 2截止后公开 3永久保密
+      if (v === 0) {
+        return true;
+      }
+      if (v === 1) {
+        return this.detail.joins.some((v) => v.playerId === this.user.id);
+      }
+      if (v === 2) {
+        return +this.detail.status === 4;
+      }
+      return false;
+    },
+    getVisibility(v) {
+      const docs = [
+        {
+          name: "公开",
+          status: 0,
+        },
+        {
+          name: "仅对跟单者公开",
+          status: 1,
+        },
+        {
+          name: "截止后公开",
+          status: 2,
+        },
+        {
+          name: "永久保密",
+          status: 3,
+        },
+      ];
+      return (docs.find((doc) => doc.status === v) || {}).name;
+    },
     btmStatus(v) {
       return (this.$store.state.btmStatus.find((doc) => +doc.id === +v) || {})
         .name;
     },
     goDetail() {
-      //window.open(`#/order/detail/${this.doc.data.id}`);
       this.$router.push(`/order/detail/${this.doc.data.id}`);
+    },
+    async visib() {
+      const [err, res] = await userApi.betsOrderDetail({
+        id: this.doc.data.id,
+      });
+      if (err) return;
+      this.detail = res.data;
     },
   },
 };
@@ -109,7 +159,8 @@ export default {
   .conts {
     padding: 0 12px 12px;
     font-size: 12px;
-    background-color: #fff;
+    background: url("@/assets/img/room.png") no-repeat 189px 8px #fff;
+    background-size: 40px 40px;
   }
   .expect {
     margin-bottom: 4px;
@@ -150,6 +201,17 @@ export default {
     background: #e7474c;
     border-radius: 8px 8px 8px 8px;
     color: #fff;
+  }
+}
+.expect-color {
+  & > li {
+    p:first-child {
+      margin-right: 24px;
+      color: #505050;
+    }
+    p:last-child {
+      color: #b78756;
+    }
   }
 }
 </style>
