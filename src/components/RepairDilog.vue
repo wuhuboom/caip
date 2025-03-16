@@ -6,7 +6,6 @@
     :close-on-press-escape="false"
     class="g-msg-repair-dialog"
     width="440px"
-    @opened="opened"
   >
     <ul>
       <li class="center-center font16 m-b-12">系统维护通知</li>
@@ -36,7 +35,10 @@ export default {
             this.dialogTableVisible = true;
           }
         } else {
-          this.dialogTableVisible = false;
+          if (this.dialogTableVisible) {
+            this.dialogTableVisible = false;
+            location.reload();
+          }
         }
       },
       deep: true, // 监听 repair 内部属性变化
