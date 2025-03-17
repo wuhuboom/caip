@@ -60,7 +60,7 @@
             </p>
           </li>
         </ul>
-        <p class="user-list">{{ doc.data.user }}</p>
+        <p class="user-list">计划无神,跟反自由</p>
         <p class="btns-bet center-center">我要跟投</p>
       </div>
     </div>
