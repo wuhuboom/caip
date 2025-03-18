@@ -107,7 +107,7 @@
             ends: !isCna,
           }"
         >
-          {{ !isCna ? "已结束" : "直接下注" }}
+          {{ !isCna ? getStatus(detail.status) : "直接下注" }}
         </li>
       </ul>
     </div>

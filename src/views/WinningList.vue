@@ -16,8 +16,7 @@
             </div>
             <div class="info">
               <div
-                class="item center-center"
-                :class="{ on: i == 0 }"
+                class="item center-center on"
                 v-for="(v2, i2) in v.openArr"
                 :key="i2"
               >
