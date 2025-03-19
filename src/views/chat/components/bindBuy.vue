@@ -1,61 +1,53 @@
 <template>
-  <div class="my-group-buy" @click="goDetail">
-    <p class="my-title center-center">{{ doc.data.lottery }}全天计划</p>
-    <div class="conts font12">
-      <p class="lottery font13 align-center">{{ doc.data.lottery }}</p>
-      <ul class="list-txt expect expect-color">
-        <li class="d-flex">
-          <p>期号:</p>
-          <p>{{ doc.data.expect }}</p>
-        </li>
-      </ul>
-      <ul
-        class="bet-code list-txt expect-color"
-        v-for="(item, index) in betCode"
-        :key="index"
-      >
-        <li class="d-flex">
-          <p>投注玩法:</p>
-          <p>{{ item.name }}</p>
-        </li>
-        <li class="d-flex">
-          <p>投注内容:</p>
-          <p class="x-auto no-wrap">
-            {{
-              !detail.betCode
-                ? getVisibility(detail.visibility)
-                : item.positions?.map((subArr) => subArr.join(", ")).join("|")
-            }}
-          </p>
-        </li>
-        <li class="d-flex">
-          <p>投注金额:</p>
-          <p>{{ item.price }}元</p>
-        </li>
-        <li class="d-flex">
-          <p>总命中率:</p>
-          <p>{{ `${doc.data.bingos}%` }}</p>
-        </li>
-      </ul>
-      <ul
-        class="btm-status"
-        v-for="(item, index) in doc.data.expects"
-        :key="`${index}-index`"
-      >
-        <li class="justify-between">
-          <p>{{ item.expect }}期</p>
-          <p
-            :class="{
-              'color-green': item.status === 3,
-              'color-red': item.status === 2,
-            }"
+  <div>
+    <div class="my-group-buy" @click="goDetail">
+      <p class="my-title center-center">{{ doc.data.lottery }}全天计划</p>
+      <div class="conts font12">
+        <p class="lottery font13 align-center">{{ doc.data.lottery }}</p>
+        <ul class="list-txt expect expect-color">
+          <li class="d-flex">
+            <p>期号:</p>
+            <p>{{ doc.data.expect }}</p>
+          </li>
+        </ul>
+        <p class="center-center" v-if="!detail.id"><van-loading /></p>
+        <template v-else>
+          <ul
+            class="bet-code list-txt expect-color"
+            v-for="(item, index) in betCode.filter((v, k) => k == 0)"
+            :key="index"
           >
-            {{ btmStatus(item.status) }}
-          </p>
-        </li>
-      </ul>
-      <p class="user-list">计划无神,跟反自由</p>
-      <p class="btns-bet center-center">我要跟投</p>
+            <li class="d-flex">
+              <p>投注玩法:</p>
+              <p class="x-auto no-wrap">
+                {{
+                  !detail.betCode ? getVisibility(detail.visibility) : item.name
+                }}
+              </p>
+            </li>
+            <li class="d-flex">
+              <p class="no-shrink">投注内容:</p>
+              <p class="x-auto no-wrap">
+                {{
+                  !detail.betCode
+                    ? getVisibility(detail.visibility)
+                    : item.positions?.map((subArr) => subArr.join("")).join("|")
+                }}
+              </p>
+            </li>
+          </ul>
+          <ul class="bet-code list-txt expect-color" v-if="detail.myBetCount">
+            <li class="d-flex">
+              <p>投注金额:</p>
+              <p class="x-auto no-wrap">
+                {{ divide(detail.myBetCount / 100, false) }}元
+              </p>
+            </li>
+          </ul>
+        </template>
+        <p class="user-list">计划无神,跟反自由</p>
+        <p class="btns-bet center-center">我要跟投</p>
+      </div>
     </div>
   </div>
 </template>
