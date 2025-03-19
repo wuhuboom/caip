@@ -9,87 +9,103 @@
         <li @click="show = false"><van-icon name="cross" :size="16" /></li>
       </ul>
       <div class="p-l-24 p-r-24">
-        <ul class="detail-msg">
-          <li>
-            <div class="justify-between p-b-24 color999">
-              <div class="align-center">
-                <img
-                  v-if="isCna"
-                  class="d-img beting m-r-16"
-                  src="@/assets/img/beting-sign.png"
-                  alt=""
-                />
-                <p>{{ detail.expect }}期</p>
-              </div>
-              <div v-if="detail.lottery?.nextExpect.countdown">
-                <div>距离截止时间</div>
-                <div>
-                  <van-count-down
-                    @finish="openFish"
-                    :time="detail.lottery?.nextExpect.countdown * 1000"
-                  >
-                    <template #default="timeData">
-                      <div class="timeData d-flex">
-                        <span class="block center-center">{{
-                          timeData.hours >= 10
-                            ? timeData.hours
-                            : `0${timeData.hours}`
-                        }}</span>
-                        <span class="colon center-center">:</span>
-                        <span class="block center-center">{{
-                          timeData.minutes >= 10
-                            ? timeData.minutes
-                            : `0${timeData.minutes}`
-                        }}</span>
-                        <span class="colon center-center">:</span>
-                        <span class="block center-center">{{
-                          timeData.seconds >= 10
-                            ? timeData.seconds
-                            : `0${timeData.seconds}`
-                        }}</span>
-                      </div>
-                    </template>
-                  </van-count-down>
+        <div>
+          <ul class="detail-msg">
+            <li>
+              <div class="justify-between p-b-24 color999">
+                <div class="align-center">
+                  <img
+                    v-if="isCna"
+                    class="d-img beting m-r-16"
+                    src="@/assets/img/beting-sign.png"
+                    alt=""
+                  />
+                  <img
+                    v-else
+                    class="d-img beting m-r-16"
+                    src="@/assets/img/finishend.png"
+                    alt=""
+                  />
+                  <p>{{ detail.expect }}期</p>
+                </div>
+                <div v-if="detail.lottery?.nextExpect.countdown">
+                  <div>距离截止时间</div>
+                  <div>
+                    <van-count-down
+                      @finish="openFish"
+                      :time="detail.lottery?.nextExpect.countdown * 1000"
+                    >
+                      <template #default="timeData">
+                        <div class="timeData d-flex">
+                          <span class="block center-center">{{
+                            timeData.hours >= 10
+                              ? timeData.hours
+                              : `0${timeData.hours}`
+                          }}</span>
+                          <span class="colon center-center">:</span>
+                          <span class="block center-center">{{
+                            timeData.minutes >= 10
+                              ? timeData.minutes
+                              : `0${timeData.minutes}`
+                          }}</span>
+                          <span class="colon center-center">:</span>
+                          <span class="block center-center">{{
+                            timeData.seconds >= 10
+                              ? timeData.seconds
+                              : `0${timeData.seconds}`
+                          }}</span>
+                        </div>
+                      </template>
+                    </van-count-down>
+                  </div>
                 </div>
               </div>
-            </div>
-            <p class="p-b-24 font14">{{ detail.lottery?.lotteryName }}</p>
-            <p
-              class="p-b-24 align-center"
-              v-for="(item, index) in betCode"
-              :key="index"
-            >
-              <span class="no-shrink m-r-16">{{ item.name }}</span>
-              <span class="x-auto flex-1" style="white-space: nowrap">
-                {{
-                  item.positions?.map((subArr) => subArr.join(", ")).join("|")
-                }}</span
+              <p class="p-b-24 font14">{{ detail.lottery?.lotteryName }}</p>
+              <p
+                class="p-b-24 align-center"
+                v-for="(item, index) in betCode"
+                :key="index"
               >
-            </p>
-          </li>
+                <span class="no-shrink m-r-16">{{ item.name }}</span>
+                <span class="x-auto flex-1" style="white-space: nowrap">
+                  {{
+                    item.positions?.map((subArr) => subArr.join("")).join("|")
+                  }}</span
+                >
+              </p>
+            </li>
+          </ul>
+          <ul class="justify-between stepper align-center m-t-24">
+            <li class="flex-1">
+              <van-field
+                v-model="detail.clientMoney"
+                type="number"
+                placeholder="请输入金额"
+              />
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div
+        class="p-l-24 p-r-24"
+        v-for="(item, index) in detail.expects"
+        :key="index"
+      >
+        <ul>
+          <li>{{ item.expect }}期</li>
         </ul>
-        <ul class="justify-between stepper align-center m-t-24">
-          <li class="flex-1">
-            <van-field
-              v-model="detail.clientMoney"
-              type="number"
-              placeholder="请输入金额"
-            />
-            <!-- <van-stepper
-              v-model="detail.clientMoney"
-              min="1"
-              :max="detail.sellCount"
-              :show-plus="false"
-              :show-minus="false"
-            /> -->
-          </li>
+        <ul
+          class="justify-between stepper align-center"
+          v-for="(subItem, subIndex) in item.details"
+          :key="subIndex"
+        >
+          <li></li>
+          <li></li>
+          <li></li>
         </ul>
       </div>
+
       <ul class="center-center money-list">
-        <!-- <li class="center-center m-r-32">
-          共<span class="m-l-4 m-r-4 reds">{{ quantity }}</span
-          >注
-        </li> -->
         <li class="center-center">
           总金额<span class="m-l-4 m-r-4 reds">¥{{ divide(detail.money) }}</span
           >元

@@ -27,9 +27,7 @@
                 {{
                   !detail.betCode
                     ? getVisibility(detail.visibility)
-                    : item.positions
-                        ?.map((subArr) => subArr.join(", "))
-                        .join("|")
+                    : item.positions?.map((subArr) => subArr.join("")).join("|")
                 }}
               </p>
             </li>
