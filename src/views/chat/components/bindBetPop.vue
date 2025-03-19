@@ -35,9 +35,9 @@
             v-for="(subItem, subIndex) in item.details"
             :key="subIndex"
           >
-            <template v-if="subItem.code">
-              <li>{{ subItem.name }}</li>
-              <li>{{ subItem.txtCode }}</li>
+            <template>
+              <li>{{ subItem.name || "****" }}</li>
+              <li>{{ subItem.txtCode || "****" }}</li>
               <li :class="{ red: subItem.win > 0 }">
                 {{ subItem.win > 0 ? "中奖" : "未中奖" }}
               </li>
