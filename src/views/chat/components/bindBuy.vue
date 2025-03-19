@@ -35,14 +35,6 @@
                 }}
               </p>
             </li>
-            <!-- <li class="d-flex">
-              <p>投注金额:</p>
-              <p class="x-auto no-wrap">{{ countPrice(item) }}元</p>
-            </li> -->
-            <!-- <li class="d-flex">
-              <p>总命中率:</p>
-              <p class="x-auto no-wrap">{{ `${doc.data.bingos}%` }}</p>
-            </li> -->
           </ul>
           <ul class="bet-code list-txt expect-color" v-if="detail.myBetCount">
             <li class="d-flex">
@@ -53,23 +45,6 @@
             </li>
           </ul>
         </template>
-        <!-- <ul
-          class="btm-status"
-          v-for="(item, index) in doc.data.expects"
-          :key="`${index}-index`"
-        >
-          <li class="justify-between">
-            <p>{{ item.expect }}期</p>
-            <p
-              :class="{
-                'color-green': item.status === 3,
-                'color-red': item.status === 2,
-              }"
-            >
-              {{ btmStatus(item.status) }}
-            </p>
-          </li>
-        </ul> -->
         <p class="user-list">计划无神,跟反自由</p>
         <p class="btns-bet center-center">我要跟投</p>
       </div>
