@@ -1,5 +1,6 @@
 export default {
   parseFourStarInput(input) {
+    if (!input) return "";
     // 按 '/' 分割多组记录
     const records = input.split("/");
 
