@@ -47,7 +47,9 @@
           <ul class="bet-code list-txt expect-color" v-if="detail.myBetCount">
             <li class="d-flex">
               <p>投注金额:</p>
-              <p class="x-auto no-wrap">{{ detail.myBetCount }}元</p>
+              <p class="x-auto no-wrap">
+                {{ divide(detail.myBetCount / 100, false) }}元
+              </p>
             </li>
           </ul>
         </template>
