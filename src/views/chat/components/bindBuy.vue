@@ -41,7 +41,7 @@
             </li>
           </ul>
         </template>
-        <ul
+        <!-- <ul
           class="btm-status"
           v-for="(item, index) in doc.data.expects"
           :key="`${index}-index`"
@@ -57,7 +57,7 @@
               {{ btmStatus(item.status) }}
             </p>
           </li>
-        </ul>
+        </ul> -->
         <p class="user-list">计划无神,跟反自由</p>
         <p class="btns-bet center-center">我要跟投</p>
       </div>
