@@ -8,7 +8,42 @@
         <li class="font16">跟投计划</li>
         <li @click="show = false"><van-icon name="cross" :size="16" /></li>
       </ul>
-      <div class="p-l-24 p-r-24">
+      <div class="stepper" v-if="detail.status > 2">
+        <div
+          class="p-l-24 p-r-24"
+          v-for="(item, index) in detail.expects"
+          :key="index"
+        >
+          <ul class="color999 align-center justify-between p-b-24">
+            <li class="align-center">
+              <img
+                class="d-img beting m-r-16"
+                src="@/assets/img/finishend.png"
+                alt=""
+              />
+              {{ item.expect }}期
+            </li>
+            <li style="text-align: right">
+              <p class="p-b-4">开奖结果</p>
+              <p class="font14" style="color: #ff4d3e">
+                {{ item.open?.replace(/,/g, " ") }}
+              </p>
+            </li>
+          </ul>
+          <ul
+            class="justify-between m-b-16 align-center"
+            v-for="(subItem, subIndex) in item.details"
+            :key="subIndex"
+          >
+            <li>{{ subItem.name }}</li>
+            <li>{{ subItem.txtCode }}</li>
+            <li :class="{ red: subItem.win > 0 }">
+              {{ subItem.win > 0 ? "中奖" : "未中奖" }}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="p-l-24 p-r-24" v-else>
         <div>
           <ul class="detail-msg">
             <li>
@@ -86,24 +121,6 @@
           </ul>
         </div>
       </div>
-      <div
-        class="p-l-24 p-r-24"
-        v-for="(item, index) in detail.expects"
-        :key="index"
-      >
-        <ul>
-          <li>{{ item.expect }}期</li>
-        </ul>
-        <ul
-          class="justify-between stepper align-center"
-          v-for="(subItem, subIndex) in item.details"
-          :key="subIndex"
-        >
-          <li></li>
-          <li></li>
-          <li></li>
-        </ul>
-      </div>
 
       <ul class="center-center money-list">
         <li class="center-center">
@@ -116,6 +133,7 @@
           <p>剩余:{{ detail.sellCount }}元</p>
           <p>全包</p>
         </li>
+        <!-- getStatus(detail.status) -->
         <li
           @click="buyPlayer(detail.clientMoney)"
           class="center-center"
@@ -123,7 +141,7 @@
             ends: !isCna,
           }"
         >
-          {{ !isCna ? getStatus(detail.status) : "直接下注" }}
+          {{ !isCna ? "已结束" : "直接下注" }}
         </li>
       </ul>
     </div>
@@ -403,6 +421,20 @@ export default {
       res.data.betListArr = res.data.betCode
         ? this.$util.parseFourStarInput(res.data.betCode)
         : [];
+      res.data?.expects?.forEach((v) => {
+        v?.details?.forEach((c) => {
+          const arr = this.$util.parseFourStarInput(c.code);
+          if (arr.length) {
+            const item = arr[0];
+            Object.assign(c, {
+              name: item.name,
+              txtCode: item?.positions
+                ?.map((subArr) => subArr.join(""))
+                .join("|"),
+            });
+          }
+        });
+      });
       //res.data.clientMoney = res.data.sellCount;
       for (let key in res.data) {
         this.$set(this.detail, key, res.data[key]);
@@ -526,5 +558,8 @@ export default {
   & > li.ends {
     background: #999999;
   }
+}
+.red {
+  color: #ff4d3e;
 }
 </style>
