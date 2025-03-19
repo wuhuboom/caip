@@ -14,12 +14,16 @@
         <template v-else>
           <ul
             class="bet-code list-txt expect-color"
-            v-for="(item, index) in betCode"
+            v-for="(item, index) in betCode.filter((v, k) => k == 0)"
             :key="index"
           >
             <li class="d-flex">
               <p>投注玩法:</p>
-              <p class="x-auto no-wrap">{{ item.name }}</p>
+              <p class="x-auto no-wrap">
+                {{
+                  !detail.betCode ? getVisibility(detail.visibility) : item.name
+                }}
+              </p>
             </li>
             <li class="d-flex">
               <p class="no-shrink">投注内容:</p>
@@ -31,13 +35,19 @@
                 }}
               </p>
             </li>
-            <li class="d-flex">
+            <!-- <li class="d-flex">
               <p>投注金额:</p>
-              <p class="x-auto no-wrap">{{ item.price }}元</p>
-            </li>
-            <li class="d-flex">
+              <p class="x-auto no-wrap">{{ countPrice(item) }}元</p>
+            </li> -->
+            <!-- <li class="d-flex">
               <p>总命中率:</p>
               <p class="x-auto no-wrap">{{ `${doc.data.bingos}%` }}</p>
+            </li> -->
+          </ul>
+          <ul class="bet-code list-txt expect-color" v-if="detail.myBetCount">
+            <li class="d-flex">
+              <p>投注金额:</p>
+              <p class="x-auto no-wrap">{{ detail.myBetCount }}元</p>
             </li>
           </ul>
         </template>
@@ -96,6 +106,12 @@ export default {
     },
   },
   methods: {
+    countPrice(item) {
+      if (this.theOne.includes(item.name)) {
+        return item.price;
+      }
+      return item.quantity * item.multiplier * item.price;
+    },
     showContent(v) {
       //visibility 0公开 1仅对跟单者公开 2截止后公开 3永久保密
       if (v === 0) {
@@ -135,6 +151,7 @@ export default {
         .name;
     },
     goDetail() {
+      console.log(this.doc.data, "---");
       this.$emit("openBetPop", this.doc.data.id);
       //this.$router.push(`/purchase-record-details?id=${this.doc.data.id}`);
     },
