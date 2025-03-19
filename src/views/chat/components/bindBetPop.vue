@@ -30,19 +30,32 @@
               </p>
             </li>
           </ul>
-          <ul
-            class="justify-between m-b-16 align-center"
-            v-for="(subItem, subIndex) in item.details"
-            :key="subIndex"
-          >
-            <template>
-              <li>{{ subItem.name || "****" }}</li>
-              <li>{{ subItem.txtCode || "****" }}</li>
-              <li :class="{ red: subItem.win > 0 }">
-                {{ subItem.win > 0 ? "中奖" : "未中奖" }}
-              </li>
-            </template>
-          </ul>
+          <template v-if="!detail.betCode">
+            <ul class="justify-between m-b-16 align-center">
+              <template>
+                <li>{{ "****" }}</li>
+                <li>{{ "****" }}</li>
+                <li :class="{ red: detail.openStatus === 2 }">
+                  {{ detail.openStatus === 2 ? "中奖" : "未中奖" }}
+                </li>
+              </template>
+            </ul>
+          </template>
+          <template v-else>
+            <ul
+              class="justify-between m-b-16 align-center"
+              v-for="(subItem, subIndex) in item.details"
+              :key="subIndex"
+            >
+              <template>
+                <li>{{ subItem.name || "****" }}</li>
+                <li>{{ subItem.txtCode || "****" }}</li>
+                <li :class="{ red: subItem.win > 0 }">
+                  {{ subItem.win > 0 ? "中奖" : "未中奖" }}
+                </li>
+              </template>
+            </ul>
+          </template>
         </div>
       </div>
       <div class="p-l-24 p-r-24" v-else>
