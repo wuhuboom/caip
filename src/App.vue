@@ -1,7 +1,11 @@
 <template>
   <div id="app" :style="topBar">
     <router-view name="AppTopBar"></router-view>
-    <router-view :key="$router.currentRoute.fullPath" />
+    <keep-alive>
+      <router-view v-if="isCashier" :key="$route.fullPath" />
+    </keep-alive>
+
+    <router-view v-if="!isCashier" :key="$route.fullPath" />
     <router-view name="AppBtmBar"></router-view>
     <RepairDilog />
   </div>
@@ -14,17 +18,22 @@ import auth from "@/plugins/auth";
 export default {
   name: "App",
   data() {
-    return {};
+    return {
+      keepAliveRoutePath: ["/documentation"],
+    };
   },
   watch: {
-    $route() {
-      //
+    "$route.fullPath"(v) {
+      console.log(this.keepAliveRoutePath.includes(v), v);
     },
   },
   components: {
     RepairDilog,
   },
   computed: {
+    isCashier() {
+      return this.keepAliveRoutePath.includes(this.$route.fullPath);
+    },
     user() {
       return this.$store.state.user;
     },

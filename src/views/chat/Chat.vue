@@ -1,6 +1,6 @@
 <template>
   <div class="bg-grey flex-column" :style="{ height: `${chatHeight}px` }">
-    <AppTopBar ref="topBar" topBarTitle="欢聚一堂">
+    <AppTopBar ref="topBar" topBarTitle="欢聚一堂" :back="back">
       <template #right>
         <p class="center-center colorfff serve m-r-24" @click="serve">
           <img class="d-img" src="@/assets/img/card.png" alt="" />
@@ -200,6 +200,9 @@ export default {
     },
   },
   methods: {
+    back() {
+      this.$router.push("/");
+    },
     openBetPop(v) {
       this.$refs.$bindBetPop.open(v);
     },

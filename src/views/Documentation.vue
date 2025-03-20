@@ -91,7 +91,8 @@
                   <template v-else>
                     <div class="flex-column" style="text-align: right">
                       <p class="m-b-8 color999">状态</p>
-                      <p class="blod">{{ getStatus(item.status) }}</p>
+                      <!-- {{ getStatus(item.status) }} -->
+                      <p class="blod">已结束</p>
                     </div>
                   </template>
                 </div>
@@ -153,27 +154,34 @@
 
 <script>
 import userApi from "@/api/user";
+const initForm = () => ({
+  ftype: -1,
+  playerName: "",
+  lotteryId: "",
+  betCountMin: -1,
+  pageNo: 1,
+  pageSize: 10,
+});
 export default {
   name: "AppDocumentation",
   data() {
     return {
       loading: false,
       finished: false,
-      params: {
-        ftype: -1,
-        playerName: "",
-        lotteryId: "",
-        betCountMin: -1,
-        pageNo: 1,
-        pageSize: 10,
-      },
+      params: initForm(),
       tableData: {
         totalPage: null,
         totalCount: 0,
         results: [],
       },
       currentRate: 80,
+      fromRoute: null, // 存储前一个路由
     };
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.fromRoute = from; // 只能在 next() 里访问 this
+    });
   },
   computed: {
     text() {
@@ -271,6 +279,10 @@ export default {
       }
       this.tableData.results = this.tableData.results.concat(res.data.results);
     },
+  },
+  activated() {
+    if (this.fromRoute?.path == "/purchase-record-details") return;
+    this.lotteryBetsOrder(initForm());
   },
 };
 </script>

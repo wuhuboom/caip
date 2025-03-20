@@ -130,27 +130,29 @@
           <div v-if="showContent(detail.visibility)">
             <ul
               class="align-center justify-between m-l-24 m-r-24 p-b-24"
-              v-for="(item, index) in detail.betListArr"
+              v-for="(item, index) in detail.bets"
               :key="index"
               :class="{ 'p-t-24 b-d-m m-b-24': index == 0 }"
             >
+              <!-- "c": 2,//注数 "m": 2,//倍数 "b": "22,11",//号码
+              "p":"三星和值"//玩法 -->
               <li class="font12 no-shrink m-r-8">
-                <span>{{ item.name }}</span>
+                <span>{{ item.p }}</span>
                 <p class="m-t-8 space-between">
                   <span class="m-r-16 center-center"
                     >共
-                    <i class="m-l-8 m-r-8">{{ item.quantity }}</i>
+                    <i class="m-l-8 m-r-8">{{ item.c }}</i>
                     注</span
                   >
-                  <span class="m-r-16">{{ item.multiplier }}倍</span>
-                  <span class="active">{{ countPrice(item) }}元</span>
+                  <span class="m-r-16">{{ item.m }}倍</span>
+                  <span class="active">{{ item.money }}元</span>
                 </p>
               </li>
               <li class="x-auto">
                 <div class="align-center">
                   <div
                     class="align-center"
-                    v-for="(doc, idx) in item?.positions"
+                    v-for="(doc, idx) in $util.betsCode(item?.b)"
                     :key="idx"
                   >
                     <p
@@ -163,7 +165,7 @@
                     </p>
                     <p
                       class="center-center line"
-                      v-if="idx < item.positions?.length - 1"
+                      v-if="idx < $util.betsCode(item?.b).length - 1"
                     ></p>
                   </div>
                 </div>

@@ -1,4 +1,17 @@
 export default {
+  betsCode(v) {
+    if (!v) return [];
+    const positions = v
+      .split("|")
+      .map((pos) =>
+        pos.split(",").map((value) => (isNaN(value) ? value : Number(value)))
+      );
+
+    positions.forEach((item) => {
+      item.sort((a, b) => a - b);
+    });
+    return positions;
+  },
   getStrs(tableList) {
     let dataStr = "";
     tableList.forEach((v) => {
