@@ -76,11 +76,11 @@
       </template>
     </div>
     <div class="case-bets m-b-24">
-      <p class="p-l-24 p-r-24 bets-title align-center m-b-16 justify-between">
+      <p class="p-l-24 p-r-24 bets-title align-center justify-between">
         <span class="blod">开奖情况</span><span class="more">更多详情</span>
       </p>
       <div>
-        <ul class="grad-3">
+        <ul class="grad-3 p-t-16 p-b-16">
           <li class="p-l-24">期号</li>
           <li>状态</li>
         </ul>
