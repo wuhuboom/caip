@@ -77,7 +77,7 @@
     </div>
     <div class="case-bets m-b-24">
       <p class="p-l-24 p-r-24 bets-title align-center m-b-16 justify-between">
-        <span class="blod">开奖情况</span><span>更多详情</span>
+        <span class="blod">开奖情况</span><span class="more">更多详情</span>
       </p>
     </div>
     <div class="bg-fff font14 list-cont">
@@ -767,5 +767,9 @@ export default {
 }
 .pink {
   color: #bf2935;
+}
+.more {
+  color: #f19838;
+  text-decoration: underline;
 }
 </style>
