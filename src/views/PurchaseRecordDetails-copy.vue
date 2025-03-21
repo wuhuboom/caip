@@ -1,20 +1,15 @@
 <template>
   <div class="c-page bg-grey">
-    <AppTopBar topBarTitle="合买详情">
-      <template v-slot:right>
-        <p
-          class="colorfff m-r-16"
-          v-if="shareData.chatAble !== undefined"
-          @click="shareToChatRoom"
-        >
-          分享到聊天室
-        </p>
-      </template>
-    </AppTopBar>
+    <AppTopBar topBarTitle="合买详情"> </AppTopBar>
     <ul
-      class="nav active font16 bg-fff m-b-24 align-center justify-between p-l-24 p-r-24"
+      class="nav font16 bg-fff m-b-24 align-center justify-between p-l-24 p-r-24"
     >
-      <li>{{ getName(detail.lotteryId) }}</li>
+      <li class="align-center">
+        <p class="icoUrls m-r-16">
+          <img class="d-img" :src="lottery.icoUrls" alt="" />
+        </p>
+        {{ lottery.lotteryNameH5 }}
+      </li>
       <li
         class="underline"
         v-if="+detail.status === 0 && isMe"
@@ -300,6 +295,9 @@ export default {
   },
   computed: {
     ...mapGetters(["catList"]),
+    lottery() {
+      return this.detail?.lottery || {};
+    },
     user() {
       return this.$store.state.user;
     },
@@ -670,5 +668,9 @@ export default {
   .buy {
     background: #bf2935;
   }
+}
+.icoUrls {
+  height: 48px;
+  width: 48px;
 }
 </style>
