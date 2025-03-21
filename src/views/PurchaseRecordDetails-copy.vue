@@ -53,23 +53,32 @@
       </p>
     </div>
     <div class="case-bets m-b-24">
-      <p class="p-l-24 bets-title blod align-center m-b-16">方案内容</p>
-      <ul
-        class="p-l-24 p-r-24"
-        v-for="(item, index) in detail.bets"
-        :key="index"
-      >
-        <li class="align-center p-b-16">
-          <span class="m-r-8 no-shrink">选号:</span
-          ><span class="pink x-auto">{{ item?.b.replace(/,/g, "") }}</span>
-        </li>
-        <li class="align-center p-b-16">
-          <span class="m-r-8">{{ item.p }}</span>
-          <span class="m-r-8">{{ item.m }}倍</span>
-          <span class="m-r-8">{{ item.c }}注</span>
-          <span>{{ item.money }}元</span>
-        </li>
-      </ul>
+      <p class="p-l-24 bets-title blod align-center m-b-16">
+        投注内容({{ getVisibility(detail.visibility) }})
+      </p>
+      <template v-if="showContent(detail.visibility)">
+        <ul
+          class="p-l-24 p-r-24"
+          v-for="(item, index) in detail.bets"
+          :key="index"
+        >
+          <li class="align-center p-b-16">
+            <span class="m-r-8 no-shrink">选号:</span
+            ><span class="pink x-auto">{{ item?.b.replace(/,/g, "") }}</span>
+          </li>
+          <li class="align-center p-b-16">
+            <span class="m-r-8">{{ item.p }}</span>
+            <span class="m-r-8">{{ item.m }}倍</span>
+            <span class="m-r-8">{{ item.c }}注</span>
+            <span>{{ item.money }}元</span>
+          </li>
+        </ul>
+      </template>
+    </div>
+    <div class="case-bets m-b-24">
+      <p class="p-l-24 p-r-24 bets-title align-center m-b-16 justify-between">
+        <span class="blod">开奖情况</span><span>更多详情</span>
+      </p>
     </div>
     <div class="bg-fff font14 list-cont">
       <ul class="nav align-center justify-between p-l-24 p-r-24">
@@ -751,10 +760,10 @@ export default {
 }
 .case-bets {
   background-color: #fff;
-  .bets-title {
-    height: 66px;
-    border-bottom: 1px solid #e0e1e0;
-  }
+}
+.bets-title {
+  height: 66px;
+  border-bottom: 1px solid #e0e1e0;
 }
 .pink {
   color: #bf2935;
