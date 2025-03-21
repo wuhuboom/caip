@@ -80,8 +80,8 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import userApi from "@/api/user";
+import { mapGetters } from "vuex";
 export default {
   name: "PurchaseRecord",
   data() {

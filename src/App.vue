@@ -19,7 +19,7 @@ export default {
   name: "App",
   data() {
     return {
-      keepAliveRoutePath: ["/documentation"],
+      keepAliveRoutePath: ["/documentation", "/myBallRecord"],
     };
   },
   watch: {
