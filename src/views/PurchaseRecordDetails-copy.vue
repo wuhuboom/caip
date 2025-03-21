@@ -1,5 +1,5 @@
 <template>
-  <div class="c-page bg-grey">
+  <div class="c-page bg-grey font12">
     <AppTopBar topBarTitle="合买详情"> </AppTopBar>
     <ul
       class="nav font16 bg-fff m-b-24 align-center justify-between p-l-24 p-r-24"
@@ -20,8 +20,8 @@
       <li v-else>{{ getStatus(detail.status) }}</li>
     </ul>
     <div class="circle-cont m-b-24">
-      <ul>
-        <li class="circle-box">
+      <ul class="justify-between align-center">
+        <li class="circle-box align-center">
           <van-circle
             :rate="detail.p"
             :stroke-width="60"
@@ -33,10 +33,42 @@
             v-model="detail.currentRate"
           />
         </li>
-        <li></li>
-        <li></li>
+        <li class="flex-1 justify-between p-r-24 circle-desc">
+          <p class="flex-column center-center">
+            <span>总金额</span>
+            <span>¥{{ divide(detail.money) }}</span>
+          </p>
+          <p class="flex-column center-center">
+            <span>每份</span>
+            <span>1元</span>
+          </p>
+          <p class="flex-column center-center">
+            <span>剩余</span>
+            <span>{{ divide(detail.sellCount) }}元</span>
+          </p>
+        </li>
       </ul>
-      <p></p>
+      <p class="form-uesrs align-center p-l-24">
+        发起人:{{ detail.playerName }}
+      </p>
+    </div>
+    <div class="case-bets m-b-24">
+      <p class="p-l-24 bets-title blod align-center m-b-16">方案内容</p>
+      <ul
+        class="p-l-24 p-r-24"
+        v-for="(item, index) in detail.bets"
+        :key="index"
+      >
+        <li class="align-center p-b-16">
+          <span class="m-r-8 no-shrink">选号:</span
+          ><span class="pink x-auto">{{ item?.b.replace(/,/g, "") }}</span>
+        </li>
+        <li class="align-center p-b-16">
+          <span class="m-r-8">{{ item.p }}</span>
+          <span class="m-r-8">{{ item.c }}注</span>
+          <span>{{ item.money }}元</span>
+        </li>
+      </ul>
     </div>
     <div class="bg-fff font14 list-cont">
       <ul class="nav align-center justify-between p-l-24 p-r-24">
@@ -528,7 +560,7 @@ export default {
       const curMoney = res.data.betCountCurr;
       const fix = (curMoney / res.data.betTotal).toFixed(2);
       res.data.p = parseInt(fix * 100);
-
+      res.data.currentRate = 0;
       res.data.betListArr = res.data.betCode
         ? this.$util.parseFourStarInput(res.data.betCode)
         : [];
@@ -698,10 +730,32 @@ export default {
   width: 48px;
 }
 .circle-box {
-  padding-left: 60px;
-  padding-right: 30px;
+  padding: 24px 30px 24px 60px;
 }
 .circle-cont {
   background-color: #fff;
+}
+.circle-desc {
+  & > p {
+    span:nth-child(1) {
+      color: #999;
+      margin-bottom: 12px;
+    }
+  }
+}
+.form-uesrs {
+  color: #343434;
+  height: 74px;
+  border-top: 1px solid #e5e5e5;
+}
+.case-bets {
+  background-color: #fff;
+  .bets-title {
+    height: 66px;
+    border-bottom: 1px solid #e0e1e0;
+  }
+}
+.pink {
+  color: #bf2935;
 }
 </style>
