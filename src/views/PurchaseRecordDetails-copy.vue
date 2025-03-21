@@ -65,6 +65,7 @@
         </li>
         <li class="align-center p-b-16">
           <span class="m-r-8">{{ item.p }}</span>
+          <span class="m-r-8">{{ item.m }}倍</span>
           <span class="m-r-8">{{ item.c }}注</span>
           <span>{{ item.money }}元</span>
         </li>
