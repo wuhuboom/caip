@@ -79,6 +79,10 @@ export default {
       },
     ]);
     setInterval(() => {
+      //获取环境变量
+      if (process.env.NODE_ENV === "development") {
+        return;
+      }
       if (auth.getToken()) {
         this.$store.dispatch("getInfo");
       } else {
