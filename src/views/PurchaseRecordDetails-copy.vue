@@ -79,7 +79,14 @@
       <p class="p-l-24 p-r-24 bets-title align-center m-b-16 justify-between">
         <span class="blod">开奖情况</span><span class="more">更多详情</span>
       </p>
+      <div>
+        <ul class="grad-3">
+          <li class="p-l-24">期号</li>
+          <li>状态</li>
+        </ul>
+      </div>
     </div>
+
     <div class="bg-fff font14 list-cont">
       <ul class="nav align-center justify-between p-l-24 p-r-24">
         <li class="align-center els">
@@ -771,5 +778,13 @@ export default {
 .more {
   color: #f19838;
   text-decoration: underline;
+}
+.grad-3 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  & > li:nth-child(2) {
+    text-align: left;
+  }
 }
 </style>
