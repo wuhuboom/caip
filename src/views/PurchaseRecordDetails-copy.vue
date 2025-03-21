@@ -19,6 +19,25 @@
       </li>
       <li v-else>{{ getStatus(detail.status) }}</li>
     </ul>
+    <div class="circle-cont m-b-24">
+      <ul>
+        <li class="circle-box">
+          <van-circle
+            :rate="detail.p"
+            :stroke-width="60"
+            :text="detail.p + '%'"
+            :size="46"
+            layer-color="#f6b426"
+            color="#ff3b55"
+            :speed="100"
+            v-model="detail.currentRate"
+          />
+        </li>
+        <li></li>
+        <li></li>
+      </ul>
+      <p></p>
+    </div>
     <div class="bg-fff font14 list-cont">
       <ul class="nav align-center justify-between p-l-24 p-r-24">
         <li class="align-center els">
@@ -505,6 +524,11 @@ export default {
       res.data.betCountCurr = res.data.betCountCurr / 100;
       res.data.betTotal = res.data.betTotal / 100;
       res.data.sellCount = res.data.betTotal - res.data.betCountCurr;
+
+      const curMoney = res.data.betCountCurr;
+      const fix = (curMoney / res.data.betTotal).toFixed(2);
+      res.data.p = parseInt(fix * 100);
+
       res.data.betListArr = res.data.betCode
         ? this.$util.parseFourStarInput(res.data.betCode)
         : [];
@@ -672,5 +696,12 @@ export default {
 .icoUrls {
   height: 48px;
   width: 48px;
+}
+.circle-box {
+  padding-left: 60px;
+  padding-right: 30px;
+}
+.circle-cont {
+  background-color: #fff;
 }
 </style>
