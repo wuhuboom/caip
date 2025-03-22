@@ -1,421 +1,237 @@
 <template>
   <div class="c-page bg-grey font12">
     <AppTopBar topBarTitle="合买详情"> </AppTopBar>
-    <ul
-      class="nav font16 bg-fff m-b-24 align-center justify-between p-l-24 p-r-24"
-    >
-      <li class="align-center">
-        <p class="icoUrls m-r-16">
-          <img class="d-img" :src="lottery.icoUrls" alt="" />
-        </p>
-        {{ lottery.lotteryNameH5 }}
-      </li>
-      <li class="font12 align-center">
-        第{{ detail.expect }}期
-        <template v-if="detail.open?.openNum">
-          :<span class="pink">{{
-            detail.open?.openNum?.replace(/,/g, "")
-          }}</span>
-        </template>
-      </li>
-    </ul>
-    <div class="circle-cont m-b-24">
-      <ul class="justify-between align-center">
-        <li class="circle-box align-center">
-          <van-circle
-            :rate="detail.p"
-            :stroke-width="60"
-            :text="detail.p + '%'"
-            :size="46"
-            layer-color="#f6b426"
-            color="#ff3b55"
-            :speed="100"
-            v-model="detail.currentRate"
-          />
-        </li>
-        <li class="flex-1 justify-between p-r-24 circle-desc">
-          <p class="flex-column center-center">
-            <span>总金额</span>
-            <span>¥{{ divide(detail.money) }}</span>
+    <div class="center-center m-t-24" v-if="!detail.id">
+      <van-loading color="#bf2935" />
+    </div>
+    <div v-else>
+      <ul
+        class="nav font16 bg-fff m-b-24 align-center justify-between p-l-24 p-r-24"
+      >
+        <li class="align-center">
+          <p class="icoUrls m-r-16">
+            <img class="d-img" :src="lottery.icoUrls" alt="" />
           </p>
-          <p class="flex-column center-center">
-            <span>每份</span>
-            <span>1元</span>
-          </p>
-          <p class="flex-column center-center">
-            <span>剩余</span>
-            <span>{{ divide(detail.sellCount) }}元</span>
-          </p>
+          {{ lottery.lotteryNameH5 }}
+        </li>
+        <li class="font12 align-center">
+          第{{ detail.expect }}期
+          <template v-if="detail.open?.openNum">
+            :<span class="pink">{{
+              detail.open?.openNum?.replace(/,/g, "")
+            }}</span>
+          </template>
         </li>
       </ul>
-      <p class="form-uesrs align-center p-l-24">
-        发起人:{{ detail.playerName }}
-      </p>
-    </div>
-    <div class="case-bets m-b-24">
-      <p class="p-l-24 bets-title blod align-center m-b-16">
-        投注内容({{ getVisibility(detail.visibility) }})
-      </p>
-      <template v-if="showContent(detail.visibility)">
-        <ul
-          class="p-l-24 p-r-24"
-          v-for="(item, index) in detail.bets"
-          :key="index"
-        >
-          <li class="align-center p-b-16">
-            <span class="m-r-8 no-shrink">选号:</span
-            ><span class="pink x-auto">{{ item?.b.replace(/,/g, "") }}</span>
+      <div class="circle-cont m-b-24">
+        <ul class="justify-between align-center">
+          <li class="circle-box align-center">
+            <van-circle
+              :rate="detail.p"
+              :stroke-width="60"
+              :text="detail.p + '%'"
+              :size="46"
+              layer-color="#f6b426"
+              color="#ff3b55"
+              :speed="100"
+              v-model="detail.currentRate"
+            />
           </li>
-          <li class="align-center p-b-16">
-            <span class="m-r-8">{{ item.p }}</span>
-            <span class="m-r-8">{{ item.m }}倍</span>
-            <span class="m-r-8">{{ item.c }}注</span>
-            <span>{{ item.money }}元</span>
-          </li>
-        </ul>
-      </template>
-    </div>
-    <div class="case-bets m-b-24">
-      <p class="p-l-24 p-r-24 bets-title align-center justify-between">
-        <span class="blod">订单情况</span><span class="more">更多详情</span>
-      </p>
-      <div>
-        <ul class="grad-2 p-t-16 p-b-16 color999">
-          <li class="p-l-24">订单编号</li>
-          <li class="p-r-32">状态</li>
-        </ul>
-        <ul class="grad-2 p-t-16 p-b-16">
-          <li class="p-l-24">{{ detail.orderId }}</li>
-          <li
-            class="p-r-32 pink"
-            v-if="+detail.status === 0 && isMe"
-            @click="cancelAll"
-          >
-            点击撤销
-          </li>
-          <li class="p-r-32" :class="{ pink: +detail.openStatus === 2 }" v-else>
-            {{ getOpenStatus(detail.openStatus) }}
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="case-bets m-b-24">
-      <p class="p-l-24 p-r-24 bets-title align-center justify-between">
-        <span class="blod">跟单用户</span>
-      </p>
-      <div>
-        <ul class="p-t-16 p-b-16 grad-4 color999 text-center">
-          <li>昵称</li>
-          <li>金额</li>
-          <li>奖金</li>
-          <li>占比</li>
-        </ul>
-        <ul
-          class="p-t-16 p-b-16 grad-4 text-center p-l-8 p-r-8"
-          v-for="(item, index) in detail.joins"
-          :key="index"
-        >
-          <li class="els">{{ item.playerName }}</li>
-          <li class="els">¥{{ divide(item.money) }}</li>
-          <li class="els">¥{{ divide(item.moneyIncome) }}</li>
-          <li class="els">
-            {{ $util.toPercent(item.money, detail.money, 4) }}
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="case-bets m-b-24">
-      <p class="p-l-24 p-r-24 bets-title align-center justify-between">
-        <span class="blod">期号列表</span>
-      </p>
-      <div>
-        <ul class="p-t-16 p-b-16 grad-6 color999 text-center">
-          <li>期号</li>
-          <li>金额</li>
-          <li>奖金</li>
-          <li>开奖号码</li>
-          <li>状态</li>
-          <li>操作</li>
-        </ul>
-        <ul
-          class="p-t-16 p-b-16 grad-6 text-center p-l-8 p-r-8"
-          v-for="(item, index) in detail.expects"
-          :key="index"
-        >
-          <li class="els">{{ item.expect }}</li>
-          <li class="els">¥{{ divide(item.money) }}</li>
-          <li class="els">¥{{ divide(item.bingo) }}</li>
-          <li class="els">
-            {{ item.open }}
-          </li>
-          <li class="els">
-            {{ btmStatus(item.status) }}
-          </li>
-          <li
-            class="els pink underline"
-            v-if="+item.status === 0 && isMe && detail.type3 == 1"
-            @click="cancel(item.expect)"
-          >
-            撤销
-          </li>
-          <li class="els" v-else>--</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="bg-fff font14 list-cont">
-      <ul class="nav align-center justify-between p-l-24 p-r-24">
-        <li class="align-center els">
-          <span class="color999">方案编号</span>
-          <span class="els m-l-24 color333" @click="copy(detail.orderId)">{{
-            detail.orderId
-          }}</span>
-        </li>
-        <li class="active font16 m-l-24 no-shrink">
-          {{ getOpenStatus(detail.openStatus) }}
-        </li>
-      </ul>
-      <ul class="nav align-center justify-between p-l-24 p-r-24">
-        <li class="align-center els">
-          <span class="color999">订单金额</span>
-          <span class="els m-l-24 color333">¥{{ divide(detail.money) }}</span>
-        </li>
-      </ul>
-      <ul class="nav align-center justify-between p-l-24 p-r-24">
-        <li class="align-center els">
-          <span class="color999">订单期数</span>
-          <span class="els m-l-24 color333">{{ detail.totalExpect }}</span>
-        </li>
-      </ul>
-      <ul class="nav align-center justify-between p-l-24 p-r-24">
-        <li class="align-center els">
-          <span class="color999">完成期数</span>
-          <span class="els m-l-24 color333">{{ detail.currExpect }}</span>
-        </li>
-      </ul>
-      <ul class="nav align-center justify-between p-l-24 p-r-24">
-        <li class="align-center els">
-          <span class="color999">追号</span>
-          <span class="els m-l-24 color333">{{
-            getReType(+detail.reType)
-          }}</span>
-        </li>
-      </ul>
-      <ul class="nav align-center justify-between p-l-24 p-r-24">
-        <li class="align-center els">
-          <span class="color999">保底</span>
-          <span class="els m-l-24 color333"
-            >{{ getBtype(detail.btype) }}
-            {{ detail.ftype === 1 ? `| 系统满单` : "" }}</span
-          >
-        </li>
-      </ul>
-      <ul class="nav align-center justify-between p-l-24 p-r-24">
-        <li class="align-center els">
-          <span class="color999">购买方式</span>
-          <span class="els m-l-24 color333">用户合买</span>
-        </li>
-      </ul>
-      <ul class="nav align-center justify-between p-l-24 p-r-24">
-        <li class="align-center els">
-          <span class="color999">剩余金额</span>
-          <span class="els m-l-24 color333">¥{{ detail.sellCount }}</span>
-        </li>
-      </ul>
-      <ul class="nav align-center justify-between p-l-24 p-r-24">
-        <li class="align-center els">
-          <span class="color999">中奖金额</span>
-          <span class="els m-l-24 color333"
-            >¥{{ divide(detail.moneyIncome) }}</span
-          >
-        </li>
-      </ul>
-      <ul class="nav align-center justify-between p-l-24 p-r-24">
-        <li class="align-center els">
-          <span class="color999">订单状态</span>
-          <span class="els m-l-24 color333">{{
-            getStatus(detail.status)
-          }}</span>
-        </li>
-      </ul>
-    </div>
-    <div class="prize-cur p-x-24 font16 m-t-24">
-      <ul class="open-prize">
-        <li class="center-center headers">当前开奖号码</li>
-        <li class="justify-around align-center">
-          <p>
-            第
-            <span class="active">{{ detail?.open?.cycleNum }}</span>
-            期
-          </p>
-          <div class="center-center">
-            <p
-              class="prize-num center-center color-fff"
-              v-for="(num, idx) in getOpen(detail?.open?.openNum)"
-              :key="idx"
-            >
-              {{ num }}
+          <li class="flex-1 justify-between p-r-24 circle-desc">
+            <p class="flex-column center-center">
+              <span>总金额</span>
+              <span>¥{{ divide(detail.money) }}</span>
             </p>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="prize-cur p-x-24 font16 m-t-24">
-      <ul class="open-prize">
-        <li class="center-center headers">
+            <p class="flex-column center-center">
+              <span>每份</span>
+              <span>1元</span>
+            </p>
+            <p class="flex-column center-center">
+              <span>剩余</span>
+              <span>{{ divide(detail.sellCount) }}元</span>
+            </p>
+          </li>
+        </ul>
+        <p class="form-uesrs align-center p-l-24">
+          发起人:{{ detail.playerName }}
+        </p>
+      </div>
+      <div class="case-bets m-b-24">
+        <p class="p-l-24 bets-title blod align-center m-b-16">
           投注内容({{ getVisibility(detail.visibility) }})
+        </p>
+        <template v-if="showContent(detail.visibility)">
+          <ul
+            class="p-l-24 p-r-24"
+            v-for="(item, index) in detail.bets"
+            :key="index"
+          >
+            <li class="align-center p-b-16">
+              <span class="m-r-8 no-shrink">选号:</span
+              ><span class="pink x-auto">{{ item?.b.replace(/,/g, "") }}</span>
+            </li>
+            <li class="align-center p-b-16">
+              <span class="m-r-8">{{ item.p }}</span>
+              <span class="m-r-8">{{ item.m }}倍</span>
+              <span class="m-r-8">{{ item.c }}注</span>
+              <span>{{ item.money }}元</span>
+            </li>
+          </ul>
+        </template>
+      </div>
+      <div class="case-bets m-b-24">
+        <p class="p-l-24 p-r-24 bets-title align-center justify-between">
+          <span class="blod">订单情况</span
+          ><span class="more" @click="show = true">更多详情</span>
+        </p>
+        <div>
+          <ul class="grad-2 p-t-16 p-b-16 color999">
+            <li class="p-l-24">订单编号</li>
+            <li class="p-r-32">状态</li>
+          </ul>
+          <ul class="grad-2 p-t-16 p-b-16">
+            <li class="p-l-24">{{ detail.orderId }}</li>
+            <li
+              class="p-r-32 pink"
+              v-if="+detail.status === 0 && isMe"
+              @click="cancelAll"
+            >
+              点击撤销
+            </li>
+            <li
+              class="p-r-32"
+              :class="{ pink: +detail.openStatus === 2 }"
+              v-else
+            >
+              {{ getOpenStatus(detail.openStatus) }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="case-bets m-b-24">
+        <p class="p-l-24 p-r-24 bets-title align-center justify-between">
+          <span class="blod">跟单用户</span>
+        </p>
+        <div>
+          <ul class="p-t-16 p-b-16 grad-4 color999 text-center">
+            <li>昵称</li>
+            <li>金额</li>
+            <li>奖金</li>
+            <li>占比</li>
+          </ul>
+          <ul
+            class="p-t-16 p-b-16 grad-4 text-center p-l-8 p-r-8"
+            v-for="(item, index) in detail.joins"
+            :key="index"
+          >
+            <li class="els">{{ item.playerName }}</li>
+            <li class="els">¥{{ divide(item.money) }}</li>
+            <li class="els">¥{{ divide(item.moneyIncome) }}</li>
+            <li class="els">
+              {{ $util.toPercent(item.money, detail.money, 4) }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="case-bets m-b-24" v-if="detail.expects?.length">
+        <p class="p-l-24 p-r-24 bets-title align-center justify-between">
+          <span class="blod">期号列表</span>
+        </p>
+        <div>
+          <ul class="p-t-16 p-b-16 grad-6 color999 text-center">
+            <li>期号</li>
+            <li>金额</li>
+            <li>奖金</li>
+            <li>开奖号码</li>
+            <li>状态</li>
+            <li>操作</li>
+          </ul>
+          <ul
+            class="p-t-16 p-b-16 grad-6 text-center p-l-8 p-r-8"
+            v-for="(item, index) in detail.expects"
+            :key="index"
+          >
+            <li class="els">{{ item.expect }}</li>
+            <li class="els">¥{{ divide(item.money) }}</li>
+            <li class="els">¥{{ divide(item.bingo) }}</li>
+            <li class="els">
+              {{ item.open }}
+            </li>
+            <li class="els">
+              {{ btmStatus(item.status) }}
+            </li>
+            <li
+              class="els pink underline"
+              v-if="+item.status === 0 && isMe && detail.type3 == 1"
+              @click="cancel(item.expect)"
+            >
+              撤销
+            </li>
+            <li class="els" v-else>--</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <van-popup class="pop-detail" v-model="show">
+      <ul class="center-center pop-title colorfff">
+        <li>购买详情</li>
+        <li class="close font12" @click="show = false">关闭</li>
+      </ul>
+      <!-- 期号 方案编号 方案金额 中奖金额 发起人 发起时间 发起时间 购买方式 方案保底 追号 方案期数 -->
+      <ul class="detail-pop-desc p-t-16 p-b-16">
+        <li>
+          <p>期号</p>
+          <p>{{ detail.expect }}期</p>
         </li>
         <li>
-          <div v-if="showContent(detail.visibility)">
-            <ul
-              class="align-center justify-between m-l-24 m-r-24 p-b-24"
-              v-for="(item, index) in detail.bets"
-              :key="index"
-              :class="{ 'p-t-24 b-d-m m-b-24': index == 0 }"
-            >
-              <!-- "c": 2,//注数 "m": 2,//倍数 "b": "22,11",//号码
-              "p":"三星和值"//玩法 -->
-              <li class="font12 no-shrink m-r-8">
-                <span>{{ item.p }}</span>
-                <p class="m-t-8 space-between">
-                  <span class="m-r-16 center-center"
-                    >共
-                    <i class="m-l-8 m-r-8">{{ item.c }}</i>
-                    注</span
-                  >
-                  <span class="m-r-16">{{ item.m }}倍</span>
-                  <span class="active">{{ item.money }}元</span>
-                </p>
-              </li>
-              <li class="x-auto">
-                <div class="align-center">
-                  <div
-                    class="align-center"
-                    v-for="(doc, idx) in $util.betsCode(item?.b)"
-                    :key="idx"
-                  >
-                    <p
-                      class="prize-num center-center color-fff"
-                      v-for="(v, i) in doc"
-                      :key="i"
-                      :class="{ font11: isNaN(+v) }"
-                    >
-                      {{ v }}
-                    </p>
-                    <p
-                      class="center-center line"
-                      v-if="idx < $util.betsCode(item?.b).length - 1"
-                    ></p>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
+          <p>方案编号</p>
+          <p>{{ detail.orderId }}</p>
         </li>
-      </ul>
-    </div>
-    <div
-      class="user-jions bg-fff px-24 m-t-24 font14"
-      v-if="detail.joins?.length"
-    >
-      <p class="p-l-24 p-r-24 user-title align-center font16">用户列表</p>
-      <ul class="user-desc bg-grey align-center p-l-8 p-r-8">
-        <li class="center-center">昵称</li>
-        <li class="center-center">认购金额</li>
-        <li class="center-center">奖金</li>
-        <li class="center-center">所占比例</li>
-      </ul>
-      <ul
-        class="user-desc align-center color777 p-l-8 p-r-8"
-        v-for="(item, index) in detail.joins"
-        :key="index"
-        :class="{ 'b-d-m': index !== detail.joins.length - 1 }"
-      >
-        <li class="center-center els">
-          <p class="els">{{ item.playerName }}</p>
+        <li>
+          <p>方案金额</p>
+          <p>¥{{ divide(detail.money) }}</p>
         </li>
-        <li class="center-center els">
-          <p class="els">¥{{ divide(item.money) }}</p>
+        <li>
+          <p>中奖金额</p>
+          <p>¥{{ divide(detail.moneyIncome) }}</p>
         </li>
-        <li class="center-center els">
-          <p class="els">¥{{ divide(item.moneyIncome) }}</p>
+        <li>
+          <p>发起人</p>
+          <p>{{ detail.playerName }}</p>
         </li>
-        <li class="center-center els">
-          <p class="els">{{ $util.toPercent(item.money, detail.money, 4) }}</p>
+        <li>
+          <p>发起时间</p>
+          <p>{{ $dayjsTime(detail.createdAt) }}</p>
         </li>
-      </ul>
-    </div>
-    <div class="user-jions bg-fff px-24 m-t-24 font14">
-      <p class="p-l-24 p-r-24 user-title align-center font16">期号列表</p>
-      <ul class="user-desc bg-grey align-center p-l-8 p-r-8">
-        <li class="center-center">期号</li>
-        <li class="center-center">金额</li>
-        <li class="center-center">奖金</li>
-        <li class="center-center">开奖号码</li>
-        <li class="center-center">状态</li>
-        <li class="center-center">操作</li>
-      </ul>
-      <ul
-        class="user-desc align-center color777 p-l-8 p-r-8"
-        v-for="(item, index) in detail.expects"
-        :key="index"
-        :class="{ 'b-d-m': index !== detail.expects?.length - 1 }"
-      >
-        <li class="center-center els">
-          <p class="els">{{ item.expect }}</p>
+        <!-- <li>
+          <p>截止下注</p>
+          <p></p>
+        </li> -->
+        <li>
+          <p>购买方式</p>
+          <p>用户合买</p>
         </li>
-        <li class="center-center els">
-          <p class="els">¥{{ divide(item.money) }}</p>
-        </li>
-        <li class="center-center els">
-          <p class="els">¥{{ divide(item.bingo) }}</p>
-        </li>
-        <li class="center-center els">
-          <p class="els">{{ item.open }}</p>
-        </li>
-        <li class="center-center els">
-          <p class="els">{{ btmStatus(item.status) }}</p>
-        </li>
-        <li class="center-center els">
-          <p
-            class="active underline"
-            v-if="+item.status === 0 && isMe && detail.type3 == 1"
-            @click="cancel(item.expect)"
-          >
-            撤销
+        <li>
+          <p>方案保底</p>
+          <p>
+            {{ getBtype(detail.btype) }}
+            {{ detail.ftype === 1 ? `| 系统满单` : "" }}
           </p>
-          <p v-else>--</p>
+        </li>
+        <li>
+          <p>追号</p>
+          <p>{{ getReType(+detail.reType) }}</p>
+        </li>
+        <li>
+          <p>方案期数</p>
+          <p>
+            共 {{ detail.totalExpect }} 期 已完成 {{ detail.currExpect }} 期
+          </p>
         </li>
       </ul>
-    </div>
-    <div class="p-btm" v-if="detail.sellCount && +detail.status === 0">
-      <div class="fix-btm">
-        <p class="center-center b-money font16 active">
-          剩余: {{ detail.sellCount }}元
-        </p>
-        <ul class="btm-row p-l-24 align-center font16">
-          <li class="align-center flex-1">
-            <span class="color-fff">购买</span>
-            <input
-              class="p-x-24 m-l-28 m-r-28"
-              type="text"
-              @input="validateInput(detail, $event)"
-              v-model.trim="detail.clientMoney"
-            />
-            <span class="color-fff">元</span>
-          </li>
-          <li class="center-center btns all" @click="buyPlayer('all')">全包</li>
-          <li
-            class="center-center btns buy"
-            @click="buyPlayer(detail.clientMoney)"
-          >
-            购买
-          </li>
-        </ul>
-      </div>
-    </div>
+    </van-popup>
     <tipsDialog ref="$tipsDialog" />
     <tipsDialog ref="$buyDialog" @sure="mySure" />
     <tipsDialog ref="$canAllDialog" @sure="ALLSure" />
@@ -430,6 +246,7 @@ export default {
   name: "PurchaseRecordDetails",
   data() {
     return {
+      show: false,
       id: +this.$route.query.id,
       detail: {},
       expect: "",
@@ -557,7 +374,7 @@ export default {
       // 0 btype 是否保底0全保 1部分 2不保
       const docs = [
         {
-          name: "全保保底",
+          name: "全额保底",
           status: 0,
         },
         {
@@ -877,5 +694,35 @@ export default {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 4px;
+}
+.pop-detail {
+  width: 652px;
+  background: #ffffff;
+  border-radius: 20px 20px 20px 20px;
+  .pop-title {
+    height: 76px;
+    background: #bf2935;
+    border-radius: 20px 20px 0px 0px;
+    position: relative;
+    .close {
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+  }
+}
+.detail-pop-desc {
+  & > li {
+    height: 72px;
+    align-items: center;
+    display: flex;
+    p:nth-child(1) {
+      color: #999;
+      width: 180px;
+      padding-left: 32px;
+    }
+  }
 }
 </style>
