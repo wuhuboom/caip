@@ -18,7 +18,7 @@
           第{{ detail.expect }}期
           <template v-if="detail.open?.openNum">
             :<span class="pink">{{
-              detail.open?.openNum?.replace(/,/g, "")
+              detail.open?.openNum?.replace(/,/g, "|")
             }}</span>
           </template>
         </li>
@@ -43,18 +43,17 @@
               <span>¥{{ divide(detail.money) }}</span>
             </p>
             <p class="flex-column center-center">
-              <span>每份</span>
-              <span>1元</span>
-            </p>
-            <p class="flex-column center-center">
               <span>剩余</span>
               <span>{{ detail.sellCount }}元</span>
             </p>
+            <p class="flex-column center-center">
+              <span>发起人</span>
+              <span class="els circle-playerName"
+                >{{ detail.playerName }}元</span
+              >
+            </p>
           </li>
         </ul>
-        <p class="form-uesrs align-center p-l-24">
-          发起人:{{ detail.playerName }}
-        </p>
       </div>
       <div class="case-bets m-b-24">
         <p class="p-l-24 bets-title blod align-center m-b-16">
@@ -110,33 +109,6 @@
           </ul>
         </div>
       </div>
-
-      <div class="case-bets m-b-24">
-        <p class="p-l-24 p-r-24 bets-title align-center justify-between">
-          <span class="blod">跟单用户</span>
-        </p>
-        <div>
-          <ul class="p-t-16 p-b-16 grad-4 color999 text-center">
-            <li>昵称</li>
-            <li>金额</li>
-            <li>奖金</li>
-            <li>占比</li>
-          </ul>
-          <ul
-            class="p-t-16 p-b-16 grad-4 text-center p-l-8 p-r-8"
-            v-for="(item, index) in detail.joins"
-            :key="index"
-          >
-            <li class="els">{{ item.playerName }}</li>
-            <li class="els">¥{{ divide(item.money) }}</li>
-            <li class="els">¥{{ divide(item.moneyIncome) }}</li>
-            <li class="els">
-              {{ $util.toPercent(item.money, detail.money, 4) }}
-            </li>
-          </ul>
-        </div>
-      </div>
-
       <div class="case-bets m-b-24" v-if="detail.expects?.length">
         <p class="p-l-24 p-r-24 bets-title align-center justify-between">
           <span class="blod">期号列表</span>
@@ -159,7 +131,7 @@
             <li class="els">¥{{ divide(item.money) }}</li>
             <li class="els">¥{{ divide(item.bingo) }}</li>
             <li class="els">
-              {{ item.open }}
+              {{ item?.open?.replace(/,/g, "|") }}
             </li>
             <li class="els">
               {{ btmStatus(item.status) }}
@@ -172,6 +144,31 @@
               撤销
             </li>
             <li class="els" v-else>--</li>
+          </ul>
+        </div>
+      </div>
+      <div class="case-bets m-b-24">
+        <p class="p-l-24 p-r-24 bets-title align-center justify-between">
+          <span class="blod">跟单用户</span>
+        </p>
+        <div>
+          <ul class="p-t-16 p-b-16 grad-4 color999 text-center">
+            <li>昵称</li>
+            <li>金额</li>
+            <li>奖金</li>
+            <li>占比</li>
+          </ul>
+          <ul
+            class="p-t-16 p-b-16 grad-4 text-center p-l-8 p-r-8"
+            v-for="(item, index) in detail.joins"
+            :key="index"
+          >
+            <li class="els">{{ item.playerName }}</li>
+            <li class="els">¥{{ divide(item.money) }}</li>
+            <li class="els">¥{{ divide(item.moneyIncome) }}</li>
+            <li class="els">
+              {{ $util.toPercent(item.money, detail.money, 4) }}
+            </li>
           </ul>
         </div>
       </div>
@@ -752,5 +749,8 @@ export default {
       padding-left: 32px;
     }
   }
+}
+.circle-playerName {
+  max-width: 210px;
 }
 </style>
