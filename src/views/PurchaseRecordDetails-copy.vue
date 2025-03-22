@@ -109,7 +109,7 @@
           </ul>
         </div>
       </div>
-      <div class="case-bets m-b-24" v-if="detail.expects?.length">
+      <div class="case-bets m-b-24" v-if="isPre">
         <p class="p-l-24 p-r-24 bets-title align-center justify-between">
           <span class="blod">期号列表</span>
         </p>
@@ -283,6 +283,9 @@ export default {
   },
   computed: {
     ...mapGetters(["catList"]),
+    isPre() {
+      return this.detail.type3 == 1 && this.detail.type2 == 1;
+    },
     lottery() {
       return this.detail?.lottery || {};
     },
