@@ -1,6 +1,6 @@
 <template>
   <div class="c-page bg-grey font12">
-    <AppTopBar topBarTitle="合买详情"> </AppTopBar>
+    <AppTopBar topBarTitle="自购详情"> </AppTopBar>
     <div class="center-center m-t-24" v-if="!detail.id">
       <van-loading color="#bf2935" />
     </div>
@@ -28,10 +28,9 @@
         <div class="justify-between align-center b-b-d1 m-b-16">
           <p class="p-l-24 bets-title blod align-center">
             方案内容({{ getVisibility(detail.visibility) }})
-            {{ +detail.status }}
           </p>
           <p
-            class="no-buy center-center"
+            class="no-buy center-center colorfff"
             v-if="+detail.status === 0 && isMe"
             @click="cancelAll"
           >
@@ -47,9 +46,7 @@
           >
             <li class="align-center p-b-8">
               <span class="m-r-8 no-shrink">选号:</span
-              ><span class="pink x-auto">{{
-                item?.b?.replace(/,/g, "|")
-              }}</span>
+              ><span class="pink x-auto">{{ item?.b?.replace(/,/g, "") }}</span>
             </li>
             <li class="align-center p-b-16">
               <span class="m-r-8">{{ item.p }}</span>
@@ -148,18 +145,7 @@
         </li>
         <li>
           <p>购买方式</p>
-          <p>用户合买</p>
-        </li>
-        <li>
-          <p>方案保底</p>
-          <p>
-            {{ getBtype(detail.btype) }}
-            {{ detail.ftype === 1 ? `| 系统满单` : "" }}
-          </p>
-        </li>
-        <li>
-          <p>追号</p>
-          <p>{{ getReType(+detail.reType) || "无追号" }}</p>
+          <p>用户自购</p>
         </li>
         <li>
           <p>方案期数</p>
@@ -305,7 +291,7 @@ export default {
       // 0 btype 是否保底0全保 1部分 2不保
       const docs = [
         {
-          name: "全保保底",
+          name: "全额保底",
           status: 0,
         },
         {

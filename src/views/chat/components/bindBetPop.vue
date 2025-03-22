@@ -329,7 +329,7 @@ export default {
       // 0 btype 是否保底0全保 1部分 2不保
       const docs = [
         {
-          name: "全保保底",
+          name: "全额保底",
           status: 0,
         },
         {

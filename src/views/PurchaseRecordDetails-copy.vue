@@ -57,10 +57,9 @@
         <div class="justify-between align-center b-b-d1 m-b-16">
           <p class="p-l-24 bets-title blod align-center">
             方案内容({{ getVisibility(detail.visibility) }})
-            {{ +detail.status }}
           </p>
           <p
-            class="no-buy center-center"
+            class="no-buy center-center colorfff"
             v-if="+detail.status === 0 && isMe"
             @click="cancelAll"
           >
@@ -76,9 +75,7 @@
           >
             <li class="align-center p-b-8">
               <span class="m-r-8 no-shrink">选号:</span
-              ><span class="pink x-auto">{{
-                item?.b?.replace(/,/g, "|")
-              }}</span>
+              ><span class="pink x-auto">{{ item?.b?.replace(/,/g, "") }}</span>
             </li>
             <li class="align-center p-b-16">
               <span class="m-r-8">{{ item.p }}</span>
@@ -253,9 +250,9 @@
             {{ detail.ftype === 1 ? `| 系统满单` : "" }}
           </p>
         </li>
-        <li>
-          <p>追号</p>
-          <p>{{ getReType(+detail.reType) }}</p>
+        <li v-if="isPre">
+          <p>中奖停追号</p>
+          <p>{{ detail.stopBingo ? "是" : "否" }}</p>
         </li>
         <li>
           <p>方案期数</p>
