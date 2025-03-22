@@ -1,248 +1,756 @@
 <template>
-  <div class="c-page bg-grey">
-    <AppTopBar topBarTitle="订单详情"></AppTopBar>
-    <div class="info-box">
-      <div class="d1-box">
-        <div class="left">
-          <div class="img"></div>
-          <div>排列三</div>
-        </div>
-        <div class="right">第20170903期</div>
+  <div class="c-page bg-grey font12">
+    <AppTopBar topBarTitle="合买详情"> </AppTopBar>
+    <div class="center-center m-t-24" v-if="!detail.id">
+      <van-loading color="#bf2935" />
+    </div>
+    <div v-else>
+      <ul
+        class="nav font16 bg-fff m-b-24 align-center justify-between p-l-24 p-r-24"
+      >
+        <li class="align-center">
+          <p class="icoUrls m-r-16">
+            <img class="d-img" :src="lottery.icoUrls" alt="" />
+          </p>
+          {{ lottery.lotteryNameH5 }}
+        </li>
+        <li class="font12 align-center">
+          第{{ detail.expect }}期
+          <template v-if="detail.open?.openNum">
+            :<span class="pink">{{
+              detail.open?.openNum?.replace(/,/g, "")
+            }}</span>
+          </template>
+        </li>
+      </ul>
+      <div class="circle-cont m-b-24">
+        <ul class="justify-between align-center">
+          <li class="circle-box align-center">
+            <van-circle
+              :rate="detail.p"
+              :stroke-width="60"
+              :text="detail.p + '%'"
+              :size="46"
+              layer-color="#f6b426"
+              color="#ff3b55"
+              :speed="100"
+              v-model="detail.currentRate"
+            />
+          </li>
+          <li class="flex-1 justify-between p-r-24 circle-desc">
+            <p class="flex-column center-center">
+              <span>总金额</span>
+              <span>¥{{ divide(detail.money) }}</span>
+            </p>
+            <p class="flex-column center-center">
+              <span>每份</span>
+              <span>1元</span>
+            </p>
+            <p class="flex-column center-center">
+              <span>剩余</span>
+              <span>{{ detail.sellCount }}元</span>
+            </p>
+          </li>
+        </ul>
+        <p class="form-uesrs align-center p-l-24">
+          发起人:{{ detail.playerName }}
+        </p>
       </div>
-      <div class="d2-box">
-        <div class="item">
-          <div class="t1">24.00</div>
-          <div class="t2">投注金额(元)</div>
+      <div class="case-bets m-b-24">
+        <p class="p-l-24 bets-title blod align-center m-b-16">
+          投注内容({{ getVisibility(detail.visibility) }})
+        </p>
+        <template v-if="showContent(detail.visibility)">
+          <ul
+            class="p-l-24 p-r-24"
+            v-for="(item, index) in detail.bets"
+            :key="index"
+          >
+            <li class="align-center p-b-16">
+              <span class="m-r-8 no-shrink">选号:</span
+              ><span class="pink x-auto">{{ item?.b.replace(/,/g, "") }}</span>
+            </li>
+            <li class="align-center p-b-16">
+              <span class="m-r-8">{{ item.p }}</span>
+              <span class="m-r-8">{{ item.m }}倍</span>
+              <span class="m-r-8">{{ item.c }}注</span>
+              <span>{{ item.money }}元</span>
+            </li>
+          </ul>
+        </template>
+      </div>
+      <div class="case-bets m-b-24">
+        <p class="p-l-24 p-r-24 bets-title align-center justify-between">
+          <span class="blod">订单情况</span
+          ><span class="more" @click="show = true">更多详情</span>
+        </p>
+        <div>
+          <ul class="grad-2 p-t-16 p-b-16 color999">
+            <li class="p-l-24">订单编号</li>
+            <li class="p-r-32">状态</li>
+          </ul>
+          <ul class="grad-2 p-t-16 p-b-16">
+            <li class="p-l-24">{{ detail.orderId }}</li>
+            <li
+              class="p-r-32 pink"
+              v-if="+detail.status === 0 && isMe"
+              @click="cancelAll"
+            >
+              点击撤销
+            </li>
+            <li
+              class="p-r-32"
+              :class="{ pink: +detail.openStatus === 2 }"
+              v-else
+            >
+              {{
+                detail.status == 2 ? "已撤销" : getOpenStatus(detail.openStatus)
+              }}
+            </li>
+          </ul>
         </div>
-        <div class="item">
-          <div class="t1">1%</div>
-          <div class="t2">合买占比</div>
+      </div>
+
+      <div class="case-bets m-b-24">
+        <p class="p-l-24 p-r-24 bets-title align-center justify-between">
+          <span class="blod">跟单用户</span>
+        </p>
+        <div>
+          <ul class="p-t-16 p-b-16 grad-4 color999 text-center">
+            <li>昵称</li>
+            <li>金额</li>
+            <li>奖金</li>
+            <li>占比</li>
+          </ul>
+          <ul
+            class="p-t-16 p-b-16 grad-4 text-center p-l-8 p-r-8"
+            v-for="(item, index) in detail.joins"
+            :key="index"
+          >
+            <li class="els">{{ item.playerName }}</li>
+            <li class="els">¥{{ divide(item.money) }}</li>
+            <li class="els">¥{{ divide(item.moneyIncome) }}</li>
+            <li class="els">
+              {{ $util.toPercent(item.money, detail.money, 4) }}
+            </li>
+          </ul>
         </div>
-        <div class="item">
-          <div class="t1 on">100,000,000.00</div>
-          <div class="t2">中奖金额(元)</div>
+      </div>
+
+      <div class="case-bets m-b-24" v-if="detail.expects?.length">
+        <p class="p-l-24 p-r-24 bets-title align-center justify-between">
+          <span class="blod">期号列表</span>
+        </p>
+        <div>
+          <ul class="p-t-16 p-b-16 grad-6 color999 text-center">
+            <li>期号</li>
+            <li>金额</li>
+            <li>奖金</li>
+            <li>开奖号码</li>
+            <li>状态</li>
+            <li>操作</li>
+          </ul>
+          <ul
+            class="p-t-16 p-b-16 grad-6 text-center p-l-8 p-r-8"
+            v-for="(item, index) in detail.expects"
+            :key="index"
+          >
+            <li class="els">{{ item.expect }}</li>
+            <li class="els">¥{{ divide(item.money) }}</li>
+            <li class="els">¥{{ divide(item.bingo) }}</li>
+            <li class="els">
+              {{ item.open }}
+            </li>
+            <li class="els">
+              {{ btmStatus(item.status) }}
+            </li>
+            <li
+              class="els pink underline"
+              v-if="+item.status === 0 && isMe && detail.type3 == 1"
+              @click="cancel(item.expect)"
+            >
+              撤销
+            </li>
+            <li class="els" v-else>--</li>
+          </ul>
         </div>
       </div>
     </div>
-    <div class="zj-box">
-      <div class="title">开奖号码</div>
-      <div class="content-kj">
-        <div class="num on">07</div>
-        <div class="num on">07</div>
-        <div class="num on">07</div>
-      </div>
-      <div class="title">投注内容</div>
-      <div class="content-tz">
-        <div class="list">
-          <div class="name">第一位</div>
-          <div class="n-box">
-            <div class="num">07</div>
-            <div class="num">07</div>
-            <div class="num">07</div>
-          </div>
-        </div>
-        <div class="list">
-          <div class="name">第一位</div>
-          <div class="n-box">
-            <div class="num">07</div>
-            <div class="num">07</div>
-            <div class="num">07</div>
-          </div>
-        </div>
-        <div class="list">
-          <div class="name">第一位</div>
-          <div class="n-box">
-            <div class="num">07</div>
-            <div class="num">07</div>
-            <div class="num">07</div>
-          </div>
-        </div>
-        <div class="b-box">后三直选 12注 24元</div>
+    <div class="p-btm" v-if="detail.sellCount && +detail.status === 0">
+      <div class="fix-btm">
+        <p class="center-center b-money font16 active">
+          剩余: {{ detail.sellCount }}元
+        </p>
+        <ul class="btm-row p-l-24 align-center font16">
+          <li class="align-center flex-1">
+            <span class="color-fff">购买</span>
+            <input
+              class="p-x-24 m-l-28 m-r-28"
+              type="text"
+              @input="validateInput(detail, $event)"
+              v-model.trim="detail.clientMoney"
+            />
+            <span class="color-fff">元</span>
+          </li>
+          <li class="center-center btns all" @click="buyPlayer('all')">全包</li>
+          <li
+            class="center-center btns buy"
+            @click="buyPlayer(detail.clientMoney)"
+          >
+            购买
+          </li>
+        </ul>
       </div>
     </div>
-    <div class="bh-box">
-      <div class="left">
-        <div class="t-1">方案编号：CP57118603626</div>
-        <div class="t-2">投注时间：2017-08-11 11:56:56</div>
-      </div>
-      <div class="right">
-        <div class="copy" @click="copy">复制</div>
-      </div>
-    </div>
-    <div class="bottom-box">
-      <div class="height"></div>
-      <div class="btn">再次购买</div>
-    </div>
+    <van-popup class="pop-detail" v-model="show">
+      <ul class="center-center pop-title colorfff">
+        <li>购买详情</li>
+        <li class="close font12" @click="show = false">关闭</li>
+      </ul>
+      <!-- 期号 方案编号 方案金额 中奖金额 发起人 发起时间 发起时间 购买方式 方案保底 追号 方案期数 -->
+      <ul class="detail-pop-desc p-t-16 p-b-16">
+        <li>
+          <p>期号</p>
+          <p>{{ detail.expect }}期</p>
+        </li>
+        <li>
+          <p>方案编号</p>
+          <p>{{ detail.orderId }}</p>
+        </li>
+        <li>
+          <p>方案金额</p>
+          <p>¥{{ divide(detail.money) }}</p>
+        </li>
+        <li>
+          <p>中奖金额</p>
+          <p>¥{{ divide(detail.moneyIncome) }}</p>
+        </li>
+        <li>
+          <p>发起人</p>
+          <p>{{ detail.playerName }}</p>
+        </li>
+        <li>
+          <p>发起时间</p>
+          <p>{{ $dayjsTime(detail.createdAt) }}</p>
+        </li>
+        <li>
+          <p>截止下注</p>
+          <p>{{ $dayjsTime(detail.finishTime) }}</p>
+        </li>
+        <li>
+          <p>购买方式</p>
+          <p>用户合买</p>
+        </li>
+        <li>
+          <p>方案保底</p>
+          <p>
+            {{ getBtype(detail.btype) }}
+            {{ detail.ftype === 1 ? `| 系统满单` : "" }}
+          </p>
+        </li>
+        <li>
+          <p>追号</p>
+          <p>{{ getReType(+detail.reType) }}</p>
+        </li>
+        <li>
+          <p>方案期数</p>
+          <p>
+            共 {{ detail.totalExpect }} 期 已完成 {{ detail.currExpect }} 期
+          </p>
+        </li>
+      </ul>
+    </van-popup>
+    <tipsDialog ref="$tipsDialog" />
+    <tipsDialog ref="$buyDialog" @sure="mySure" />
+    <tipsDialog ref="$canAllDialog" @sure="ALLSure" />
+    <tipsDialog ref="$canOneDialog" @sure="OneSure" />
   </div>
 </template>
 
 <script>
-import { Toast } from "vant";
-
+import userApi from "@/api/user";
+import { mapGetters } from "vuex";
 export default {
   name: "PurchaseRecordDetails",
   data() {
-    return {};
+    return {
+      show: false,
+      id: +this.$route.query.id,
+      detail: {},
+      expect: "",
+      shareData: {
+        // chatAble
+        // recharge 3000
+      },
+    };
+  },
+  computed: {
+    ...mapGetters(["catList"]),
+    lottery() {
+      return this.detail?.lottery || {};
+    },
+    user() {
+      return this.$store.state.user;
+    },
+    theOne() {
+      return this.$store.state.theOne;
+    },
+    cat() {
+      return [...this.$store.state.cat];
+    },
+    curCat() {
+      let catData = {};
+      this.cat.forEach((v) => {
+        v.list.forEach((c) => {
+          if (+c.id === +this.detail.lotteryId) {
+            catData = v;
+          }
+        });
+      });
+      return catData;
+    },
+    isMe() {
+      return +this.user.id === +this.detail?.playerId;
+    },
   },
   methods: {
-    copy() {
-      navigator.clipboard.writeText("复制的内容").then(() => {
-        Toast("复制成功");
+    countPrice(item) {
+      if (this.theOne.includes(item.name)) {
+        return item.price;
+      }
+      return item.quantity * item.multiplier * item.price;
+    },
+    copy(v) {
+      navigator.clipboard.writeText(v).then(() => {
+        this.$toast("复制成功");
       });
     },
+    getOpenStatus(v) {
+      const item = this.$store.state.openStatus.find((d) => d.id === v);
+      return item ? item.name : "";
+    },
+    async cancelAll() {
+      this.$refs.$canAllDialog.open("确定要撤销吗？");
+    },
+    async ALLSure() {
+      const [err] = await userApi.cancelTogether({
+        id: this.id,
+      });
+      if (err) return;
+      this.$toast.success("撤销成功");
+      this.getDetail();
+    },
+    async cancel(expect) {
+      this.expect = expect;
+      this.$refs.$canOneDialog.open("确定要撤销吗？");
+    },
+    async OneSure() {
+      const [err] = await userApi.lotteryMyOrderCancelRe2({
+        expect: this.expect,
+        id: this.id,
+      });
+      if (err) return;
+      this.$toast.success("撤销成功");
+      this.getDetail();
+    },
+    onCopySuccess() {
+      this.$toast.success("复制链接成功");
+    },
+    getName(id) {
+      const item = this.catList.find((v) => v.id === id);
+      return item ? item.lotteryName : "";
+    },
+    getOpen(v) {
+      if (!v) return ["_", "_", "_", "", "_"];
+      return v.split(",").filter((v) => v);
+    },
+    showContent(v) {
+      //visibility 0公开 1仅对跟单者公开 2截止后公开 3永久保密
+      if (v === 0) {
+        return true;
+      }
+      if (v === 1) {
+        return this.detail.joins.some((v) => v.playerId === this.user.id);
+      }
+      if (v === 2) {
+        return +this.detail.status === 4;
+      }
+      return false;
+    },
+    getVisibility(v) {
+      const docs = [
+        {
+          name: "公开",
+          status: 0,
+        },
+        {
+          name: "仅对跟单者公开",
+          status: 1,
+        },
+        {
+          name: "截止后公开",
+          status: 2,
+        },
+        {
+          name: "永久保密",
+          status: 3,
+        },
+      ];
+      return (docs.find((doc) => doc.status === v) || {}).name;
+    },
+    getBtype(v) {
+      // 0 btype 是否保底0全保 1部分 2不保
+      const docs = [
+        {
+          name: "全额保底",
+          status: 0,
+        },
+        {
+          name: "部分保底",
+          status: 1,
+        },
+        {
+          name: "不保底",
+          status: 2,
+        },
+      ];
+      return (docs.find((doc) => doc.status === v) || {}).name;
+    },
+    getReType(v) {
+      // 0 无追号 1中奖停 2中奖不停
+      const docs = [
+        {
+          name: "无追号",
+          status: 0,
+        },
+        {
+          name: "中奖停",
+          status: 1,
+        },
+        {
+          name: "中奖不停",
+          status: 2,
+        },
+      ];
+      return (docs.find((doc) => doc.status === v) || {}).name;
+    },
+    validateInput(item, v) {
+      let value = v.target.value.replace(/\D/g, "");
+      if (value) {
+        const numericValue = parseInt(value, 10);
+        value = Math.min(Math.max(numericValue, 1), item.sellCount);
+      }
+      item.clientMoney = value;
+    },
+    buyPlayer(price) {
+      if (price === "all") {
+        this.detail.clientMoney = this.detail.sellCount;
+        this.$refs.$buyDialog.open(
+          `全包金额: ${this.detail.clientMoney}元，确定全包?`
+        );
+        return;
+      }
+      if (!price) {
+        this.$refs.$tipsDialog.open("请输入购买金额");
+        return;
+      }
+      if (price > this.detail.sellCount) {
+        this.$refs.$tipsDialog.open("购买金额不能大于剩余金额");
+        return;
+      }
+      this.$refs.$buyDialog.open(`认购金额：￥${this.detail.clientMoney}`);
+    },
+    getExpects(v) {
+      return (this.$store.state.openStatus.find((doc) => doc.id === v) || {})
+        .name;
+    },
+    getStatus(v) {
+      return (this.$store.state.status.find((doc) => doc.id === v) || {}).name;
+    },
+    btmStatus(v) {
+      return (this.$store.state.btmStatus.find((doc) => doc.id === v) || {})
+        .name;
+    },
+    async chat() {
+      const [err, res] = await userApi.chat();
+      if (err) return;
+
+      this.shareData = res.data;
+    },
+    async mySure() {
+      const [err] = await userApi.lotteryBetsJoin({
+        betId: this.detail.id,
+        betCount: this.detail.clientMoney,
+      });
+      if (err) return;
+      this.detail.clientMoney = "";
+      this.$toast.success("购买成功");
+      this.getDetail();
+    },
+    async getDetail() {
+      const [err, res] = await userApi.betsOrderDetail({
+        id: this.id,
+      });
+      if (err) return;
+      res.data.clientMoney = "";
+      res.data.betCountCurr = res.data.betCountCurr / 100;
+      res.data.betTotal = res.data.betTotal / 100;
+      res.data.sellCount = res.data.betTotal - res.data.betCountCurr;
+
+      const curMoney = res.data.betCountCurr;
+      const fix = (curMoney / res.data.betTotal).toFixed(2);
+      res.data.p = parseInt(fix * 100);
+      res.data.currentRate = 0;
+      res.data.betListArr = res.data.betCode
+        ? this.$util.parseFourStarInput(res.data.betCode)
+        : [];
+      //res.data.clientMoney = res.data.sellCount;
+      for (let key in res.data) {
+        this.$set(this.detail, key, res.data[key]);
+      }
+    },
+    comfire(v) {
+      return new Promise((resolve) => {
+        this.$dialog
+          .confirm({
+            message: v,
+            confirmButtonColor: "#3291FF",
+            className: "confirm-no-tile-dialog",
+          })
+          .then(() => {
+            resolve(1);
+          })
+          .catch(() => {
+            resolve(0);
+          });
+      });
+    },
+    async shareToChatRoom() {
+      if (+this.shareData.shareDisabled === 0) {
+        this.$toast.fail(`分享已禁用`);
+        return;
+      }
+      if (this.detail.status !== 0) {
+        this.$toast("合买已结束，无法分享");
+        return;
+      }
+      if (!this.shareData.chatAble) {
+        this.$toast(`充值${this.shareData.recharge}才能解锁聊天`);
+        return;
+      }
+      const status = await this.comfire("确定分享到聊天室吗？");
+      if (!status) return;
+      this.$toast.loading({
+        forbidClick: false, // 允许点击和滚动
+        duration: 0, // 持续时间为 0 表示不会自动关闭
+      });
+      const [err] = await userApi.lotteryBetsShare({
+        id: this.id,
+      });
+      this.sleep(1000);
+      this.$toast.clear();
+      if (err) return;
+      this.$toast.success("分享成功");
+      // this.$confirm("分享成功，是否查看聊天室消息?", {
+      //   confirmButtonText: "确定",
+      //   cancelButtonText: "取消",
+      //   type: "success",
+      //   customClass: "g-confirm-box",
+      // })
+      //   .then(() => {
+      //     this.$router.push("/chat/room");
+      //   })
+      //   .catch(() => {});
+    },
+  },
+  created() {
+    this.chat();
+    this.getDetail();
   },
 };
 </script>
 <style scoped lang="less">
-.info-box {
+.nav {
+  height: 86px;
+}
+
+.list-cont {
+  & > ul {
+    border-bottom: 1px solid #e5e5e5;
+  }
+  & > ul > li {
+    & > span:nth-child(1) {
+      width: 118px;
+    }
+  }
+}
+.prize-cur {
   background: #fff;
-  .d1-box {
-    display: flex;
-    align-items: center;
-    padding: 16px 30px;
-    .left {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      font-size: 32px;
-      font-weight: bold;
-      .img {
-        width: 66px;
-        height: 66px;
-        background: url("@/assets/img/PurchaseRecordDetails/pai.png") no-repeat;
-        background-size: 100% auto;
-        margin-right: 24px;
-      }
-    }
-    .right {
-      font-size: 26px;
-    }
-  }
-  .d2-box {
-    display: flex;
-    border-top: 1px solid #e5e5e5;
-    .item {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      padding: 24px 0;
-      position: relative;
-      &::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        right: 0;
-        background: #e5e5e5;
-        height: 60px;
-        width: 1px;
-        margin-top: -30px;
-      }
-      &:last-child:after {
-        display: none;
-      }
-      .t2 {
-        color: #999999;
-        font-size: 24px;
-        margin-top: 10px;
-      }
-      .on {
-        color: #bf2935;
-      }
-    }
+  .headers {
+    background: #fafbfb;
+    border-bottom: 1px solid #e0e1e0;
   }
 }
-.zj-box {
-  .title {
-    font-size: 24px;
-    margin-top: 32px;
-    margin-bottom: 22px;
-    text-align: center;
+.open-prize {
+  border: 1px solid #e0e1e0;
+  & > li {
+    min-height: 88px;
   }
-  .content-kj {
-    width: 660px;
-    background: #ffffff;
-    box-shadow: 0px 2 16px 2px rgba(0, 0, 0, 0.1);
-    border-radius: 6px 6px 6px 6px;
-    padding: 28px 32px;
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0 auto;
-  }
-  .num {
-    font-size: 32px;
-    margin-right: 22px;
-    color: #666666;
-    &.on {
-      color: #bf2935;
-    }
-  }
-  .content-tz {
-    width: 660px;
-    background: #ffffff;
-    box-shadow: 0px 2 16px 2px rgba(0, 0, 0, 0.1);
-    border-radius: 6px 6px 6px 6px;
-    margin: 0 auto;
-    .list {
-      padding: 20px 34px;
-      border-top: 1px dashed #e5e5e5;
-      &:first-child {
-        border-top: none;
-      }
-      .name {
-        color: #999999;
-        font-size: 24px;
-        margin-bottom: 4px;
-      }
-      .n-box {
-        display: flex;
-      }
-    }
-    .b-box {
-      padding: 26px 0;
-      text-align: center;
-      border-top: 1px solid #e5e5e5;
-    }
-  }
-}
-.bh-box {
-  padding: 0 42px;
-  color: #999999;
-  margin-top: 40px;
-  display: flex;
-  padding-bottom: 40px;
-  .left {
-    flex: 1;
-    font-size: 24px;
-    .t-2 {
-      margin-top: 14px;
-    }
-  }
-  .copy {
-    border-radius: 6px 6px 6px 6px;
-    background: #e5e5e5;
-    height: 46px;
-    line-height: 46px;
-    padding: 0 22px;
-    font-size: 20px;
-  }
-}
-.bottom-box {
-  .height {
-    height: 98px;
-  }
-  .btn {
-    position: fixed;
-    width: 100%;
-    left: 0;
-    bottom: 0;
-    height: 98px;
-    line-height: 98px;
-    text-align: center;
-    color: #fff;
+  .prize-num {
+    width: 48px;
+    height: 48px;
     background: #bf2935;
-    font-size: 32px;
+    border-radius: 50%;
+  }
+}
+.line {
+  width: 1px;
+  height: 24px;
+  background: #333;
+  margin: 0 8px;
+}
+.b-d-m {
+  border-bottom: 1px dotted #e5e5e5;
+}
+.b-s-m {
+  border-bottom: 1px solid #e5e5e5;
+}
+.user-title {
+  height: 88px;
+}
+.user-desc {
+  & > li {
+    width: 25%;
+    height: 78px;
+  }
+}
+.p-btm {
+  &,
+  .fix-btm {
+    height: 216px;
+  }
+  .fix-btm {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+  .b-money {
+    background-color: #ffe7e9;
+    height: 90px;
+  }
+  .btm-row {
+    height: 126px;
+    background: #2b2b2b;
+    & > li {
+      height: 126px;
+    }
+  }
+  [type="text"] {
+    width: 160px;
+    height: 94px;
+    background: #ffffff;
+    border-radius: 14px 14px 14px 14px;
+    border: none;
+  }
+  .btns {
+    width: 180px;
+    height: 126px;
+    color: #ffffff;
+  }
+  .all {
+    background: #484848;
+  }
+  .buy {
+    background: #bf2935;
+  }
+}
+.icoUrls {
+  height: 48px;
+  width: 48px;
+}
+.circle-box {
+  padding: 24px 30px 24px 60px;
+}
+.circle-cont {
+  background-color: #fff;
+}
+.circle-desc {
+  & > p {
+    span:nth-child(1) {
+      color: #999;
+      margin-bottom: 12px;
+    }
+  }
+}
+.form-uesrs {
+  color: #343434;
+  height: 74px;
+  border-top: 1px solid #e5e5e5;
+}
+.case-bets {
+  background-color: #fff;
+}
+.bets-title {
+  height: 66px;
+  border-bottom: 1px solid #e0e1e0;
+}
+.pink {
+  color: #bf2935;
+}
+.more {
+  color: #f19838;
+  text-decoration: underline;
+}
+.grad-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  & > li:nth-child(2) {
+    text-align: right;
+  }
+}
+.grad-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  // & > li:nth-child(2) {
+  //   text-align: right;
+  // }
+}
+.grad-6 {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+}
+.pop-detail {
+  width: 652px;
+  background: #ffffff;
+  border-radius: 20px 20px 20px 20px;
+  .pop-title {
+    height: 76px;
+    background: #bf2935;
+    border-radius: 20px 20px 0px 0px;
+    position: relative;
+    .close {
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+  }
+}
+.detail-pop-desc {
+  & > li {
+    height: 72px;
+    align-items: center;
+    display: flex;
+    p:nth-child(1) {
+      color: #999;
+      width: 180px;
+      padding-left: 32px;
+    }
   }
 }
 </style>
