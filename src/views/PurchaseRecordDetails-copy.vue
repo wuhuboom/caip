@@ -14,13 +14,13 @@
           </p>
           {{ lottery.lotteryNameH5 }}
         </li>
-        <li class="font12 align-center">
-          第{{ detail.expect }}期
-          <template v-if="detail.open?.openNum">
-            :<span class="pink">{{
-              detail.open?.openNum?.replace(/,/g, "|")
-            }}</span>
-          </template>
+        <li
+          class="font12 align-center"
+          v-clipboard:copy="detail.orderId"
+          v-clipboard:success="onCopySuccess"
+        >
+          单号:{{ detail.orderId }}
+          <img class="copyt d-img" src="@/assets/img/copyt.png" alt="" />
         </li>
       </ul>
       <div class="circle-cont m-b-24">
@@ -56,9 +56,19 @@
         </ul>
       </div>
       <div class="case-bets m-b-24">
-        <p class="p-l-24 bets-title blod align-center m-b-16">
-          投注内容({{ getVisibility(detail.visibility) }})
-        </p>
+        <div class="justify-between align-center b-b-d1 m-b-16">
+          <p class="p-l-24 bets-title blod align-center">
+            方案内容({{ getVisibility(detail.visibility) }})
+          </p>
+          <p
+            class="no-buy center-center"
+            v-if="+detail.status === 0 && isMe"
+            @click="cancelAll"
+          >
+            撤销
+          </p>
+        </div>
+
         <template v-if="showContent(detail.visibility)">
           <ul
             class="p-l-24 p-r-24"
@@ -67,7 +77,9 @@
           >
             <li class="align-center p-b-16">
               <span class="m-r-8 no-shrink">选号:</span
-              ><span class="pink x-auto">{{ item?.b.replace(/,/g, "") }}</span>
+              ><span class="pink x-auto">{{
+                item?.b?.replace(/,/g, "|")
+              }}</span>
             </li>
             <li class="align-center p-b-16">
               <span class="m-r-8">{{ item.p }}</span>
@@ -79,29 +91,20 @@
         </template>
       </div>
       <div class="case-bets m-b-24">
-        <p class="p-l-24 p-r-24 bets-title align-center justify-between">
-          <span class="blod">订单情况</span
+        <p class="p-l-24 p-r-24 bets-title align-center justify-between b-b-d1">
+          <span class="blod">当前开奖</span
           ><span class="more" @click="show = true">更多详情</span>
         </p>
         <div>
-          <ul class="grad-2 p-t-16 p-b-16 color999">
-            <li class="p-l-24">订单编号</li>
-            <li class="p-r-32">状态</li>
+          <ul class="grad-3 text-center p-t-16 p-b-16 color999 b-b-d1">
+            <li>期号</li>
+            <li>开奖结果</li>
+            <li>状态</li>
           </ul>
-          <ul class="grad-2 p-t-16 p-b-16">
-            <li class="p-l-24">{{ detail.orderId }}</li>
-            <li
-              class="p-r-32 pink"
-              v-if="+detail.status === 0 && isMe"
-              @click="cancelAll"
-            >
-              点击撤销
-            </li>
-            <li
-              class="p-r-32"
-              :class="{ pink: +detail.openStatus === 2 }"
-              v-else
-            >
+          <ul class="grad-3 text-center p-t-16 p-b-16">
+            <li>{{ detail.expect }}</li>
+            <li>{{ detail?.open?.openNum?.replace(/,/g, " ") || "--" }}</li>
+            <li>
               {{
                 detail.status == 2 ? "已撤销" : getOpenStatus(detail.openStatus)
               }}
@@ -114,7 +117,7 @@
           <span class="blod">期号列表</span>
         </p>
         <div>
-          <ul class="p-t-16 p-b-16 grad-6 color999 text-center">
+          <ul class="p-t-16 p-b-16 h-bg-gray grad-6 color999 text-center">
             <li>期号</li>
             <li>金额</li>
             <li>奖金</li>
@@ -129,9 +132,11 @@
           >
             <li class="els">{{ item.expect }}</li>
             <li class="els">¥{{ divide(item.money) }}</li>
-            <li class="els">¥{{ divide(item.bingo) }}</li>
+            <li class="els" :class="{ pink: +item.bingo > 0 }">
+              ¥{{ divide(item.bingo) }}
+            </li>
             <li class="els">
-              {{ item?.open?.replace(/,/g, "|") }}
+              {{ item?.open?.replace(/,/g, "|") || "-" }}
             </li>
             <li class="els">
               {{ btmStatus(item.status) }}
@@ -152,7 +157,7 @@
           <span class="blod">跟单用户</span>
         </p>
         <div>
-          <ul class="p-t-16 p-b-16 grad-4 color999 text-center">
+          <ul class="p-t-16 p-b-16 grad-4 color999 text-center h-bg-gray">
             <li>昵称</li>
             <li>金额</li>
             <li>奖金</li>
@@ -165,7 +170,9 @@
           >
             <li class="els">{{ item.playerName }}</li>
             <li class="els">¥{{ divide(item.money) }}</li>
-            <li class="els">¥{{ divide(item.moneyIncome) }}</li>
+            <li class="els" :class="{ pink: +item.moneyIncome > 0 }">
+              ¥{{ divide(item.moneyIncome) }}
+            </li>
             <li class="els">
               {{ $util.toPercent(item.money, detail.money, 4) }}
             </li>
@@ -354,7 +361,7 @@ export default {
       this.getDetail();
     },
     onCopySuccess() {
-      this.$toast.success("复制链接成功");
+      this.$toast.success("复制成功");
     },
     getName(id) {
       const item = this.catList.find((v) => v.id === id);
@@ -693,7 +700,7 @@ export default {
 }
 .bets-title {
   height: 66px;
-  border-bottom: 1px solid #e0e1e0;
+  //border-bottom: 1px solid #e0e1e0;
 }
 .pink {
   color: #bf2935;
@@ -709,6 +716,11 @@ export default {
   & > li:nth-child(2) {
     text-align: right;
   }
+}
+.grad-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
 }
 .grad-4 {
   display: grid;
@@ -755,5 +767,21 @@ export default {
 }
 .circle-playerName {
   max-width: 210px;
+}
+.copyt {
+  width: 40px;
+  height: 40px;
+}
+.no-buy {
+  width: 82px;
+  height: 44px;
+  background: #bf2935;
+  border-radius: 12px 12px 12px 12px;
+}
+.b-b-d1 {
+  border-bottom: 1px solid #e0e1e0;
+}
+.h-bg-gray {
+  background: #f0f0f0;
 }
 </style>
