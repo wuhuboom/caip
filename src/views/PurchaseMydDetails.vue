@@ -408,6 +408,9 @@ export default {
   created() {
     this.getDetail();
   },
+  beforeDestroy() {
+    this.$store.commit("setCashDetail", this.detail);
+  },
 };
 </script>
 <style scoped lang="less">

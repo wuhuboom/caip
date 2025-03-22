@@ -572,6 +572,9 @@ export default {
     this.chat();
     this.getDetail();
   },
+  beforeDestroy() {
+    this.$store.commit("setCashDetail", this.detail);
+  },
 };
 </script>
 <style scoped lang="less">

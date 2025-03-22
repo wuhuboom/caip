@@ -67,7 +67,9 @@
                   {{ divide(item.moneyIncome) }}元
                 </div>
                 <div v-else>
-                  {{ getOpenStatus(item.openStatus) }}
+                  {{
+                    item.status == 2 ? "已撤销" : getOpenStatus(item.openStatus)
+                  }}
                 </div>
                 <van-icon name="arrow" class="arrow" />
               </div>
@@ -155,6 +157,9 @@ export default {
     },
   },
   computed: {
+    cashDetail() {
+      return this.$store.state.cashDetail;
+    },
     sysList() {
       const arr = [
         {
@@ -269,15 +274,22 @@ export default {
     },
   },
   activated() {
-    console.log("activated", this.fromRoute?.path);
     if (
       [
         "/purchase-my-details",
         "/purchase-record-details",
         "/purchase-pre-details",
       ].includes(this.fromRoute?.path)
-    )
+    ) {
+      this.tableData.results.forEach((item) => {
+        if (item.id === this.cashDetail.id) {
+          item.openStatus = this.cashDetail.openStatus;
+          item.status = this.cashDetail.status;
+        }
+      });
       return;
+    }
+
     this.lotteryBetsOrder(initForm());
   },
 };

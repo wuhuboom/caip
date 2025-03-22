@@ -10,6 +10,7 @@ Vue.use(Vuex);
 const lang = location.href.includes("zmkm") ? "zh" : "";
 export default new Vuex.Store({
   state: {
+    cashDetail: {},
     repair: {
       code: 200,
       msg: auth.getToken("repair") || "",
@@ -211,6 +212,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    setCashDetail(state, data) {
+      state.cashDetail = data;
+    },
     setRepair(state, data) {
       state.repair = data;
     },
