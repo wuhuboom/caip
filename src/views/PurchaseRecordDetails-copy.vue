@@ -126,6 +126,45 @@
       </div>
     </div>
 
+    <div class="case-bets m-b-24">
+      <p class="p-l-24 p-r-24 bets-title align-center justify-between">
+        <span class="blod">期号列表</span>
+      </p>
+      <div>
+        <ul class="p-t-16 p-b-16 grad-6 color999 text-center">
+          <li>期号</li>
+          <li>金额</li>
+          <li>奖金</li>
+          <li>开奖号码</li>
+          <li>状态</li>
+          <li>操作</li>
+        </ul>
+        <ul
+          class="p-t-16 p-b-16 grad-6 text-center p-l-8 p-r-8"
+          v-for="(item, index) in detail.expects"
+          :key="index"
+        >
+          <li class="els">{{ item.expect }}</li>
+          <li class="els">¥{{ divide(item.money) }}</li>
+          <li class="els">¥{{ divide(item.bingo) }}</li>
+          <li class="els">
+            {{ item.open }}
+          </li>
+          <li class="els">
+            {{ btmStatus(item.status) }}
+          </li>
+          <li
+            class="els pink underline"
+            v-if="+item.status === 0 && isMe && detail.type3 == 1"
+            @click="cancel(item.expect)"
+          >
+            撤销
+          </li>
+          <li class="els" v-else>--</li>
+        </ul>
+      </div>
+    </div>
+
     <div class="bg-fff font14 list-cont">
       <ul class="nav align-center justify-between p-l-24 p-r-24">
         <li class="align-center els">
@@ -833,5 +872,10 @@ export default {
   // & > li:nth-child(2) {
   //   text-align: right;
   // }
+}
+.grad-6 {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
 }
 </style>
