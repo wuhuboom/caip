@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="MyBallRecord">
     <AppTopBar class="app-top-bar" topBarTitle="购票记录"> </AppTopBar>
     <ul class="align-center justify-around header">
       <li class="color333">
@@ -38,6 +38,26 @@
           finished-text="没有更多了"
           @load="lotteryBetsOrder"
         >
+          <!-- <div
+            class="my-ball-record p-x-24 font12"
+            v-for="(item, i) in results"
+            :key="i"
+          >
+            <ul>
+              <li class="justify-between align-center m-b-16">
+                <p>{{ getName(item.lotteryId) }}</p>
+                <p>第{{ item.expect }}期</p>
+              </li>
+              <li class="justify-between align-center m-b-16">
+                <p class="color999">下注金额:</p>
+                <p>{{ divide(item.money) }}元</p>
+              </li>
+              <li class="justify-between align-center">
+                <p class="color999">{{ $dayjsTime(item.createdAt) }}</p>
+                <p class="color999">{{ getTxt(item) }}</p>
+              </li>
+            </ul>
+          </div> -->
           <div
             class="lists"
             v-for="(item, i) in results"
@@ -410,5 +430,12 @@ export default {
   height: 56px;
   background: #bf2834;
   border-radius: 12px 12px 12px 12px;
+}
+.MyBallRecord {
+  height: 100vh;
+  background-color: #f9f9f9;
+  .gray {
+    color: #999999;
+  }
 }
 </style>
