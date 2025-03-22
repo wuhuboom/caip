@@ -352,13 +352,13 @@ const routes = [
       default: () => import("@/views/PurchaseRecordDetails-copy.vue"),
     },
   },
-  // {
-  //   path: "/purchase-record-details2",
-  //   name: "PurchaseRecordDetails",
-  //   components: {
-  //     default: () => import("@/views/PurchaseRecordDetails.vue"),
-  //   },
-  // },
+  {
+    path: "/purchase-record-details2",
+    name: "PurchaseRecordDetails",
+    components: {
+      default: () => import("@/views/PurchaseRecordDetails.vue"),
+    },
+  },
   {
     path: "/purchase-my-details",
     name: "PurchaseMyDetails",

@@ -48,7 +48,7 @@
             </p>
             <p class="flex-column center-center">
               <span>剩余</span>
-              <span>{{ divide(detail.sellCount) }}元</span>
+              <span>{{ detail.sellCount }}元</span>
             </p>
           </li>
         </ul>
@@ -103,7 +103,9 @@
               :class="{ pink: +detail.openStatus === 2 }"
               v-else
             >
-              {{ getOpenStatus(detail.openStatus) }}
+              {{
+                detail.status == 2 ? "已撤销" : getOpenStatus(detail.openStatus)
+              }}
             </li>
           </ul>
         </div>
@@ -174,6 +176,32 @@
         </div>
       </div>
     </div>
+    <div class="p-btm" v-if="detail.sellCount && +detail.status === 0">
+      <div class="fix-btm">
+        <p class="center-center b-money font16 active">
+          剩余: {{ detail.sellCount }}元
+        </p>
+        <ul class="btm-row p-l-24 align-center font16">
+          <li class="align-center flex-1">
+            <span class="color-fff">购买</span>
+            <input
+              class="p-x-24 m-l-28 m-r-28"
+              type="text"
+              @input="validateInput(detail, $event)"
+              v-model.trim="detail.clientMoney"
+            />
+            <span class="color-fff">元</span>
+          </li>
+          <li class="center-center btns all" @click="buyPlayer('all')">全包</li>
+          <li
+            class="center-center btns buy"
+            @click="buyPlayer(detail.clientMoney)"
+          >
+            购买
+          </li>
+        </ul>
+      </div>
+    </div>
     <van-popup class="pop-detail" v-model="show">
       <ul class="center-center pop-title colorfff">
         <li>购买详情</li>
@@ -205,10 +233,10 @@
           <p>发起时间</p>
           <p>{{ $dayjsTime(detail.createdAt) }}</p>
         </li>
-        <!-- <li>
+        <li>
           <p>截止下注</p>
-          <p></p>
-        </li> -->
+          <p>{{ $dayjsTime(detail.finishTime) }}</p>
+        </li>
         <li>
           <p>购买方式</p>
           <p>用户合买</p>
