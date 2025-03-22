@@ -10,14 +10,14 @@
         </p>
         {{ lottery.lotteryNameH5 }}
       </li>
-      <li
-        class="underline"
-        v-if="+detail.status === 0 && isMe"
-        @click="cancelAll"
-      >
-        撤销
+      <li class="font12 align-center">
+        第{{ detail.expect }}期
+        <template v-if="detail.open?.openNum">
+          :<span class="pink">{{
+            detail.open?.openNum?.replace(/,/g, "")
+          }}</span>
+        </template>
       </li>
-      <li v-else>{{ getStatus(detail.status) }}</li>
     </ul>
     <div class="circle-cont m-b-24">
       <ul class="justify-between align-center">
@@ -77,12 +77,25 @@
     </div>
     <div class="case-bets m-b-24">
       <p class="p-l-24 p-r-24 bets-title align-center justify-between">
-        <span class="blod">开奖情况</span><span class="more">更多详情</span>
+        <span class="blod">订单情况</span><span class="more">更多详情</span>
       </p>
       <div>
+        <ul class="grad-3 p-t-16 p-b-16 color999">
+          <li class="p-l-24">订单编号</li>
+          <li class="p-r-32">状态</li>
+        </ul>
         <ul class="grad-3 p-t-16 p-b-16">
-          <li class="p-l-24">期号</li>
-          <li>状态</li>
+          <li class="p-l-24">{{ detail.orderId }}</li>
+          <li
+            class="p-r-32 pink"
+            v-if="+detail.status === 0 && isMe"
+            @click="cancelAll"
+          >
+            点击撤销
+          </li>
+          <li class="p-r-32" :class="{ pink: +detail.openStatus === 2 }" v-else>
+            {{ getOpenStatus(detail.openStatus) }}
+          </li>
         </ul>
       </div>
     </div>
@@ -784,7 +797,7 @@ export default {
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
   & > li:nth-child(2) {
-    text-align: left;
+    text-align: right;
   }
 }
 </style>
