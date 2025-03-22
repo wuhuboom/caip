@@ -80,11 +80,11 @@
         <span class="blod">订单情况</span><span class="more">更多详情</span>
       </p>
       <div>
-        <ul class="grad-3 p-t-16 p-b-16 color999">
+        <ul class="grad-2 p-t-16 p-b-16 color999">
           <li class="p-l-24">订单编号</li>
           <li class="p-r-32">状态</li>
         </ul>
-        <ul class="grad-3 p-t-16 p-b-16">
+        <ul class="grad-2 p-t-16 p-b-16">
           <li class="p-l-24">{{ detail.orderId }}</li>
           <li
             class="p-r-32 pink"
@@ -95,6 +95,32 @@
           </li>
           <li class="p-r-32" :class="{ pink: +detail.openStatus === 2 }" v-else>
             {{ getOpenStatus(detail.openStatus) }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="case-bets m-b-24">
+      <p class="p-l-24 p-r-24 bets-title align-center justify-between">
+        <span class="blod">跟单用户</span>
+      </p>
+      <div>
+        <ul class="p-t-16 p-b-16 grad-4 color999 text-center">
+          <li>昵称</li>
+          <li>金额</li>
+          <li>奖金</li>
+          <li>占比</li>
+        </ul>
+        <ul
+          class="p-t-16 p-b-16 grad-4 text-center p-l-8 p-r-8"
+          v-for="(item, index) in detail.joins"
+          :key="index"
+        >
+          <li class="els">{{ item.playerName }}</li>
+          <li class="els">¥{{ divide(item.money) }}</li>
+          <li class="els">¥{{ divide(item.moneyIncome) }}</li>
+          <li class="els">
+            {{ $util.toPercent(item.money, detail.money, 4) }}
           </li>
         </ul>
       </div>
@@ -792,12 +818,20 @@ export default {
   color: #f19838;
   text-decoration: underline;
 }
-.grad-3 {
+.grad-2 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
   & > li:nth-child(2) {
     text-align: right;
   }
+}
+.grad-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  // & > li:nth-child(2) {
+  //   text-align: right;
+  // }
 }
 </style>
