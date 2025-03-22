@@ -25,8 +25,8 @@
       </ul>
 
       <div class="case-bets m-b-24">
-        <div class="justify-between align-center b-b-d1 m-b-16">
-          <p class="p-l-24 bets-title blod align-center">
+        <div class="justify-between align-center b-b-d1 m-b-16 p-l-24 p-r-24">
+          <p class="bets-title blod align-center">
             方案内容({{ getVisibility(detail.visibility) }})
           </p>
           <p
@@ -80,32 +80,7 @@
         </div>
       </div>
     </div>
-    <div class="p-btm" v-if="detail.sellCount && +detail.status === 0">
-      <div class="fix-btm">
-        <p class="center-center b-money font16 active">
-          剩余: {{ detail.sellCount }}元
-        </p>
-        <ul class="btm-row p-l-24 align-center font16">
-          <li class="align-center flex-1">
-            <span class="color-fff">购买</span>
-            <input
-              class="p-x-24 m-l-28 m-r-28"
-              type="text"
-              @input="validateInput(detail, $event)"
-              v-model.trim="detail.clientMoney"
-            />
-            <span class="color-fff">元</span>
-          </li>
-          <li class="center-center btns all" @click="buyPlayer('all')">全包</li>
-          <li
-            class="center-center btns buy"
-            @click="buyPlayer(detail.clientMoney)"
-          >
-            购买
-          </li>
-        </ul>
-      </div>
-    </div>
+
     <van-popup class="pop-detail" v-model="show">
       <ul class="center-center pop-title colorfff">
         <li>详情</li>

@@ -54,8 +54,8 @@
         </ul>
       </div>
       <div class="case-bets m-b-24">
-        <div class="justify-between align-center b-b-d1 m-b-16">
-          <p class="p-l-24 bets-title blod align-center">
+        <div class="justify-between align-center b-b-d1 m-b-16 p-l-24 p-r-24">
+          <p class="bets-title blod align-center">
             方案内容({{ getVisibility(detail.visibility) }})
           </p>
           <p
