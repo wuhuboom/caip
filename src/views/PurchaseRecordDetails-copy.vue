@@ -48,9 +48,7 @@
             </p>
             <p class="flex-column center-center">
               <span>发起人</span>
-              <span class="els circle-playerName"
-                >{{ detail.playerName }}元</span
-              >
+              <span class="els circle-playerName">{{ detail.playerName }}</span>
             </p>
           </li>
         </ul>
@@ -59,6 +57,7 @@
         <div class="justify-between align-center b-b-d1 m-b-16">
           <p class="p-l-24 bets-title blod align-center">
             方案内容({{ getVisibility(detail.visibility) }})
+            {{ +detail.status }}
           </p>
           <p
             class="no-buy center-center"
@@ -71,11 +70,11 @@
 
         <template v-if="showContent(detail.visibility)">
           <ul
-            class="p-l-24 p-r-24"
+            class="p-l-24 p-r-24 m-b-16"
             v-for="(item, index) in detail.bets"
             :key="index"
           >
-            <li class="align-center p-b-16">
+            <li class="align-center p-b-8">
               <span class="m-r-8 no-shrink">选号:</span
               ><span class="pink x-auto">{{
                 item?.b?.replace(/,/g, "|")
@@ -208,7 +207,7 @@
     </div>
     <van-popup class="pop-detail" v-model="show">
       <ul class="center-center pop-title colorfff">
-        <li>购买详情</li>
+        <li>详情</li>
         <li class="close font12" @click="show = false">关闭</li>
       </ul>
       <!-- 期号 方案编号 方案金额 中奖金额 发起人 发起时间 发起时间 购买方式 方案保底 追号 方案期数 -->
@@ -227,7 +226,9 @@
         </li>
         <li>
           <p>中奖金额</p>
-          <p>¥{{ divide(detail.moneyIncome) }}</p>
+          <p :class="{ pink: +detail.moneyIncome > 0 }">
+            ¥{{ divide(detail.moneyIncome) }}
+          </p>
         </li>
         <li>
           <p>发起人</p>
