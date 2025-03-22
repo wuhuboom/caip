@@ -262,9 +262,10 @@ export default {
         this.finished = true;
         return;
       }
-      this.tableData.results = this.tableData.results.concat(res.data.results);
+      const docs = res.data?.results || [];
+      this.tableData.results = this.tableData.results.concat(docs);
       this.params.pageNo++;
-      this.finished = this.params.pageNo > res.data.totalPage;
+      this.finished = docs.length < this.params.pageSize;
     },
   },
   activated() {
