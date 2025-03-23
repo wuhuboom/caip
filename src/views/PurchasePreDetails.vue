@@ -46,7 +46,9 @@
           >
             <li class="align-center p-b-8">
               <span class="m-r-8 no-shrink">选号:</span
-              ><span class="pink x-auto">{{ item?.b?.replace(/,/g, "") }}</span>
+              ><span class="pink x-auto">{{
+                item?.b?.replace(/,/g, " ").replace(/\|/g, " | ")
+              }}</span>
             </li>
             <li class="align-center p-b-16">
               <span class="m-r-8">{{ item.p }}</span>
